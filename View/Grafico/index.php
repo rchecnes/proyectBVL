@@ -47,47 +47,51 @@
     </div>
 
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#monto_por_precio">Montos por Precio</a></li>
-      <li><a data-toggle="tab" href="#analisis_de_precio">Análisis de Precio</a></li>
+      <li class="active"><a data-toggle="tab" href="#monto_por_precio">Montos Por Precio</a></li>
+      <li><a data-toggle="tab" href="#analisis_de_precio">Análisis De Precio</a></li>
+      <li><a data-toggle="tab" href="#cotizaciones">Cotizaciones</a></li>
     </ul>
 
     <div class="tabbable">
         <div class="tab-content">
-          <div id="monto_por_precio" class="tab-pane fade in active">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                      <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
-                      <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
-                      <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
-                      <img src="../Assets/img/load.gif" id="loading1" style="display: none">
+            <div id="monto_por_precio" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
+                          <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
+                          <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
+                          <img src="../Assets/img/load.gif" id="loading1" style="display: none">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
-            </div>
-          </div>
-          <div id="analisis_de_precio" class="tab-pane fade">
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                    <div class="form-group">
-                        <label>Rango: 1-100</label>
-                        <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" onkeyup='validaNum(this.value,0,100)'>
-                    </div>
-                </div>
-                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                    <div class="form-group">
-                        <br>
-                        <button type="button" name="buscar2" id="buscar2" class="btn btn-success" onclick="resultadoanalisisdeprecio()">Buscar</button>
-                        <img src="../Assets/img/load.gif" id="loading2" style="display: none">
-                    </div>
+                <div class="row">
+                    <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12" id="resultadoanalisisdeprecio"><!--contenido--></div>
+            <div id="analisis_de_precio" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                        <div class="form-group">
+                            <label>Rango: 1-100</label>
+                            <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" onkeyup='validaNum(this.value,0,100)'>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                        <div class="form-group">
+                            <br>
+                            <button type="button" name="buscar2" id="buscar2" class="btn btn-success" onclick="resultadoanalisisdeprecio()">Buscar</button>
+                            <img src="../Assets/img/load.gif" id="loading2" style="display: none">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" id="resultadoanalisisdeprecio"><!--contenido--></div>
+                </div>
             </div>
-          </div>
+            <div id="cotizaciones" class="tab-pane fade">
+            hola
+            </div>
         </div>
     </div>    
 </div>
