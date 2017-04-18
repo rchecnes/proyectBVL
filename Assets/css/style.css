@@ -1,0 +1,50 @@
+.ui-autocomplete, .ui-menu {
+    border: 1px solid rgba(0,0,0,.2);
+    background: #FFF;
+}
+
+.ui-menu .ui-menu-item{
+	border-bottom: 1px solid #e2d6d6 !important;
+}
+
+.btn-group .active{
+    background: #de9898 !important;
+}
+
+.align-center{
+    text-align: center !important;
+}
+
+.align-right{
+    text-align: right !important;
+}
+
+.align-left{
+    text-align: left !important;
+}
+
+.nav-tabs {
+    margin-bottom: 0!important;
+    position: relative;
+    top: 1px;
+}
+
+.nav-tabs, .nav-tabs>li:first-child>a {
+    margin-left: 0;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+}
+
+.nav {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.tab-content {
+    border: 1px solid #C5D0DC;
+    padding: 16px 12px;
+    position: relative;
+}
