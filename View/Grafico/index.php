@@ -47,9 +47,9 @@
     </div>
 
     <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#monto_por_precio">Montos Por Precio</a></li>
-      <li><a data-toggle="tab" href="#analisis_de_precio">Análisis De Precio</a></li>
-      <li><a data-toggle="tab" href="#cotizaciones">Cotizaciones</a></li>
+      <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Montos Por Precio</a></li>
+      <li><a data-toggle="tab" href="#analisis_de_precio">2. Análisis De Precio</a></li>
+      <li><a data-toggle="tab" href="#cotizacion">3. Cotizaciones</a></li>
     </ul>
 
     <div class="tabbable">
@@ -89,8 +89,13 @@
                     <div class="col-lg-12" id="resultadoanalisisdeprecio"><!--contenido--></div>
                 </div>
             </div>
-            <div id="cotizaciones" class="tab-pane fade">
-            hola
+            <div id="cotizacion" class="tab-pane fade">
+                <div class="form-group">
+                    <br>
+                    <button type="button" name="buscar3" id="buscar3" class="btn btn-success" onclick="resultadocotizacion()">Buscar</button>
+                    <img src="../Assets/img/load.gif" id="loading3" style="display: none">
+                </div>
+                <div class="col-lg-12" id="resultadocotizacion"><!--contenido--></div>
             </div>
         </div>
     </div>    
@@ -167,6 +172,29 @@
         }
     }
 
+    resultadocotizacion = function(){
+
+        if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='' && $("#rango").val() !='') {
+           
+            $("#loading3").show();
+
+            $.ajax({
+                type:'GET',
+                url: '../Controller/GraficoC.php?accion=grafico3',
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val()},
+
+                success:function(data){
+
+                    $("#resultadocotizacion").html(data);
+                    $("#loading3").hide();
+                }
+            });
+            
+        }else{
+            alert("Debe ingresar Fecha Inicio y Fecha Final");
+        }
+    }
+
     resultadomontoporprecio();
 
     $(".mostrar_graf").on("click", function(){
@@ -181,6 +209,9 @@
 
         }else if($(this).attr('href')=='#analisis_de_precio'){
             resultadoanalisisdeprecio();
+            
+        }else if($(this).attr('href')=='#cotizacion'){
+            resultadocotizacion();
         }
     })
  });

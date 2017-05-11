@@ -261,6 +261,35 @@ function grafico2Action(){
 	include('../View/Grafico/grafico2.php');
 }
 
+function grafico3Action(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$fecha_final  = $_GET['fecha_final'];
+	$fecha_inicio = $_GET['fecha_inicio'];
+	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
+	$rango        = ($_GET['rango']!='')?$_GET['rango']:1;
+
+	//Cotizacion
+	$sqlcot  = "SELECT IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa LIMIT 30";
+	$respcot = mysqli_query($link, $sqlcot);
+	
+	//Grafica
+	$categoria    = array();
+	$serie_lineal = array();
+	//$serie_monto  = array();
+	while ($f = mysqli_fetch_array($respcot)) {
+		$categoria[]    = $f['fecha'];
+		$serie_lineal[] = $f['cierre'];
+	}
+	
+	$categoria    = json_encode($categoria);
+	$serie_lineal = json_encode($serie_lineal);
+
+	include('../View/Grafico/grafico3.php');
+}
+
 
 
 switch ($_GET['accion']) {
@@ -272,6 +301,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'grafico2':
 		grafico2Action();
+		break;
+	case 'grafico3':
+		grafico3Action();
 		break;
 	
 	default:
