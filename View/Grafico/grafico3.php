@@ -13,9 +13,9 @@ $(document).ready(function(){
 });
 
 Highcharts.chart('container3', {
-    /*chart: {
-        type: 'line'
-    },*/
+    chart: {
+        type: 'spline'
+    },
     title: {
         text: 'Evolución De Precio'
     },
@@ -27,6 +27,8 @@ Highcharts.chart('container3', {
         categories: <?=$categoria?>
     },
     yAxis: {
+        min: <?=$miny?>,
+        max: <?=$maxy?>,
         title: {
             text: 'Temperature (°C)',
             enabled: false
@@ -43,7 +45,15 @@ Highcharts.chart('container3', {
     series: [{
         name: 'Precio',
         data: <?=str_replace('"','',$serie_lineal)?>
+    },{
+        name: 'Max',
+        data: <?=str_replace('"','',$serie_max12)?>
+    },{
+        name: 'Min',
+        data: <?=str_replace('"','',$serie_min12)?>
     }]
+
+
 });
 </script>
 

@@ -90,12 +90,17 @@
                 </div>
             </div>
             <div id="cotizacion" class="tab-pane fade">
-                <div class="form-group">
-                    <br>
-                    <button type="button" name="buscar3" id="buscar3" class="btn btn-success" onclick="resultadocotizacion()">Buscar</button>
-                    <img src="../Assets/img/load.gif" id="loading3" style="display: none">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <button type="button" name="buscar3" id="buscar3" class="btn btn-success" onclick="resultadocotizacion()">Buscar</button>
+                            <img src="../Assets/img/load.gif" id="loading3" style="display: none">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-12" id="resultadocotizacion"><!--contenido--></div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="resultadocotizacion"><!--contenido--></div>
+                </div>
             </div>
         </div>
     </div>    

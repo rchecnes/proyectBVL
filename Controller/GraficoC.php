@@ -269,23 +269,51 @@ function grafico3Action(){
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
-	$rango        = ($_GET['rango']!='')?$_GET['rango']:1;
 
 	//Cotizacion
-	$sqlcot  = "SELECT IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa LIMIT 30";
+	$sqlcot  = "SELECT IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
 	$respcot = mysqli_query($link, $sqlcot);
-	
+
+	//Max en un año
+	$sqlmax12  = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$respmax12 = mysqli_query($link, $sqlmax12);
+	$rmax12    = mysqli_fetch_array($respmax12);
+	$max12     = $rmax12['max'];
+
+	//Min en un año
+	$sqlmin12  = "SELECT MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$respmin12 = mysqli_query($link, $sqlmin12);
+	$rmin12    = mysqli_fetch_array($respmin12);
+	$min12     = $rmin12['min'];
+
 	//Grafica
 	$categoria    = array();
 	$serie_lineal = array();
-	//$serie_monto  = array();
-	while ($f = mysqli_fetch_array($respcot)) {
-		$categoria[]    = $f['fecha'];
-		$serie_lineal[] = $f['cierre'];
+	$serie_max12  = array();
+	$serie_min12  = array();
+
+	if ($max12 !='') {
+
+		while ($f = mysqli_fetch_array($respcot)) {
+			$categoria[]    = $f['fecha'];
+			$serie_lineal[] = $f['cierre'];
+			$serie_max12[]  = $max12;
+			$serie_min12[]  = $min12;
+		}
+	}else{
+		$categoria[] = 'Sin Reg.';
+		$serie_lineal[] = 0;
+		$serie_max12[]  = 0;
+		$serie_min12[]  = 0;
 	}
 	
+	$maxy = max($serie_lineal);
+	$miny = min($serie_lineal)-0.02;
+
 	$categoria    = json_encode($categoria);
 	$serie_lineal = json_encode($serie_lineal);
+	$serie_max12  = json_encode($serie_max12);
+	$serie_min12  = json_encode($serie_min12);
 
 	include('../View/Grafico/grafico3.php');
 }
