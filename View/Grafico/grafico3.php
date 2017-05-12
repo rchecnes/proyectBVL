@@ -51,6 +51,9 @@ Highcharts.chart('container3', {
     },{
         name: 'Min',
         data: <?=str_replace('"','',$serie_min12)?>
+    },{
+        name: 'Max 6M',
+        data: <?=str_replace('"','',$serie_max6)?>
     }]
 
 

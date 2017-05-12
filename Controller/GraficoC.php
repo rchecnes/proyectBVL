@@ -261,6 +261,20 @@ function grafico2Action(){
 	include('../View/Grafico/grafico2.php');
 }
 
+
+function getFechaMedio($fecha_i,$fecha_f){
+
+	$dias	  = (strtotime($fecha_i)-strtotime($fecha_f))/86400;
+	$dias 	  = abs($dias);
+	$dias     = floor($dias);
+	$mid      = floor(abs($dias/2));
+
+	$date_mid = strtotime($fecha_i."+ $mid days");//
+	$date_mid = date("Y-m-d",$date_mid);
+
+	return $date_mid;
+}
+
 function grafico3Action(){
 
 	include('../Config/Conexion.php');
@@ -271,7 +285,11 @@ function grafico3Action(){
 	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
 
 	//Cotizacion
-	$sqlcot  = "SELECT IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$sqlcot  = "SELECT
+				IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,
+				DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha,
+				cz_fecha
+				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
 	$respcot = mysqli_query($link, $sqlcot);
 
 	//Max en un año
@@ -286,11 +304,19 @@ function grafico3Action(){
 	$rmin12    = mysqli_fetch_array($respmin12);
 	$min12     = $rmin12['min'];
 
+	//Obtenemos el maximo de la fecha medio del anio
+	$fecha_medio = getFechaMedio($fecha_inicio,$fecha_final);
+	$sql6max    = "SELECT MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_medio' AND '$fecha_final' $empresa";
+	$resp6max   = mysqli_query($link, $sql6max);
+	$r6nmax     = mysqli_fetch_array($resp6max);
+	$max6m      = $r6nmax['min'];
+
 	//Grafica
 	$categoria    = array();
 	$serie_lineal = array();
 	$serie_max12  = array();
 	$serie_min12  = array();
+	$serie_max6   = array();
 
 	if ($max12 !='') {
 
@@ -299,12 +325,15 @@ function grafico3Action(){
 			$serie_lineal[] = $f['cierre'];
 			$serie_max12[]  = $max12;
 			$serie_min12[]  = $min12;
+			$serie_max6[]   = ($f['cz_fecha']>=$fecha_medio)?$max6m:0;
+			
 		}
 	}else{
 		$categoria[] = 'Sin Reg.';
 		$serie_lineal[] = 0;
 		$serie_max12[]  = 0;
 		$serie_min12[]  = 0;
+		$serie_max6[] = 0;
 	}
 	
 	$maxy = max($serie_lineal);
@@ -314,6 +343,7 @@ function grafico3Action(){
 	$serie_lineal = json_encode($serie_lineal);
 	$serie_max12  = json_encode($serie_max12);
 	$serie_min12  = json_encode($serie_min12);
+	$serie_max6   = json_encode($serie_max6);
 
 	include('../View/Grafico/grafico3.php');
 }
