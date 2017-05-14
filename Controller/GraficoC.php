@@ -264,12 +264,11 @@ function grafico2Action(){
 
 function getFechaMedio($fecha_i,$fecha_f){
 
-	$dias	  = (strtotime($fecha_i)-strtotime($fecha_f))/86400;
+	$dias	  = (strtotime($fecha_f)-strtotime($fecha_i))/86400;
 	$dias 	  = abs($dias);
 	$dias     = floor($dias);
-	$mid      = floor(abs($dias/2));
-
-	$date_mid = strtotime($fecha_i."+ $mid days");//
+	$mid      = floor(abs(round($dias/2)));//floor(abs($dias/2));
+	$date_mid = strtotime($fecha_f."- $mid days");//
 	$date_mid = date("Y-m-d",$date_mid);
 
 	return $date_mid;
@@ -284,32 +283,37 @@ function grafico3Action(){
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
 
+
 	//Cotizacion
 	$sqlcot  = "SELECT
 				IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,
 				DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha,
 				cz_fecha
-				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa ORDER BY cz_fecha ASC";
 	$respcot = mysqli_query($link, $sqlcot);
 
 	//Max en un año
-	$sqlmax12  = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$sqlmax12  = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
 	$respmax12 = mysqli_query($link, $sqlmax12);
 	$rmax12    = mysqli_fetch_array($respmax12);
 	$max12     = $rmax12['max'];
+	$min12     = $rmax12['min'];
 
-	//Min en un año
-	$sqlmin12  = "SELECT MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
-	$respmin12 = mysqli_query($link, $sqlmin12);
-	$rmin12    = mysqli_fetch_array($respmin12);
-	$min12     = $rmin12['min'];
-
-	//Obtenemos el maximo de la fecha medio del anio
-	$fecha_medio = getFechaMedio($fecha_inicio,$fecha_final);
-	$sql6max    = "SELECT MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_medio' AND '$fecha_final' $empresa";
+	//Obtenemos el maximo y minimo 6M
+	$fecha_6m = getFechaMedio($fecha_inicio,$fecha_final);
+	$sql6max    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_6m' AND '$fecha_final' $empresa";
 	$resp6max   = mysqli_query($link, $sql6max);
 	$r6nmax     = mysqli_fetch_array($resp6max);
-	$max6m      = $r6nmax['min'];
+	$max6m      = $r6nmax['max'];
+	$min6m      = $r6nmax['min'];
+
+	//Obtenemos el maximo y minimo 3M
+	$fecha_3m = getFechaMedio($fecha_6m,$fecha_final);
+	$sql3m    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_3m' AND '$fecha_final' $empresa";
+	$resp3m   = mysqli_query($link, $sql3m);
+	$r3m      = mysqli_fetch_array($resp3m);
+	$max3m    = $r3m['max'];
+	$min3m    = $r3m['min'];
 
 	//Grafica
 	$categoria    = array();
@@ -317,6 +321,9 @@ function grafico3Action(){
 	$serie_max12  = array();
 	$serie_min12  = array();
 	$serie_max6   = array();
+	$serie_min6   = array();
+	$serie_max3   = array();
+	$serie_min3   = array();
 
 	if ($max12 !='') {
 
@@ -325,7 +332,10 @@ function grafico3Action(){
 			$serie_lineal[] = $f['cierre'];
 			$serie_max12[]  = $max12;
 			$serie_min12[]  = $min12;
-			$serie_max6[]   = ($f['cz_fecha']>=$fecha_medio)?$max6m:0;
+			$serie_max6[]   = ($f['cz_fecha']>=$fecha_6m)?$max6m:"''";
+			$serie_min6[]   = ($f['cz_fecha']>=$fecha_6m)?$min6m:"''";
+			$serie_max3[]   = ($f['cz_fecha']>=$fecha_3m)?$max3m:"''";
+			$serie_min3[]   = ($f['cz_fecha']>=$fecha_3m)?$min3m:"''";
 			
 		}
 	}else{
@@ -333,7 +343,10 @@ function grafico3Action(){
 		$serie_lineal[] = 0;
 		$serie_max12[]  = 0;
 		$serie_min12[]  = 0;
-		$serie_max6[] = 0;
+		$serie_max6[]   = 0;
+		$serie_min6[]   = 0;
+		$serie_max3[]   = 0;
+		$serie_min3[]   = 0;
 	}
 	
 	$maxy = max($serie_lineal);
@@ -344,6 +357,9 @@ function grafico3Action(){
 	$serie_max12  = json_encode($serie_max12);
 	$serie_min12  = json_encode($serie_min12);
 	$serie_max6   = json_encode($serie_max6);
+	$serie_min6   = json_encode($serie_min6);
+	$serie_max3   = json_encode($serie_max3);
+	$serie_min3   = json_encode($serie_min3);
 
 	include('../View/Grafico/grafico3.php');
 }

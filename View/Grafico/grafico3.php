@@ -1,5 +1,5 @@
 
-<div id="container3" style="height: 600px; margin: 0px auto; border: 1px solid #ddd">
+<div id="container3" style="height: 600px; width: 100%; margin: 0px auto; border: 1px solid #ddd">
     
 </div>
 
@@ -24,7 +24,14 @@ Highcharts.chart('container3', {
         enabled: false
     },
     xAxis: {
-        categories: <?=$categoria?>
+        categories: <?=$categoria?>,
+            labels:{
+            rotation: -80
+        },
+        style: {
+            color: 'red',
+            fontSize:'10px',
+        }
     },
     yAxis: {
         min: <?=$miny?>,
@@ -44,16 +51,32 @@ Highcharts.chart('container3', {
     },
     series: [{
         name: 'Precio',
+        visible: true,
         data: <?=str_replace('"','',$serie_lineal)?>
     },{
-        name: 'Max',
+        name: 'Max 12M',
+        visible: true,
         data: <?=str_replace('"','',$serie_max12)?>
     },{
-        name: 'Min',
+        name: 'Min 12M',
+        visible: true,
         data: <?=str_replace('"','',$serie_min12)?>
     },{
         name: 'Max 6M',
+        visible: true,
         data: <?=str_replace('"','',$serie_max6)?>
+    },{
+        name: 'Min 6M',
+        visible: true,
+        data: <?=str_replace('"','',$serie_min6)?>
+    },{
+        name: 'Max 3M',
+        visible: true,
+        data: <?=str_replace('"','',$serie_max3)?>
+    },{
+        name: 'Min 3M',
+        visible: true,
+        data: <?=str_replace('"','',$serie_min3)?>
     }]
 
 

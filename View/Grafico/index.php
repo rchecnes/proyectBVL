@@ -10,7 +10,7 @@
 <div class="container">
     <h3>GRÁFICOS</h3>
     <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="form-group">
                 <?php
                 $fecha_fin    = date('Y-m-d');
@@ -21,13 +21,13 @@
                 <input type="text" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="form-group">
                 <label>Fecha Final (Ejem: <?=$fecha_fin?>)</label>
                 <input type="text" id="fecha_final" name="fecha_final" value="<?=$fecha_fin?>" class="form-control" placeholder="<?=$fecha_fin?>">
             </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="form-group">
                 <label>Empresa:</label>
                 <?php
@@ -43,6 +43,14 @@
                     Combobox($link, $params);
                  ?>
             </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                          <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
+                          <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
+                          <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
+                          <img src="../Assets/img/load.gif" id="loading1" style="display: none">
+                        </div>
         </div>
     </div>
 
