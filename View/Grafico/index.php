@@ -17,13 +17,13 @@
                 $fecha_final    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
                 $fecha_inicio = date ( 'Y-m-j' , $fecha_final );
                 ?>
-                <label>Fecha Inicio (Ejem: <?=$fecha_inicio?>)</label>
+                <label>Fecha Ini. (<?=$fecha_inicio?>)</label>
                 <input type="text" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="form-group">
-                <label>Fecha Final (Ejem: <?=$fecha_fin?>)</label>
+                <label>Fecha Fin. (<?=$fecha_fin?>)</label>
                 <input type="text" id="fecha_final" name="fecha_final" value="<?=$fecha_fin?>" class="form-control" placeholder="<?=$fecha_fin?>">
             </div>
         </div>
@@ -46,15 +46,21 @@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
-                          <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
-                          <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
-                          <img src="../Assets/img/load.gif" id="loading1" style="display: none">
-                        </div>
+              <label>&nbsp;</label><br>
+              <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
+              <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
+              <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="button" name="buscar" id="buscar" class="btn btn-success" onclick="buscar()">Buscar</button>
+            <img src="../Assets/img/load.gif" id="loading" style="display: none">
+        </div>
+    </div><br>
 
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" id="tabs">
       <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Montos Por Precio</a></li>
       <li><a data-toggle="tab" href="#analisis_de_precio">2. Análisis De Precio</a></li>
       <li><a data-toggle="tab" href="#cotizacion">3. Cotizaciones</a></li>
@@ -98,14 +104,14 @@
                 </div>
             </div>
             <div id="cotizacion" class="tab-pane fade">
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <button type="button" name="buscar3" id="buscar3" class="btn btn-success" onclick="resultadocotizacion()">Buscar</button>
                             <img src="../Assets/img/load.gif" id="loading3" style="display: none">
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="resultadocotizacion"><!--contenido--></div>
                 </div>
@@ -133,12 +139,26 @@
         if ( n<mini || n>maxi ) alert("El valor debe ser mayor a "+mini+" y menor igual a "+maxi);
     }
 
+    buscar = function(){
+
+        var grafico = $("#tabs li.active>a").attr('href');
+
+        if (grafico == '#analisis_de_precio') {
+            resultadomontoporprecio();
+        }else if(grafico == '#monto_por_precio'){
+            resultadoanalisisdeprecio();
+        }else if (grafico == '#cotizacion') {
+            resultadocotizacion();
+        }
+
+    }
+
     resultadomontoporprecio = function(){
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
             
-            $("#loading1").show();
+            $("#loading").show();
 
             $.ajax({
                 type:'GET',
@@ -148,7 +168,7 @@
                 success:function(data){
 
                     $("#resultadomontoporprecio").html(data);
-                    $("#loading1").hide();
+                    $("#loading").hide();
                 }
             });
         }else{
@@ -163,7 +183,7 @@
             n = parseInt($("#rango").val());
             if (n>0 && n<=100){
 
-                $("#loading2").show();
+                $("#loading").show();
 
                 $.ajax({
                     type:'GET',
@@ -173,7 +193,7 @@
                     success:function(data){
 
                         $("#resultadoanalisisdeprecio").html(data);
-                        $("#loading2").hide();
+                        $("#loading").hide();
                     }
                 });
             }else{
@@ -189,7 +209,7 @@
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='' && $("#rango").val() !='') {
            
-            $("#loading3").show();
+            $("#loading").show();
 
             $.ajax({
                 type:'GET',
@@ -199,7 +219,7 @@
                 success:function(data){
 
                     $("#resultadocotizacion").html(data);
-                    $("#loading3").hide();
+                    $("#loading").hide();
                 }
             });
             
