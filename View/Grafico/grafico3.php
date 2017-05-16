@@ -55,27 +55,27 @@ Highcharts.chart('container3', {
         data: <?=str_replace('"','',$serie_lineal)?>
     },{
         name: 'Max 12M',
-        visible: true,
+        visible: <?=$visible12m?>,
         data: <?=str_replace('"','',$serie_max12)?>
     },{
         name: 'Min 12M',
-        visible: true,
+        visible: <?=$visible12m?>,
         data: <?=str_replace('"','',$serie_min12)?>
     },{
         name: 'Max 6M',
-        visible: true,
+        visible: <?=$visible6m?>,
         data: <?=str_replace('"','',$serie_max6)?>
     },{
         name: 'Min 6M',
-        visible: true,
+        visible: <?=$visible6m?>,
         data: <?=str_replace('"','',$serie_min6)?>
     },{
         name: 'Max 3M',
-        visible: true,
+        visible: <?=$visible3m?>,
         data: <?=str_replace('"','',$serie_max3)?>
     },{
         name: 'Min 3M',
-        visible: true,
+        visible: <?=$visible3m?>,
         data: <?=str_replace('"','',$serie_min3)?>
     }]
 

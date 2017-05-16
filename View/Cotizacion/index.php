@@ -5,7 +5,7 @@
 </head>
 <body>
 <?php include('../Include/Menu.php');
-$url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
+$url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
 ?>
 <div class="container">
     <h3>IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>

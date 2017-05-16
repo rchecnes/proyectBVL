@@ -47,8 +47,8 @@
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="btn-group" role="group" aria-label="Basic example">
               <label>&nbsp;</label><br>
-              <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
-              <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
+              <button type="button" class="btn btn-secondary mostrar_graf active" value="3">3M</button>
+              <button type="button" class="btn btn-secondary mostrar_graf active" value="6">6M</button>
               <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
             </div>
         </div>
@@ -60,42 +60,26 @@
         </div>
     </div><br>
 
-    <ul class="nav nav-tabs" id="tabs">
-      <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Montos Por Precio</a></li>
-      <li><a data-toggle="tab" href="#analisis_de_precio">2. Análisis De Precio</a></li>
-      <li><a data-toggle="tab" href="#cotizacion">3. Cotizaciones</a></li>
-    </ul>
+    
 
     <div class="tabbable">
+        <ul class="nav nav-tabs" id="tabs">
+          <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Montos Por Precio</a></li>
+          <li><a data-toggle="tab" href="#analisis_de_precio">2. Análisis De Precio</a></li>
+          <li><a data-toggle="tab" href="#cotizacion">3. Cotizaciones</a></li>
+        </ul>
         <div class="tab-content">
             <div id="monto_por_precio" class="tab-pane fade in active">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
-                          <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
-                          <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
-                          <img src="../Assets/img/load.gif" id="loading1" style="display: none">
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
                 </div>
             </div>
             <div id="analisis_de_precio" class="tab-pane fade">
                 <div class="row">
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label>Rango: 1-100</label>
                             <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" onkeyup='validaNum(this.value,0,100)'>
-                        </div>
-                    </div>
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                        <div class="form-group">
-                            <br>
-                            <button type="button" name="buscar2" id="buscar2" class="btn btn-success" onclick="resultadoanalisisdeprecio()">Buscar</button>
-                            <img src="../Assets/img/load.gif" id="loading2" style="display: none">
                         </div>
                     </div>
                 </div>
@@ -104,14 +88,6 @@
                 </div>
             </div>
             <div id="cotizacion" class="tab-pane fade">
-                <!--<div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                            <button type="button" name="buscar3" id="buscar3" class="btn btn-success" onclick="resultadocotizacion()">Buscar</button>
-                            <img src="../Assets/img/load.gif" id="loading3" style="display: none">
-                        </div>
-                    </div>
-                </div>-->
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="resultadocotizacion"><!--contenido--></div>
                 </div>
@@ -139,13 +115,17 @@
         if ( n<mini || n>maxi ) alert("El valor debe ser mayor a "+mini+" y menor igual a "+maxi);
     }
 
+    $(".mostrar_graf").click(function(){
+        $(this).toggleClass('active');
+    });
+
     buscar = function(){
 
         var grafico = $("#tabs li.active>a").attr('href');
 
-        if (grafico == '#analisis_de_precio') {
+        if (grafico == '#monto_por_precio') {
             resultadomontoporprecio();
-        }else if(grafico == '#monto_por_precio'){
+        }else if(grafico == '#analisis_de_precio'){
             resultadoanalisisdeprecio();
         }else if (grafico == '#cotizacion') {
             resultadocotizacion();
@@ -208,13 +188,24 @@
     resultadocotizacion = function(){
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='' && $("#rango").val() !='') {
+
+            var visible12m = 'false';
+            var visible6m = 'false';
+            var visible3m = 'false';
+
+            $(".mostrar_graf.active").each(function(){
+                if ($(this).val() == '12') {visible12m ='true';}
+                if ($(this).val() == '6') {visible6m   ='true';}
+                if ($(this).val() == '3') {visible3m   ='true';}
+            });
            
             $("#loading").show();
 
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico3',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val(),
+                visible12m:visible12m,visible6m:visible6m,visible3m:visible3m},
 
                 success:function(data){
 
