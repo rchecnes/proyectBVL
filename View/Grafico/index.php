@@ -45,11 +45,14 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-            <div class="btn-group" role="group" aria-label="Basic example">
-              <label>&nbsp;</label><br>
-              <button type="button" class="btn btn-secondary mostrar_graf active" value="3">3M</button>
-              <button type="button" class="btn btn-secondary mostrar_graf active" value="6">6M</button>
-              <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
+            <div class="form-group">
+                <label>Rango:</label><br>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  
+                  <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
+                  <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
+                  <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
+                </div>
             </div>
         </div>
     </div>
@@ -116,7 +119,20 @@
     }
 
     $(".mostrar_graf").click(function(){
-        $(this).toggleClass('active');
+        var value = $(this).val();
+        var node = $(this);
+
+        $('.mostrar_graf').removeClass('active');
+        node.addClass('active');
+
+        if (value == '12') {
+
+        }else if(value == '6'){
+
+        }else if (value == '3') {
+
+        }
+        
     });
 
     buscar = function(){
@@ -189,23 +205,12 @@
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='' && $("#rango").val() !='') {
 
-            var visible12m = 'false';
-            var visible6m = 'false';
-            var visible3m = 'false';
-
-            $(".mostrar_graf.active").each(function(){
-                if ($(this).val() == '12') {visible12m ='true';}
-                if ($(this).val() == '6') {visible6m   ='true';}
-                if ($(this).val() == '3') {visible3m   ='true';}
-            });
-           
             $("#loading").show();
 
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico3',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val(),
-                visible12m:visible12m,visible6m:visible6m,visible3m:visible3m},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val()},
 
                 success:function(data){
 
@@ -221,9 +226,9 @@
 
     resultadomontoporprecio();
 
-    $(".mostrar_graf").on("click", function(){
-        resultadomontoporprecio();
-    });
+    //$(".mostrar_graf").on("click", function(){
+    //    resultadomontoporprecio();
+    //});
 
     $(".nav-tabs li a").on("click", function(){
 

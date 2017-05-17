@@ -282,9 +282,9 @@ function grafico3Action(){
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
 
-	$visible12m = $_GET['visible12m'];
-	$visible6m  = $_GET['visible6m'];
-	$visible3m  = $_GET['visible3m'];
+	//$visible12m = $_GET['visible12m'];
+	//$visible6m  = $_GET['visible6m'];
+	//$visible3m  = $_GET['visible3m'];
 
 	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
 
