@@ -15,7 +15,7 @@
                 <?php
                 $fecha_fin    = date('Y-m-d');
                 $fecha_final    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
-                $fecha_inicio = date ( 'Y-m-j' , $fecha_final );
+                $fecha_inicio = date ( 'Y-m-d' , $fecha_final );
                 ?>
                 <label>Fecha Ini. (<?=$fecha_inicio?>)</label>
                 <input type="text" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
@@ -118,22 +118,6 @@
         if ( n<mini || n>maxi ) alert("El valor debe ser mayor a "+mini+" y menor igual a "+maxi);
     }
 
-    $(".mostrar_graf").click(function(){
-        var value = $(this).val();
-        var node = $(this);
-
-        $('.mostrar_graf').removeClass('active');
-        node.addClass('active');
-
-        if (value == '12') {
-
-        }else if(value == '6'){
-
-        }else if (value == '3') {
-
-        }
-        
-    });
 
     buscar = function(){
 
@@ -226,6 +210,55 @@
 
     resultadomontoporprecio();
 
+    function restarFecha(fecha, cantidad){
+        /*var d    = Date.parse(fecha);
+        var date = new Date(d);
+      
+        date.setDate(date.getDate() - cantidad);
+
+        return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();*/
+
+        $.ajax({
+            url: '../Controller/GraficoC.php?accion=restarFecha',
+            type: 'GET',
+            data: {fecha:fecha,cantidad:cantidad},
+            success: function(data){
+                $("#fecha_inicio").val(data);
+                //Buscamos
+                buscar();
+            }
+        });
+        
+    }
+    
+    $(".mostrar_graf").click(function(){
+
+        var value = $(this).val();
+        var node  = $(this);
+
+        $('.mostrar_graf').removeClass('active');
+        node.addClass('active');
+
+        var fecha_final = $("#fecha_final").val()
+
+        if (value == '12') {
+            //dias 1 anio: 365
+            //$("#fecha_inicio").val(restarFecha($("#fecha_final").val(),365));
+            restarFecha(fecha_final,12);
+
+        }else if(value == '6'){
+            //dias 6 mese: 183
+            //$("#fecha_inicio").val(restarFecha($("#fecha_final").val(),183));
+            restarFecha(fecha_final,6);
+
+        }else if (value == '3') {
+            //dias 6 mese: 91
+            //$("#fecha_inicio").val(restarFecha($("#fecha_final").val(),91));
+            restarFecha(fecha_final,3);
+        }
+        
+    });
+
     //$(".mostrar_graf").on("click", function(){
     //    resultadomontoporprecio();
     //});
@@ -242,7 +275,9 @@
         }else if($(this).attr('href')=='#cotizacion'){
             resultadocotizacion();
         }
-    })
+    });
+
+    
  });
  </script>
 </body>

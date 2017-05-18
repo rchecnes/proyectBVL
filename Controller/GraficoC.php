@@ -369,6 +369,17 @@ function grafico3Action(){
 	include('../View/Grafico/grafico3.php');
 }
 
+function restarFecha(){
+
+	$fecha    = $_GET['fecha'];
+	$cantidad = $_GET['cantidad'];
+
+	$fecha     = date($fecha);
+    $new_fecha = strtotime ( "-$cantidad months" , strtotime ( $fecha ) ) ;
+    $new_fecha = date ( 'Y-m-d' , $new_fecha );
+
+	echo $new_fecha;
+}
 
 
 switch ($_GET['accion']) {
@@ -383,6 +394,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'grafico3':
 		grafico3Action();
+		break;
+	case 'restarFecha':
+		restarFecha();
 		break;
 	
 	default:
