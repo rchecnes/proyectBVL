@@ -95,7 +95,7 @@ function listarAction(){
 	include('../View/Cotizacion/listar.php');
 }
 
-function buscarEmpresaAction(){
+/*function buscarEmpresaAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
@@ -116,29 +116,34 @@ function buscarEmpresaAction(){
 	}
 
 	echo json_encode($empresa);
-}
+}*/
 
-/*function buscarEmpresaAction(){
+function buscarEmpresaAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
 	$sector = ($_GET['sector']!='')?" AND cod_sector ='".$_GET['sector']."'":"";
 	$moneda = ($_GET['moneda']!='')?" AND moneda LIKE '%".$_GET['moneda']."%'":"";
-	$term   = $_GET['term'];
+	//$term   = $_GET['term'];
 
-	$sql = "SELECT * FROM empresa WHERE (nombre LIKE '%$term%' OR nemonico LIKE '%$term%') $sector $moneda";
+	$sql = "SELECT * FROM empresa WHERE cod_emp!='' $sector $moneda";
 	$resp = mysqli_query($link,$sql);
 
-	$empresa = "<option value=''>[Ninguno]</option>";
+	//$empresa = "<option value=''>[Ninguno]</option>";
+	$empresa = "";
 
 	while ($row = mysqli_fetch_array($resp)) {
 		$empresa .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['nombre'].' - '.$row['moneda']."</option>";
 
 	}
 
+	if ($empresa=='') {
+		$empresa = "<option value=''>[Sin Resultado]</option>";
+	}
+
 	echo $empresa;
-}*/
+}
 
 switch ($_GET['accion']) {
 	case 'index':

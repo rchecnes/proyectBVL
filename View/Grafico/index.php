@@ -17,14 +17,14 @@
                 $fecha_final    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
                 $fecha_inicio = date ( 'Y-m-d' , $fecha_final );
                 ?>
-                <label>Fecha Ini. (<?=$fecha_inicio?>)</label>
-                <input type="text" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
+                <label>Fecha Ini. (dd/mm/aaaa)</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <div class="form-group">
-                <label>Fecha Fin. (<?=$fecha_fin?>)</label>
-                <input type="text" id="fecha_final" name="fecha_final" value="<?=$fecha_fin?>" class="form-control" placeholder="<?=$fecha_fin?>">
+                <label>Fecha Fin. (dd/mm/aaaa)</label>
+                <input type="date" id="fecha_final" name="fecha_final" value="<?=$fecha_fin?>" class="form-control" placeholder="<?=$fecha_fin?>">
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -35,7 +35,7 @@
                         'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
                         'sql'    => 'SELECT * FROM empresa WHERE estado=1',
                         'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
-                        'empty'  => 'Todos',
+                        'empty'  => false,
                         'defect' => 'ENGEPEC1',
                         'edit'   => '',
                         'enable' => 'enable'

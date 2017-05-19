@@ -40,14 +40,14 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
                 </div>
             </div>
             <div class="col-lg-4">
-                <!--<div class="form-group">
+                <div class="form-group">
                     <label>Empresa:</label>
                     <?php   
                         $params = array(
                             'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
-                            'sql'    => 'SELECT * FROM empresa',
+                            'sql'    => 'SELECT * FROM empresa WHERE estado=1',
                             'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
-                            'empty'  => '[Ninguno]',
+                            'empty'  => false,
                             'defect' => 'RELAPAC1',
                             'edit'   => '',
                             'enable' => 'enable'
@@ -55,27 +55,33 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
 
                         Combobox($link, $params);
                       ?>
-                </div>-->
+                </div>
 
-                <label>Buscar Empresa(Busca del tercer caracter):</label>
+                <!--<label>Buscar Empresa(Busca del tercer caracter):</label>
                 <div class="form-group">
                     <input type="hidden" id="empresa" name="empresa">
                     <input type="hidden" id="cod_empresa" name="cod_empresa">
                     <input type="text" id="bus_empresa" name="bus_empresa" class="form-control ui-autocomplete-input" placeholder="Buscar Empresa">
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <label>Fecha Inicio:</label>
+                <?php
+                    $fecha_fin    = date('Y-m-d');
+                    $fecha_final  = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
+                    $fecha_inicio = date ( 'Y-m-d' , $fecha_final );
+                   
+                ?>
+                <label>Fecha Inicio (dd/mm/aaaa):</label>
                 <div class="form-group">
-                    <input type="text" id="fecha_inicio" name="fecha_inicio" class="form-control date-picker" placeholder="Fecha Inicio" readonly="readonly">
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" placeholder="Fecha Inicio" value="<?=$fecha_inicio?>">
                 </div>
             </div>
             <div class="col-lg-6">
-                <label>Fecha Final:</label>
+                <label>Fecha Final (dd/mm/aaaa):</label>
                 <div class="form-group">
-                    <input type="text" id="fecha_fin" name="fecha_fin" class="form-control date-picker" placeholder="Fecha Fin" readonly="readonly">
+                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" placeholder="Fecha Fin" value="<?=$fecha_fin?>">
                 </div>
             </div>
         </div>
@@ -94,17 +100,16 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
 
-    $('#fecha_inicio').datepicker({
+    /*$('#fecha_inicio').datepicker({
         format: "dd/mm/yyyy",
         autoclose: true
     }).datepicker("update", '<?=date('d/m/Y')?>').on('changeDate', function(ev){
-        //$('#fecha_fin').datepicker("update", $("#fecha_inicio").val());
     });
 
     $('#fecha_fin').datepicker({
         format: "dd/mm/yyyy",
         autoclose: true
-    }).datepicker("update", '<?=date('d/m/Y')?>');
+    }).datepicker("update", '<?=date('d/m/Y')?>');*/
 
     var url = '<?php echo $url; ?>';
     $(".navbar-nav li a").each(function(){
@@ -125,10 +130,10 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
     getHistorico = function(){
 
         var p_Nemonico   = $("#empresa").val();
-        var fecha_inicio = $("#fecha_inicio").val().split('/');
-        var p_Ini        = fecha_inicio[2]+'-'+fecha_inicio[1]+'-'+fecha_inicio[0];
-        var fecha_fin    = $("#fecha_fin").val().split('/');
-        var P_Fin        = fecha_fin[2]+'-'+fecha_fin[1]+'-'+fecha_fin[0];
+        var fecha_inicio = $("#fecha_inicio").val().split('-');
+        var p_Ini        = fecha_inicio[0]+'-'+fecha_inicio[1]+'-'+fecha_inicio[2];
+        var fecha_fin    = $("#fecha_fin").val().split('-');
+        var P_Fin        = fecha_fin[0]+'-'+fecha_fin[1]+'-'+fecha_fin[2];
 
         $("#loading").show();
 
@@ -147,10 +152,10 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
     getCotizacion = function(){
 
         var p_Nemonico    = $("#empresa").val();
-        var fecha_inicio  = $("#fecha_inicio").val().split('/');
-        var p_Ini         = fecha_inicio[2]+fecha_inicio[1]+fecha_inicio[0];
-        var fecha_fin     = $("#fecha_fin").val().split('/');
-        var P_Fin         = fecha_fin[2]+fecha_fin[1]+fecha_fin[0];
+        var fecha_inicio  = $("#fecha_inicio").val().split('-');
+        var p_Ini         = fecha_inicio[0]+fecha_inicio[1]+fecha_inicio[2];
+        var fecha_fin     = $("#fecha_fin").val().split('-');
+        var P_Fin         = fecha_fin[0]+fecha_fin[1]+fecha_fin[2];
 
         var url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio="+p_Ini+"&fec_fin="+P_Fin+"&nemonico="+p_Nemonico;
 
@@ -195,7 +200,7 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
                 $(this).children("td").each(function (index2){   
                     var campo = '';
                     var valor = '';
-                    console.log(index2);
+                    //console.log(index2);
                     switch (index2){
 
                         case 0: campo = 'f';valor=$(this).text();break;//fecha
@@ -229,7 +234,7 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
 
     getHistorico();
 
-    $( "#bus_empresa" ).autocomplete({
+    /*$( "#bus_empresa" ).autocomplete({
       source: function( request, response ) {
         $.ajax({
             type: 'GET',
@@ -246,9 +251,9 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
           $("#empresa").val(ui.item.nemonico);
           $("#cod_empresa").val(ui.item.cod_emp);
       }
-    });
+    });*/
 
-    /*buscarEmpresa = function(){
+    buscarEmpresa = function(){
         $("#empresa").attr('disabled','disabled');
         $.ajax({
             type: 'GET',
@@ -259,11 +264,11 @@ $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
                 $("#empresa").removeAttr('disabled');
             }
         });
-    }*/
+    }
 
-    /*$("#sector, #moneda").on("change", function(){
+    $("#sector, #moneda").on("change", function(){
         buscarEmpresa();
-    })*/
+    })
 
  });
  </script>
