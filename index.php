@@ -1,2 +1,2 @@
 <?php
-header("location:Controller/CotizacionC.php?accion=index");
+header("location:Controller/LoginC.php?accion=index");

@@ -20,6 +20,7 @@
           <li><a href="../Controller/CotizacionC.php?accion=index">Importar De BVL</a></li>
           <li><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
           <li><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
+          <li><a href="../Controller/LoginC.php?accion=logout" role="button" style="color:red">Cerrar Sesión</a></li>
           
         </ul>
      
