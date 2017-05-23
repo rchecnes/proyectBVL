@@ -38,7 +38,7 @@
 		        <td><?=$em['nom_sector']?></td>
 		        <td><?=$em['segmento']?></td>
 		        <td><?=$em['moneda']?></td>
-		        <td><?=($em['estado']==1)?'Habilitado':'Deshabilitado'?></td>
+		        <td><?=($em['estado']=='1')?'Habilitado':'Deshabilitado'?></td>
 		        <td width="200">
 		        	<a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="btn btn-default" role="button">Editar</a>
 		        	<a href="../Controller/EmpresaC.php?accion=delete&codigo=<?=$em['cod_emp']?>" class="btn btn-danger" role="button">Eliminar</a>
