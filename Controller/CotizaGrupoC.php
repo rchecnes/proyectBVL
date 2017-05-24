@@ -1,22 +1,36 @@
 <?php
 
 //http://www.forosdelweb.com/f18/extraer-datos-tabla-html-710504/
+//Cron: 15 22 * * * /usr/local/zend/bin/php -f /var/www/html/AppChecnes/proyectBVL/Controller/CotizaGrupoC.php
+//El cron se ejecuta a las 10:15pm de cada dia
+//Se esta registrando desde el dia 22/05/2017
 
 $ruta = 'var/www/html/AppChecnes/proyectBVL';
 
+function getConexion(){
+
+    $DB_SERVER = '190.117.250.34:3307';
+    $DB_USER   = 'integrator';
+    $DB_PASS   = '4v4t4r';
+    $DB_NAME   = 'checnes_BVL';
+
+    $link = mysqli_connect($DB_SERVER,$DB_USER,$DB_PASS,$DB_NAME);
+
+    return $link;
+}
+
 function getCotizacionGrupo(){
 
-    global $ruta;
+    //global $ruta;
 
-	include($ruta.'/Config/Conexion.php');
 	$link      = getConexion();
 
 	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1'";
 	$respemp   = mysqli_query($link, $sqlemp);
 	$emp_array = array();
 
-	$p_Ini = '20170522';//date('Ymd');
-	$P_Fin = '20170522';//date('Ymd');
+	$p_Ini = date('Ymd');
+	$P_Fin = date('Ymd');
 
     $c = 1;
     $cotiza = array();
@@ -67,15 +81,15 @@ function getPrepareData($empresa, $data){
             $cotiza = array(
                     'emp'=> $empresa,
                     'f'  => $fecha,
-                    'a'  => (float)str_replace(" ","",$cols->item(1)->nodeValue),
-                    'c'  => (float)str_replace(" ","",$cols->item(2)->nodeValue),
-                    'max'=> (float)str_replace(" ","",$cols->item(3)->nodeValue),
-                    'min'=> (float)str_replace(" ","",$cols->item(4)->nodeValue),
-                    'prd'=> (float)str_replace(" ","",$cols->item(5)->nodeValue),
-                    'cn' => (float)str_replace(" ","",$cols->item(6)->nodeValue),
-                    'mn' => (float)str_replace(" ","",$cols->item(7)->nodeValue),
+                    'a'  => (double)str_replace(" ","",$cols->item(1)->nodeValue),
+                    'c'  => (double)str_replace(" ","",$cols->item(2)->nodeValue),
+                    'max'=> (double)str_replace(" ","",$cols->item(3)->nodeValue),
+                    'min'=> (double)str_replace(" ","",$cols->item(4)->nodeValue),
+                    'prd'=> (double)str_replace(" ","",$cols->item(5)->nodeValue),
+                    'cn' => (double)str_replace(" ","",$cols->item(6)->nodeValue),
+                    'mn' => (double)str_replace(" ","",$cols->item(7)->nodeValue),
                     'fa' => str_replace(" ","",$cols->item(8)->nodeValue),
-                    'ca' => (float)str_replace(" ","",$cols->item(9)->nodeValue)
+                    'ca' => (double)str_replace(" ","",$cols->item(9)->nodeValue)
                     );
         }
     }
@@ -85,9 +99,8 @@ function getPrepareData($empresa, $data){
 
 function savCatiza($cotiza){
 
-    global $ruta;
+    //global $ruta;
 
-    include($ruta.'/Config/Conexion.php');
     $link = getConexion();
 
     $del_x_cod = "";
