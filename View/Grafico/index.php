@@ -50,7 +50,7 @@
                 <?php
                   $params = array(
                         'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
-                        'sql'    => 'SELECT * FROM empresa WHERE estado=1',
+                        'sql'    => "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp) WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user'",
                         'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
                         'empty'  => false,
                         'defect' => 'ENGEPEC1',

@@ -64,6 +64,12 @@
     position: relative;
 }
 
+.table-header{
+    background: #efefef;
+}
+.td-header{
+    background:#f1f1f1;
+}
 /*MENU*/
 .navbar ul.nav li:hover{
     background: #e7e7e7;

@@ -93,15 +93,15 @@
 		?>
 			<table class="table table-bordered">
 				<tr>
-			        <th colspan="7">Grupo: <?=$rg['nom_grupo']?></th>
+			        <th colspan="7" class="table-header">Grupo: <?=$rg['nom_grupo']?></th>
 			    </tr>
 			    <tr>
-			        <th>Nemónico</th>
-			        <th>Nombre</th>
-			        <th>Sector</th>
-			        <th align="center">Moneda</th>
-			        <th colspan="2" style="text-align:center">Ult. Cotización</th>
-			        <th align="center">Acciones</th>
+			        <th class="td-header">Nemónico</th>
+			        <th class="td-header">Nombre</th>
+			        <th class="td-header">Sector</th>
+			        <th align="center" class="td-header">Moneda</th>
+			        <th colspan="2" class="td-header" style="text-align:center">Ult. Cotización</th>
+			        <th align="center" class="td-header">Acciones</th>
 			    </tr>
 			    <?php
 
