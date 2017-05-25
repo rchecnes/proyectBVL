@@ -10,24 +10,41 @@
 <div class="container">
     <h3>GRÁFICOS</h3>
     <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-112">
             <div class="form-group">
                 <?php
                 $fecha_fin    = date('Y-m-d');
                 $fecha_final    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
                 $fecha_inicio = date ( 'Y-m-d' , $fecha_final );
                 ?>
-                <label>Fecha Ini. (dd/mm/aaaa)</label>
+                <label>Fecha Ini.(dd/mm/aaaa)</label>
                 <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?=$fecha_inicio?>" class="form-control" placeholder="<?=$fecha_inicio?>">
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
             <div class="form-group">
-                <label>Fecha Fin. (dd/mm/aaaa)</label>
+                <label>Fecha Fin.(dd/mm/aaaa)</label>
                 <input type="date" id="fecha_final" name="fecha_final" value="<?=$fecha_fin?>" class="form-control" placeholder="<?=$fecha_fin?>">
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <div class="form-group">
+                <label for="inputPassword" class="control-label">Grupo:</label>
+                <?php
+                    $params = array(
+                        'select' => array('id'=>'cod_grupo', 'name'=>'cod_grupo', 'class'=>'form-control'),
+                        'sql'    => "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'",
+                        'attrib' => array('value'=>'cod_grupo','desc'=>'nom_grupo', 'concat'=>' - ','descextra'=>''),
+                        'empty'  => 'Todos',
+                        'defect' => '',
+                        'edit'   => '',
+                        'enable' => 'enable'
+                    );
+                    Combobox($link, $params);
+                 ?>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
             <div class="form-group">
                 <label>Empresa:</label>
                 <?php
@@ -44,7 +61,7 @@
                  ?>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
             <div class="form-group">
                 <label>Rango:</label><br>
                 <div class="btn-group" role="group" aria-label="Basic example">

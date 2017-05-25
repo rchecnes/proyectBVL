@@ -1,9 +1,13 @@
 <?php
+session_start();
 
 function indexAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
+
+	$cod_user = $_SESSION['cod_user'];
+	
 	include('../Control/Combobox/Combobox.php');
 	$url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
 	

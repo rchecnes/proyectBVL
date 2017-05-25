@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <header>
     <nav class="navbar navbar-default" role="navigation">
       <!-- El logotipo y el icono que despliega el menú se agrupan
@@ -22,7 +25,7 @@
           <li><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
           <li><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
           <li><a href="../Controller/LoginC.php?accion=logout" role="button" style="color:red">Cerrar Sesión</a></li>
-          
+          <li><a href="#" role="button"><strong>Usuario:<?=strtoupper($_SESSION['nomb_user']);?></strong></a></li>
         </ul>
      
         <!--<form class="navbar-form navbar-left" role="search">
