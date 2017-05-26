@@ -294,6 +294,22 @@
         }
     });
 
+    $("#cod_grupo").change(function(){
+
+        $("#empresa").attr('disabled','disabled');
+        $.ajax({
+            type:'GET',
+            url: '../Controller/GraficoC.php?accion=listfavorito',
+            data:{cod_grupo:$(this).val()},
+
+            success:function(data){
+
+                $("#empresa").html(data);
+                $("#empresa").removeAttr('disabled');
+            }
+        });
+    });
+
     
  });
  </script>

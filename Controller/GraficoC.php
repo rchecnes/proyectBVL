@@ -130,9 +130,14 @@ function grafico1Action(){
 		}
 
 			
+		$roud_serie = round((($f['monto']/$suma_monto)*100),0);
 
-		$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-		$series[]    = round((($f['monto']/$suma_monto)*100),0);
+		if ($roud_serie>0) {
+
+			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
+			$series[]    = $roud_serie;
+		}
+		
 	}
 
 	$categoria = json_encode($categoria);
@@ -252,10 +257,14 @@ function grafico2Action(){
 			$fecha_fin = number_format($f['rango_fin'],4,'.',',');
 		}
 
-			
+		$round_serie = round((($f['monto']/$suma_monto)*100),0);
 
-		$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-		$series[]    = round((($f['monto']/$suma_monto)*100),0);
+		if ($round_serie > 0) {
+
+			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
+			$series[]    = $round_serie;
+		}
+		
 	}
 
 	$tabla_ult_rf = $tabla[$p-1]['rango_fin'];
@@ -385,6 +394,34 @@ function restarFecha(){
 	echo $new_fecha;
 }
 
+function listfavoritoAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$cod_user  = $_SESSION['cod_user'];
+
+	$cod_grupo = $_GET['cod_grupo'];
+
+	$sql = "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef
+			INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+			WHERE e.estado=1
+			AND ef.est_fab
+			AND ef.cod_user='$cod_user'";
+	if ($cod_grupo !='') {
+		$sql .= " AND ef.cod_grupo='$cod_grupo'";
+	}
+	
+	$resp = mysqli_query($link,$sql);
+
+	$html = '';
+	while ($r=mysqli_fetch_array($resp)) {
+		$html .= '<option value="'.$r['nemonico'].'">'.$r['nombre'].'</option>';
+	}
+
+	echo $html;
+}
+
 
 switch ($_GET['accion']) {
 	case 'index':
@@ -402,7 +439,9 @@ switch ($_GET['accion']) {
 	case 'restarFecha':
 		restarFecha();
 		break;
-	
+	case 'listfavorito':
+		listfavoritoAction();
+		break;	
 	default:
 		# code...
 		break;

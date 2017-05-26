@@ -75,6 +75,23 @@
     background: #e7e7e7;
 } 
 
+/*ICONS*/
+.color-red{
+    color: #d9534f!important;
+}
+.bigger-50{
+    font-size: 50%!important;
+}
+.bigger-100{
+    font-size: 100%!important;
+}
+.bigger-200{
+    font-size: 200%!important;
+}
+.bigger-300{
+    font-size: 300%!important;
+}
+/*FIN ICONS*/
 
 @media (max-width: 1000px) {
   .container{

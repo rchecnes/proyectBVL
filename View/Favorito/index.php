@@ -4,6 +4,7 @@
 	<title>Empresa</title>
 	<?php
 	//session_start();
+	//http://glyphicons.bootstrapcheatsheets.com/
 	include('../Include/Header.php');
 
 	$url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
@@ -132,7 +133,9 @@
 			        <td align="right"><?=number_format($em['cz_ult_cierre'],2,'.',',')?></td>
 			        			        
 			        <td width="200" align="center">
-			        	<a href="../Controller/FavoritoC.php?accion=delete&cod_emp=<?=$em['cod_emp']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" class="btn btn-danger" role="button">Eliminar</a>
+			        	<a href="../Controller/FavoritoC.php?accion=delete&cod_emp=<?=$em['cod_emp']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" title="Eliminar">
+			              <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
+			            </a>
 			        </td>
 			    </tr>
 			    <?php endwhile ?>
