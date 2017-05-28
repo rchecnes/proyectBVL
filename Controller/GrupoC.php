@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 function createAction(){
 
 	include('../Config/Conexion.php');
@@ -15,6 +17,40 @@ function createAction(){
 	$resp = mysqli_query($link, "INSERT INTO user_grupo(cod_grupo,cod_user,nom_grupo, est_grupo, ord_grupo)VALUES('$new_cod','$cod_user','$nom_grupo',1,1)");
 
 	header("location:../Controller/FavoritoC.php?accion=index");
+}
+
+function updateAction(){
+	
+	$cod_user   = $_SESSION['cod_user'];
+	$cod_grupo  = $_POST['cod_grupo'];
+	$nom_grupo  = $_POST['nom_grupo'];
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$sql  = "UPDATE user_grupo SET nom_grupo='$nom_grupo' WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
+	//echo $sql;
+	$resp = mysqli_query($link,$sql);
+
+	echo $nom_grupo;
+}
+
+function listarAction(){
+	
+	$cod_user   = $_SESSION['cod_user'];
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$sql  = "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'";
+	$resp = mysqli_query($link,$sql);
+
+	$html = '';
+	while ($r = mysqli_fetch_array($resp)) {
+		$html .= '<option value="'.$r['cod_grupo'].'">'.$r['nom_grupo'].'</option>';
+	}
+
+	echo $html;
 }
 
 /*function deleteAction(){
@@ -39,8 +75,11 @@ switch ($_GET['accion']) {
 	case 'create':
 		createAction();
 		break;
-	case 'delete':
-		//deleteAction();
+	case 'update':
+		updateAction();
+		break;
+	case 'listar':
+		listarAction();
 		break;
 }
 ?>

@@ -65,10 +65,10 @@
 }
 
 .table-header{
-    background: #efefef;
+    background: #f7dfde;
 }
 .td-header{
-    background:#f1f1f1;
+    background:#f3ebd5;
 }
 /*MENU*/
 .navbar ul.nav li:hover{
@@ -78,6 +78,9 @@
 /*ICONS*/
 .color-red{
     color: #d9534f!important;
+}
+.color-blue{
+    color: #4b8cde!important;
 }
 .bigger-50{
     font-size: 50%!important;

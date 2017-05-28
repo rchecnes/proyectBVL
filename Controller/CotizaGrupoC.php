@@ -22,10 +22,9 @@ function getConexion(){
 function getCotizacionGrupo(){
 
     //global $ruta;
-
 	$link      = getConexion();
 
-	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1'";
+	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.nemonico ASC";
 	$respemp   = mysqli_query($link, $sqlemp);
 	$emp_array = array();
 
@@ -34,17 +33,34 @@ function getCotizacionGrupo(){
 
     $c = 1;
     $cotiza = array();
-
+    //echo "<table border='1'>";
 	while ($e = mysqli_fetch_array($respemp)) {
 		$empresa = $e['nemonico'];
 		$url     = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$p_Ini&fec_fin=$P_Fin&nemonico=$empresa";
 		$data    = file_get_contents($url);
-		$cotiza[]= getPrepareData($empresa,$data);
+        //echo "<tr>";
+        //    echo "<td>".$c."=>".$empresa."</td>";
+        //    echo "<td>";
+        //        echo $data;
+        //    echo "</td>";
+        //echo "</tr>";
+        $cotiza_row = getPrepareData($empresa,$data);
+
+        if (count($cotiza_row)>0) {
+            $cotiza[] = $cotiza_row;
+        }
+		
+        unset($data);
+        unset($cotiza_row);
 
         $c++;
 	}
-
+    //echo "</table>";
     $resp = savCatiza($cotiza);
+
+    echo $resp;
+
+    unset($cotiza);
 }
 
 function getPrepareData($empresa, $data){
@@ -77,7 +93,7 @@ function getPrepareData($empresa, $data){
         $fecha = str_replace(" ","",$cols->item(0)->nodeValue);
 
         if ($fecha !='') {
-            
+
             $cotiza = array(
                     'emp'=> $empresa,
                     'f'  => $fecha,
@@ -109,38 +125,55 @@ function savCatiza($cotiza){
 
     foreach ($cotiza as $key => $f) {
 
-        list($dia, $mes, $ano) = explode('/', $f['f']);
-        
-        $cod             = $ano.$mes.$dia;
-        $empresa         = $f['emp'];
-        $fecha           = ($ano!='' && $mes!='' && $dia!='')?$ano.'-'.$mes.'-'.$dia:"";
-        $apertura        = $f['a'];
-        $cierre          = $f['c'];
-        $maxima          = $f['max'];
-        $minima          = $f['min'];
-        $promedio        = $f['prd'];
-        $cant_negociado  = $f['cn'];
-        $monto_negociado = $f['mn'];
-        list($dia, $mes, $ano) = explode('/', $f['fa']);
-        $fecha_anterior  = ($ano!='' && $mes !='' && $dia !='')?$ano.'-'.$mes.'-'.$dia:"";
-        $cierre_anterior = $f['ca'];
+        $empresa = $f['emp'];
 
-        $del_x_cod = "'".$cod."',";
-        $del_x_emp .= "'".$empresa."',";
+        if ($empresa !='') {
         
-        $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+            list($dia, $mes, $ano) = explode('/', $f['f']);
+            
+            $cod             = $ano.$mes.$dia;
+            $fecha           = ($ano!='' && $mes!='' && $dia!='')?$ano.'-'.$mes.'-'.$dia:"";
+            $apertura        = $f['a'];
+            $cierre          = $f['c'];
+            $maxima          = $f['max'];
+            $minima          = $f['min'];
+            $promedio        = $f['prd'];
+            $cant_negociado  = $f['cn'];
+            $monto_negociado = $f['mn'];
+            list($dia, $mes, $ano) = explode('/', $f['fa']);
+            $fecha_anterior  = ($ano!='' && $mes !='' && $dia !='')?$ano.'-'.$mes.'-'.$dia:"";
+            $cierre_anterior = $f['ca'];
+
+            $del_x_cod = "'".$cod."',";
+            $del_x_emp .= "'".$empresa."',";
+
+            $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre' WHERE em.nemonico='$empresa'";
+            $respup    = mysqli_query($link,$upd_x_emp);
+            unset($upd_x_emp);
+
+            
+            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+
+        }
     }
+
+    unset($cotiza);
 
     if ($del_x_cod !='' && $sql !='') {
 
         $delete = "DELETE FROM cotizacion WHERE cz_cod IN(".trim($del_x_cod,',').") AND cz_codemp IN(".trim($del_x_emp,',').")";
-        
         $respdel = mysqli_query($link,$delete);
+        unset($delete);
 
         $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_montnegd,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
-        
         $resp    = mysqli_query($link,$insert);
+        unset($insert);
+        
     }
+
+    unset($del_x_cod);
+    unset($del_x_emp);
+    unset($sql);
     
     return "ok";
 }

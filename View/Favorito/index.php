@@ -20,14 +20,14 @@
 		<div style="border-bottom: 1px solid #aba8a8;">
 			<form method="POST" action="../Controller/GrupoC.php?accion=create" id="form_grupo">
 				<div class="row">
-					<div class="col-lg-8">
+					<div class="col-lg-10 col-md-10 col-sm-9 col-xs-8">
 						<div class="form-group">
-							<label for="nombre_grupo" class="control-label">Grupo:</label>
+							<label for="nombre_grupo" class="control-label">Nombre Del Grupo:</label>
 							<input type="text" class="form-control" id="nom_grupo" name="nom_grupo"></input>
 							<input type="hidden" class="form-control" id="cod_user" name="cod_user" value="<?=$cod_user?>"></input>
 						</div>
 					</div>
-					<div class="col-lg-4">
+					<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
 						<p class="align-right">
 							<label>&nbsp;</label><br>
 							<button type="submit" class="btn btn-danger">Crear Grupo</button>
@@ -37,7 +37,7 @@
 			</form>
 			<form method="POST" action="../Controller/FavoritoC.php?accion=create" id="form_favorito">
 				<div class="row">
-					<div class="col-lg-4 col-md-8 col-sm-6 col-xs-12">
+					<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
 						<div class="form-group">
 						    <label for="inputPassword" class="control-label">Empresa:</label>
 						    <?php
@@ -54,7 +54,7 @@
 						     ?>
 					  	</div>
 					</div>
-					<div class="col-lg-4 col-md-8 col-sm-6 col-xs-12">
+					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
 						<div class="form-group">
 						    <label for="inputPassword" class="control-label">Grupo:</label>
 						    <?php
@@ -72,7 +72,7 @@
 					  	</div>
 					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
 						<p class="align-right">
 							<label>&nbsp;</label><br>
 							<button type="submit" class="btn btn-success">Agregar Favorito</button>
@@ -84,17 +84,38 @@
 			</form>
 		</div>
 		<br>
-		<div class="table-responsive">
+		<div class="">
 		<?php
 
-		$sqlg  = "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'";
+		$sqlg  = "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user' ORDER BY nom_grupo ASC";
 		$respg = mysqli_query($link, $sqlg);
 
 		while ($rg = mysqli_fetch_array($respg)):
 		?>
 			<table class="table table-bordered">
 				<tr>
-			        <th colspan="7" class="table-header">Grupo: <?=$rg['nom_grupo']?></th>
+			        <th colspan="7" class="table-header">
+			        	<span id="labelgrupo_<?=$rg['cod_grupo']?>"><?=$rg['nom_grupo']?></span>
+			        	<a id="showhide_<?=$rg['cod_grupo']?>" title="Editar" style=";cursor:pointer; " onclick="havilitarEdicion(<?=$rg['cod_grupo']?>)">
+			              <i class="fa fa-pencil fa-2x color-blue" aria-hidden="true"></i> 
+			            </a>	
+			        			
+			        	<div class="row">
+			        		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+			        			<input type="hidden" id="grupo_<?=$rg['cod_grupo']?>" value="<?=$rg['cod_grupo']?>" class="form-control"></input>
+			        			<input type="text" id="gruponame_<?=$rg['cod_grupo']?>" value="<?=$rg['nom_grupo']?>" style="display: none;" class="form-control"></input>
+			        		</div>
+			        		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+			        			<img src="../Assets/img/load.gif" id="loading_<?=$rg['cod_grupo']?>" style="display: none;">
+			        			<a  id="savgrupo_<?=$rg['cod_grupo']?>" title="Guardar" style="display: none;cursor:pointer; " onclick="savEditGrupo(<?=$rg['cod_grupo']?>)">
+					              <i class="fa fa-floppy-o fa-2x color-blue" aria-hidden="true"></i> 
+					            </a>
+					            <a  id="cancelsav_<?=$rg['cod_grupo']?>" title="Cancelar" style="display: none;cursor:pointer; " onclick="cancelSav(<?=$rg['cod_grupo']?>)">
+					              <i class="fa fa-times fa-2x color-blue" aria-hidden="true"></i> 
+					            </a>
+			        		</div>
+			        	</div>	        	
+			        </th>
 			    </tr>
 			    <tr>
 			        <th class="td-header">Nemónico</th>
@@ -114,12 +135,13 @@
 						INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
 						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'";*/
 				$sql = "SELECT e.cod_emp,e.nombre AS nom_empresa, s.nombre AS nom_sector,e.nemonico,e.moneda,ef.cod_user, ef.cod_grupo,
-						'00/00/000' AS fe_ult_cotiza,
-						'0.00' AS cz_ult_cierre
+						DATE_FORMAT(e.cz_fe_fin,'%d/%m/%Y') AS fe_ult_cotiza,
+						e.cz_ci_fin AS cz_ult_cierre
 						FROM empresa_favorito ef
 						INNER JOIN empresa e ON (ef.cod_emp=e.cod_emp)
 						INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
-						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'";
+						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'
+						ORDER BY e.nemonico ASC";
 				$favoritos= mysqli_query($link, $sql);
 
 			    while ($em = mysqli_fetch_array($favoritos)):
@@ -129,8 +151,8 @@
 			        <td><?=$em['nom_empresa']?></td>
 			        <td><?=utf8_encode($em['nom_sector'])?></td>
 			        <td><?=$em['moneda']?></td>
-			        <td><?=$em['fe_ult_cotiza']?></td>
-			        <td align="right"><?=number_format($em['cz_ult_cierre'],2,'.',',')?></td>
+			        <td><?=($em['fe_ult_cotiza']!='' && $em['fe_ult_cotiza']!='00/00/0000')?$em['fe_ult_cotiza']:""?></td>
+			        <td align="right"><?=($em['cz_ult_cierre']>0)?number_format($em['cz_ult_cierre'],2,'.',','):""?></td>
 			        			        
 			        <td width="200" align="center">
 			        	<a href="../Controller/FavoritoC.php?accion=delete&cod_emp=<?=$em['cod_emp']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" title="Eliminar">
@@ -147,13 +169,67 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
             var url = '<?php echo $url; ?>';
-			    $(".navbar-nav li a").each(function(){
-			        if ($(this).attr('href').indexOf(url)!=-1) {
-			            $(this).parent().addClass('active');
-			        }else{
-			            $(this).parent().removeClass('active');
-			        }
-			    });
+		    $(".navbar-nav li a").each(function(){
+		        if ($(this).attr('href').indexOf(url)!=-1) {
+		            $(this).parent().addClass('active');
+		        }else{
+		            $(this).parent().removeClass('active');
+		        }
+		    });
+
+		    havilitarEdicion = function(grupo_id){
+		    	$("#labelgrupo_"+grupo_id).hide();
+		    	$("#gruponame_"+grupo_id).show().select();
+		    	$("#showhide_"+grupo_id).hide();
+		    	$("#savgrupo_"+grupo_id).show();
+		    	$("#cancelsav_"+grupo_id).show();
+		    }
+
+		    cancelSav = function(grupo_id){
+		    	$("#labelgrupo_"+grupo_id).show();
+		    	$("#gruponame_"+grupo_id).hide();
+		    	$("#showhide_"+grupo_id).show();
+		    	$("#savgrupo_"+grupo_id).hide();
+		    	$("#cancelsav_"+grupo_id).hide();
+		    }
+
+		    getGrupoUsuario = function(){
+
+		    	$("#cod_grupo").attr('disabled','disabled');
+	    		$.ajax({
+		    		type:'GET',
+		    		url:'../Controller/GrupoC.php?accion=listar',
+		    		data:{},
+		    		success: function(data){
+		    			$("#cod_grupo").html(data);
+		    			$("#cod_grupo").removeAttr('disabled');
+
+		    		}
+		    	});
+
+		    }
+
+		    savEditGrupo = function(grupo_id){
+		    	
+		    	if ($("#gruponame_"+grupo_id).val()!='') {
+		    		$("#loading_"+grupo_id).show();
+		    		$.ajax({
+			    		type:'POST',
+			    		url:'../Controller/GrupoC.php?accion=update',
+			    		data:{cod_grupo:$("#grupo_"+grupo_id).val(),nom_grupo:$("#gruponame_"+grupo_id).val()},
+			    		success: function(data){
+			    			$("#labelgrupo_"+grupo_id).html(data);
+			    			cancelSav(grupo_id);
+			    			$("#loading_"+grupo_id).hide();
+			    			getGrupoUsuario();
+			    		}
+			    	});
+		    	}else{
+		    		$("#gruponame_"+grupo_id).select();
+		    	}
+		    	
+		    }
+
 
 			$('#form_grupo').bootstrapValidator({
 		        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later

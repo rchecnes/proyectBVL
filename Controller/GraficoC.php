@@ -33,7 +33,7 @@ function grafico1Action(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
+	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 
 	/*$fecha_fin    = date($fecha_final);
 	$fecha_fin    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
@@ -154,7 +154,7 @@ function grafico2Action(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
+	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 	$rango        = ($_GET['rango']!='')?$_GET['rango']:1;
 
 	//Obtener Max
@@ -299,7 +299,7 @@ function grafico3Action(){
 	//$visible6m  = $_GET['visible6m'];
 	//$visible3m  = $_GET['visible3m'];
 
-	$empresa      = ($_GET['empresa']!='')?" AND cz_codemp='".$_GET['empresa']."'":"";
+	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 
 
 	//Cotizacion

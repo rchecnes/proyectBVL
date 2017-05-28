@@ -20,8 +20,8 @@
 		<table class="table table-bordered">
 		    <tr>
 		        <th>Código</th>
-		        <th>Nombre</th>
 		        <th>Nemónico</th>
+		        <th>Nombre</th>		        
 		        <th>Sector</th>
 		        <th>Segmento</th>
 		        <th>Moneda</th>
@@ -33,8 +33,8 @@
 		    ?>
 		    <tr>
 		        <td><?=$em['cod_emp']?></td>
-		        <td><?=$em['nom_empresa']?></td>
 		        <td><?=$em['nemonico']?></td>
+		        <td><?=$em['nom_empresa']?></td>		        
 		        <td><?=$em['nom_sector']?></td>
 		        <td><?=$em['segmento']?></td>
 		        <td><?=$em['moneda']?></td>

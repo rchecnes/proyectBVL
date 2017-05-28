@@ -19,7 +19,9 @@ function validAction(){
 	$password     = addslashes(limpiarCadena($_POST['password']));
 	$password_md5 = md5($password);
 
-	$sql = "SELECT * FROM user WHERE pass_user='$password_md5' AND (email_user='$email_login' OR login_user='$email_login') ";
+	$sql = "SELECT * FROM user u 
+			INNER JOIN role r ON(u.cod_role=r.cod_role)
+			WHERE u.pass_user='$password_md5' AND (u.email_user='$email_login' OR u.login_user='$email_login') ";
 	$resp = mysqli_query($link, $sql);
 	$r    = mysqli_fetch_array($resp);
 
@@ -33,8 +35,18 @@ function validAction(){
 		$_SESSION["apema_user"] = $r['apema_user'];
 		$_SESSION["email_user"] = $r['email_user'];
 		$_SESSION["login_user"] = $r['login_user'];
-		
-		header("location:../Controller/CotizacionC.php?accion=index");
+		$_SESSION["nom_role"]   = $r['nom_role'];
+		$_SESSION["desc_role"]  = $r['desc_role'];
+
+		if ($r['nom_role'] == 'ROLE_ADMIN') {
+
+			header("location:../Controller/CotizacionC.php?accion=index");
+
+		}elseif($r['nom_role'] == 'ROLE_ANONIMO'){
+
+			header("location:../Controller/GraficoC.php?accion=index");
+
+		}
 
 	}else{
 
