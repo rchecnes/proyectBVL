@@ -1,14 +1,14 @@
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<?php include('../Include/Header.php'); ?>
-</head>
-<body>
-<?php include('../Include/Menu.php');
-$url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
-?>
-<div class="container">
-    <h3>IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>
+<!DOCTYPE>
+    <html lang="en">
+        <head>
+        <?php include('../Include/Header.php'); ?>
+        </head>
+        <?php include('../Include/Menu.php');
+        $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
+    ?>
+    <div class="container">
+        <h3>IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>
 
         <div class="row">
             <div class="col-lg-4">

@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
@@ -5,6 +6,8 @@
 <meta http-equiv="expires" content="-1">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="../Assets/css/jquery-ui.min.css">

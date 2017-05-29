@@ -1,33 +1,33 @@
 <!DOCTYPE>
 <html lang="en">
     <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-    <meta http-equiv="expires" content="Sun, 19 Nov 1978 05:00:00 GMT">
-    <meta http-equiv="expires" content="-1">
-    <meta http-equiv="Cache-Control" content="no-cache">
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-    <meta name="robots" content="noindex">
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+        <meta http-equiv="expires" content="Sun, 19 Nov 1978 05:00:00 GMT">
+        <meta http-equiv="expires" content="-1">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="robots" content="noindex">
 
-    <title>moving background login form - Bootsnipp.com</title>
+        <title>moving background login form - Bootsnipp.com</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <style type="text/css">
-        body{
-            background-color: #444;
-            background: #fff; 
-        }
+        <style type="text/css">
+            body{
+                background-color: #444;
+                background: #fff; 
+            }
 
-        .vertical-offset-100{
-            padding-top:100px;
-        }
-    </style>
-    <script src="../Assets/js/jquery-2.1.4.min.js"></script>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
-</head>
+            .vertical-offset-100{
+                padding-top:100px;
+            }
+        </style>
+        <script src="../Assets/js/jquery-2.1.4.min.js"></script>
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
+    </head>
 <body>
 
 <div class="container">

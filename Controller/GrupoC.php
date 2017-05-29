@@ -53,19 +53,19 @@ function listarAction(){
 	echo $html;
 }
 
-/*function deleteAction(){
+function deleteAction(){
 	
-	$cod_user = $_GET['cod_user'];
-	$cod_emp  = $_GET['cod_emp'];
+	$cod_user   = $_GET['cod_user'];
+	$cod_grupo  = $_GET['cod_grupo'];
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sql  = "DELETE FROM empresa_favorito WHERE cod_emp='$cod_emp' AND cod_user='$cod_user'";
+	$sql  = "DELETE FROM user_grupo WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
 	$resp = mysqli_query($link,$sql);
 
 	header("location:../Controller/FavoritoC.php?accion=index");
-}*/
+}
 
 
 switch ($_GET['accion']) {
@@ -77,6 +77,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'update':
 		updateAction();
+		break;
+	case 'delete':
+		deleteAction();
 		break;
 	case 'listar':
 		listarAction();

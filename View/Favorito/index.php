@@ -95,23 +95,29 @@
 			<table class="table table-bordered">
 				<tr>
 			        <th colspan="7" class="table-header">
-			        	<span id="labelgrupo_<?=$rg['cod_grupo']?>"><?=$rg['nom_grupo']?></span>
-			        	<a id="showhide_<?=$rg['cod_grupo']?>" title="Editar" style=";cursor:pointer; " onclick="havilitarEdicion(<?=$rg['cod_grupo']?>)">
-			              <i class="fa fa-pencil fa-2x color-blue" aria-hidden="true"></i> 
-			            </a>	
+			        		
 			        			
 			        	<div class="row">
-			        		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+			        		<div class="col-lg-10 col-md-10 col-sm-9 col-xs-8">
+			        			<span id="labelgrupo_<?=$rg['cod_grupo']?>"><?=$rg['nom_grupo']?></span>
+					        	<a id="showhide_<?=$rg['cod_grupo']?>" title="Editar" style=";cursor:pointer; " onclick="havilitarEdicion(<?=$rg['cod_grupo']?>)">
+					              <i class="fa fa-pencil fa-2x color-blue" aria-hidden="true"></i> 
+					            </a>
+
 			        			<input type="hidden" id="grupo_<?=$rg['cod_grupo']?>" value="<?=$rg['cod_grupo']?>" class="form-control"></input>
 			        			<input type="text" id="gruponame_<?=$rg['cod_grupo']?>" value="<?=$rg['nom_grupo']?>" style="display: none;" class="form-control"></input>
 			        		</div>
-			        		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+			        		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 align-right">
 			        			<img src="../Assets/img/load.gif" id="loading_<?=$rg['cod_grupo']?>" style="display: none;">
 			        			<a  id="savgrupo_<?=$rg['cod_grupo']?>" title="Guardar" style="display: none;cursor:pointer; " onclick="savEditGrupo(<?=$rg['cod_grupo']?>)">
 					              <i class="fa fa-floppy-o fa-2x color-blue" aria-hidden="true"></i> 
 					            </a>
 					            <a  id="cancelsav_<?=$rg['cod_grupo']?>" title="Cancelar" style="display: none;cursor:pointer; " onclick="cancelSav(<?=$rg['cod_grupo']?>)">
 					              <i class="fa fa-times fa-2x color-blue" aria-hidden="true"></i> 
+					            </a>
+
+					            <a href="../Controller/GrupoC.php?accion=delete&cod_grupo=<?=$rg['cod_grupo']?>&cod_user=<?=$rg['cod_user']?>" title="Eliminar Grupo">
+					              <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 					            </a>
 			        		</div>
 			        	</div>	        	
