@@ -263,6 +263,9 @@ function grafico2Action(){
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = $round_serie;
+		}else{
+			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
+			$series[]    = '';
 		}
 		
 	}
