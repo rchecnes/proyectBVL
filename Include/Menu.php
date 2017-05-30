@@ -50,6 +50,7 @@ session_start();
         <li><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
         <li><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
+        <li><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>
       <?php elseif($_SESSION['nom_role']=='ROLE_ANONIMO'):?>
         <li><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
