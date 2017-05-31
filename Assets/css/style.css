@@ -1,3 +1,28 @@
+
+/*MENU*/
+.menu-header{
+    background: #ffd53c;
+    border-bottom: 1px solid #f39f6e;
+}
+.navbar-default .navbar-nav>li>a {
+    color: #5f5d5d;
+}
+.navbar ul.nav>li>a:hover {
+    color: #FFF;
+    background-color: #f9864f;
+    z-index: 1;
+    height: 50px;
+    box-shadow: 0 -2px 3px 0 rgba(0,0,0,.15);
+}
+.navbar ul.nav>li.active a {
+    color: #FFF!important;
+    background: #f9864f!important;
+    z-index: 1;
+    height: 50px;
+    box-shadow: 0 -2px 3px 0 rgba(0,0,0,.15);
+}
+/*FIN MENU*/
+
 .ui-autocomplete, .ui-menu {
     border: 1px solid rgba(0,0,0,.2);
     background: #FFF;
@@ -70,10 +95,7 @@
 .td-header{
     background:#f3ebd5;
 }
-/*MENU*/
-.navbar ul.nav li:hover{
-    background: #e7e7e7;
-} 
+
 
 /*ICONS*/
 .color-red{

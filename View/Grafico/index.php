@@ -1,5 +1,5 @@
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE>
+<html>
 <head>
 <?php include('../Include/Header.php'); ?>
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -119,15 +119,6 @@
 <script type="text/javascript">
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
-
-    var url = '<?php echo $url; ?>';
-    $(".navbar-nav li a").each(function(){
-        if ($(this).attr('href').indexOf(url)!=-1) {
-            $(this).parent().addClass('active');
-        }else{
-            $(this).parent().removeClass('active');
-        }
-    });
 
     validaNum = function(n,mini,maxi)
     {

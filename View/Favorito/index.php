@@ -6,8 +6,6 @@
 	//session_start();
 	//http://glyphicons.bootstrapcheatsheets.com/
 	include('../Include/Header.php');
-
-	$url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
 	?>
 </head>
 <body>
@@ -174,15 +172,7 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-            var url = '<?php echo $url; ?>';
-		    $(".navbar-nav li a").each(function(){
-		        if ($(this).attr('href').indexOf(url)!=-1) {
-		            $(this).parent().addClass('active');
-		        }else{
-		            $(this).parent().removeClass('active');
-		        }
-		    });
-
+            
 		    havilitarEdicion = function(grupo_id){
 		    	$("#labelgrupo_"+grupo_id).hide();
 		    	$("#gruponame_"+grupo_id).show().select();

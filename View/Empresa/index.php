@@ -51,14 +51,7 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-            var url = '<?php echo $url; ?>';
-            $(".navbar-nav li a").each(function(){
-                if ($(this).attr('href').indexOf(url)!=-1) {
-                    $(this).parent().addClass('active');
-                }else{
-                    $(this).parent().removeClass('active');
-                }
-            });
+            
 
             $.ajaxPrefilter( function (options) {
 		      if (options.crossDomain && jQuery.support.cors) {

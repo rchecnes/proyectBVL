@@ -5,7 +5,6 @@
         <?php include('../Include/Header.php'); ?>
         </head>
         <?php include('../Include/Menu.php');
-        $url = str_replace('/AppChecnes/proyectBVL', '', $_SERVER['REQUEST_URI']);
     ?>
     <div class="container">
         <h3>IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>
@@ -99,26 +98,6 @@
 <script type="text/javascript">
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
-
-    /*$('#fecha_inicio').datepicker({
-        format: "dd/mm/yyyy",
-        autoclose: true
-    }).datepicker("update", '<?=date('d/m/Y')?>').on('changeDate', function(ev){
-    });
-
-    $('#fecha_fin').datepicker({
-        format: "dd/mm/yyyy",
-        autoclose: true
-    }).datepicker("update", '<?=date('d/m/Y')?>');*/
-
-    var url = '<?php echo $url; ?>';
-    $(".navbar-nav li a").each(function(){
-        if ($(this).attr('href').indexOf(url)!=-1) {
-            $(this).parent().addClass('active');
-        }else{
-            $(this).parent().removeClass('active');
-        }
-    });
 
     $.ajaxPrefilter( function (options) {
       if (options.crossDomain && jQuery.support.cors) {
