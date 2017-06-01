@@ -5,6 +5,7 @@ if(!isset($_SESSION)){
 
 $url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
 $url = str_replace(" ","",$url);
+//echo $url;
 ?>
 
 <header>
@@ -25,14 +26,14 @@ $url = str_replace(" ","",$url);
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav">
       <?php if($_SESSION['nom_role']=='ROLE_ADMIN'):?>
-        <li class="<?=($url=='/proyectBVL/Controller/CotizacionC.php?accion=index')?'active':''?>"><a href="../Controller/CotizacionC.php?accion=index">Importar De BVL</a></li>
-        <li class="<?=($url=='/proyectBVL/Controller/EmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
-        <li class="<?=($url=='/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
-        <li class="<?=($url=='/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
-        <li class='<?=($url=="/proyectBVL/Controller/ComisionC.php?accion=index")?"active":""?>'><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/CotizacionC.php?accion=index')?'active':''?>"><a href="../Controller/CotizacionC.php?accion=index">Importar De BVL</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/EmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/ComisionC.php?accion=index')?'active':''?>"><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>
       <?php elseif($_SESSION['nom_role']=='ROLE_ANONIMO'):?>
-        <li class="<?=($url=='/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
-        <li class="<?=($url=='/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
       <?php endif; ?>
       <!--<li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
