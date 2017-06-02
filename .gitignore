@@ -1,2 +1,3 @@
 Config/conexion.php
 sftp-config.json
+/vendor

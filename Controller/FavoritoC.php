@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require "../vendor/autoload.php";
+
 function getFavoritoGrupo($cod_user,$cod_grupo){
 
 	$sql = "SELECT e.cod_emp,e.nombre AS nom_empresa, s.nombre AS nom_sector,e.nemonico,e.moneda,ef.cod_user,
@@ -22,6 +24,9 @@ function indexAction(){
 	$link = getConexion();
 
 	include('../Control/Combobox/Combobox.php');
+
+	$array =array('1'=>"juan",'2'=>"Pedro");
+	//d($array);
 
 	$cod_user = $_SESSION['cod_user'];
 
