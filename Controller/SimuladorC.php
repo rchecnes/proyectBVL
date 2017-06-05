@@ -37,9 +37,10 @@ function datoscabAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cod_emp  = $_POST['cod_emp'];
+	$cod_emp  = $_GET['cod_emp'];
 
 	$sql  = "SELECT * FROM empresa WHERE nemonico='$cod_emp' LIMIT 1";
+	//echo $sql;
 	$resp = mysqli_query($link,$sql);
 	$r    = mysqli_fetch_array($resp);
 
@@ -48,7 +49,7 @@ function datoscabAction(){
 	$cant_acc = ($cz_cn_fin > 0 && $cz_mn_fin>0)?$cz_cn_fin/$cz_mn_fin:0;
 	$mont_neg = $cz_mn_fin*$cant_acc;
 
-	$cab = array('mont_est'=>$cz_mn_fin,'pre_unit'=>$cz_mn_fin, 'cant_acc'=>$cant_acc,'mont_neg'=>$mont_neg);
+	$cab = array('mont_est'=>number_format($cz_cn_fin,3,'.',','),'pre_unit'=>number_format($cz_mn_fin,3,'.',','), 'cant_acc'=>number_format($cant_acc,3,'.',','),'mont_neg'=>number_format($mont_neg,3,'.',','));
 	
 
 	echo json_encode($cab);
