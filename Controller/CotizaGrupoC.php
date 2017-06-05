@@ -149,7 +149,7 @@ function savCatiza($cotiza){
 
             //Actualizamos ultima cotizacion: Si solo si hay cotización en la ultima fecha
             if ($fecha !='' && $cierre!='' && $cierre > 0) {
-                $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre' WHERE em.nemonico='$empresa'";
+                $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$empresa'";
                 $respup    = mysqli_query($link,$upd_x_emp);
                 unset($upd_x_emp);
             }

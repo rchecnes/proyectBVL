@@ -419,7 +419,7 @@ function listfavoritoAction(){
 
 	$html = '';
 	while ($r=mysqli_fetch_array($resp)) {
-		$html .= '<option value="'.$r['nemonico'].'">'.$r['nombre'].'</option>';
+		$html .= '<option value="'.$r['nemonico'].'">'.$r['nemonico'].' - '.$r['nombre'].'</option>';
 	}
 
 	echo $html;
