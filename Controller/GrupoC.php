@@ -64,6 +64,9 @@ function deleteAction(){
 	$sql  = "DELETE FROM user_grupo WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
 	$resp = mysqli_query($link,$sql);
 
+	$sql1  = "DELETE FROM empresa_favorito WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
+	$resp1 = mysqli_query($link,$sql1);
+
 	header("location:../Controller/FavoritoC.php?accion=index");
 }
 

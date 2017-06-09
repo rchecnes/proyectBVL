@@ -408,6 +408,7 @@ function listfavoritoAction(){
 
 	$sql = "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef
 			INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
 			WHERE e.estado=1
 			AND ef.est_fab
 			AND ef.cod_user='$cod_user'";

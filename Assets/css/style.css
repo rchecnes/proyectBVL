@@ -122,6 +122,26 @@ input[readonly='readonly'] {
 }
 /*FIN ICONS*/
 
+/*TABLA SIMULACION*/
+table.excel .form-control{
+    height: 23px !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: none;
+    transition: none;
+}
+.excel>tbody>tr>td, .excel>tbody>tr>th, .excel>tfoot>tr>td, .excel>tfoot>tr>th, .excel>thead>tr>td, .excel>thead>tr>th {
+    padding: 4px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+.excel input[readonly='readonly'] { 
+    background-color: #ffffff!important;
+    border: 0px;
+}
+/*FIN SIMULACION*/
+
 @media (max-width: 1000px) {
   .container{
         width: 100%;
