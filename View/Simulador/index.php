@@ -64,7 +64,7 @@
 					<table class="table table-bordered excel">
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" min="0" step="0.0001" onkeyup="buscar('dos')"></input></td>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" min="0" step="0.0001" onkeyup="buscar('dos')"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
@@ -185,6 +185,8 @@
 					precio_unitario = $("#precio_unitario").val();
 				}				
 
+				$("#buscar").attr('disabled','disabled');
+
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
@@ -211,6 +213,7 @@
 						$("#c_costo_compra").val(data.c_costo_compra);
 						$("#c_poliza_compra").val(data.c_poliza_compra);
 
+						$("#buscar").removeAttr('disabled');
 				    }
 				});
 			}

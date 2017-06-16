@@ -42,7 +42,7 @@ function datoscabAction(){
 	$monto_estimado  = ($_GET['monto_estimado']!='' && $_GET['monto_estimado']>0)?$_GET['monto_estimado']:0;
 	$precio_unitario = ($_GET['precio_unitario']!='' && $_GET['precio_unitario']>0)?$_GET['precio_unitario']:0;
 
-	$cz_cn_fin = 0;
+	$cz_cn_fin = 500.00;
 	$cz_mn_fin = 0;
 
 	if ($tipo == 'uno') {
@@ -51,22 +51,22 @@ function datoscabAction(){
 		$resp = mysqli_query($link,$sql);
 		$r    = mysqli_fetch_array($resp);
 
-		$cz_cn_fin = ($r['cz_cn_fin'] > 0)?$r['cz_cn_fin']:0;//Monto estimado
-		$cz_mn_fin = ($r['cz_mn_fin'] > 0)?$r['cz_mn_fin']:0;//Precio unitario
+		//$cz_cn_fin = ($r['cz_cn_fin'] > 0)?$r['cz_cn_fin']:0;//Monto estimado
+		$cz_ci_fin = ($r['cz_ci_fin'] > 0)?$r['cz_ci_fin']:0;//Precio unitario ultima cotizacion
 	}elseif ($tipo == 'dos') {
 
 		$cz_cn_fin = $monto_estimado;
 		$cz_mn_fin = $precio_unitario;
 	}
 	
-	$cant_acc = ($cz_cn_fin > 0 && $cz_mn_fin>0)?$cz_cn_fin/$cz_mn_fin:0;
-	$mont_neg = $cz_mn_fin*$cant_acc;
+	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?$cz_cn_fin/$cz_ci_fin:0;
+	$mont_neg = $cz_ci_fin*$cant_acc;
 	
 	$info = array(
 				//CABECERA
 				'mont_est'=>number_format($cz_cn_fin,3,'.',','),
 				'cant_acc'=>number_format($cant_acc,3,'.',','),
-				'pre_unit'=>number_format($cz_mn_fin,3,'.',','),
+				'pre_unit'=>number_format($cz_ci_fin,3,'.',','),
 				'mont_neg'=>number_format($mont_neg,3,'.',','),
 				//COMPRA
 				'c_comision_sab' =>number_format(0,2,'.',','),
