@@ -51,7 +51,8 @@ function getComision($tipo){
 		'VAL_IGV'    =>$r['igv'],
 		'F_LIQUI'    =>$r['fondo_liq'],
 		'MIN_CAVAL'  =>5,
-		'BASE_CAVAL' =>12210.01
+		'BASE_CAVAL' =>12210.01,
+		'COM_CAVAL' =>$r['retrib_caval_iclv']
 	);
 }
 
@@ -88,23 +89,39 @@ function datoscabAction(){
 	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?$cz_cn_fin/$cz_ci_fin:0;
 	$mont_neg = $cz_ci_fin*$cant_acc;
 
+	//VARIABLES COMPRAS
+	//:::::::::::::::::
+	$c_comision_sab = ($mont_neg>$com['BASE_SAB'])?$mont_neg*($com['COM_SAB']/100):$com['MIN_SAB'];
+	$c_cuota_bvl    = $mont_neg*($com['COM_BVL']/100);
+	$c_f_garantia   = $mont_neg*($com['F_GARANT']/100);
+	$c_cavali       = 0;
+	if ($mont_neg <= $com['BASE_CAVAL']) {
+		if ($mont_neg*($com['COM_CAVAL']/100)<$com['MIN_CAVAL']) {$c_cavali=$com['MIN_CAVAL'];}else{$c_cavali=$mont_neg*($com['COM_CAVAL']/100);}
+	}
+	$c_f_liquidacion = ($mont_neg*($com['F_LIQUI']/100)<1)?0:$mont_neg*($com['F_LIQUI']/100);
+	$c_compra_total  = $c_comision_sab +$c_cuota_bvl+$c_f_garantia+$c_cavali+$c_f_liquidacion;
+	$c_igv           = $c_compra_total*($com['VAL_IGV']/100);
+	$c_compra_smv    = ($mont_neg+$c_compra_total+$c_igv)*($com['COM_SMV']/100);
+	$c_costo_compra  = $c_compra_total+$c_igv+$c_compra_smv;
+	$c_poliza_compra = $c_costo_compra+$mont_neg;
+
 	$info = array(
 				//CABECERA
-				'mont_est'=>number_format($cz_cn_fin,3,'.',''),
-				'pre_unit'=>number_format($cz_ci_fin,3,'.',''),
+				'mont_est'=>number_format($cz_cn_fin,2,'.',''),
+				'pre_unit'=>number_format($cz_ci_fin,2,'.',''),
 				'cant_acc'=>number_format($cant_acc,0,'.',','),				
-				'mont_neg'=>number_format($mont_neg,3,'.',','),
+				'mont_neg'=>number_format($mont_neg,2,'.',','),
 				//COMPRA
-				'c_comision_sab' =>($mont_neg>$com['BASE_SAB'])?number_format($mont_neg*($com['COM_SAB']/100),2,'.',''):number_format($com['MIN_SAB'],2,'.',''),
-				'c_cuota_bvl'    =>number_format(0,2,'.',','),
-				'c_f_garantia'   =>number_format(0,2,'.',','),
-				'c_cavali'       =>number_format(0,2,'.',','),
-				'c_f_liquidacion'=>number_format(0,2,'.',','),
-				'c_compra_total' =>number_format(0,2,'.',','),
-				'c_igv'          =>number_format(0,2,'.',','),
-				'c_compra_smv'   =>number_format(0,2,'.',','),
-				'c_costo_compra' =>number_format(0,2,'.',','),
-				'c_poliza_compra'=>number_format(0,2,'.',',')
+				'c_comision_sab' =>number_format($c_comision_sab,2,'.',''),
+				'c_cuota_bvl'    =>number_format($c_cuota_bvl,2,'.',','),
+				'c_f_garantia'   =>number_format($c_f_garantia,2,'.',','),
+				'c_cavali'       =>number_format($c_cavali,2,'.',','),
+				'c_f_liquidacion'=>number_format($c_f_liquidacion,2,'.',','),
+				'c_compra_total' =>number_format($c_compra_total,2,'.',','),
+				'c_igv'          =>number_format($c_igv,2,'.',','),
+				'c_compra_smv'   =>number_format($c_compra_smv,2,'.',','),
+				'c_costo_compra' =>number_format($c_costo_compra,2,'.',','),
+				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',',')
 			);
 
 	echo json_encode($info);
