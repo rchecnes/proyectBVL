@@ -86,7 +86,7 @@ function datoscabAction(){
 		
 	}
 	
-	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?$cz_cn_fin/$cz_ci_fin:0;
+	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?ceil($cz_cn_fin/$cz_ci_fin):0;
 	$mont_neg = $cz_ci_fin*$cant_acc;
 
 	//VARIABLES COMPRAS
