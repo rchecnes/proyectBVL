@@ -6,10 +6,9 @@
 </head>
 <body>
 	<?php include('../Include/Menu.php');?>
-	<br>
-	
+		
 	<div class="container">
-		<h3>Simulador</h3><br>
+		<h3 class="title">Simulador</h3>
 		<div style="border-bottom: 1px solid #aba8a8;">
 			<div class="row">
 				<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">

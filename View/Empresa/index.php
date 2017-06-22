@@ -6,11 +6,9 @@
 </head>
 <body>
 	<?php include('../Include/Menu.php');?>
-	<br>
 	
 	<div class="container">
-		<h3>LISTA DE EMPRESAS</h3>
-		<br>
+		<h3 class="title">LISTA DE EMPRESAS</h3>
 		<p class="align-right">
 			<a href="../Controller/EmpresaC.php?accion=new" class="btn btn-default" role="button">Nueva Empresa</a>
 			<button type="button" class="btn btn-success" onclick="inportarEmpresa()">Importar Empresa</button>

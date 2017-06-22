@@ -1,5 +1,15 @@
 
 /*MENU*/
+
+.header {
+    padding: 15px 0;
+    background: #fff;
+    z-index: 888;
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
 .menu-header{
     background: #ffd53c;
     border-bottom: 1px solid #f39f6e;
@@ -98,6 +108,15 @@
 
 input[readonly='readonly'] { 
     background-color: #f7f1e3!important;
+}
+
+.title{
+    color: #da5c20!important;
+    font-size: 26px!important;
+    font-family: arial!important;
+    border-bottom: 1px solid #c5bfbf!important;
+    margin-top: 12px!important;
+    margin-bottom: 20px!important;
 }
 
 

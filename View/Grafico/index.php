@@ -8,7 +8,7 @@
 <body>
 <?php include('../Include/Menu.php');?>
 <div class="container">
-    <h3>GRÁFICOS</h3>
+    <h3 class="title">GRÁFICOS</h3>
     <div class="row">
         <div class="col-lg-2 col-md-4 col-sm-4 col-xs-112">
             <div class="form-group">

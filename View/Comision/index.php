@@ -11,11 +11,9 @@
 </head>
 <body>
 	<?php include('../Include/Menu.php');?>
-	<br>
 	
 	<div class="container">
-		<h3>Comisiones</h3>
-		<br>
+		<h3 class="title">Comisiones</h3>
 		<table class="table table-bordered">
 		    <tr>
 		        <th class="">Concepto</th>

@@ -4,11 +4,11 @@
         <head>
         <?php include('../Include/Header.php'); ?>
         </head>
-        <?php include('../Include/Menu.php');
-    ?>
+        
+    <body>
+    <?php include('../Include/Menu.php');?>
     <div class="container">
-        <h3>IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>
-
+        <h3 class="title">IMPORTAR INFORMACION DESDE BOLSA DE VALORES DE LIMA</h3>
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">

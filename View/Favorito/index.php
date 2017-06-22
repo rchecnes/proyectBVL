@@ -10,11 +10,9 @@
 </head>
 <body>
 	<?php include('../Include/Menu.php');?>
-	<br>
 	
 	<div class="container">
-		<h3>MIS FAVORITOS</h3>
-		<br>
+		<h3 class="title">MIS FAVORITOS</h3>
 		<div style="border-bottom: 1px solid #aba8a8;">
 			<form method="POST" action="../Controller/GrupoC.php?accion=create" id="form_grupo">
 				<div class="row">
