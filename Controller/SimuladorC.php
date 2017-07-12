@@ -105,6 +105,32 @@ function datoscabAction(){
 	$c_costo_compra  = $c_compra_total+$c_igv+$c_compra_smv;
 	$c_poliza_compra = $c_costo_compra+$mont_neg;
 
+	//VARIABLES GANANCIA
+	//::::::::::::::::::
+	$gan_pre_min = 0;
+	$gan_pre_obj = 0;
+	$gan_var_pre = 0;
+	$gan_val_vent = 0;
+
+	//VARIABLES RESUMEN
+	//:::::::::::::::::
+	$res_gan_neta = 0;
+	$res_cost_total = 0;
+	$res_var_total = 0;
+
+	//VARIABLES DE VENTA
+	//::::::::::::::::::
+	$v_comision_sab  = 0;
+	$v_cuota_bvl     = 0;
+	$v_f_garantia    = 0;
+	$v_cavali        = 0;
+	$v_f_liquidacion = 0;
+	$v_com_total     = 0;
+	$v_igv           = 0;
+	$v_com_smv       = 0;
+	$v_costo_venta   = 0;
+	$v_poliza_venta  = 0;
+
 	$info = array(
 				//CABECERA
 				'mont_est'=>number_format($cz_cn_fin,2,'.',''),
@@ -121,7 +147,27 @@ function datoscabAction(){
 				'c_igv'          =>number_format($c_igv,2,'.',','),
 				'c_compra_smv'   =>number_format($c_compra_smv,2,'.',','),
 				'c_costo_compra' =>number_format($c_costo_compra,2,'.',','),
-				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',',')
+				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',','),
+				//GANANCIA
+				'gan_pre_min' => number_format($gan_pre_min,2,'.',''),
+				'gan_pre_obj' => number_format($gan_pre_obj,2,'.',''),
+				'gan_var_pre' => number_format($gan_var_pre,2,'.',''),
+				'gan_val_vent' => number_format($gan_val_vent,2,'.',''),
+				//RESUMEN
+				'res_gan_neta' => number_format($res_gan_neta,2,'.',''),
+				'res_cost_total' => number_format($res_cost_total,2,'.',''),
+				'res_var_total' => number_format($res_var_total,2,'.',''),
+				//VENTA
+				'v_comision_sab' => number_format($v_comision_sab,2,'.',''),
+				'v_cuota_bvl' => number_format($v_cuota_bvl,2,'.',''),
+				'v_f_garantia' => number_format($v_f_garantia,2,'.',''),
+				'v_cavali' => number_format($v_cavali,2,'.',''),
+				'v_f_liquidacion' => number_format($v_f_liquidacion,2,'.',''),
+				'v_com_total' => number_format($v_com_total,2,'.',''),
+				'v_igv' => number_format($v_igv,2,'.',''),
+				'v_com_smv' => number_format($v_com_smv,2,'.',''),
+				'v_costo_venta' => number_format($v_costo_venta,2,'.',''),
+				'v_poliza_venta' => number_format($v_poliza_venta,2,'.','')
 			);
 
 	echo json_encode($info);
