@@ -265,6 +265,7 @@
 
 				var monto_estimado  = '';
 				var precio_unitario = '';
+				var gan_renta_obj = 0;
 
 				if (tipo == 'uno') {
 
@@ -274,14 +275,16 @@
 
 					monto_estimado  = $("#monto_estimado").val();
 					precio_unitario = $("#precio_unitario").val();
-				}				
+				}
+
+				gan_renta_obj = $("#gan_rent_obj").val();
 
 				$("#buscar").attr('disabled','disabled');
 
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,monto_estimado:monto_estimado,precio_unitario:precio_unitario},
+				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA

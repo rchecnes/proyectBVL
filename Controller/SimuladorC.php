@@ -67,6 +67,8 @@ function datoscabAction(){
 	$tipo            = $_GET['tipo'];
 	$monto_estimado  = ($_GET['monto_estimado']!='' && (float)$_GET['monto_estimado']>0)?(float)$_GET['monto_estimado']:0;
 	$precio_unitario = ($_GET['precio_unitario']!='' && (float)$_GET['precio_unitario']>0)?(float)$_GET['precio_unitario']:0;
+	$gan_renta_obj = ($_GET['gan_renta_obj']!='' && (float)$_GET['gan_renta_obj']>0)?(float)$_GET['gan_renta_obj']:0;
+	
 
 	$cz_cn_fin = 5000.00;
 	$cz_ci_fin = 0;
@@ -107,8 +109,8 @@ function datoscabAction(){
 
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
-	$gan_pre_min = 0;
-	$gan_pre_obj = 0;
+	$gan_pre_min = round(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2,PHP_ROUND_HALF_ODD);
+	$gan_pre_obj = round(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2,PHP_ROUND_HALF_ODD);
 	$gan_var_pre = 0;
 	$gan_val_vent = 0;
 
