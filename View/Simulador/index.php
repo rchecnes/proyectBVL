@@ -35,11 +35,11 @@
 					    <?php
 					    	$params = array(
 			                    'select' => array('id'=>'cod_emp', 'name'=>'cod_emp', 'class'=>'form-control'),
-			                    'sql'    => "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef 
+			                    'sql'    => "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef 
 			                    			 INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
 			                    			 INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
 			                    			 WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user'",
-			                    'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
+			                    'attrib' => array('value'=>'cod_emp','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
 			                    'empty'  => false,
 			                    'defect' => 'ATACOBC1',
 			                    'edit'   => '',
@@ -66,11 +66,11 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" onkeyup="buscar('dos')"></input></td>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" onkeyup="buscar('dos','')"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
-							<td><input type="text" id="precio_unitario" class="form-control align-center" onkeyup="buscar('dos')"></input></td>
+							<td><input type="text" id="precio_unitario" class="form-control align-center" onkeyup="buscar('dos','')"></input></td>
 						</tr>
 						<tr>
 							<td>Cant. Acciones</td>
@@ -87,7 +87,7 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Renta. Objetivo</td>
-							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos')" value="500.00"></input></td>
+							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos','renta_obj')" value="500.00"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Min.</td>
@@ -95,7 +95,7 @@
 						</tr>
 						<tr>
 							<td>Precio Objetivo</td>
-							<td><input type="text" id="gan_pre_obj" class="form-control align-center"></input></td>
+							<td><input type="text" id="gan_pre_obj" class="form-control align-center" onkeyup="buscar('dos','precio_obj')"></input></td>
 						</tr>
 						<tr>
 							<td>Var. Precio</td>
@@ -112,15 +112,18 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Ganancia Neta</td>
-							<td><input type="text" id="res_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
+							<td style="width: 30%"><input type="text" id="res_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
+							<td><input type="text" id="porc_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
-							<td>Costo Total</td>
+							<td >Costo Total</td>
 							<td><input type="text" id="res_cost_total" class="form-control align-center" readonly="readonly"></input></td>
+							<td><input type="text" id="porc_cost_total" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>Variación Total</td>
 							<td><input type="text" id="res_var_total" class="form-control align-center" readonly="readonly"></input></td>
+							<td><input type="text" id="por_var_total" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 					</table>
 					
@@ -221,6 +224,10 @@
 				</div>
 			</div>
 		</div>
+		<p class="align-right">			
+			<button type="button" id="add_portafolio" class="btn btn-danger">Agregar a portafolio</button>
+			<button type="button" id="ver_portafolio" class="btn btn-warning">Ver Portafolio</button>
+		</p>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -240,33 +247,12 @@
 				});
 			});
 
-			/*infoCompra = function(){
-
-				$.ajax({
-				    type:'GET',
-				    url: '../Controller/SimuladorC.php?accion=infocompra',
-				    data:{cod_emp:$("#cod_emp").val()},
-				    dataType: "json",
-				    success:function(data){
-				        $("#c_comision_sab").val(data.c_comision_sab);
-						$("#c_cuota_bvl").val(data.c_cuota_bvl);
-						$("#c_f_garantia").val(data.c_f_garantia);
-						$("#c_cavali").val(data.c_cavali);
-						$("#c_f_liquidacion").val(data.c_f_liquidacion);
-						$("#c_compra_total").val(data.c_compra_total);
-						$("#c_igv").val(data.c_igv);
-						$("#c_compra_smv").val(data.c_compra_smv);
-						$("#c_costo_compra").val(data.c_costo_compra);
-						$("#c_poliza_compra").val(data.c_poliza_compra);
-				    }
-				});
-			}*/
-
-			buscar = function(tipo){
+			buscar = function(tipo,tipo_two){
 
 				var monto_estimado  = '';
 				var precio_unitario = '';
 				var gan_renta_obj = 0;
+				var gan_pre_obj = 0;
 
 				if (tipo == 'uno') {
 
@@ -278,14 +264,17 @@
 					precio_unitario = $("#precio_unitario").val();
 				}
 
+				//GANANCIA
 				gan_renta_obj = $("#gan_rent_obj").val();
+				gan_pre_obj   =  $("#gan_pre_obj").val();
 
 				$("#buscar").attr('disabled','disabled');
+				$("#add_portafolio").attr('disabled','disabled');
 
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj},
+				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA
@@ -308,15 +297,13 @@
 						$("#c_costo_compra").val(data.c_costo_compra);
 						$("#c_poliza_compra").val(data.c_poliza_compra);
 						//GANANCIA
+						//$("#gan_rent_obj").val(data.gan_rent_obj);
 						$("#gan_pre_min").val(data.gan_pre_min);
-						$("#gan_pre_obj").val(data.gan_pre_obj);
+						if (tipo_two != 'precio_obj') {
+							$("#gan_pre_obj").val(data.gan_pre_obj);
+						}
 						$("#gan_var_pre").val(data.gan_var_pre);
 						$("#gan_val_vent").val(data.gan_val_vent);
-						//RESUMEN
-						$("#res_gan_neta").val(data.res_gan_neta);
-						$("#res_cost_total").val(data.res_cost_total);
-						$("#res_var_total").val(data.res_var_total);
-						$("#buscar").removeAttr('disabled');
 						//VENTA
 						$("#v_comision_sab").val(data.v_comision_sab);
 						$("#v_cuota_bvl").val(data.v_cuota_bvl);
@@ -328,18 +315,58 @@
 						$("#v_com_smv").val(data.v_com_smv);
 						$("#v_costo_venta").val(data.v_costo_venta);
 						$("#v_poliza_venta").val(data.v_poliza_venta);
+						//RESUMEN
+						$("#res_gan_neta").val(data.res_gan_neta);
+						$("#res_cost_total").val(data.res_cost_total);
+						$("#res_var_total").val(data.res_var_total);
+						$("#porc_gan_neta").val(data.porc_gan_neta);
+						$("#porc_cost_total").val(data.porc_cost_total);
+						$("#por_var_total").val(data.por_var_total);
+
+						$("#buscar").removeAttr('disabled');
+						$("#add_portafolio").removeAttr('disabled');
 				    }
 				});
 			}
 
-			buscar('uno');
+			buscar('uno','');
 
 			$("#buscar").on("click",function(){
-				buscar('uno');
+				buscar('uno','');
 			});
 
-
 			
+
+			verPortafolio = function(){
+				window.location.href = "./PortafolioC.php?accion=index";
+			}
+
+			$("#ver_portafolio").on("click",function(){
+				verPortafolio();
+			});
+
+			$("#add_portafolio").on("click",function(){
+
+				var cod_emp  = $("#cod_emp").val();
+				var cantidad = $("#cantidad_acciones").val(); 
+				var precio   = $("#precio_unitario").val();
+
+				$("#buscar").attr('disabled','disabled');
+				$("#add_portafolio").attr('disabled','disabled');
+
+				$.ajax({
+				    type:'POST',
+				    url: '../Controller/SimuladorC.php?accion=add_portafolio',
+				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio},
+				    success:function(data){
+
+				    	$("#buscar").removeAttr('disabled');
+						$("#add_portafolio").removeAttr('disabled');
+
+						verPortafolio();
+				    }
+				});
+			});
 
 
         });

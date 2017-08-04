@@ -160,6 +160,7 @@ table.excel .form-control{
 .excel input[readonly='readonly'] { 
     background-color: #ffffff!important;
     border: 0px;
+    padding: 3px 3px;
 }
 
 #inversion>tbody>tr>td, #inversion>tbody>tr>th, #resumen>tbody>tr>td, #resumen>tbody>tr>th, #ganancia>tbody>tr>td, #ganancia>tbody>tr>th {

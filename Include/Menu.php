@@ -32,10 +32,12 @@ $url = str_replace(" ","",$url);
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/ComisionC.php?accion=index')?'active':''?>"><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/SimuladorC.php?accion=index')?'active':''?>"><a href="../Controller/SimuladorC.php?accion=index">Simulador</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/PortafolioC.php?accion=index')?'active':''?>"><a href="../Controller/PortafolioC.php?accion=index">Portafolio</a></li>
       <?php elseif($_SESSION['nom_role']=='ROLE_ANONIMO'):?>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/SimuladorC.php?accion=index')?'active':''?>"><a href="../Controller/SimuladorC.php?accion=index">Simulador</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/PortafolioC.php?accion=index')?'active':''?>"><a href="../Controller/PortafolioC.php?accion=index">Portafolio</a></li>
       <?php endif; ?>
       <!--<li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">

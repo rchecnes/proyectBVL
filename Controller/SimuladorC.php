@@ -56,6 +56,12 @@ function getComision($tipo){
 	);
 }
 
+function round_out ($value, $places=0) {
+  if ($places < 0) { $places = 0; }
+  $mult = pow(10, $places);
+  return ($value >= 0 ? ceil($value * $mult):floor($value * $mult)) / $mult;
+}
+
 function datoscabAction(){
 	
 	include('../Config/Conexion.php');
@@ -65,9 +71,12 @@ function datoscabAction(){
 
 	$cod_emp         = $_GET['cod_emp'];
 	$tipo            = $_GET['tipo'];
+	$tipo_two        = $_GET['tipo_two'];
 	$monto_estimado  = ($_GET['monto_estimado']!='' && (float)$_GET['monto_estimado']>0)?(float)$_GET['monto_estimado']:0;
 	$precio_unitario = ($_GET['precio_unitario']!='' && (float)$_GET['precio_unitario']>0)?(float)$_GET['precio_unitario']:0;
-	$gan_renta_obj = ($_GET['gan_renta_obj']!='' && (float)$_GET['gan_renta_obj']>0)?(float)$_GET['gan_renta_obj']:0;
+	$gan_renta_obj   = ($_GET['gan_renta_obj']!='' && (float)$_GET['gan_renta_obj']>0)?(float)$_GET['gan_renta_obj']:0;
+	$gan_pre_obj     = ($_GET['gan_pre_obj']!='' && (float)$_GET['gan_pre_obj']>0)?(float)$_GET['gan_pre_obj']:0;
+	
 	
 
 	$cz_cn_fin = 5000.00;
@@ -75,7 +84,7 @@ function datoscabAction(){
 
 	if ($tipo == 'uno') {
 
-		$sql  = "SELECT * FROM empresa WHERE nemonico='$cod_emp' LIMIT 1";
+		$sql  = "SELECT * FROM empresa WHERE cod_emp='$cod_emp' LIMIT 1";
 		$resp = mysqli_query($link,$sql);
 		$r    = mysqli_fetch_array($resp);
 
@@ -110,28 +119,40 @@ function datoscabAction(){
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
 	$gan_pre_min = round(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2,PHP_ROUND_HALF_ODD);
-	$gan_pre_obj = round(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2,PHP_ROUND_HALF_ODD);
-	$gan_var_pre = 0;
-	$gan_val_vent = 0;
-
-	//VARIABLES RESUMEN
-	//:::::::::::::::::
-	$res_gan_neta = 0;
-	$res_cost_total = 0;
-	$res_var_total = 0;
+	if ($tipo_two =='precio_obj') {
+		$gan_pre_obj = $gan_pre_obj;
+	}else{
+		$gan_pre_obj = round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2);
+	}
+	
+	$gan_var_pre = $gan_pre_obj - $cz_ci_fin;
+	$gan_val_vent = $gan_pre_obj * $cant_acc;
 
 	//VARIABLES DE VENTA
 	//::::::::::::::::::
-	$v_comision_sab  = 0;
-	$v_cuota_bvl     = 0;
-	$v_f_garantia    = 0;
+	$v_comision_sab  = ($gan_val_vent>$com['BASE_SAB'])?$gan_val_vent*($com['COM_SAB']/100):$com['MIN_SAB'];
+	$v_cuota_bvl     = $gan_val_vent*($com['COM_BVL']/100);
+	$v_f_garantia    = $gan_val_vent*($com['F_GARANT']/100);
 	$v_cavali        = 0;
-	$v_f_liquidacion = 0;
-	$v_com_total     = 0;
-	$v_igv           = 0;
-	$v_com_smv       = 0;
-	$v_costo_venta   = 0;
-	$v_poliza_venta  = 0;
+	if ($gan_val_vent <= $com['BASE_CAVAL']) {
+		if ($gan_val_vent*($com['COM_CAVAL']/100)<$com['MIN_CAVAL']) {$v_cavali=$com['MIN_CAVAL'];}else{$v_cavali=$gan_val_vent*($com['COM_CAVAL']/100);}
+	}
+	$v_f_liquidacion = ($gan_val_vent*($com['F_LIQUI']/100)<1)?0:$gan_val_vent*($com['F_LIQUI']/100);
+	$v_com_total     = $v_comision_sab +$v_cuota_bvl+$v_f_garantia+$v_cavali+$v_f_liquidacion;
+	$v_igv           = $v_com_total*($com['VAL_IGV']/100);
+	$v_com_smv       = ($gan_val_vent+$v_com_total+$v_igv)*($com['COM_SMV']/100);
+	$v_costo_venta   = $v_com_total+$v_igv+$v_com_smv;
+	$v_poliza_venta  = $gan_val_vent-$v_costo_venta;
+
+	//VARIABLES RESUMEN
+	//:::::::::::::::::
+	$res_gan_neta   = $v_poliza_venta - $c_poliza_compra;
+	$res_cost_total = $c_costo_compra + $v_costo_venta;
+	$res_var_total  = $res_gan_neta + $res_cost_total;
+
+	$porc_gan_neta   = ($res_gan_neta / $mont_neg)*100;
+	$porc_cost_total = ($res_cost_total / $mont_neg)*100;
+	$por_var_total   = ($res_var_total / $mont_neg)*100;
 
 	$info = array(
 				//CABECERA
@@ -149,16 +170,12 @@ function datoscabAction(){
 				'c_igv'          =>number_format($c_igv,2,'.',','),
 				'c_compra_smv'   =>number_format($c_compra_smv,2,'.',','),
 				'c_costo_compra' =>number_format($c_costo_compra,2,'.',','),
-				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',','),
+				'c_poliza_compra'=>'S/. '.number_format($c_poliza_compra,2,'.',','),
 				//GANANCIA
 				'gan_pre_min' => number_format($gan_pre_min,2,'.',''),
 				'gan_pre_obj' => number_format($gan_pre_obj,2,'.',''),
 				'gan_var_pre' => number_format($gan_var_pre,2,'.',''),
-				'gan_val_vent' => number_format($gan_val_vent,2,'.',''),
-				//RESUMEN
-				'res_gan_neta' => number_format($res_gan_neta,2,'.',''),
-				'res_cost_total' => number_format($res_cost_total,2,'.',''),
-				'res_var_total' => number_format($res_var_total,2,'.',''),
+				'gan_val_vent' => 'S/. '.number_format($gan_val_vent,2,'.',''),
 				//VENTA
 				'v_comision_sab' => number_format($v_comision_sab,2,'.',''),
 				'v_cuota_bvl' => number_format($v_cuota_bvl,2,'.',''),
@@ -169,37 +186,49 @@ function datoscabAction(){
 				'v_igv' => number_format($v_igv,2,'.',''),
 				'v_com_smv' => number_format($v_com_smv,2,'.',''),
 				'v_costo_venta' => number_format($v_costo_venta,2,'.',''),
-				'v_poliza_venta' => number_format($v_poliza_venta,2,'.','')
+				'v_poliza_venta' => 'S/. '.number_format($v_poliza_venta,2,'.',''),
+				//RESUMEN
+				'res_gan_neta' => 'S/. '.number_format($res_gan_neta,2,'.',''),
+				'res_cost_total' => 'S/. '.number_format($res_cost_total,2,'.',''),
+				'res_var_total' => 'S/. '.number_format($res_var_total,2,'.',''),
+				'porc_gan_neta' => number_format($porc_gan_neta,2,'.','').'%',
+				'porc_cost_total' => number_format($porc_cost_total,2,'.','').'%',
+				'por_var_total' => number_format($por_var_total,2,'.','').'%'
 			);
 
 	echo json_encode($info);
 }
 
-function infocompraIndex(){
-	
-	/*$cod_user   = $_GET['cod_user'];
-	$cod_grupo  = $_GET['cod_grupo'];
+function addPortafolioAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sql  = "DELETE FROM user_grupo WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
-	$resp = mysqli_query($link,$sql);*/
+	$cod_emp   = $_POST['cod_emp'];
+	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
+	$prec      = (double)str_replace(',', '', $_POST['precio']);
+	$fecha     = date('Y-m-d');
+	$hora      = date('H:s');
+	$cod_user  = $_SESSION['cod_user'];
 
-	/*$cab = array(
-				'c_comision_sab' =>number_format(0,2,'.',','),
-				'c_cuota_bvl'    =>number_format(0,2,'.',','),
-				'c_f_garantia'   =>number_format(0,2,'.',','),
-				'c_cavali'       =>number_format(0,2,'.',','),
-				'c_f_liquidacion'=>number_format(0,2,'.',','),
-				'c_compra_total' =>number_format(0,2,'.',','),
-				'c_igv'          =>number_format(0,2,'.',','),
-				'c_compra_smv'   =>number_format(0,2,'.',','),
-				'c_costo_compra' =>number_format(0,2,'.',','),
-				'c_poliza_compra'=>number_format(0,2,'.',',')
-			);
+	//Consultamos si ya se ingresó a portafolio a la empresa por fecha
+	$sql  = "SELECT COUNT(cod_emp)AS cant FROM empresa_portafolio WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha' LIMIT 1";
+	$resp = mysqli_query($link,$sql);
+	$r    = mysqli_fetch_array($resp);
 
-	echo json_encode($cab);*/
+	if ($r['cant']>0) {
+
+		$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec' WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha'";
+		
+		$resp = mysqli_query($link,$update);
+
+	}else{
+
+		$insert  = "INSERT INTO empresa_portafolio(cod_emp,cod_user,por_fech,por_hora,por_cant,por_prec)VALUES('$cod_emp','$cod_user','$fecha','$hora','$cant','$prec')";
+		$resp = mysqli_query($link,$insert);
+	}
+
+	echo 'ok;';
 }
 
 
@@ -210,8 +239,8 @@ switch ($_GET['accion']) {
 	case 'datoscab':
 		datoscabAction();
 		break;
-	case 'infocompra':
-		infocompraIndex();
+	case 'add_portafolio':
+		addPortafolioAction();
 		break;
 }
 ?>
