@@ -60,22 +60,67 @@
 		<div id="detalle">
 			<div class="row">
 				<div class="col-lg-4 col-md-4 col-sm-4">
-					<table class="table table-bordered excel">
+					<table class="table table-bordered excel" id="inversion">
+						<tr>
+							<th>Inversión:</th>
+						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" min="0" step="0.0001" onkeyup="buscar('dos')"></input></td>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" onkeyup="buscar('dos')"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
-							<td><input type="text" id="precio_unitario" class="form-control align-center" min="0" step="0.0001" onkeyup="buscar('dos')"></input></td>
+							<td><input type="text" id="precio_unitario" class="form-control align-center" onkeyup="buscar('dos')"></input></td>
 						</tr>
 						<tr>
 							<td>Cant. Acciones</td>
-							<td><input type="text" id="cantidad_acciones" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="cantidad_acciones" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>Monto Negociado</td>
-							<td><input type="text" id="monto_negociado" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="monto_negociado" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+					</table>
+					<table class="table table-bordered excel" id="ganancia">
+						<tr>
+							<th>Ganancia:</th>
+						</tr>
+						<tr>
+							<td style="width: 50%">Renta. Objetivo</td>
+							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos')" value="500.00"></input></td>
+						</tr>
+						<tr>
+							<td>Precio Min.</td>
+							<td><input type="text" id="gan_pre_min" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Precio Objetivo</td>
+							<td><input type="text" id="gan_pre_obj" class="form-control align-center"></input></td>
+						</tr>
+						<tr>
+							<td>Var. Precio</td>
+							<td><input type="text" id="gan_var_pre" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Valor De Venta</td>
+							<td><input type="text" id="gan_val_vent" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+					</table>
+					<table class="table table-bordered excel" id="resumen">
+						<tr>
+							<th>Resumen:</th>
+						</tr>
+						<tr>
+							<td style="width: 50%">Ganancia Neta</td>
+							<td><input type="text" id="res_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Costo Total</td>
+							<td><input type="text" id="res_cost_total" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Variación Total</td>
+							<td><input type="text" id="res_var_total" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 					</table>
 					
@@ -87,43 +132,90 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Comisión SAB</td>
-							<td><input type="text" id="c_comision_sab" class="form-control align-center" min="0" step="0.0001" readonly="readonly" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_comision_sab" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>Cuota BVL</td>
-							<td><input type="text" id="c_cuota_bvl" class="form-control align-center" min="0" step="0.0001" readonly="readonly" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_cuota_bvl" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>F. Garantía</td>
-							<td><input type="text" id="c_f_garantia" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_f_garantia" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>CAVALI</td>
-							<td><input type="text" id="c_cavali" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_cavali" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>F. Liquidación</td>
-							<td><input type="text" id="c_f_liquidacion" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_f_liquidacion" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<th>Compra Total</th>
-							<th><input type="text" id="c_compra_total" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></th>
+							<th><input type="text" id="c_compra_total" class="form-control align-center" readonly="readonly"></input></th>
 						</tr>
 						<tr>
 							<td>IGV</td>
-							<td><input type="text" id="c_igv" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_igv" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<td>Com SMV</td>
-							<td><input type="text" id="c_compra_smv" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_compra_smv" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
 							<th>Costo Compra</th>
-							<th><input type="text" id="c_costo_compra" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></th>
+							<th><input type="text" id="c_costo_compra" class="form-control align-center" readonly="readonly"></input></th>
 						</tr>
 						<tr>
 							<td>Poliza Compra</td>
-							<td><input type="text" id="c_poliza_compra" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
+							<td><input type="text" id="c_poliza_compra" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<table class="table table-bordered excel">
+						<tr>
+							<th>Venta:</th>
+						</tr>
+						<tr>
+							<td style="width: 50%">Comisión SAB</td>
+							<td><input type="text" id="v_comision_sab" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Cuota BVL</td>
+							<td><input type="text" id="v_cuota_bvl" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>F. Garantía</td>
+							<td><input type="text" id="v_f_garantia" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>CAVALI</td>
+							<td><input type="text" id="v_cavali" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>F. Liquidación</td>
+							<td><input type="text" id="v_f_liquidacion" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<th>Compra Total</th>
+							<th><input type="text" id="v_com_total" class="form-control align-center" readonly="readonly"></input></th>
+						</tr>
+						<tr>
+							<td>IGV</td>
+							<td><input type="text" id="v_igv" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<td>Com SMV</td>
+							<td><input type="text" id="v_com_smv" class="form-control align-center" readonly="readonly"></input></td>
+						</tr>
+						<tr>
+							<th>Costo Venta</th>
+							<th><input type="text" id="v_costo_venta" class="form-control align-center" readonly="readonly"></input></th>
+						</tr>
+						<tr>
+							<td>Poliza Venta</td>
+							<td><input type="text" id="v_poliza_venta" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 					</table>
 				</div>
@@ -174,6 +266,7 @@
 
 				var monto_estimado  = '';
 				var precio_unitario = '';
+				var gan_renta_obj = 0;
 
 				if (tipo == 'uno') {
 
@@ -183,14 +276,16 @@
 
 					monto_estimado  = $("#monto_estimado").val();
 					precio_unitario = $("#precio_unitario").val();
-				}				
+				}
+
+				gan_renta_obj = $("#gan_rent_obj").val();
 
 				$("#buscar").attr('disabled','disabled');
 
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,monto_estimado:monto_estimado,precio_unitario:precio_unitario},
+				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA
@@ -212,8 +307,27 @@
 						$("#c_compra_smv").val(data.c_compra_smv);
 						$("#c_costo_compra").val(data.c_costo_compra);
 						$("#c_poliza_compra").val(data.c_poliza_compra);
-
+						//GANANCIA
+						$("#gan_pre_min").val(data.gan_pre_min);
+						$("#gan_pre_obj").val(data.gan_pre_obj);
+						$("#gan_var_pre").val(data.gan_var_pre);
+						$("#gan_val_vent").val(data.gan_val_vent);
+						//RESUMEN
+						$("#res_gan_neta").val(data.res_gan_neta);
+						$("#res_cost_total").val(data.res_cost_total);
+						$("#res_var_total").val(data.res_var_total);
 						$("#buscar").removeAttr('disabled');
+						//VENTA
+						$("#v_comision_sab").val(data.v_comision_sab);
+						$("#v_cuota_bvl").val(data.v_cuota_bvl);
+						$("#v_f_garantia").val(data.v_f_garantia);
+						$("#v_cavali").val(data.v_cavali);
+						$("#v_f_liquidacion").val(data.v_f_liquidacion);
+						$("#v_com_total").val(data.v_com_total);
+						$("#v_igv").val(data.v_igv);
+						$("#v_com_smv").val(data.v_com_smv);
+						$("#v_costo_venta").val(data.v_costo_venta);
+						$("#v_poliza_venta").val(data.v_poliza_venta);
 				    }
 				});
 			}
