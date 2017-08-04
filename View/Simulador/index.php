@@ -78,6 +78,7 @@
 							<td><input type="text" id="monto_negociado" class="form-control align-center" readonly="readonly" step="0.0001" pattern="[0-9]+([\.,][0-9]+)?"></input></td>
 						</tr>
 					</table>
+					
 				</div>
 				<div class="col-lg-4 col-md-4 col-sm-4">
 					<table class="table table-bordered excel">
