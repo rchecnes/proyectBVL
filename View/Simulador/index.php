@@ -111,17 +111,17 @@
 							<th>Resumen:</th>
 						</tr>
 						<tr>
-							<td style="width: 50%">Ganancia Neta</td>
+							<td style="width: 50%">Ganancia Neta (S/.)</td>
 							<td style="width: 30%"><input type="text" id="res_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
 							<td><input type="text" id="porc_gan_neta" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
-							<td >Costo Total</td>
+							<td >Costo Total (S/.)</td>
 							<td><input type="text" id="res_cost_total" class="form-control align-center" readonly="readonly"></input></td>
 							<td><input type="text" id="porc_cost_total" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
-							<td>Variación Total</td>
+							<td>Variación Total (S/.)</td>
 							<td><input type="text" id="res_var_total" class="form-control align-center" readonly="readonly"></input></td>
 							<td><input type="text" id="por_var_total" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
@@ -348,16 +348,20 @@
 			$("#add_portafolio").on("click",function(){
 
 				var cod_emp  = $("#cod_emp").val();
+				var mont_est = $("#monto_estimado").val();
 				var cantidad = $("#cantidad_acciones").val(); 
 				var precio   = $("#precio_unitario").val();
+				var rent_obj = $("#gan_rent_obj").val();
+				var prec_act = $("#gan_pre_obj").val();
+				var gan_neta = $("#res_gan_neta").val();
 
 				$("#buscar").attr('disabled','disabled');
 				$("#add_portafolio").attr('disabled','disabled');
 
 				$.ajax({
 				    type:'POST',
-				    url: '../Controller/SimuladorC.php?accion=add_portafolio',
-				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio},
+				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
+				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');

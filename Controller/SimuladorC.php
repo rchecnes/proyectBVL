@@ -170,12 +170,12 @@ function datoscabAction(){
 				'c_igv'          =>number_format($c_igv,2,'.',','),
 				'c_compra_smv'   =>number_format($c_compra_smv,2,'.',','),
 				'c_costo_compra' =>number_format($c_costo_compra,2,'.',','),
-				'c_poliza_compra'=>'S/. '.number_format($c_poliza_compra,2,'.',','),
+				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',','),
 				//GANANCIA
 				'gan_pre_min' => number_format($gan_pre_min,2,'.',''),
 				'gan_pre_obj' => number_format($gan_pre_obj,2,'.',''),
 				'gan_var_pre' => number_format($gan_var_pre,2,'.',''),
-				'gan_val_vent' => 'S/. '.number_format($gan_val_vent,2,'.',''),
+				'gan_val_vent' => number_format($gan_val_vent,2,'.',''),
 				//VENTA
 				'v_comision_sab' => number_format($v_comision_sab,2,'.',''),
 				'v_cuota_bvl' => number_format($v_cuota_bvl,2,'.',''),
@@ -186,49 +186,17 @@ function datoscabAction(){
 				'v_igv' => number_format($v_igv,2,'.',''),
 				'v_com_smv' => number_format($v_com_smv,2,'.',''),
 				'v_costo_venta' => number_format($v_costo_venta,2,'.',''),
-				'v_poliza_venta' => 'S/. '.number_format($v_poliza_venta,2,'.',''),
+				'v_poliza_venta' => number_format($v_poliza_venta,2,'.',''),
 				//RESUMEN
-				'res_gan_neta' => 'S/. '.number_format($res_gan_neta,2,'.',''),
-				'res_cost_total' => 'S/. '.number_format($res_cost_total,2,'.',''),
-				'res_var_total' => 'S/. '.number_format($res_var_total,2,'.',''),
+				'res_gan_neta' => number_format($res_gan_neta,2,'.',''),
+				'res_cost_total' => number_format($res_cost_total,2,'.',''),
+				'res_var_total' => number_format($res_var_total,2,'.',''),
 				'porc_gan_neta' => number_format($porc_gan_neta,2,'.','').'%',
 				'porc_cost_total' => number_format($porc_cost_total,2,'.','').'%',
 				'por_var_total' => number_format($por_var_total,2,'.','').'%'
 			);
 
 	echo json_encode($info);
-}
-
-function addPortafolioAction(){
-
-	include('../Config/Conexion.php');
-	$link = getConexion();
-
-	$cod_emp   = $_POST['cod_emp'];
-	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
-	$prec      = (double)str_replace(',', '', $_POST['precio']);
-	$fecha     = date('Y-m-d');
-	$hora      = date('H:s');
-	$cod_user  = $_SESSION['cod_user'];
-
-	//Consultamos si ya se ingresó a portafolio a la empresa por fecha
-	$sql  = "SELECT COUNT(cod_emp)AS cant FROM empresa_portafolio WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha' LIMIT 1";
-	$resp = mysqli_query($link,$sql);
-	$r    = mysqli_fetch_array($resp);
-
-	if ($r['cant']>0) {
-
-		$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec' WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha'";
-		
-		$resp = mysqli_query($link,$update);
-
-	}else{
-
-		$insert  = "INSERT INTO empresa_portafolio(cod_emp,cod_user,por_fech,por_hora,por_cant,por_prec)VALUES('$cod_emp','$cod_user','$fecha','$hora','$cant','$prec')";
-		$resp = mysqli_query($link,$insert);
-	}
-
-	echo 'ok;';
 }
 
 

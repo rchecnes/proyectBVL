@@ -6,6 +6,8 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
+	include('../Model/PortafolioM.php');
+
 	$cod_user  = $_SESSION['cod_user'];
 
 	$sql = "SELECT * FROM empresa_portafolio ep
@@ -17,19 +19,43 @@ function indexAction(){
 	include('../View/Portafolio/index.php');
 }
 
-function createAction(){
+function addPortafolioAction(){
 
-	/*include('../Config/Conexion.php');
+	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cod_user  = $_SESSION['cod_user'];
 	$cod_emp   = $_POST['cod_emp'];
-	$cod_grupo = $_POST['cod_grupo'];
+	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
+	$prec      = (double)str_replace(',', '', $_POST['precio']);
+	$fecha     = date('Y-m-d');
+	$hora      = date('H:s');
+	$cod_user  = $_SESSION['cod_user'];
+	$mont_est  = (double)str_replace(',', '', $_POST['mont_est']);
+	$rent_obj  = (double)str_replace(',', '', $_POST['rent_obj']);
+	$prec_act = (double)str_replace(',', '', $_POST['prec_act']);
+	$gan_neta = (double)str_replace(',', '', $_POST['gan_neta']);
 
-	$resp = mysqli_query($link, "INSERT INTO empresa_favorito(cod_user,cod_emp,cod_grupo,est_fab,ord_fab)VALUES('$cod_user','$cod_emp','$cod_grupo',1,1)");
+	//Consultamos si ya se ingresó a portafolio a la empresa por fecha
+	$sql  = "SELECT COUNT(cod_emp)AS cant FROM empresa_portafolio WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha' LIMIT 1";
+	$resp = mysqli_query($link,$sql);
+	$r    = mysqli_fetch_array($resp);
 
-	header("location:../Controller/FavoritoC.php?accion=index");*/
+	if ($r['cant']>0) {
+
+		$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_act='$prec_act',por_gan_net='$gan_neta' WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$fecha'";
+		
+		$resp = mysqli_query($link,$update);
+
+	}else{
+
+		$insert  = "INSERT INTO empresa_portafolio(cod_emp,cod_user,por_fech,por_hora,por_cant,por_prec,por_mont_est,por_rent_obj,por_prec_act,por_gan_net)VALUES('$cod_emp','$cod_user','$fecha','$hora','$cant','$prec','$mont_est','$rent_obj','$prec_act','$gan_neta')";
+		$resp = mysqli_query($link,$insert);
+	}
+
+	echo 'ok;';
 }
+
+
 
 function deleteAction(){
 
@@ -53,6 +79,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'delete':
 		deleteAction();
+		break;
+	case 'add_portafolio':
+		addPortafolioAction();
 		break;
 }
 ?>

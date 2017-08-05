@@ -38,15 +38,31 @@
 		        <td class=""><?=$p['por_fech']?></td>
 		        <td class=""><?=$p['por_cant']?></td>
 		        <td class=""><?=$p['por_prec']?></td>
-		        <td class=""><?=$p['cz_ci_fin']?></td>
-		        <td class=""></td>
+		        <td class="">
+		        	<?php
+		        	if(date('Y-m-d')>$p['por_fech']): 
+		        		echo $p['cz_ci_fin'];
+		        	else:
+		        		echo $p['por_prec_act'];
+		        	endif;
+		        	?>
+		        </td>
+		        <td class="">
+		        	<?php
+		        	if(date('Y-m-d')>$p['por_fech']): 
+		        		echo getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
+		        	else:
+		        		echo $p['por_gan_net'];
+		        	endif;
+		        	?>
+		        </td>
 		        <td class="">
 		        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 			            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
-			        </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			        </a><!--&nbsp;&nbsp;&nbsp;&nbsp;
 			        <a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Ver Simulador">
 			            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
-			        </a>
+			        </a>-->
 		        </td>
 		    </tr>	
 			<?php endwhile; ?>
