@@ -35,9 +35,9 @@
 			<tr>
 		        <td class=""><?=$p['nemonico']?></td>
 		        <td class=""><?=$p['nombre']?></td>
-		        <td class=""><?=$p['por_fech']?></td>
-		        <td class=""><?=$p['por_cant']?></td>
-		        <td class=""><?=$p['por_prec']?></td>
+		        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
+		        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
+		        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
 		        <td class="">
 		        	<?php
 		        	if(date('Y-m-d')>$p['por_fech']): 
@@ -49,20 +49,23 @@
 		        </td>
 		        <td class="">
 		        	<?php
-		        	if(date('Y-m-d')>$p['por_fech']): 
+		        	$prec_act = 0;
+		        	if(date('Y-m-d')>$p['por_fech']):
+		        		$prec_act = $p['cz_ci_fin'];
 		        		echo getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 		        	else:
-		        		echo $p['por_gan_net'];
+		        		$prec_act = $p['por_prec_act'];
+		        		echo number_format($p['por_gan_net'],2,'.',',');
 		        	endif;
 		        	?>
 		        </td>
 		        <td class="">
 		        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 			            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
-			        </a><!--&nbsp;&nbsp;&nbsp;&nbsp;
-			        <a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Ver Simulador">
+			        </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			        <a href="../Controller/SimuladorC.php?accion=index&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$prec_act?>" title="Ver en simulador">
 			            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
-			        </a>-->
+			        </a>
 		        </td>
 		    </tr>	
 			<?php endwhile; ?>

@@ -20,7 +20,7 @@
 			                    'sql'    => "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'",
 			                    'attrib' => array('value'=>'cod_grupo','desc'=>'nom_grupo', 'concat'=>' - ','descextra'=>''),
 			                    'empty'  => 'Todos',
-			                    'defect' => '',
+			                    'defect' => $cod_grupo,
 			                    'edit'   => '',
 			                    'enable' => 'enable'
 			                );
@@ -33,15 +33,16 @@
 					<div class="form-group">
 						<label for="inputPassword" class="control-label">Empresa:</label>
 					    <?php
+					    	$andwhere = ($cod_grupo !='')?" AND ug.cod_grupo='$cod_grupo'":"";
 					    	$params = array(
 			                    'select' => array('id'=>'cod_emp', 'name'=>'cod_emp', 'class'=>'form-control'),
 			                    'sql'    => "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef 
 			                    			 INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
 			                    			 INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
-			                    			 WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user'",
+			                    			 WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
 			                    'attrib' => array('value'=>'cod_emp','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
 			                    'empty'  => false,
-			                    'defect' => 'ATACOBC1',
+			                    'defect' => $cod_emp,
 			                    'edit'   => '',
 			                    'enable' => 'enable'
 			                );
@@ -66,11 +67,11 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" value="5000.00" onkeyup="buscar('dos','')"></input></td>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="<?=$mont_est?>" onkeyup="buscar('dos','')"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
-							<td><input type="text" id="precio_unitario" class="form-control align-center" onkeyup="buscar('dos','')"></input></td>
+							<td><input type="text" id="precio_unitario" class="form-control align-center" value="<?=$prec?>" onkeyup="buscar('dos','')"></input></td>
 						</tr>
 						<tr>
 							<td>Cant. Acciones</td>
@@ -87,7 +88,7 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Renta. Objetivo</td>
-							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos','renta_obj')" value="500.00"></input></td>
+							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos','renta_obj')" value="<?=$rent_obj?>"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Min.</td>
@@ -95,7 +96,7 @@
 						</tr>
 						<tr>
 							<td>Precio Objetivo</td>
-							<td><input type="text" id="gan_pre_obj" class="form-control align-center" onkeyup="buscar('dos','precio_obj')"></input></td>
+							<td><input type="text" id="gan_pre_obj" class="form-control align-center" value="<?=$prec_act?>" onkeyup="buscar('dos','precio_obj')"></input></td>
 						</tr>
 						<tr>
 							<td>Var. Precio</td>
@@ -201,7 +202,7 @@
 							<td><input type="text" id="v_f_liquidacion" class="form-control align-center" readonly="readonly"></input></td>
 						</tr>
 						<tr>
-							<th>Compra Total</th>
+							<th>Venta Total</th>
 							<th><input type="text" id="v_com_total" class="form-control align-center" readonly="readonly"></input></th>
 						</tr>
 						<tr>
@@ -224,7 +225,8 @@
 				</div>
 			</div>
 		</div>
-		<p class="align-right">			
+		<p class="align-right">
+			<button type="button" id="new_simulacion" class="btn btn-success">Nueva Simulación</button>		
 			<button type="button" id="add_portafolio" class="btn btn-danger">Agregar a portafolio</button>
 			<button type="button" id="ver_portafolio" class="btn btn-warning">Ver Portafolio</button>
 		</p>
@@ -237,7 +239,7 @@
 				$("#cod_emp").attr('disabled','disabled');
 				$.ajax({
 				    type:'GET',
-				    url: '../Controller/GraficoC.php?accion=listfavorito',
+				    url: '../Controller/SimuladorC.php?accion=empresaporgrupo',
 				    data:{cod_grupo:$(this).val()},
 				    success:function(data){
 
@@ -258,6 +260,8 @@
 
 					$("#monto_estimado").attr('readonly','readonly');
 					$("#precio_unitario").attr('readonly','readonly');
+					monto_estimado  = $("#monto_estimado").val();
+					precio_unitario = $("#precio_unitario").val();
 				}else if (tipo == 'dos') {
 
 					monto_estimado  = $("#monto_estimado").val();
@@ -274,7 +278,7 @@
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
+				    data:{oper:'<?=$oper?>',cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA
@@ -341,6 +345,10 @@
 				window.location.href = "./PortafolioC.php?accion=index";
 			}
 
+			$("#new_simulacion").on("click",function(){
+				window.location.href = "./SimuladorC.php?accion=index";
+			});
+
 			$("#ver_portafolio").on("click",function(){
 				verPortafolio();
 			});
@@ -348,6 +356,7 @@
 			$("#add_portafolio").on("click",function(){
 
 				var cod_emp  = $("#cod_emp").val();
+				var cod_grupo= $("#cod_grupo").val();
 				var mont_est = $("#monto_estimado").val();
 				var cantidad = $("#cantidad_acciones").val(); 
 				var precio   = $("#precio_unitario").val();
@@ -361,7 +370,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
-				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta},
+				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');

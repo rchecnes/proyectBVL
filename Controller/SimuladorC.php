@@ -7,30 +7,20 @@ function indexAction(){
 	$link = getConexion();
 	include('../Control/Combobox/Combobox.php');
 
-	$cod_user = $_SESSION['cod_user'];
+	//Estas variable bienen del simulador
+	$oper      = isset($_GET['oper'])?$_GET['oper']:'';
+	$mont_est  = isset($_GET['mont_est'])?$_GET['mont_est']:'5000.00';
+	$prec      = isset($_GET['prec'])?$_GET['prec']:'';
+	$cant      = isset($_GET['cant'])?$_GET['cant']:'';
+	$rent_obj  = isset($_GET['rent_obj'])?$_GET['rent_obj']:'500.00';
+	$prec_act  = isset($_GET['prec_act'])?$_GET['prec_act']:'';
+	$cod_emp   = isset($_GET['cod_emp'])?$_GET['cod_emp']:'';
+	$cod_grupo = (isset($_GET['cod_grupo']) && $_GET['cod_grupo']!=0)?$_GET['cod_grupo']:'';
 
-	/*$sqlmax = mysqli_query($link, "SELECT MAX(cod_grupo) AS new_cod FROM user_grupo");
-	$rowmax = mysqli_fetch_array($sqlmax);
-	$new_cod = ($rowmax['new_cod']!='')?$rowmax['new_cod']+1:1;*/
+	$cod_user = $_SESSION['cod_user'];
 
 	include('../View/Simulador/index.php');
 }
-
-/*unction updateAction(){
-	
-	$cod_user   = $_SESSION['cod_user'];
-	$cod_grupo  = $_POST['cod_grupo'];
-	$nom_grupo  = $_POST['nom_grupo'];
-
-	include('../Config/Conexion.php');
-	$link = getConexion();
-
-	$sql  = "UPDATE user_grupo SET nom_grupo='$nom_grupo' WHERE cod_grupo='$cod_grupo' AND cod_user='$cod_user'";
-	//echo $sql;
-	$resp = mysqli_query($link,$sql);
-
-	echo $nom_grupo;
-}*/
 
 function getComision($tipo){
 
@@ -69,6 +59,7 @@ function datoscabAction(){
 
 	$com = getComision('contado');
 
+	$oper            = $_GET['oper'];
 	$cod_emp         = $_GET['cod_emp'];
 	$tipo            = $_GET['tipo'];
 	$tipo_two        = $_GET['tipo_two'];
@@ -84,12 +75,19 @@ function datoscabAction(){
 
 	if ($tipo == 'uno') {
 
-		$sql  = "SELECT * FROM empresa WHERE cod_emp='$cod_emp' LIMIT 1";
-		$resp = mysqli_query($link,$sql);
-		$r    = mysqli_fetch_array($resp);
+		if ($oper != 'ver_simu') {
 
-		//$cz_cn_fin = ($r['cz_cn_fin'] > 0)?$r['cz_cn_fin']:0;//Monto estimado
-		$cz_ci_fin = ($r['cz_ci_fin'] > 0)?$r['cz_ci_fin']:0;//Precio unitario ultima cotizacion
+			$sql  = "SELECT * FROM empresa WHERE cod_emp='$cod_emp' LIMIT 1";
+			$resp = mysqli_query($link,$sql);
+			$r    = mysqli_fetch_array($resp);
+
+			//$cz_cn_fin = ($r['cz_cn_fin'] > 0)?$r['cz_cn_fin']:0;//Monto estimado
+			$cz_ci_fin = ($r['cz_ci_fin'] > 0)?$r['cz_ci_fin']:0;//Precio unitario ultima cotizacion
+		}else{
+			$cz_cn_fin = $monto_estimado;
+			$cz_ci_fin = $precio_unitario;
+		}
+		
 	}elseif ($tipo == 'dos') {
 
 		$cz_cn_fin = $monto_estimado;
@@ -119,7 +117,7 @@ function datoscabAction(){
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
 	$gan_pre_min = round(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2,PHP_ROUND_HALF_ODD);
-	if ($tipo_two =='precio_obj') {
+	if ($tipo_two =='precio_obj' || $oper =='ver_simu') {
 		$gan_pre_obj = $gan_pre_obj;
 	}else{
 		$gan_pre_obj = round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2);
@@ -199,6 +197,35 @@ function datoscabAction(){
 	echo json_encode($info);
 }
 
+function getEmpresaPorGrupoAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$cod_user  = $_SESSION['cod_user'];
+
+	$cod_grupo = $_GET['cod_grupo'];
+
+	$sql = "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef
+			INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
+			WHERE e.estado=1
+			AND ef.est_fab
+			AND ef.cod_user='$cod_user'";
+	if ($cod_grupo !='') {
+		$sql .= " AND ef.cod_grupo='$cod_grupo'";
+	}
+	
+	$resp = mysqli_query($link,$sql);
+
+	$html = '';
+	while ($r=mysqli_fetch_array($resp)) {
+		$html .= '<option value="'.$r['cod_emp'].'">'.$r['nemonico'].' - '.$r['nombre'].'</option>';
+	}
+
+	echo $html;
+}
+
 
 switch ($_GET['accion']) {
 	case 'index':
@@ -209,6 +236,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'add_portafolio':
 		addPortafolioAction();
+		break;
+	case 'empresaporgrupo':
+		getEmpresaPorGrupoAction();
 		break;
 }
 ?>

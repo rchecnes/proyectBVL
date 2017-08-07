@@ -83,6 +83,6 @@ function getGananciaNeta($mont_est, $prec, $cant,  $rent_obj, $prec_act){
 	//$porc_cost_total = ($res_cost_total / $mont_neg)*100;
 	//$por_var_total   = ($res_var_total / $mont_neg)*100;
 
-	return number_format($res_gan_neta,2,'.','');
+	return number_format($res_gan_neta,2,'.',',');
 }
 ?>
