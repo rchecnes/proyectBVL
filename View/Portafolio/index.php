@@ -34,40 +34,36 @@
 		
 			<?php
 			$nemonico = '';
-			$sum_mont_neg = $sum_cant = $sum_prec = $sum_gan_net = 0;
-			$c = 1;
+			$sum_mont_neg = $sum_cant = $sum_gan_net = 0;
+			$c = 0;
 			while ($p = mysqli_fetch_array($portafolio)):
-				//if ($c==1) {$nemonico = strtoupper($p['nemonico']);}
-			
-				if ($nemonico == strtoupper($p['nemonico'])) { ?>
+
+				if ($c==0) {$nemonico = strtoupper($p['nemonico']);}
+				
+				if ($nemonico == strtoupper($p['nemonico'])) {
+					
+		        	$prec_act = $gan_net = 0;
+		        	if(date('Y-m-d')>$p['por_fech']):
+		        		$prec_act = $p['cz_ci_fin'];
+		        		$gan_net  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
+		        	else:
+		        		$prec_act = $p['por_prec_act'];
+		        		$gan_net  = $p['por_gan_net'];
+		        	endif;
+
+					$sum_mont_neg += $p['por_mont_neg'];
+					$sum_cant     += $p['por_cant'];
+					$sum_gan_net  += $gan_net;
+				?>
 					<tr>
-				        <td class="">&nbsp;</td>
-				        <td class="">&nbsp;</td>
+				        <td class=""><?=($c==0)?$p['nemonico']:'&nbsp;'?></td>
+				        <td class=""><?=($c==0)?$p['nombre']:'&nbsp;'?></td>
 				        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class="">
-				        	<?php
-				        	if(date('Y-m-d')>$p['por_fech']): 
-				        		echo $p['cz_ci_fin'];
-				        	else:
-				        		echo $p['por_prec_act'];
-				        	endif;
-				        	?>
-				        </td>
-				        <td class="">
-				        	<?php
-				        	$prec_act = 0;
-				        	if(date('Y-m-d')>$p['por_fech']):
-				        		$prec_act = $p['cz_ci_fin'];
-				        		echo getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
-				        	else:
-				        		$prec_act = $p['por_prec_act'];
-				        		echo number_format($p['por_gan_net'],2,'.',',');
-				        	endif;
-				        	?>
-				        </td>
+				        <td class=""><?=number_format($prec_act,2,'.',',')?></td>
+				        <td class=""><?=number_format($gan_net,2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 					            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
@@ -75,11 +71,52 @@
 					        <a href="../Controller/SimuladorC.php?accion=index&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$prec_act?>" title="Ver en simulador">
 					            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
 					        </a>
+
 				        </td>
 				    </tr>
 				<?php
+					if (($c+1)==$cant_reg_port) {
+				?>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<th>Total</th>
+						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td><?=number_format($sum_cant,2,'.',',')?></td>
+						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td>&nbsp;</td>
+						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
+						<td>&nbsp;</td>
+					</tr>
+				<?php
+					}
 				}else{
 				?>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<th>Total</th>
+						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td><?=number_format($sum_cant,2,'.',',')?></td>
+						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td>&nbsp;</td>
+						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
+						<td>&nbsp;</td>
+					</tr>
+					<?php 
+					$prec_act = $gan_net = 0;
+		        	if(date('Y-m-d')>$p['por_fech']):
+		        		$prec_act = $p['cz_ci_fin'];
+		        		$gan_net  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
+		        	else:
+		        		$prec_act = $p['por_prec_act'];
+		        		$gan_net  = $p['por_gan_net'];
+		        	endif;
+
+					$sum_mont_neg = $p['por_mont_neg'];
+					$sum_cant     = $p['por_cant'];
+					$sum_gan_net  = $gan_net;
+					?>
 					<tr>
 				        <td class=""><?=$p['nemonico']?></td>
 				        <td class=""><?=$p['nombre']?></td>
@@ -87,27 +124,8 @@
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class="">
-				        	<?php
-				        	if(date('Y-m-d')>$p['por_fech']): 
-				        		echo $p['cz_ci_fin'];
-				        	else:
-				        		echo $p['por_prec_act'];
-				        	endif;
-				        	?>
-				        </td>
-				        <td class="">
-				        	<?php
-				        	$prec_act = 0;
-				        	if(date('Y-m-d')>$p['por_fech']):
-				        		$prec_act = $p['cz_ci_fin'];
-				        		echo getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
-				        	else:
-				        		$prec_act = $p['por_prec_act'];
-				        		echo number_format($p['por_gan_net'],2,'.',',');
-				        	endif;
-				        	?>
-				        </td>
+				        <td class=""><?=number_format($prec_act,2,'.',',')?></td>
+				        <td class=""><?=number_format($gan_net,2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 					            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
@@ -117,11 +135,26 @@
 					        </a>
 				        </td>
 				    </tr>
-				<?php
+				    <?php
+				    if (($c+1)==$cant_reg_port) {
+					?>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<th>Total</th>
+						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td><?=number_format($sum_cant,2,'.',',')?></td>
+						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td>&nbsp;</td>
+						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
+						<td>&nbsp;</td>
+					</tr>
+					<?php
+					}
 				}
 				?>
 				
-			<?php 
+			<?php
 			$c++;
 			$nemonico = strtoupper($p['nemonico']);
 			endwhile;

@@ -14,7 +14,9 @@ function indexAction(){
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
 			WHERE ep.cod_user='$cod_user' ORDER BY em.nemonico ASC";
 
-	$portafolio= mysqli_query($link, $sql);
+	$portafolio = mysqli_query($link, $sql);
+
+	$cant_reg_port = mysqli_num_rows($portafolio);
 
 	include('../View/Portafolio/index.php');
 }
