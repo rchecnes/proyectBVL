@@ -11,7 +11,7 @@
 		<h3 class="title">Simulador</h3>
 		<div style="border-bottom: 1px solid #aba8a8;">
 			<div class="row">
-				<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group">
 						<label for="inputPassword" class="control-label">Grupo:</label>
 					    <?php
@@ -29,7 +29,7 @@
 					    
 				  	</div>
 				</div>
-				<div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group">
 						<label for="inputPassword" class="control-label">Empresa:</label>
 					    <?php
@@ -50,12 +50,12 @@
 					     ?>
 					</div>
 				</div>
-				<div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
+				<!--<div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group align-right ">
 						<label>&nbsp;</label><br>
 						<button type="button" id="buscar" class="btn btn-success">Buscar</button>
 					</div>
-				</div>
+				</div>-->
 			</div>
 		</div><br>
 		<div id="detalle">
@@ -226,14 +226,28 @@
 			</div>
 		</div>
 		<p class="align-right">
-			<button type="button" id="new_simulacion" class="btn btn-success">Nueva Simulación</button>		
-			<button type="button" id="add_portafolio" class="btn btn-danger">Agregar a portafolio</button>
-			<button type="button" id="ver_portafolio" class="btn btn-warning">Ver Portafolio</button>
+			<button type="button" id="new_simulacion" class="btn btn-success">Nuevo</button>		
+			<button type="button" id="add_portafolio" class="btn btn-danger">Guardar</button>
+			<button type="button" id="ver_portafolio" class="btn btn-warning">Portafolio</button>
 		</p>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-            
+
+            var oper = '<?=$oper?>';
+            if (oper == 'ver_simu') {
+            	$("#cod_emp").attr('disabled','disabled');
+				$("#cod_grupo").attr('disabled','disabled');
+				$("#add_portafolio").hide();
+
+				$("#monto_estimado").attr('disabled','disabled');
+				$("#precio_unitario").attr('disabled','disabled');
+				$("#gan_rent_obj").attr('disabled','disabled');
+				$("#gan_pre_obj").attr('disabled','disabled');
+            }else{
+            	$("#new_simulacion").hide();
+            }
+
 			$("#cod_grupo").change(function(){
 
 				$("#cod_emp").attr('disabled','disabled');
@@ -253,8 +267,9 @@
 
 				var monto_estimado  = '';
 				var precio_unitario = '';
-				var gan_renta_obj = 0;
-				var gan_pre_obj = 0;
+				var gan_renta_obj   = 0;
+				var gan_pre_obj     = 0;
+				var oper            = '';
 
 				if (tipo == 'uno') {
 
@@ -262,6 +277,7 @@
 					$("#precio_unitario").attr('readonly','readonly');
 					monto_estimado  = $("#monto_estimado").val();
 					precio_unitario = $("#precio_unitario").val();
+					oper = '<?=$oper?>';
 				}else if (tipo == 'dos') {
 
 					monto_estimado  = $("#monto_estimado").val();
@@ -278,7 +294,7 @@
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{oper:'<?=$oper?>',cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
+				    data:{oper:oper,cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA
@@ -335,11 +351,13 @@
 
 			buscar('uno','');
 
-			$("#buscar").on("click",function(){
+			//$("#buscar").on("click",function(){
+			//	buscar('uno','');
+			//});
+
+			$("#cod_emp").on('change',function(){
 				buscar('uno','');
 			});
-
-			
 
 			verPortafolio = function(){
 				window.location.href = "./PortafolioC.php?accion=index";
@@ -363,6 +381,7 @@
 				var rent_obj = $("#gan_rent_obj").val();
 				var prec_act = $("#gan_pre_obj").val();
 				var gan_neta = $("#res_gan_neta").val();
+				var mont_neg = $("#monto_negociado").val();
 
 				$("#buscar").attr('disabled','disabled');
 				$("#add_portafolio").attr('disabled','disabled');
@@ -370,7 +389,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
-				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo},
+				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');

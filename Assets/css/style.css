@@ -142,6 +142,12 @@ input[readonly='readonly'] {
 /*FIN ICONS*/
 
 /*TABLA SIMULACION*/
+
+.form-control[disabled] {
+    background-color: #eae8db;
+    opacity: 1;
+}
+
 table.excel .form-control{
     height: 20px !important;
     -webkit-box-shadow: none;

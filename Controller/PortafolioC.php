@@ -12,7 +12,7 @@ function indexAction(){
 
 	$sql = "SELECT *,DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new FROM empresa_portafolio ep
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
-			WHERE ep.cod_user='$cod_user'";
+			WHERE ep.cod_user='$cod_user' ORDER BY em.nemonico ASC";
 
 	$portafolio= mysqli_query($link, $sql);
 
@@ -27,6 +27,7 @@ function addPortafolioAction(){
 	$cod_emp   = $_POST['cod_emp'];
 	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
 	$prec      = (double)str_replace(',', '', $_POST['precio']);
+	$mont_neg  = (double)str_replace(',', '', $_POST['mont_neg']);
 	$fecha     = date('Y-m-d');
 	$hora      = date('H:i:s');
 	$cod_user  = $_SESSION['cod_user'];
@@ -49,7 +50,7 @@ function addPortafolioAction(){
 
 	//}else{
 
-		$insert  = "INSERT INTO empresa_portafolio(cod_emp,cod_user,por_fech,por_hora,por_cant,por_prec,por_mont_est,por_rent_obj,por_prec_act,por_gan_net,cod_grupo)VALUES('$cod_emp','$cod_user','$fecha','$hora','$cant','$prec','$mont_est','$rent_obj','$prec_act','$gan_neta','$cod_grupo')";
+		$insert  = "INSERT INTO empresa_portafolio(cod_emp,cod_user,por_fech,por_hora,por_cant,por_prec,por_mont_est,por_rent_obj,por_prec_act,por_gan_net,cod_grupo,por_mont_neg)VALUES('$cod_emp','$cod_user','$fecha','$hora','$cant','$prec','$mont_est','$rent_obj','$prec_act','$gan_neta','$cod_grupo','$mont_neg')";
 		$resp = mysqli_query($link,$insert);
 	//}
 

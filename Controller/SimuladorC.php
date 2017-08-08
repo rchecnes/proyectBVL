@@ -117,10 +117,16 @@ function datoscabAction(){
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
 	$gan_pre_min = round(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2,PHP_ROUND_HALF_ODD);
-	if ($tipo_two =='precio_obj' || $oper =='ver_simu') {
+	
+	if ($tipo_two =='precio_obj') {
 		$gan_pre_obj = $gan_pre_obj;
 	}else{
-		$gan_pre_obj = round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2);
+		if ($oper =='ver_simu') {
+			$gan_pre_obj = $gan_pre_obj;
+		}else{
+			$gan_pre_obj = round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2);
+		}
+		
 	}
 	
 	$gan_var_pre = $gan_pre_obj - $cz_ci_fin;
