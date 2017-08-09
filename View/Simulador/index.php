@@ -242,8 +242,8 @@
 
 				$("#monto_estimado").attr('disabled','disabled');
 				$("#precio_unitario").attr('disabled','disabled');
-				$("#gan_rent_obj").attr('disabled','disabled');
-				$("#gan_pre_obj").attr('disabled','disabled');
+				//$("#gan_rent_obj").attr('disabled','disabled');
+				//$("#gan_pre_obj").attr('disabled','disabled');
             }else{
             	$("#new_simulacion").hide();
             }
