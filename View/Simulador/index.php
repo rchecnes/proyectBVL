@@ -67,7 +67,9 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" value="<?=$mont_est?>" onkeyup="buscar('dos','')"></input></td>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="<?=$mont_est?>" onkeyup="buscar('dos','')"></input>
+							<input type="hidden" name="por_cod" id="por_cod" value="<?=$por_cod?>">
+							</td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
@@ -226,8 +228,9 @@
 			</div>
 		</div>
 		<p class="align-right">
-			<button type="button" id="new_simulacion" class="btn btn-success">Nuevo</button>		
+			<button type="button" id="update_portafolio" class="btn btn-danger">Actualizar</button>		
 			<button type="button" id="add_portafolio" class="btn btn-danger">Guardar</button>
+			<button type="button" id="new_simulacion" class="btn btn-success">Nuevo</button>
 			<button type="button" id="ver_portafolio" class="btn btn-warning">Portafolio</button>
 		</p>
 	</div>
@@ -239,6 +242,7 @@
             	$("#cod_emp").attr('disabled','disabled');
 				$("#cod_grupo").attr('disabled','disabled');
 				$("#add_portafolio").hide();
+				$("#update_portafolio").show();
 
 				$("#monto_estimado").attr('disabled','disabled');
 				$("#precio_unitario").attr('disabled','disabled');
@@ -246,6 +250,7 @@
 				//$("#gan_pre_obj").attr('disabled','disabled');
             }else{
             	$("#new_simulacion").hide();
+            	$("#update_portafolio").hide();
             }
 
 			$("#cod_grupo").change(function(){
@@ -390,6 +395,36 @@
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
 				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
+				    success:function(data){
+
+				    	$("#buscar").removeAttr('disabled');
+						$("#add_portafolio").removeAttr('disabled');
+
+						verPortafolio();
+				    }
+				});
+			});
+
+			$("#update_portafolio").on("click",function(){
+
+				var por_cod  = $("#por_cod").val();
+				var cod_emp  = $("#cod_emp").val();
+				var cod_grupo= $("#cod_grupo").val();
+				var mont_est = $("#monto_estimado").val();
+				var cantidad = $("#cantidad_acciones").val(); 
+				var precio   = $("#precio_unitario").val();
+				var rent_obj = $("#gan_rent_obj").val();
+				var prec_act = $("#gan_pre_obj").val();
+				var gan_neta = $("#res_gan_neta").val();
+				var mont_neg = $("#monto_negociado").val();
+
+				$("#buscar").attr('disabled','disabled');
+				$("#add_portafolio").attr('disabled','disabled');
+
+				$.ajax({
+				    type:'POST',
+				    url: '../Controller/PortafolioC.php?accion=update_portafolio',
+				    data:{por_cod:por_cod,cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');

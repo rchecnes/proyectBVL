@@ -17,8 +17,10 @@
 		<table class="table table-bordered">
 			<tr>
 		        <th colspan="2">Empresa</th>
-		        <th colspan="6">Compra</th>
-		        <th colspan="3">Ganancia</th>
+		        <th colspan="4">Compra</th>
+		        <th colspan="2">Actual</th>
+		        <th colspan="2">Objetivo</th>
+		        <th>&nbsp;</th>
 		    </tr>
 		    <tr>
 		        <th class="">Nemonico</th>
@@ -27,10 +29,10 @@
 		        <th class="">Inversión.</th>
 		        <th class="">Cant.</th>
 		        <th class="">Precio</th>
-		        <th class="">P. Obj</th>
-		        <th class="">Gan. Neta</th>
-		        <th class="">P. Actual</th>
-		        <th class="">Gan. Neta Act.</th>
+		        <th class="">Precio</th>
+		        <th class="">G/P Neta</th>
+		        <th class="">Precio</th>
+		        <th class="">G/P Neta</th>
 		        <th class="">Acciones</th>
 		    </tr>			    
 		
@@ -44,22 +46,13 @@
 				
 				if ($nemonico == strtoupper($p['nemonico'])) {
 					
-		        	/*$prec_act = $gan_net_act = 0;
-		        	if(date('Y-m-d')>$p['por_fech']):
-		        		$prec_act = $p['cz_ci_fin'];
-		        		$gan_net_act  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
-		        	else:
-		        		$prec_act = $p['por_prec_act'];
-		        		$gan_net_act  = $p['por_gan_net'];
-		        	endif;*/
-
-		        	$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
+		        	//$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
 		        	$gan_net_act  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
 					$sum_mont_neg     += $p['por_mont_neg'];
 					$sum_cant         += $p['por_cant'];
-					$sum_gan_net      += $gan_net;
+					$sum_gan_net_obj  += $p['por_gan_net'];
 					$sum_gan_net_act  += $gan_net_act;
 				?>
 					<tr>
@@ -69,15 +62,15 @@
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec_act'],2,'.',',')?></td>
-				        <td class=""><?=number_format($gan_net,2,'.',',')?></td>
 				        <td class=""><?=number_format($p['cz_ci_fin'],2,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
+				        <td class=""><?=number_format($p['por_prec_obj'],2,'.',',')?></td>
+				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 					            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 					        </a>&nbsp;&nbsp;&nbsp;&nbsp;
-					        <a href="../Controller/SimuladorC.php?accion=index&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$p['cz_ci_fin']?>" title="Ver en simulador">
+					        <a href="../Controller/SimuladorC.php?accion=index&por_cod=<?=$p['por_cod']?>&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$p['cz_ci_fin']?>" title="Ver en simulador">
 					            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
 					        </a>
 
@@ -94,9 +87,9 @@
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
 						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
 						<td>&nbsp;</td>
-						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
-						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
+						<td>&nbsp;</td>						
+						<td><?=number_format($sum_gan_net_obj,2,'.',',')?></td>
 						<td>&nbsp;</td>
 					</tr>
 				<?php
@@ -111,19 +104,19 @@
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
 						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
 						<td>&nbsp;</td>
-						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
-						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
+						<td>&nbsp;</td>						
+						<td><?=number_format($sum_gan_net_obj,2,'.',',')?></td>
 						<td>&nbsp;</td>
 					</tr>
 					<?php 
-					$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
+					//$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
 		        	$gan_net_act  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
 					$sum_mont_neg     = $p['por_mont_neg'];
 					$sum_cant         = $p['por_cant'];
-					$sum_gan_net      = $gan_net;
+					$sum_gan_net_obj  = $p['por_gan_net'];
 					$sum_gan_net_act  = $gan_net_act;
 					?>
 					<tr>
@@ -133,15 +126,15 @@
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec_act'],2,'.',',')?></td>
-				        <td class=""><?=number_format($gan_net,2,'.',',')?></td>
 				        <td class=""><?=number_format($p['cz_ci_fin'],2,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
+				        <td class=""><?=number_format($p['por_prec_obj'],2,'.',',')?></td>
+				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 					            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 					        </a>&nbsp;&nbsp;&nbsp;&nbsp;
-					        <a href="../Controller/SimuladorC.php?accion=index&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$p['cz_ci_fin']?>" title="Ver en simulador">
+					        <a href="../Controller/SimuladorC.php?accion=index&por_cod=<?=$p['por_cod']?>&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$p['cz_ci_fin']?>" title="Ver en simulador">
 					            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
 					        </a>
 				        </td>
@@ -157,9 +150,9 @@
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
 						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
 						<td>&nbsp;</td>
-						<td><?=number_format($sum_gan_net,2,'.',',')?></td>
-						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
+						<td>&nbsp;</td>						
+						<td><?=number_format($sum_gan_net_obj,2,'.',',')?></td>
 						<td>&nbsp;</td>
 					</tr>
 					<?php

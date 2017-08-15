@@ -46,7 +46,7 @@ function getGananciaNeta($mont_est, $prec, $cant,  $rent_obj, $prec_act){
 	$c_compra_total  = $c_comision_sab +$c_cuota_bvl+$c_f_garantia+$c_cavali+$c_f_liquidacion;
 	$c_igv           = $c_compra_total*($com['VAL_IGV']/100);
 	$c_compra_smv    = ($mont_neg+$c_compra_total)*($com['COM_SMV']/100);
-	$c_costo_compra  = $c_compra_total+$c_compra_smv;
+	$c_costo_compra  = $c_compra_total+$c_igv+$c_compra_smv;
 	$c_poliza_compra = $c_costo_compra+$mont_neg;
 
 	//VARIABLES GANANCIA
@@ -70,7 +70,7 @@ function getGananciaNeta($mont_est, $prec, $cant,  $rent_obj, $prec_act){
 	$v_com_total     = $v_comision_sab +$v_cuota_bvl+$v_f_garantia+$v_cavali+$v_f_liquidacion;
 	$v_igv           = $v_com_total*($com['VAL_IGV']/100);
 	$v_com_smv       = ($gan_val_vent+$v_com_total)*($com['COM_SMV']/100);
-	$v_costo_venta   = $v_com_total+$v_com_smv;
+	$v_costo_venta   = $v_com_total+$v_igv+$v_com_smv;
 	$v_poliza_venta  = $gan_val_vent-$v_costo_venta;
 
 	//VARIABLES RESUMEN
