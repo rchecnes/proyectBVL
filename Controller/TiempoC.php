@@ -8,7 +8,7 @@ if ($_SESSION["autenticado"] == "SI") {
 	$tiempo_trans   = (strtotime($ahora)-strtotime($fecha_guardada));    
 
 	//comparamos el tiempo transcurrido   
-	if($tiempo_trans >= 10) {   
+	if($tiempo_trans >= 30) {   
 		//si pasaron 10 minutos o más   
 		session_destroy(); // destruyo la sesión 
 		$msj = "Su sesión a caducado, intenten autenticarse nuevamente" ;
