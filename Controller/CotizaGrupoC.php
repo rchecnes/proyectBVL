@@ -1,5 +1,4 @@
 <?php
-
 //http://www.forosdelweb.com/f18/extraer-datos-tabla-html-710504/
 //Cron: 15 22 * * * /usr/local/zend/bin/php -f /var/www/html/AppChecnes/proyectBVL/Controller/CotizaGrupoC.php
 //El cron se ejecuta a las 10:15pm de cada dia

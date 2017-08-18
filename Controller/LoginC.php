@@ -1,10 +1,11 @@
 <?php
-
-
 function indexAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
+
+	$error = isset($_GET['error'])?$_GET['error']:"";
+	$msj   = isset($_GET['msj'])?$_GET['msj']:"";
 
 	include('../View/Login/index.php');
 }
@@ -29,14 +30,18 @@ function validAction(){
 
 		session_start();
 		
-		$_SESSION["cod_user"]   = $r['cod_user'];
-		$_SESSION["nomb_user"]  = $r['nomb_user'];
-		$_SESSION["apepa_user"] = $r['apepa_user'];
-		$_SESSION["apema_user"] = $r['apema_user'];
-		$_SESSION["email_user"] = $r['email_user'];
-		$_SESSION["login_user"] = $r['login_user'];
-		$_SESSION["nom_role"]   = $r['nom_role'];
-		$_SESSION["desc_role"]  = $r['desc_role'];
+		$_SESSION["cod_user"]       = $r['cod_user'];
+		$_SESSION["nomb_user"]      = $r['nomb_user'];
+		$_SESSION["apepa_user"]     = $r['apepa_user'];
+		$_SESSION["apema_user"]     = $r['apema_user'];
+		$_SESSION["email_user"]     = $r['email_user'];
+		$_SESSION["login_user"]     = $r['login_user'];
+		$_SESSION["nom_role"]       = $r['nom_role'];
+		$_SESSION["desc_role"]      = $r['desc_role'];
+		$_SESSION["autenticado"]    = 'SI';
+		$_SESSION['ultimo_acceso']  = date("Y-m-d H:i:s");
+
+		//Ingresamos el ultimo
 
 		if ($r['nom_role'] == 'ROLE_ADMIN') {
 
