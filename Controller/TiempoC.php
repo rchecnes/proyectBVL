@@ -8,11 +8,11 @@ if ($_SESSION["autenticado"] == "SI") {
 	$tiempo_trans   = (strtotime($ahora)-strtotime($fecha_guardada));    
 
 	//comparamos el tiempo transcurrido   
-	if($tiempo_trans >= 120) {   
+	if($tiempo_trans >= 100) {   
 		//si pasaron 10 minutos o más   
 		session_destroy(); // destruyo la sesión 
 		$msj = "Su sesión a caducado, intenten autenticarse nuevamente" ;
-		header("Location: LoginC.php?accion=index&error=si&msj=$msj");   
+		header("Location: ../Include/expira.php?error=si&msj=$msj");   
 		  
 	}else{   
 		$_SESSION["ultimo_acceso"] = $ahora;   

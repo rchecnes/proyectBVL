@@ -35,7 +35,7 @@
         <div class="col-md-4 col-md-offset-4">
     		<div class="panel panel-default">
 			  	<div class="panel-heading">
-			    	<h1 class="panel-title">Login</h1>
+			    	<h1 class="panel-title">LOGIN - SIS. BVL</h1>
 			 	</div>
 			  	<div class="panel-body">
 			    	<form accept-charset="UTF-8" role="form" method="POST" id="form_login" action="../Controller/LoginC.php?accion=valid">
@@ -74,6 +74,8 @@
 	<script type="text/javascript">
     $(document).mousemove(function(e){
 
+        $("#email").focus();
+
         $('#form_login').bootstrapValidator({
             // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
             feedbackIcons: {
@@ -85,7 +87,7 @@
                 email: {
                     validators: {
                             notEmpty: {
-                            message: 'Ingrese Email'
+                            message: 'Ingrese Email ó Nombre usuario'
                         }
                     }
                 },
