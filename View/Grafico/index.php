@@ -107,7 +107,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label>Rango: 1-100</label>
-                            <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" onkeyup='validaNum(this.value,0,100)'>
+                            <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" style="max-width: 100px" onkeyup='validaNum(this.value,0,100)'>
                         </div>
                     </div>
                 </div>

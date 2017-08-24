@@ -52,6 +52,8 @@ function grafico1Action(){
 	$min    = ($rowmin['min'] !='')?$rowmin['min']:0;
 	//Obtener Long
 	$long = $max - $min;
+	//Obtener media
+	$med = ($max + $min)/2;
 
 	//Tabla Grafica
 	$porcen   = array('0.100','0.225','0.350','0.225','0.100');

@@ -4,6 +4,7 @@
         <table class="table table-bordered">
             <tr><td>Max</td><td><?=number_format($max,3,'.',',')?></td></tr>
             <tr><td>Min</td><td><?=number_format($min,3,'.',',')?></td></tr>
+            <tr><td>Med</td><td><?=number_format($med,3,'.',',')?></td></tr>
             <tr><td>Long</td><td><?=number_format($long,3,'.',',')?></td></tr>
         </table>
     </div>
