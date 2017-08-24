@@ -17,12 +17,13 @@
                 <th class="align-center">Rango Final</th>
                 <th class="align-center">Días</th>
                 <th class="align-center">Monto</th>
+                <th class="align-center">Recomendación</th>
             </tr>
             <?php 
             $suma_dias  = 0;
             $suma_monto = 0;
             foreach ($tabla as $key => $c):?>
-                <tr>
+                <tr bgcolor="<?=($c['rec']=='SI')?'#d2cea3':''?>">
                     <!--<td><?=$c['porcen']?></td>-->
                     <td class="align-center"><?php if($c['rango_ini']>=10):echo number_format($c['rango_ini'],2,'.',',');
                         elseif($c['rango_ini']>=1 && $c['rango_ini']<10):echo number_format($c['rango_ini'],3,'.',',');
@@ -35,6 +36,8 @@
                     </td>
                     <td class="align-center"><?=$c['dias']?></td>
                     <td class="align-center"><?=number_format($c['monto'],0,'.',',')?></td>
+                    <td class="align-center"><?=$c['rec_nom']?></td>
+                    
                 </tr>
             <?php
                 $suma_dias += $c['dias'];

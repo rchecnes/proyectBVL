@@ -162,7 +162,7 @@ function datoscabAction(){
 	$info = array(
 				//CABECERA
 				'mont_est'=>number_format($cz_cn_fin,2,'.',''),
-				'pre_unit'=>number_format($cz_ci_fin,2,'.',''),
+				'pre_unit'=>($cz_ci_fin>=1)?number_format($cz_ci_fin,2,'.',''):number_format($cz_ci_fin,3,'.',''),
 				'cant_acc'=>number_format($cant_acc,0,'.',','),				
 				'mont_neg'=>number_format($mont_neg,2,'.',','),
 				//COMPRA
@@ -177,9 +177,9 @@ function datoscabAction(){
 				'c_costo_compra' =>number_format($c_costo_compra,2,'.',','),
 				'c_poliza_compra'=>number_format($c_poliza_compra,2,'.',','),
 				//GANANCIA
-				'gan_pre_min' => number_format($gan_pre_min,2,'.',''),
-				'gan_pre_obj' => number_format($gan_pre_obj,2,'.',''),
-				'gan_var_pre' => number_format($gan_var_pre,2,'.',''),
+				'gan_pre_min' => ($gan_pre_min>=1)?number_format($gan_pre_min,2,'.',''):number_format($gan_pre_min,3,'.',''),
+				'gan_pre_obj' => ($gan_pre_obj>=1)?number_format($gan_pre_obj,2,'.',''):number_format($gan_pre_obj,3,'.',''),
+				'gan_var_pre' => ($gan_var_pre>=1)?number_format($gan_var_pre,2,'.',''):number_format($gan_var_pre,3,'.',''),
 				'gan_val_vent' => number_format($gan_val_vent,2,'.',''),
 				//VENTA
 				'v_comision_sab' => number_format($v_comision_sab,2,'.',''),

@@ -34,6 +34,7 @@ function grafico1Action(){
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$prec_unit    = ($_GET['prec_unit']>0 && $_GET['prec_unit']!='')?$_GET['prec_unit']:0;
 
 	/*$fecha_fin    = date($fecha_final);
 	$fecha_fin    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
@@ -53,11 +54,12 @@ function grafico1Action(){
 	$long = $max - $min;
 
 	//Tabla Grafica
-	$porcen  = array('0.100','0.225','0.350','0.225','0.100');
+	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
+	$recomen  = array('Vender+','Vender','Mantener','Comprar','Comprar+');
 	$tabla = array();
 
 	$rango_fin = 0;
-	$rango_ini = 0; 
+	$rango_ini = 0;
 	for ($i=0; $i < count($porcen) ; $i++) {
 
 		if ($i==0) {
@@ -98,10 +100,14 @@ function grafico1Action(){
 		$resm = mysqli_query($link, $sqlm);
 		$rowm = mysqli_fetch_array($resm);
 
-		//Cuadro en tabla
-		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma']);
+		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
+		$rec = "NO";
+		if ($prec_unit<$rango_ini && $prec_unit>$rango_fin) {
+			$rec = "SI";
+		}
 
-		
+		//Cuadro en tabla
+		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i],'rec'=>$rec);
 	}
 
 	//Grafica

@@ -61,10 +61,10 @@
 				        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['cz_ci_fin'],2,'.',',')?></td>
+				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],3,'.',',')?></td>
+				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],3,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec_obj'],2,'.',',')?></td>
+				        <td class=""><?=($p['por_prec_obj']>=1)?number_format($p['por_prec_obj'],2,'.',','):number_format($p['por_prec_obj'],3,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
@@ -85,7 +85,7 @@
 						<th>Total</th>
 						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						
@@ -102,7 +102,7 @@
 						<th>Total</th>
 						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						
@@ -125,10 +125,10 @@
 				        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
 				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec'],2,'.',',')?></td>
-				        <td class=""><?=number_format($p['cz_ci_fin'],2,'.',',')?></td>
+				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],3,'.',',')?></td>
+				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],3,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
-				        <td class=""><?=number_format($p['por_prec_obj'],2,'.',',')?></td>
+				        <td class=""><?=($p['por_prec_obj']>=1)?number_format($p['por_prec_obj'],2,'.',','):number_format($p['por_prec_obj'],3,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
 				        <td class="">
 				        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
@@ -148,7 +148,7 @@
 						<th>Total</th>
 						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=number_format($sum_mont_neg / $sum_cant,2,'.',',')?></td>
+						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						

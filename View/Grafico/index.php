@@ -91,6 +91,14 @@
         <div class="tab-content">
             <div id="monto_por_precio" class="tab-pane fade in active">
                 <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label>Precio Unit.</label>
+                            <input type="text" name="prec_unit" id="prec_unit" class="form-control" value="2.56" style="max-width: 100px" size="5">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
                 </div>
             </div>
@@ -151,7 +159,7 @@
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico1',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(),prec_unit:$("#prec_unit").val()},
 
                 success:function(data){
 
