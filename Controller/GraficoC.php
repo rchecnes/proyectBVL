@@ -25,6 +25,27 @@ function getSumaMonto($data){
 	return $suma;
 }
 
+function getPromedioPrecio(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$fecha_final  = $_GET['fecha_final'];
+	$fecha_inicio = $_GET['fecha_inicio'];
+	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+
+	$resp = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($resp);
+	$max    = ($row['max'] !='')?$row['max']:0;
+	$min    = ($row['min'] !='')?$row['min']:0;
+	$long = $max - $min;
+	//Obtener media
+	$med = ($max + $min)/2;
+
+	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',',')));
+}
 
 function grafico1Action(){
 
@@ -41,15 +62,11 @@ function grafico1Action(){
 	$fecha_inicio = date ( 'Y-m-j' , $fecha_fin );*/
 
 	//Obtener Max
-	$sqlmax = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
-	$resmax = mysqli_query($link, $sqlmax);
-	$rowmax = mysqli_fetch_array($resmax);
-	$max    = ($rowmax['max'] !='')?$rowmax['max']:0;
-	//Obtener Min
-	$sqlmin = "SELECT MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
-	$resmin = mysqli_query($link, $sqlmin);
-	$rowmin = mysqli_fetch_array($resmin);
-	$min    = ($rowmin['min'] !='')?$rowmin['min']:0;
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$resp = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($resp);
+	$max    = ($row['max'] !='')?$row['max']:0;
+	$min    = ($row['min'] !='')?$row['min']:0;
 	//Obtener Long
 	$long = $max - $min;
 	//Obtener media
@@ -438,6 +455,9 @@ function listfavoritoAction(){
 switch ($_GET['accion']) {
 	case 'index':
 		indexAction();
+		break;
+	case 'promedio':
+		getPromedioPrecio();
 		break;
 	case 'grafico1':
 		grafico1Action();

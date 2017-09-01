@@ -90,12 +90,16 @@
         </ul>
         <div class="tab-content">
             <div id="monto_por_precio" class="tab-pane fade in active">
+                
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                            <label>Precio Unit.</label>
-                            <input type="text" name="prec_unit" id="prec_unit" class="form-control" value="2.56" style="max-width: 100px" size="5">
-                        </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <table class="table table-bordered grafico">
+                            <tr><td style="width: 98px!important;">P. Actual</td><td><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="2.56"></td></tr></th>
+                            <tr><td>Max</td><td><input type="text" name="max" id="max" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Min</td><td><input type="text" name="min" id="min" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Med</td><td><input type="text" name="med" id="med" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Long</td><td><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
+                        </table>
                     </div>
                 </div>
                 <div class="row">
@@ -140,13 +144,42 @@
         var grafico = $("#tabs li.active>a").attr('href');
 
         if (grafico == '#monto_por_precio') {
-            resultadomontoporprecio();
+            //resultadomontoporprecio();
+            getPromedioMontoPorPrecio();
         }else if(grafico == '#analisis_de_precio'){
             resultadoanalisisdeprecio();
         }else if (grafico == '#cotizacion') {
             resultadocotizacion();
         }
 
+    }
+
+    getPromedioMontoPorPrecio = function(){
+
+        if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
+
+            
+            $("#loading").show();
+
+            $.ajax({
+                type:'GET',
+                dataType: 'json',
+                url: '../Controller/GraficoC.php?accion=promedio',
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(),prec_unit:$("#prec_unit").val()},
+
+                success:function(data){
+
+                    $("#max").val(data.max);
+                    $("#min").val(data.min);
+                    $("#long").val(data.long);
+                    $("#med").val(data.med);
+                   
+                    resultadomontoporprecio();
+                }
+            });
+        }else{
+            alert("Debe ingresar Fecha Inicio y Fecha Final");
+        }
     }
 
     resultadomontoporprecio = function(){
@@ -224,7 +257,7 @@
         }
     }
 
-    resultadomontoporprecio();
+    getPromedioMontoPorPrecio();
 
     function restarFecha(fecha, cantidad){
         /*var d    = Date.parse(fecha);
@@ -283,7 +316,7 @@
 
         if ($(this).attr('href')=='#monto_por_precio') {
 
-            resultadomontoporprecio();
+            getPromedioMontoPorPrecio();
 
         }else if($(this).attr('href')=='#analisis_de_precio'){
             resultadoanalisisdeprecio();

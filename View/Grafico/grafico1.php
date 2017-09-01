@@ -1,14 +1,15 @@
 <br>
-<div class="row">
+<!--<div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
         <table class="table table-bordered">
+            <tr><th style="width: 98px!important;">P. Actual</th><th><input type="" name="" class="form-control" style="text-align: center"></th></tr></th>
             <tr><td>Max</td><td><?=number_format($max,3,'.',',')?></td></tr>
             <tr><td>Min</td><td><?=number_format($min,3,'.',',')?></td></tr>
             <tr><td>Med</td><td><?=number_format($med,3,'.',',')?></td></tr>
             <tr><td>Long</td><td><?=number_format($long,3,'.',',')?></td></tr>
         </table>
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
         <table class="table table-bordered">
