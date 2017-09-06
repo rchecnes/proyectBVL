@@ -4,14 +4,14 @@
 //El cron se ejecuta a las 10:15pm de cada dia
 //Se esta registrando desde el dia 22/05/2017
 
-$ruta = 'var/www/html/AppChecnes/proyectBVL';
-
+$ruta = 'home3/rchecnes/public_html/domains/bvl.worldapu.com';
+include($ruta.'/Util/simple_html_dom_php5.6.php');
 function getConexion(){
 
-    $DB_SERVER = '190.117.250.34:3307';
-    $DB_USER   = 'integrator';
-    $DB_PASS   = '4v4t4r';
-    $DB_NAME   = 'checnes_BVL';
+    $DB_SERVER = '108.167.189.18';//Publico
+    $DB_USER   = 'rchecnes_apu';
+    $DB_PASS   = 'raisa6242016apu';
+    $DB_NAME   = 'rchecnes_bvl';
 
     $link = mysqli_connect($DB_SERVER,$DB_USER,$DB_PASS,$DB_NAME);
 
@@ -32,29 +32,22 @@ function getCotizacionGrupo(){
 
     $c = 1;
     $cotiza = array();
-    //echo "<table border='1'>";
 	while ($e = mysqli_fetch_array($respemp)) {
 		$empresa = $e['nemonico'];
 		$url     = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$p_Ini&fec_fin=$P_Fin&nemonico=$empresa";
-		$data    = file_get_contents($url);
-        //echo "<tr>";
-        //    echo "<td>".$c."=>".$empresa."</td>";
-        //    echo "<td>";
-        //        echo $data;
-        //    echo "</td>";
-        //echo "</tr>";
-        $cotiza_row = getPrepareData($empresa,$data);
-
+		//$data    = file_get_contents($url);
+        $cotiza_row = getPrepareDataTwo($empresa,$url);
+        //var_dump($cotiza_row)."<br><br>";
         if (count($cotiza_row)>0) {
             $cotiza[] = $cotiza_row;
         }
 		
-        unset($data);
+        //unset($data);
         unset($cotiza_row);
 
         $c++;
 	}
-    //echo "</table>";
+    
     $resp = savCatiza($cotiza);
 
     echo $resp;
@@ -62,16 +55,48 @@ function getCotizacionGrupo(){
     unset($cotiza);
 }
 
+function getPrepareDataTwo($empresa, $data){
+
+    $cotiza = array();
+
+    $html = file_get_html($data);
+
+    foreach($html->find('table') as $e){
+
+        $fecha = str_replace(" ","",$e->find('td',0)->plaintext);
+
+        if ($fecha !='') {
+
+            $cotiza = array(
+                    'emp'=> $empresa,
+                    'f'  => $fecha,
+                    'a'  => (double)str_replace(" ","",$e->find('td',1)->plaintext),
+                    'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),
+                    'max'=> (double)str_replace(" ","",$e->find('td',3)->plaintext),
+                    'min'=> (double)str_replace(" ","",$e->find('td',4)->plaintext),
+                    'prd'=> (double)str_replace(" ","",$e->find('td',5)->plaintext),
+                    'cn' => (double)str_replace(" ","",$e->find('td',6)->plaintext),
+                    'mn' => (double)str_replace(" ","",$e->find('td',7)->plaintext),
+                    'fa' => str_replace(" ","",$e->find('td',8)->plaintext),
+                    'ca' => (double)str_replace(" ","",$e->find('td',9)->plaintext)
+                    );
+        }
+    }
+    unset($html);
+
+    return $cotiza;
+}
+
 function getPrepareData($empresa, $data){
 
-	global $ruta;
+	//global $ruta;
 
-	include($ruta.'/Util/simple_html_dom.php');
+	//include('../Util/simple_html_dom.php');
 
 	$dom = new domDocument; 
 
-    // load the html into the object
-    $dom->loadHTML($data); 
+    // load the html into the object 
+    $dom->loadHTML($data);
 
     // discard white space 
     $dom->preserveWhiteSpace = false;

@@ -23,10 +23,7 @@ function indexAction(){
 	include('../View/Simulador/index.php');
 }
 
-function getComision($tipo){
-
-	include('../Config/Conexion.php');
-	$link = getConexion();
+function getComision($link, $tipo){
 
 	$sql  = "SELECT * FROM comision WHERE concep='$tipo' LIMIT 1";
 	$resp = mysqli_query($link,$sql);
@@ -58,7 +55,7 @@ function datoscabAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$com = getComision('contado');
+	$com = getComision($link, 'contado');
 
 	$oper            = $_GET['oper'];
 	$cod_emp         = $_GET['cod_emp'];

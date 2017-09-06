@@ -47,7 +47,7 @@
 				if ($nemonico == strtoupper($p['nemonico'])) {
 					
 		        	//$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
-		        	$gan_net_act  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
+		        	$gan_net_act  = getGananciaNeta($link, $p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
 					$sum_mont_neg     += $p['por_mont_neg'];
@@ -111,7 +111,7 @@
 					</tr>
 					<?php 
 					//$gan_net      = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['por_prec_act']);
-		        	$gan_net_act  = getGananciaNeta($p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
+		        	$gan_net_act  = getGananciaNeta($link, $p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
 					$sum_mont_neg     = $p['por_mont_neg'];
