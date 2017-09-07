@@ -94,11 +94,11 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <table class="table table-bordered grafico">
-                            <tr><td style="width: 98px!important;">P. Actual</td><td><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="2.56"></td></tr></th>
-                            <tr><td>Max</td><td><input type="text" name="max" id="max" class="align-center" readonly="readonly"></td></tr>
-                            <tr><td>Min</td><td><input type="text" name="min" id="min" class="align-center" readonly="readonly"></td></tr>
-                            <tr><td>Med</td><td><input type="text" name="med" id="med" class="align-center" readonly="readonly"></td></tr>
-                            <tr><td>Long</td><td><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td style="width: 98px!important;">P. Actual</td><td align="center"><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="2.56"></td></tr></th>
+                            <tr><td>Max</td><td align="center"><input type="text" name="max" id="max" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Min</td><td align="center"><input type="text" name="min" id="min" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Med</td><td align="center"><input type="text" name="med" id="med" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Long</td><td align="center"><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
                         </table>
                     </div>
                 </div>
@@ -138,6 +138,9 @@
         if ( n<mini || n>maxi ) alert("El valor debe ser mayor a "+mini+" y menor igual a "+maxi);
     }
 
+    $("#prec_unit").click(function(){
+        $(this).select();
+    });
 
     buscar = function(){
 
@@ -165,7 +168,7 @@
                 type:'GET',
                 dataType: 'json',
                 url: '../Controller/GraficoC.php?accion=promedio',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(),prec_unit:$("#prec_unit").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val()},
 
                 success:function(data){
 
@@ -173,6 +176,7 @@
                     $("#min").val(data.min);
                     $("#long").val(data.long);
                     $("#med").val(data.med);
+                    $("#prec_unit").val(data.cz_ci_fin);
                    
                     resultadomontoporprecio();
                 }
@@ -308,10 +312,7 @@
         
     });
 
-    //$(".mostrar_graf").on("click", function(){
-    //    resultadomontoporprecio();
-    //});
-
+    //CLICK EN LAS PESTAÑAS
     $(".nav-tabs li a").on("click", function(){
 
         if ($(this).attr('href')=='#monto_por_precio') {
@@ -325,6 +326,21 @@
             resultadocotizacion();
         }
     });
+
+    //CLICK EN EL COMBO EMPRESA
+    $("#empresa").on("change", function(){
+
+        var pestana = $("#tabs li.active a").attr('href');
+
+        if (pestana == '#monto_por_precio') {
+            getPromedioMontoPorPrecio();
+        }else if(pestana == '#analisis_de_precio'){
+            resultadoanalisisdeprecio();
+        }else if(pestana == '#cotizacion'){
+            resultadocotizacion();
+        }
+    });
+
 
     $("#cod_grupo").change(function(){
 
@@ -341,6 +357,12 @@
             }
         });
     });
+
+    $("#prec_unit").keyup(function(event) {
+        resultadomontoporprecio();
+    })
+
+
 
     
  });

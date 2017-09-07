@@ -24,6 +24,14 @@
             <?php 
             $suma_dias  = 0;
             $suma_monto = 0;
+            ?>
+            <tr bgcolor="<?=($prec_unit>$max && $exist_rec=='NO')?'#d2cea3':''?>">
+                <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td align="center">Mantener <i class="glyphicon glyphicon-arrow-up"></i></td>
+            </tr>
+            <?php
             foreach ($tabla as $key => $c):?>
                 <tr bgcolor="<?=($c['rec']=='SI')?'#d2cea3':''?>">
                     <!--<td><?=$c['porcen']?></td>-->
@@ -46,6 +54,12 @@
                 $suma_monto += $c['monto'];
             endforeach;
             ?>
+            <tr bgcolor="<?=($prec_unit<$min && $exist_rec=='NO')?'#d2cea3':''?>">
+                <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td align="center">Mantener <i class="glyphicon glyphicon-arrow-down"></i></i></td>
+            </tr>
             <tr>
                 <th colspan="2">&nbsp;</th>
                 <th class="align-center"><?=$suma_dias?></th>

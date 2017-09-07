@@ -44,7 +44,14 @@ function getPromedioPrecio(){
 	//Obtener media
 	$med = ($max + $min)/2;
 
-	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',',')));
+	//Obtener el ultimo precio de la empresa
+	$sqlpre = "SELECT cz_ci_fin FROM empresa WHERE nemonico='".$_GET['empresa']."'";
+	$respre = mysqli_query($link, $sqlpre);
+	$rpre   = mysqli_fetch_array($respre);
+
+	mysqli_close($link);
+
+	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($rpre['cz_ci_fin'],3,'.',',')));
 }
 
 function grafico1Action(){
@@ -74,11 +81,12 @@ function grafico1Action(){
 
 	//Tabla Grafica
 	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
-	$recomen  = array('Vender+','Vender','Mantener','Comprar','Comprar+');
+	$recomen  = array('Vender +','Vender','Mantener','Comprar','Comprar +');
 	$tabla = array();
 
 	$rango_fin = 0;
 	$rango_ini = 0;
+	$exist_rec = 'NO';
 	for ($i=0; $i < count($porcen) ; $i++) {
 
 		if ($i==0) {
@@ -121,8 +129,9 @@ function grafico1Action(){
 
 		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
 		$rec = "NO";
-		if ($prec_unit<$rango_ini && $prec_unit>$rango_fin) {
+		if ($prec_unit<=$rango_ini && $prec_unit>$rango_fin) {
 			$rec = "SI";
+			$exist_rec = 'SI';
 		}
 
 		//Cuadro en tabla
@@ -155,7 +164,7 @@ function grafico1Action(){
 		}
 
 			
-		$roud_serie = round((($f['monto']/$suma_monto)*100),0);
+		$roud_serie = ($suma_monto>0)?round((($f['monto']/$suma_monto)*100),0):0;
 
 		if ($roud_serie>0) {
 
