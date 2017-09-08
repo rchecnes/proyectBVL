@@ -4,8 +4,8 @@
 //El cron se ejecuta a las 10:15pm de cada dia
 //Se esta registrando desde el dia 22/05/2017
 
-$ruta = 'home3/rchecnes/public_html/domains/bvl.worldapu.com';
-include('../Util/simple_html_dom_php5.6.php');
+$ruta = 'public_html/domains/bvl.worldapu.com';
+include($ruta.'/Util/simple_html_dom_php5.6.php');
 function getConexion(){
 
     $DB_SERVER = '108.167.189.18';//Publico
@@ -27,8 +27,8 @@ function getCotizacionGrupo(){
 	$respemp   = mysqli_query($link, $sqlemp);
 	$emp_array = array();
 
-	$p_Ini = '20170906';//date('Ymd');
-	$P_Fin = '20170906';//date('Ymd');
+	$p_Ini = '20170907';//date('Ymd');
+	$P_Fin = '20170907';//date('Ymd');
 
     $c = 1;
     $cotiza = array();
