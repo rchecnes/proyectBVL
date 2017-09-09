@@ -1,6 +1,8 @@
 <?php
 function indexAction(){
 
+	//phpinfo();
+
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
@@ -64,6 +66,8 @@ function validAction(){
 }
 
 function logoutAction(){
+
+	session_start();
 
 	session_destroy();
 

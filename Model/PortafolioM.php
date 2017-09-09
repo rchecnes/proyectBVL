@@ -1,8 +1,7 @@
 <?php
-function getComision($tipo){
-
-	include('../Config/Conexion.php');
-	$link = getConexion();
+function getComision($link, $tipo){
+	//include('../Config/Conexion.php');
+	//$link = getConexion();
 
 	$sql  = "SELECT * FROM comision WHERE concep='$tipo' LIMIT 1";
 	$resp = mysqli_query($link,$sql);
@@ -23,9 +22,9 @@ function getComision($tipo){
 	);
 }
 
-function getGananciaNeta($mont_est, $prec, $cant,  $rent_obj, $prec_act){
+function getGananciaNeta($link, $mont_est, $prec, $cant,  $rent_obj, $prec_act){
 
-	$com = getComision('contado');
+	$com = getComision($link, 'contado');
 
 	$cz_cn_fin = $mont_est;//5000.00; //Monto estimado
 	$cz_ci_fin = $prec; //precio unitario
