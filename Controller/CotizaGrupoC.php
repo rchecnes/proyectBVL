@@ -4,14 +4,14 @@
 //El cron se ejecuta a las 10:15pm de cada dia
 //Se esta registrando desde el dia 22/05/2017
 
-$ruta = 'var/www/html/AppChecnes/proyectBVL';
-
+$ruta = 'home/rchecnes/public_html/domains/bvl.worldapu.com';
+include('../Util/simple_html_dom.php');
 function getConexion(){
 
-    $DB_SERVER = '190.117.250.34:3307';
-    $DB_USER   = 'integrator';
-    $DB_PASS   = '4v4t4r';
-    $DB_NAME   = 'checnes_BVL';
+    $DB_SERVER = '108.167.189.18';//Publico
+    $DB_USER   = 'rchecnes_apu';
+    $DB_PASS   = 'raisa6242016apu';
+    $DB_NAME   = 'rchecnes_bvl';
 
     $link = mysqli_connect($DB_SERVER,$DB_USER,$DB_PASS,$DB_NAME);
 
@@ -23,28 +23,22 @@ function getCotizacionGrupo(){
     //global $ruta;
 	$link      = getConexion();
 
-	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.nemonico ASC";
+	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.nemonico ASC limit 10";
 	$respemp   = mysqli_query($link, $sqlemp);
 	$emp_array = array();
 
-	$p_Ini = date('Ymd');
-	$P_Fin = date('Ymd');
+	$p_Ini = '20170904';//date('Ymd');
+	$P_Fin = '20170904';//date('Ymd');
 
     $c = 1;
     $cotiza = array();
-    //echo "<table border='1'>";
 	while ($e = mysqli_fetch_array($respemp)) {
 		$empresa = $e['nemonico'];
 		$url     = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$p_Ini&fec_fin=$P_Fin&nemonico=$empresa";
 		$data    = file_get_contents($url);
-        //echo "<tr>";
-        //    echo "<td>".$c."=>".$empresa."</td>";
-        //    echo "<td>";
-        //        echo $data;
-        //    echo "</td>";
-        //echo "</tr>";
+        
         $cotiza_row = getPrepareData($empresa,$data);
-
+        
         if (count($cotiza_row)>0) {
             $cotiza[] = $cotiza_row;
         }
@@ -63,15 +57,16 @@ function getCotizacionGrupo(){
 }
 
 function getPrepareData($empresa, $data){
+    //echo $data;exit();
+	//global $ruta;
 
-	global $ruta;
-
-	include($ruta.'/Util/simple_html_dom.php');
+	//include('../Util/simple_html_dom.php');
 
 	$dom = new domDocument; 
 
     // load the html into the object
-    $dom->loadHTML($data); 
+    //$dom->loadHTML($data); 
+    $dom->loadHTML(mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8'));
 
     // discard white space 
     $dom->preserveWhiteSpace = false;

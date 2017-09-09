@@ -34,6 +34,11 @@ function getPromedioPrecio(){
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 
+	//Ultimo precio de la empresa
+	$sqlpre = "SELECT * FROM empresa WHERE nemonico='$empresa'";
+	$respre = mysql_query($link, $sqlpre);
+	$pre = mysqli_fetch_array($resp);
+
 	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
 
 	$resp = mysqli_query($link, $sql);
@@ -44,7 +49,7 @@ function getPromedioPrecio(){
 	//Obtener media
 	$med = ($max + $min)/2;
 
-	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',',')));
+	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($pre['cz_ci_fin'],3,'.',',')));
 }
 
 function grafico1Action(){

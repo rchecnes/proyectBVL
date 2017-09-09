@@ -168,7 +168,7 @@
                 data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(),prec_unit:$("#prec_unit").val()},
 
                 success:function(data){
-
+                    $("#prec_unit").val(data.cz_ci_fin);
                     $("#max").val(data.max);
                     $("#min").val(data.min);
                     $("#long").val(data.long);
