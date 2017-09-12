@@ -27,8 +27,8 @@ function getCotizacionGrupo(){
 	$respemp   = mysqli_query($link, $sqlemp);
 	$emp_array = array();
 
-	$p_Ini = '20170907';//date('Ymd');
-	$P_Fin = '20170907';//date('Ymd');
+	$p_Ini = date('Ymd');
+	$P_Fin = date('Ymd');
 
     $c = 1;
     $cotiza = array();

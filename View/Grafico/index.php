@@ -101,6 +101,35 @@
                             <tr><td>Long</td><td align="center"><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
                         </table>
                     </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <table class="table table-bordered grafico">
+                            <tr><th colspan="4">RECOMENDACION</th></tr></th>
+                            <tr>
+                                <th>PESO</th>
+                                <th>MES</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            <tr>
+                                <td>48.81%</td>
+                                <td>12</td>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            <tr>
+                            <tr>
+                                <td>31.22%</td>
+                                <td>6</td>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            <tr>
+                            <tr>
+                                <td>19.97%</td>
+                                <td>3</td>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            <tr>
+                        </table>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
