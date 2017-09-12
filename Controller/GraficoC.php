@@ -54,6 +54,10 @@ function getPromedioPrecio(){
 	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($rpre['cz_ci_fin'],3,'.',',')));
 }
 
+function insertaRecomend($cx, $cod_emp, $cod_rec, $mes){
+
+}
+
 function grafico1Action(){
 
 	include('../Config/Conexion.php');

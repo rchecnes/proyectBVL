@@ -63,14 +63,15 @@ function getPrepareDataTwo($empresa, $data){
 
     foreach($html->find('table') as $e){
 
-        $fecha = str_replace(" ","",$e->find('td',0)->plaintext);
+        $fecha    = str_replace(" ","",$e->find('td',0)->plaintext);
+        $apertura = (double)str_replace(" ","",$e->find('td',1)->plaintext);
 
-        if ($fecha !='') {
+        if ($fecha !='' && $apertura !='' && $apertura > 0) {
 
             $cotiza = array(
                     'emp'=> $empresa,
                     'f'  => $fecha,
-                    'a'  => (double)str_replace(" ","",$e->find('td',1)->plaintext),
+                    'a'  => $apertura,
                     'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),
                     'max'=> (double)str_replace(" ","",$e->find('td',3)->plaintext),
                     'min'=> (double)str_replace(" ","",$e->find('td',4)->plaintext),
