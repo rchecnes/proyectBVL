@@ -56,6 +56,8 @@ function getPromedioPrecio(){
 
 function insertaRecomend($cx, $cod_emp, $cod_rec, $mes){
 
+	$fecha = date('Y-m-d');
+	$sql = "INSERT INTO temp_recomendacion()VALUES()";
 }
 
 function grafico1Action(){
@@ -85,12 +87,14 @@ function grafico1Action(){
 
 	//Tabla Grafica
 	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
-	$recomen  = array('Vender +','Vender','Mantener','Comprar','Comprar +');
+	//Consultamos recomendacion
+	$recomen  = array(array('cod'=>2,'nom'=>'Vender +'),array('cod'=>3,'nom'=>'Vender'),array('cod'=>4,'nom'=>'Mantener'),array('cod'=>5,'nom'=>'Comprar'),array('cod'=>6,'nom'=>'Comprar +'));
 	$tabla = array();
 
 	$rango_fin = 0;
 	$rango_ini = 0;
 	$exist_rec = 'NO';
+	$cod_rec = '';
 	for ($i=0; $i < count($porcen) ; $i++) {
 
 		if ($i==0) {
@@ -134,13 +138,23 @@ function grafico1Action(){
 		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
 		$rec = "NO";
 		if ($prec_unit<=$rango_ini && $prec_unit>$rango_fin) {
-			$rec = "SI";
+			$rec       = "SI";
 			$exist_rec = 'SI';
+			$cod_rec   = $recomen[$i]['cod'];
 		}
 
 		//Cuadro en tabla
-		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i],'rec'=>$rec);
+		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i]['nom'],'rec'=>$rec);
 	}
+
+	//Registramos la recomendacion del cliente
+	if($cod_rec ==''){
+		if ($prec_unit>$max && $exist_rec=='NO') {$cod_fin_rec = 1;}
+		if ($prec_unit<$min && $exist_rec=='NO') {$cod_fin_rec = 7;}
+	}else{
+		$cod_fin_rec = $cod_rec;
+	}
+	insertaRecomend($link, $empresa, $cod_fin_rec);
 
 	//Grafica
 	$categoria  = array();
