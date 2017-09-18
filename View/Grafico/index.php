@@ -65,7 +65,6 @@
             <div class="form-group">
                 <label>Rango:</label><br>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  
                   <button type="button" class="btn btn-secondary mostrar_graf" value="3">3M</button>
                   <button type="button" class="btn btn-secondary mostrar_graf" value="6">6M</button>
                   <button type="button" class="btn btn-secondary mostrar_graf active" value="12">12M</button>
@@ -101,9 +100,9 @@
                             <tr><td>Long</td><td align="center"><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
                         </table>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="recomendacion">
                         <table class="table table-bordered grafico">
-                            <tr><th colspan="4">RECOMENDACION</th></tr></th>
+                            <tr><th colspan="4">RECOMENDACIÓN</th></tr></th>
                             <tr>
                                 <th>PESO</th>
                                 <th>MES</th>
@@ -219,23 +218,39 @@
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
+            var mes = $(".mostrar_graf.active").val();
+            var empresa = $("#empresa").val();
             
             $("#loading").show();
 
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico1',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(),prec_unit:$("#prec_unit").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:empresa,prec_unit:$("#prec_unit").val(),mes:mes},
 
                 success:function(data){
 
                     $("#resultadomontoporprecio").html(data);
                     $("#loading").hide();
+                    getRecomendacion(empresa);
                 }
             });
         }else{
             alert("Debe ingresar Fecha Inicio y Fecha Final");
         }
+    }
+
+    getRecomendacion = function(empresa){
+
+        $.ajax({
+            type:'GET',
+            url: '../Controller/GraficoC.php?accion=crearcuadrorec',
+            data:{empresa:empresa},
+
+            success:function(data){
+                $("#recomendacion").html(data);
+            }
+        });
     }
 
     resultadoanalisisdeprecio = function(){

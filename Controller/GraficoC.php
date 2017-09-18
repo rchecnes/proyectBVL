@@ -54,10 +54,38 @@ function getPromedioPrecio(){
 	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($rpre['cz_ci_fin'],3,'.',',')));
 }
 
-function insertaRecomend($cx, $cod_emp, $cod_rec, $mes){
+function insertaRecomend($cx, $empresa, $cod_rec, $mes){
 
-	$fecha = date('Y-m-d');
-	$sql = "INSERT INTO temp_recomendacion()VALUES()";
+	$tp_fecha = date('Y-m-d');
+	$tp_hora = date('h:i:s');
+
+	$ps_cod = 1;
+	if ($mes == '12') { $ps_cod =1;}
+	if ($mes == '6') { $ps_cod =2;}
+	if ($mes == '3') { $ps_cod =3;}
+
+	$cod_user = $_SESSION['cod_user'];
+
+	//Emores
+	$sqlemp = "SELECT cod_emp FROM empresa WHERE nemonico='$empresa'";
+	$resemp = mysqli_query($cx, $sqlemp);
+	$rowemp = mysqli_fetch_array($resemp);
+	$cod_emp = $rowemp['cod_emp'];
+
+	//Validamos si existe registro en es fecha
+	$sqlcon = "SELECT rc_cod FROM temp_recomendacion WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
+	$rescon = mysqli_query($cx, $sqlcon);
+	$rowcon = mysqli_fetch_array($rescon);
+
+	if ($rowcon['rc_cod'] !='') {
+		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
+		mysqli_query($cx, $sqlup);
+	}else{
+		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
+		mysqli_query($cx, $sqlin);
+	}
+
+	
 }
 
 function grafico1Action(){
@@ -69,6 +97,7 @@ function grafico1Action(){
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 	$prec_unit    = ($_GET['prec_unit']>0 && $_GET['prec_unit']!='')?$_GET['prec_unit']:0;
+	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
 
 	/*$fecha_fin    = date($fecha_final);
 	$fecha_fin    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
@@ -137,7 +166,11 @@ function grafico1Action(){
 
 		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
 		$rec = "NO";
-		if ($prec_unit<=$rango_ini && $prec_unit>$rango_fin) {
+		if ($i != 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
+			$rec       = "SI";
+			$exist_rec = 'SI';
+			$cod_rec   = $recomen[$i]['cod'];
+		}elseif ($i == 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)) {
 			$rec       = "SI";
 			$exist_rec = 'SI';
 			$cod_rec   = $recomen[$i]['cod'];
@@ -154,7 +187,7 @@ function grafico1Action(){
 	}else{
 		$cod_fin_rec = $cod_rec;
 	}
-	insertaRecomend($link, $empresa, $cod_fin_rec);
+	insertaRecomend($link, $_GET['empresa'], $cod_fin_rec, $mes);
 
 	//Grafica
 	$categoria  = array();
@@ -188,14 +221,54 @@ function grafico1Action(){
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = $roud_serie;
-		}
-		
+		}	
 	}
 
 	$categoria = json_encode($categoria);
 	$series    = json_encode($series);
 
 	include('../View/Grafico/grafico1.php');
+}
+
+function crearcuadrorecAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$cod_emp  = $_GET['empresa'];
+	$cod_user = $_SESSION['cod_user'];
+	$tp_fecha = date('Y-m-d');
+
+	//TEMP RECOMENDACION
+	$sql = "SELECT * FROM temp_recomendacion tr
+			INNER JOIN empresa em ON(tr.cod_emp=em.cod_emp)
+			INNER JOIN porce_recomendacion pr ON(tr.ps_cod=pr.ps_cod)
+			INNER JOIN recomendacion r ON(tr.rc_cod=r.rc_cod)
+			WHERE em.nemonico='$cod_emp' AND tr.cod_user='$cod_user' AND tr.tp_fecha='$tp_fecha'";
+	$res = mysqli_query($link, $sql);
+
+	//RECOMENDACION
+	$sqlre = "SELECT * FROM porce_recomendacion";
+	$resre = mysqli_query($link,$sqlre);
+
+	echo '<table class="table table-bordered grafico">
+            <tr><th colspan="4">RECOMENDACIÓN</th></tr></th>
+            <tr>
+                <th>PESO</th>
+                <th>MES</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>';
+	while ($r = mysqli_fetch_array($resre)) {
+		echo '<tr>
+                <td>'.$r['ps_peso'].'%</td>
+                <td>'.$r['ps_mes'].'</td>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            <tr>';
+	}
+	echo '</table>';
+
 }
 
 
@@ -500,6 +573,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'listfavorito':
 		listfavoritoAction();
+		break;
+	case 'crearcuadrorec':
+		crearcuadrorecAction();
 		break;	
 	default:
 		# code...
