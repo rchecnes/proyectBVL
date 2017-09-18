@@ -100,34 +100,34 @@
                             <tr><td>Long</td><td align="center"><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
                         </table>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="recomendacion">
-                        <table class="table table-bordered grafico">
-                            <tr><th colspan="4">RECOMENDACIÓN</th></tr></th>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="recomendacion">
+                        <!--<table class="table table-bordered grafico">
+                            <tr><th colspan="4" class="align-center">RECOMENDACIÓN</th></tr></th>
                             <tr>
-                                <th>PESO</th>
-                                <th>MES</th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
+                                <th class="align-center">PESO</th>
+                                <th class="align-center">MES</th>
+                                <th class="align-center">&nbsp;</th>
+                                <th class="align-center">&nbsp;</th>
                             </tr>
                             <tr>
-                                <td>48.81%</td>
-                                <td>12</td>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
+                                <td class="align-center">48.81%</td>
+                                <td class="align-center">12</td>
+                                <th class="align-center">&nbsp;</th>
+                                <th class="align-center">&nbsp;</th>
                             <tr>
                             <tr>
-                                <td>31.22%</td>
-                                <td>6</td>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
+                                <td class="align-center">31.22%</td>
+                                <td class="align-center">6</td>
+                                <th class="align-center">&nbsp;</th>
+                                <th class="align-center">&nbsp;</th>
                             <tr>
                             <tr>
-                                <td>19.97%</td>
-                                <td>3</td>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
+                                <td class="align-center">19.97%</td>
+                                <td class="align-center">3</td>
+                                <th class="align-center">&nbsp;</th>
+                                <th class="align-center">&nbsp;</th>
                             <tr>
-                        </table>
+                        </table>-->
                     </div>
                 </div>
                 <div class="row">

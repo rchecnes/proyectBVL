@@ -246,28 +246,63 @@ function crearcuadrorecAction(){
 			INNER JOIN recomendacion r ON(tr.rc_cod=r.rc_cod)
 			WHERE em.nemonico='$cod_emp' AND tr.cod_user='$cod_user' AND tr.tp_fecha='$tp_fecha'";
 	$res = mysqli_query($link, $sql);
-
+	$rctp = array();
+	while ($tr = mysqli_fetch_array($res)) {
+		$rctp[$tr['ps_cod']] = array('rc_cod'=>$tr['rc_cod'],'rc_nom'=>$tr['rc_nom'],'rc_valor'=>$tr['rc_valor']);
+	}
+	//var_dump($recomend);
 	//RECOMENDACION
 	$sqlre = "SELECT * FROM porce_recomendacion";
 	$resre = mysqli_query($link,$sqlre);
+	$prec   = array();
+	while ($ps = mysqli_fetch_array($resre)) {
+		$prec[$ps['ps_cod']] = array('ps_peso'=>$ps['ps_peso'],'ps_mes'=>$ps['ps_mes']);
+	}
+
+	$rec12m = ($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
+	$rec6m  = ($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
+	$rec3m  = ($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
+	$recV12m = ($rctp[1]['rc_valor']!='')?$rctp[1]['rc_valor']:"-";
+	$recV6m  = ($rctp[2]['rc_valor']!='')?$rctp[2]['rc_valor']:"-";
+	$recV3m  = ($rctp[3]['rc_valor']!='')?$rctp[3]['rc_valor']:"-";
+
+	$recfinaltxt = '¿?';
+	if ($rec12m !='-' && $rec6m!='-' && $rec3m!='-' && $recV12m !='-' && $recV6m!='-' && $recV3m!='-') {
+		$recfinal = (($prec[1]['ps_peso']/100*$recV12m)+($prec[2]['ps_peso']/100*$recV6m)+($prec[3]['ps_peso']/100*$recV3m));
+		$recfinal = round($recfinal,0);
+
+		foreach ($rctp as $key => $v) {
+			if ($recfinal == $v['rc_valor']) {
+				$recfinaltxt = $v['rc_nom'];
+			}
+		}
+	}
 
 	echo '<table class="table table-bordered grafico">
-            <tr><th colspan="4">RECOMENDACIÓN</th></tr></th>
+            <tr><th colspan="4" class="align-center">RECOMENDACIÓN</th></tr></th>
             <tr>
-                <th>PESO</th>
-                <th>MES</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>';
-	while ($r = mysqli_fetch_array($resre)) {
-		echo '<tr>
-                <td>'.$r['ps_peso'].'%</td>
-                <td>'.$r['ps_mes'].'</td>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            <tr>';
-	}
-	echo '</table>';
+                <th class="align-center" style="width:50px">PESO</th>
+                <th class="align-center" style="width:50px">MES</th>
+                <th class="align-center" style="width:50px">REC.</th>
+                <th class="align-center" style="width:50px">&nbsp;</th>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[1]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[1]['ps_mes'].'</td>
+                <td class="align-center">'.$rec12m.'</td>
+               <td class="align-center" rowspan="3" style="vertical-align:middle">'.$recfinaltxt.'</td>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[2]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[2]['ps_mes'].'</td>
+                <td class="align-center">'.$rec6m.'</td>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[3]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[3]['ps_mes'].'</td>
+                <td class="align-center">'.$rec3m.'</td>
+            </tr>
+         </table>';
 
 }
 
