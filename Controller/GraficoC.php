@@ -250,8 +250,8 @@ function crearcuadrorecAction(){
 	while ($tr = mysqli_fetch_array($res)) {
 		$rctp[$tr['ps_cod']] = array('rc_cod'=>$tr['rc_cod'],'rc_nom'=>$tr['rc_nom'],'rc_valor'=>$tr['rc_valor']);
 	}
-	//var_dump($recomend);
-	//RECOMENDACION
+	
+	//PORCENTAJE RECOMENDACION
 	$sqlre = "SELECT * FROM porce_recomendacion";
 	$resre = mysqli_query($link,$sqlre);
 	$prec   = array();
@@ -259,19 +259,28 @@ function crearcuadrorecAction(){
 		$prec[$ps['ps_cod']] = array('ps_peso'=>$ps['ps_peso'],'ps_mes'=>$ps['ps_mes']);
 	}
 
-	$rec12m = ($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
-	$rec6m  = ($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
-	$rec3m  = ($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
+	//RECOMENDACION
+	//PORCENTAJE RECOMENDACION
+	$sqlre = "SELECT * FROM recomendacion";
+	$resre = mysqli_query($link,$sqlre);
+	$rec   = array();
+	while ($rc = mysqli_fetch_array($resre)) {
+		$rec[$rc['rc_cod']] = array('rc_cod'=>$rc['rc_cod'],'rc_nom'=>$rc['rc_nom'],'rc_valor'=>$rc['rc_valor']);
+	}
+
+	$rec12m  = ($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
+	$rec6m   = ($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
+	$rec3m   = ($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
+
 	$recV12m = ($rctp[1]['rc_valor']!='')?$rctp[1]['rc_valor']:"-";
 	$recV6m  = ($rctp[2]['rc_valor']!='')?$rctp[2]['rc_valor']:"-";
 	$recV3m  = ($rctp[3]['rc_valor']!='')?$rctp[3]['rc_valor']:"-";
 
 	$recfinaltxt = '¿?';
 	if ($rec12m !='-' && $rec6m!='-' && $rec3m!='-' && $recV12m !='-' && $recV6m!='-' && $recV3m!='-') {
-		$recfinal = (($prec[1]['ps_peso']/100*$recV12m)+($prec[2]['ps_peso']/100*$recV6m)+($prec[3]['ps_peso']/100*$recV3m));
+		$recfinal = (($prec[1]['ps_peso']/100*($recV12m))+($prec[2]['ps_peso']/100*($recV6m))+($prec[3]['ps_peso']/100*($recV3m)));
 		$recfinal = round($recfinal,0);
-
-		foreach ($rctp as $key => $v) {
+		foreach ($rec as $key => $v) {
 			if ($recfinal == $v['rc_valor']) {
 				$recfinaltxt = $v['rc_nom'];
 			}
