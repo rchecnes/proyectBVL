@@ -5,6 +5,7 @@
 //Se esta registrando desde el dia 22/05/2017
 
 $ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 function getConexion(){
 
