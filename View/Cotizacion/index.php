@@ -148,7 +148,7 @@
                 $("#divCotizaciones").html(data).hide();
                 var HBVL = prepararData(data);
                 guardarData(HBVL,p_Nemonico);
-                getHistorico();
+                
             }
         });
     }
@@ -161,6 +161,7 @@
             data: {info:JSON.stringify(data),cz_codemp:p_Nemonico},
             success: function(data){
                 $("#loading").hide();
+                getHistorico();
             }
         })
         //console.log(data);
@@ -176,6 +177,7 @@
 
             if (index > 1) {
                 var valor_c = '';
+                var apertura = '';
                 $(this).children("td").each(function (index2){   
                     var campo = '';
                     var valor = '';
@@ -183,7 +185,7 @@
                     switch (index2){
 
                         case 0: campo = 'f';valor=$(this).text();break;//fecha
-                        case 1: campo = 'a';valor=$(this).text();break;//apertura
+                        case 1: campo = 'a';valor=$(this).text();apertura=$(this).text();break;//apertura
                         case 2: campo = 'c';valor=$(this).text();valor_c=$(this).text();break;//cierre
                         case 3: campo = 'max';valor=$(this).text();break;//maxima
                         case 4: campo = 'min';valor=$(this).text();break;//minima

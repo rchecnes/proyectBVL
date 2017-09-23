@@ -78,11 +78,19 @@ function insertaRecomend($cx, $empresa, $cod_rec, $mes){
 	$rowcon = mysqli_fetch_array($rescon);
 
 	if ($rowcon['rc_cod'] !='') {
+<<<<<<< HEAD
 		$up = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
 		mysqli_query($cx, $up);
 	}else{
 		$sql = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
 		mysqli_query($cx, $sql);
+=======
+		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
+		mysqli_query($cx, $sqlup);
+	}else{
+		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
+		mysqli_query($cx, $sqlin);
+>>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	}
 
 	
@@ -166,11 +174,19 @@ function grafico1Action(){
 
 		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
 		$rec = "NO";
+<<<<<<< HEAD
 		if ($i !=4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
 			$rec       = "SI";
 			$exist_rec = 'SI';
 			$cod_rec   = $recomen[$i]['cod'];
 		}elseif($i ==4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)){
+=======
+		if ($i != 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
+			$rec       = "SI";
+			$exist_rec = 'SI';
+			$cod_rec   = $recomen[$i]['cod'];
+		}elseif ($i == 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)) {
+>>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 			$rec       = "SI";
 			$exist_rec = 'SI';
 			$cod_rec   = $recomen[$i]['cod'];
@@ -221,14 +237,98 @@ function grafico1Action(){
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = $roud_serie;
-		}
-		
+		}	
 	}
 
 	$categoria = json_encode($categoria);
 	$series    = json_encode($series);
 
 	include('../View/Grafico/grafico1.php');
+}
+
+function crearcuadrorecAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$cod_emp  = $_GET['empresa'];
+	$cod_user = $_SESSION['cod_user'];
+	$tp_fecha = date('Y-m-d');
+
+	//TEMP RECOMENDACION
+	$sql = "SELECT * FROM temp_recomendacion tr
+			INNER JOIN empresa em ON(tr.cod_emp=em.cod_emp)
+			INNER JOIN porce_recomendacion pr ON(tr.ps_cod=pr.ps_cod)
+			INNER JOIN recomendacion r ON(tr.rc_cod=r.rc_cod)
+			WHERE em.nemonico='$cod_emp' AND tr.cod_user='$cod_user' AND tr.tp_fecha='$tp_fecha'";
+	$res = mysqli_query($link, $sql);
+	$rctp = array();
+	while ($tr = mysqli_fetch_array($res)) {
+		$rctp[$tr['ps_cod']] = array('rc_cod'=>$tr['rc_cod'],'rc_nom'=>$tr['rc_nom'],'rc_valor'=>$tr['rc_valor']);
+	}
+	
+	//PORCENTAJE RECOMENDACION
+	$sqlre = "SELECT * FROM porce_recomendacion";
+	$resre = mysqli_query($link,$sqlre);
+	$prec   = array();
+	while ($ps = mysqli_fetch_array($resre)) {
+		$prec[$ps['ps_cod']] = array('ps_peso'=>$ps['ps_peso'],'ps_mes'=>$ps['ps_mes']);
+	}
+
+	//RECOMENDACION
+	//PORCENTAJE RECOMENDACION
+	$sqlre = "SELECT * FROM recomendacion";
+	$resre = mysqli_query($link,$sqlre);
+	$rec   = array();
+	while ($rc = mysqli_fetch_array($resre)) {
+		$rec[$rc['rc_cod']] = array('rc_cod'=>$rc['rc_cod'],'rc_nom'=>$rc['rc_nom'],'rc_valor'=>$rc['rc_valor']);
+	}
+
+	$rec12m  = ($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
+	$rec6m   = ($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
+	$rec3m   = ($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
+
+	$recV12m = ($rctp[1]['rc_valor']!='')?$rctp[1]['rc_valor']:"-";
+	$recV6m  = ($rctp[2]['rc_valor']!='')?$rctp[2]['rc_valor']:"-";
+	$recV3m  = ($rctp[3]['rc_valor']!='')?$rctp[3]['rc_valor']:"-";
+
+	$recfinaltxt = '¿?';
+	if ($rec12m !='-' && $rec6m!='-' && $rec3m!='-' && $recV12m !='-' && $recV6m!='-' && $recV3m!='-') {
+		$recfinal = (($prec[1]['ps_peso']/100*($recV12m))+($prec[2]['ps_peso']/100*($recV6m))+($prec[3]['ps_peso']/100*($recV3m)));
+		$recfinal = round($recfinal,0);
+		foreach ($rec as $key => $v) {
+			if ($recfinal == $v['rc_valor']) {
+				$recfinaltxt = $v['rc_nom'];
+			}
+		}
+	}
+
+	echo '<table class="table table-bordered grafico">
+            <tr><th colspan="4" class="align-center">RECOMENDACIÓN</th></tr></th>
+            <tr>
+                <th class="align-center" style="width:50px">PESO</th>
+                <th class="align-center" style="width:50px">MES</th>
+                <th class="align-center" style="width:50px">REC.</th>
+                <th class="align-center" style="width:50px">&nbsp;</th>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[1]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[1]['ps_mes'].'</td>
+                <td class="align-center">'.$rec12m.'</td>
+               <td class="align-center" rowspan="3" style="vertical-align:middle">'.$recfinaltxt.'</td>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[2]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[2]['ps_mes'].'</td>
+                <td class="align-center">'.$rec6m.'</td>
+            </tr>
+            <tr>
+                <td class="align-center">'.$prec[3]['ps_peso'].'%</td>
+                <td class="align-center">'.$prec[3]['ps_mes'].'</td>
+                <td class="align-center">'.$rec3m.'</td>
+            </tr>
+         </table>';
+
 }
 
 
@@ -545,9 +645,15 @@ switch ($_GET['accion']) {
 	case 'listfavorito':
 		listfavoritoAction();
 		break;
+<<<<<<< HEAD
 	case 'finalrecomen':
 		getFinalRecomend();
 		break;
+=======
+	case 'crearcuadrorec':
+		crearcuadrorecAction();
+		break;	
+>>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	default:
 		# code...
 		break;

@@ -29,20 +29,28 @@ function savAction(){
 
 		$cod             = $ano.$mes.$dia;
 		$fecha           = $ano.'-'.$mes.'-'.$dia;
-		$apertura        = $f['a'];
-		$cierre          = $f['c'];
-		$maxima          = $f['max'];
-		$minima          = $f['min'];
-		$promedio        = $f['prd'];
-		$cant_negociado  = (int)str_replace(',', '', $f['cn']);
-		$monto_negociado = (float)str_replace(',','',$f['mn']);
-		list($dia, $mes, $ano) = explode('/', $f['fa']);
-		$fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;
-		$cierre_anterior = $f['ca'];
+		$apertura        = (double)$f['a'];
+		if ($apertura !='' && $apertura>0) {
+			
+			$cierre          = $f['c'];
+			$maxima          = $f['max'];
+			$minima          = $f['min'];
+			$promedio        = $f['prd'];
+			$cant_negociado  = (int)str_replace(',', '', $f['cn']);
+			$monto_negociado = (float)str_replace(',','',$f['mn']);
+			list($dia, $mes, $ano) = explode('/', $f['fa']);
+			$fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;
+			$cierre_anterior = $f['ca'];
 
-		$del .= "'".$cod."',";
-		
-		$sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+			//Actualizamos empres con la ultima cotizacion
+			$upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$cz_codemp'";
+	        $respup    = mysqli_query($link,$upd_x_emp);
+	        //Fin actualizar
+
+			$del .= "'".$cod."',";
+			
+			$sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+		}
 	}
 
 	if ($del !='' && $sql !='') {

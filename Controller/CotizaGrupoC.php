@@ -5,8 +5,10 @@
 //Se esta registrando desde el dia 22/05/2017
 
 $ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
-function getConexion(){
+include($ruta.'/Config/Conexion.php');
+/*function getConexion(){
 
     $DB_SERVER = '108.167.189.18';//Publico
     $DB_USER   = 'rchecnes_apu';
@@ -16,7 +18,7 @@ function getConexion(){
     $link = mysqli_connect($DB_SERVER,$DB_USER,$DB_PASS,$DB_NAME);
 
     return $link;
-}
+}*/
 
 function getCotizacionGrupo(){
 
