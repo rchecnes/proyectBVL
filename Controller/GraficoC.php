@@ -78,22 +78,13 @@ function insertaRecomend($cx, $empresa, $cod_rec, $mes){
 	$rowcon = mysqli_fetch_array($rescon);
 
 	if ($rowcon['rc_cod'] !='') {
-<<<<<<< HEAD
-		$up = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-		mysqli_query($cx, $up);
-	}else{
-		$sql = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
-		mysqli_query($cx, $sql);
-=======
+
 		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
 		mysqli_query($cx, $sqlup);
 	}else{
 		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
 		mysqli_query($cx, $sqlin);
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	}
-
-	
 }
 
 function grafico1Action(){
@@ -103,18 +94,15 @@ function grafico1Action(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$nemonico     = $_GET['empresa'];//Empresa
 	$prec_unit    = ($_GET['prec_unit']>0 && $_GET['prec_unit']!='')?$_GET['prec_unit']:0;
 	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
 
-	/*$fecha_fin    = date($fecha_final);
-	$fecha_fin    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
-	$fecha_inicio = date ( 'Y-m-j' , $fecha_fin );*/
-
 	//Obtener Max
-	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
 	$resp = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($resp);
+
 	$max    = ($row['max'] !='')?$row['max']:0;
 	$min    = ($row['min'] !='')?$row['min']:0;
 	//Obtener Long
@@ -126,12 +114,11 @@ function grafico1Action(){
 	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
 	//Consultamos recomendacion
 	$recomen  = array(array('cod'=>2,'nom'=>'Vender +'),array('cod'=>3,'nom'=>'Vender'),array('cod'=>4,'nom'=>'Mantener'),array('cod'=>5,'nom'=>'Comprar'),array('cod'=>6,'nom'=>'Comprar +'));
+
 	$tabla = array();
 
 	$rango_fin = 0;
 	$rango_ini = 0;
-	$exist_rec = 'NO';
-	$cod_rec   = '';
 	for ($i=0; $i < count($porcen) ; $i++) {
 
 		if ($i==0) {
@@ -164,7 +151,6 @@ function grafico1Action(){
 			
 		}
 		
-
 		//Get Dias col cierre
 		$resc = mysqli_query($link, $sqlc);
 		$rowc = mysqli_fetch_array($resc);
@@ -172,38 +158,9 @@ function grafico1Action(){
 		$resm = mysqli_query($link, $sqlm);
 		$rowm = mysqli_fetch_array($resm);
 
-		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
-		$rec = "NO";
-<<<<<<< HEAD
-		if ($i !=4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
-			$rec       = "SI";
-			$exist_rec = 'SI';
-			$cod_rec   = $recomen[$i]['cod'];
-		}elseif($i ==4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)){
-=======
-		if ($i != 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
-			$rec       = "SI";
-			$exist_rec = 'SI';
-			$cod_rec   = $recomen[$i]['cod'];
-		}elseif ($i == 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)) {
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
-			$rec       = "SI";
-			$exist_rec = 'SI';
-			$cod_rec   = $recomen[$i]['cod'];
-		}
-
 		//Cuadro en tabla
-		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i]['nom'],'rec'=>$rec);
+		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i]['nom']);
 	}
-
-	//Registramos la recomendacion del cliente
-	if($cod_rec ==''){
-		if ($prec_unit>$max && $exist_rec=='NO') {$cod_fin_rec = 1;}
-		if ($prec_unit<$min && $exist_rec=='NO') {$cod_fin_rec = 7;}
-	}else{
-		$cod_fin_rec = $cod_rec;
-	}
-	insertaRecomend($link, $_GET['empresa'], $cod_fin_rec, $mes);
 
 	//Grafica
 	$categoria  = array();
@@ -244,6 +201,69 @@ function grafico1Action(){
 	$series    = json_encode($series);
 
 	include('../View/Grafico/grafico1.php');
+}
+
+function calcularRecomendacion($fecha_final, $nemonico, $prec_unit, $mes){
+
+	//Restamos mese a la fecha final
+	$fecha    = $fecha_final;
+	$cantidad = $mes;
+
+	$fecha        = date($fecha);
+    $new_fecha    = strtotime ( "-$cantidad months" , strtotime ( $fecha ) ) ;
+    $fecha_inicio = date ( 'Y-m-d' , $new_fecha );
+    //Fin  restar fecha
+
+
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
+	$resp = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($resp);
+	
+	$max    = ($row['max'] !='')?$row['max']:0;
+	$min    = ($row['min'] !='')?$row['min']:0;
+	//Obtener Long
+	$long = $max - $min;
+	//Obtener media
+	$med = ($max + $min)/2;
+
+	//Tabla Grafica
+	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
+	//Consultamos recomendacion
+	$recomen  = array(array('cod'=>2,'nom'=>'Vender +'),array('cod'=>3,'nom'=>'Vender'),array('cod'=>4,'nom'=>'Mantener'),array('cod'=>5,'nom'=>'Comprar'),array('cod'=>6,'nom'=>'Comprar +'));
+
+	$rango_fin = 0;
+	$rango_ini = 0;
+	$cod_rec   = '';//Recomendacion Final por mes
+	$nom_rec   = '';//Recomendacion Final por mes
+	for ($i=0; $i < count($porcen) ; $i++) {
+
+		if ($i==0) {
+
+			$rango_ini = $max;
+			$rango_fin = $rango_ini-($long*$porcen[$i]);
+		}else{
+
+			$rango_ini = $rango_fin;
+			$rango_fin = $rango_ini-($long*$porcen[$i]);
+		}
+
+		//Recomendación: El precio debe estar entre un rango y ese se debe pintar de un color
+		if ($i != 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
+			$cod_rec   = $recomen[$i]['cod'];
+			$nom_rec   = $recomen[$i]['nom'];
+		}elseif ($i == 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)) {
+			$cod_rec   = $recomen[$i]['cod'];
+			$nom_rec   = $recomen[$i]['nom'];
+		}
+	}
+
+	//Registramos la recomendacion del cliente
+	if($cod_rec ==''){
+		if (round($prec_unit,3)>round($max,3) && $exist_rec=='NO') {$cod_rec = 1;$nom_rec='Mantener +';}
+		if (round($prec_unit,3)<round($min,3) && $exist_rec=='NO') {$cod_rec = 7;$nom_rec='Mantener -';}
+	}else{
+		$cod_fin_rec = $cod_rec;
+	}
 }
 
 function crearcuadrorecAction(){
@@ -645,15 +665,12 @@ switch ($_GET['accion']) {
 	case 'listfavorito':
 		listfavoritoAction();
 		break;
-<<<<<<< HEAD
 	case 'finalrecomen':
 		getFinalRecomend();
 		break;
-=======
 	case 'crearcuadrorec':
 		crearcuadrorecAction();
 		break;	
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	default:
 		# code...
 		break;
