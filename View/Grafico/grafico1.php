@@ -25,7 +25,7 @@
             $suma_dias  = 0;
             $suma_monto = 0;
             ?>
-            <tr bgcolor="<?=($prec_unit>$max && $exist_rec=='NO')?'#d2cea3':''?>">
+            <tr bgcolor="<?=($prec_unit>$max && $rec_cod=='1')?'#d2cea3':''?>">
                 <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -33,7 +33,7 @@
             </tr>
             <?php
             foreach ($tabla as $key => $c):?>
-                <tr bgcolor="<?=($c['rec']=='SI')?'#d2cea3':''?>">
+                <tr bgcolor="<?=($c['rec_cod']==$rec_cod )?'#d2cea3':''?>">
                     <!--<td><?=$c['porcen']?></td>-->
                     <td class="align-center"><?php if($c['rango_ini']>=10):echo number_format($c['rango_ini'],2,'.',',');
                         elseif($c['rango_ini']>=1 && $c['rango_ini']<10):echo number_format($c['rango_ini'],3,'.',',');
@@ -54,7 +54,7 @@
                 $suma_monto += $c['monto'];
             endforeach;
             ?>
-            <tr bgcolor="<?=($prec_unit<$min && $exist_rec=='NO')?'#d2cea3':''?>">
+            <tr bgcolor="<?=($prec_unit<$min && $rec_cod=='7')?'#d2cea3':''?>">
                 <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

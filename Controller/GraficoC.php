@@ -54,39 +54,6 @@ function getPromedioPrecio(){
 	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($rpre['cz_ci_fin'],3,'.',',')));
 }
 
-function insertaRecomend($cx, $empresa, $cod_rec, $mes){
-
-	$tp_fecha = date('Y-m-d');
-	$tp_hora = date('h:i:s');
-
-	$ps_cod = 1;
-	if ($mes == '12') { $ps_cod =1;}
-	if ($mes == '6') { $ps_cod =2;}
-	if ($mes == '3') { $ps_cod =3;}
-
-	$cod_user = $_SESSION['cod_user'];
-
-	//Emores
-	$sqlemp = "SELECT cod_emp FROM empresa WHERE nemonico='$empresa'";
-	$resemp = mysqli_query($cx, $sqlemp);
-	$rowemp = mysqli_fetch_array($resemp);
-	$cod_emp = $rowemp['cod_emp'];
-
-	//Validamos si existe registro en es fecha
-	$sqlcon = "SELECT rc_cod FROM temp_recomendacion WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-	$rescon = mysqli_query($cx, $sqlcon);
-	$rowcon = mysqli_fetch_array($rescon);
-
-	if ($rowcon['rc_cod'] !='') {
-
-		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-		mysqli_query($cx, $sqlup);
-	}else{
-		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
-		mysqli_query($cx, $sqlin);
-	}
-}
-
 function grafico1Action(){
 
 	include('../Config/Conexion.php');
@@ -159,8 +126,11 @@ function grafico1Action(){
 		$rowm = mysqli_fetch_array($resm);
 
 		//Cuadro en tabla
-		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i]['nom']);
+		$tabla[] = array('porcen'=>$porcen[$i],'rango_fin'=>$rango_fin,'rango_ini'=>$rango_ini,'dias'=>$rowc['cant'],'monto'=>$rowm['suma'],'rec_nom'=>$recomen[$i]['nom'],'rec_cod'=>$recomen[$i]['cod']);
 	}
+
+	//Recomendacion para el mes
+	list($rec_cod, $rec_nom) = calcularRecomendacion($link, $fecha_final, $nemonico, $prec_unit, $mes);
 
 	//Grafica
 	$categoria  = array();
@@ -203,7 +173,8 @@ function grafico1Action(){
 	include('../View/Grafico/grafico1.php');
 }
 
-function calcularRecomendacion($fecha_final, $nemonico, $prec_unit, $mes){
+
+function calcularRecomendacion($link, $fecha_final, $nemonico, $prec_unit, $mes){
 
 	//Restamos mese a la fecha final
 	$fecha    = $fecha_final;
@@ -259,11 +230,13 @@ function calcularRecomendacion($fecha_final, $nemonico, $prec_unit, $mes){
 
 	//Registramos la recomendacion del cliente
 	if($cod_rec ==''){
-		if (round($prec_unit,3)>round($max,3) && $exist_rec=='NO') {$cod_rec = 1;$nom_rec='Mantener +';}
-		if (round($prec_unit,3)<round($min,3) && $exist_rec=='NO') {$cod_rec = 7;$nom_rec='Mantener -';}
+		if (round($prec_unit,3)>round($max,3)) {$cod_rec = 1;$nom_rec='Mantener +';}
+		if (round($prec_unit,3)<round($min,3)) {$cod_rec = 7;$nom_rec='Mantener -';}
 	}else{
 		$cod_fin_rec = $cod_rec;
 	}
+
+	return array($cod_rec, $nom_rec);
 }
 
 function crearcuadrorecAction(){
