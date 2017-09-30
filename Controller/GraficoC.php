@@ -78,19 +78,11 @@ function insertaRecomend($cx, $empresa, $cod_rec, $mes){
 	$rowcon = mysqli_fetch_array($rescon);
 
 	if ($rowcon['rc_cod'] !='') {
-<<<<<<< HEAD
-		$up = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-		mysqli_query($cx, $up);
-	}else{
-		$sql = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
-		mysqli_query($cx, $sql);
-=======
 		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
 		mysqli_query($cx, $sqlup);
 	}else{
 		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
 		mysqli_query($cx, $sqlin);
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	}
 
 	
@@ -106,10 +98,6 @@ function grafico1Action(){
 	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 	$prec_unit    = ($_GET['prec_unit']>0 && $_GET['prec_unit']!='')?$_GET['prec_unit']:0;
 	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
-
-	/*$fecha_fin    = date($fecha_final);
-	$fecha_fin    = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
-	$fecha_inicio = date ( 'Y-m-j' , $fecha_fin );*/
 
 	//Obtener Max
 	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
@@ -164,7 +152,6 @@ function grafico1Action(){
 			
 		}
 		
-
 		//Get Dias col cierre
 		$resc = mysqli_query($link, $sqlc);
 		$rowc = mysqli_fetch_array($resc);
@@ -174,19 +161,11 @@ function grafico1Action(){
 
 		//Recomendación: El precio debe esta entre un rango y ese se debe pintar de un color
 		$rec = "NO";
-<<<<<<< HEAD
 		if ($i !=4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
 			$rec       = "SI";
 			$exist_rec = 'SI';
 			$cod_rec   = $recomen[$i]['cod'];
 		}elseif($i ==4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)){
-=======
-		if ($i != 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>round($rango_fin,3)) {
-			$rec       = "SI";
-			$exist_rec = 'SI';
-			$cod_rec   = $recomen[$i]['cod'];
-		}elseif ($i == 4 && round($prec_unit,3)<=round($rango_ini,3) && round($prec_unit,3)>=round($rango_fin,3)) {
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 			$rec       = "SI";
 			$exist_rec = 'SI';
 			$cod_rec   = $recomen[$i]['cod'];
@@ -645,15 +624,12 @@ switch ($_GET['accion']) {
 	case 'listfavorito':
 		listfavoritoAction();
 		break;
-<<<<<<< HEAD
 	case 'finalrecomen':
 		getFinalRecomend();
 		break;
-=======
 	case 'crearcuadrorec':
 		crearcuadrorecAction();
 		break;	
->>>>>>> 251c67eb0f6aa31957e06b1690aed90695c7a0d4
 	default:
 		# code...
 		break;
