@@ -314,16 +314,16 @@ function crearcuadrorecAction(){
 	}
 
 	//RECOMENDACION
-	list($codRec12m, $valRec12) = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 12); //($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
-	list($codRec6m, $valRec6 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 6);//($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
-	list($codRec3m, $valRec3 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 3);//($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
+	list($codRec12m, $nomRec12) = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 12); //($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
+	list($codRec6m, $nomRec6 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 6);//($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
+	list($codRec3m, $nomRec3 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 3);//($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
 
-	//$peso12m = ($prec[1]['ps_peso']!='')?$prec[1]['ps_peso']:0;
-	//$peso6m  = ($prec[2]['ps_peso']!='')?$prec[2]['ps_peso']:0;
-	//$peso3m  = ($prec[3]['ps_peso']!='')?$prec[3]['ps_peso']:0;
+	$valRec12m = (isset($rec[$codRec12m]['rc_valor']))?$rec[$codRec12m]['rc_valor']:0;
+	$valRec6m  = (isset($rec[$codRec6m]['rc_valor']))?$rec[$codRec6m]['rc_valor']:0;
+	$valRec3m  = (isset($rec[$codRec3m]['rc_valor']))?$rec[$codRec3m]['rc_valor']:0;
 
 	$recfinaltxt = '';
-	$recfinal = (($prec[1]['ps_peso']/100*($rec[1][$valRec12]))+($prec[2]['ps_peso']/100*($rec[2][$valRec6]))+($rec[3]['ps_peso']/100*($rec[3][$valRec3])));
+	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($rec[3]['ps_peso']/100*($valRec3m)));
 	$recfinal = round($recfinal,0);
 	foreach ($rec as $key => $v) {
 		if ($recfinal == $v['rc_valor']) {
@@ -342,18 +342,18 @@ function crearcuadrorecAction(){
             <tr>
                 <td class="align-center">'.$prec[1]['ps_peso'].'%</td>
                 <td class="align-center">'.$prec[1]['ps_mes'].'</td>
-                <td class="align-center">'.$valRec12.'</td>
+                <td class="align-center">'.$nomRec12.'</td>
                <td class="align-center" rowspan="3" style="vertical-align:middle">'.$recfinaltxt.'</td>
             </tr>
             <tr>
                 <td class="align-center">'.$prec[2]['ps_peso'].'%</td>
                 <td class="align-center">'.$prec[2]['ps_mes'].'</td>
-                <td class="align-center">'.$valRec6.'</td>
+                <td class="align-center">'.$nomRec6.'</td>
             </tr>
             <tr>
                 <td class="align-center">'.$prec[3]['ps_peso'].'%</td>
                 <td class="align-center">'.$prec[3]['ps_mes'].'</td>
-                <td class="align-center">'.$valRec3.'</td>
+                <td class="align-center">'.$nomRec3.'</td>
             </tr>
          </table>';
 }
@@ -395,15 +395,18 @@ function recomendacionSimuladorAction(){
 	list($codRec6m, $valRec6 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 6);
 	list($codRec3m, $valRec3 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 3);
 
+	$valRec12m = (isset($rec[$codRec12m]['rc_valor']))?$rec[$codRec12m]['rc_valor']:0;
+	$valRec6m  = (isset($rec[$codRec6m]['rc_valor']))?$rec[$codRec6m]['rc_valor']:0;
+	$valRec3m  = (isset($rec[$codRec3m]['rc_valor']))?$rec[$codRec3m]['rc_valor']:0;
+
 	$recfinaltxt = '';
-	$recfinal = (($prec[1]['ps_peso']/100*($rec[1][$valRec12]))+($prec[2]['ps_peso']/100*($rec[2][$valRec6]))+($rec[3]['ps_peso']/100*($rec[3][$valRec3])));
+	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($rec[3]['ps_peso']/100*($valRec3m)));
 	$recfinal = round($recfinal,0);
 	foreach ($rec as $key => $v) {
 		if ($recfinal == $v['rc_valor']) {
 			$recfinaltxt = $v['rc_nom'];
 		}
 	}
-
 	echo $recfinaltxt;
 }
 
