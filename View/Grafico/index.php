@@ -36,7 +36,7 @@
                         'sql'    => "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'",
                         'attrib' => array('value'=>'cod_grupo','desc'=>'nom_grupo', 'concat'=>' - ','descextra'=>''),
                         'empty'  => 'Todos',
-                        'defect' => '',
+                        'defect' => ($simu_cod_grupo!='')?$simu_cod_grupo:'',
                         'edit'   => '',
                         'enable' => 'enable'
                     );
@@ -53,7 +53,7 @@
                         'sql'    => "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp) WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user'",
                         'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
                         'empty'  => false,
-                        'defect' => 'ENGEPEC1',
+                        'defect' => ($simu_cod_emp!='')?$simu_cod_emp:'ENGEPEC1',
                         'edit'   => '',
                         'enable' => 'enable'
                     );
@@ -93,7 +93,7 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <table class="table table-bordered grafico">
-                            <tr><td style="width: 98px!important;">P. Actual</td><td align="center"><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="2.56"></td></tr></th>
+                            <tr><td style="width: 98px!important;">P. Actual</td><td align="center"><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="<?=$simu_prec_unit?>"></td></tr></th>
                             <tr><td>Max</td><td align="center"><input type="text" name="max" id="max" class="align-center" readonly="readonly"></td></tr>
                             <tr><td>Min</td><td align="center"><input type="text" name="min" id="min" class="align-center" readonly="readonly"></td></tr>
                             <tr><td>Med</td><td align="center"><input type="text" name="med" id="med" class="align-center" readonly="readonly"></td></tr>
@@ -218,21 +218,22 @@
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
-            var mes = $(".mostrar_graf.active").val();
-            var empresa = $("#empresa").val();
+            var mes       = $(".mostrar_graf.active").val();
+            var empresa   = $("#empresa").val();
+            var prec_unit = $("#prec_unit").val();
             
             $("#loading").show();
 
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico1',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:empresa,prec_unit:$("#prec_unit").val(),mes:mes},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:empresa,prec_unit:prec_unit,mes:mes},
 
                 success:function(data){
 
                     $("#resultadomontoporprecio").html(data);
                     $("#loading").hide();
-                    getRecomendacion(empresa);
+                    getRecomendacion(empresa, prec_unit);
                 }
             });
         }else{
@@ -240,15 +241,17 @@
         }
     }
 
-    getRecomendacion = function(empresa){
+    getRecomendacion = function(empresa, prec_unit){
 
+        $("#loading").show();
         $.ajax({
             type:'GET',
             url: '../Controller/GraficoC.php?accion=crearcuadrorec',
-            data:{empresa:empresa},
+            data:{empresa:empresa,prec_unit:prec_unit},
 
             success:function(data){
                 $("#recomendacion").html(data);
+                $("#loading").hide();
             }
         });
     }

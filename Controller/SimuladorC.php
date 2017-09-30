@@ -114,7 +114,7 @@ function datoscabAction(){
 
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
-	$gan_pre_min = round_out(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2);
+	$gan_pre_min = ($cant_acc>0)?round_out(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2):0;
 	
 	if ($tipo_two =='precio_obj') {
 		$gan_pre_obj = $gan_pre_obj;
@@ -122,7 +122,7 @@ function datoscabAction(){
 		if ($oper =='ver_simu') {
 			$gan_pre_obj = $gan_pre_obj;
 		}else{
-			$gan_pre_obj = round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2);
+			$gan_pre_obj = ($cant_acc>0)?round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2):0;
 		}
 		
 	}
@@ -152,9 +152,9 @@ function datoscabAction(){
 	$res_cost_total = $c_costo_compra + $v_costo_venta;
 	$res_var_total  = $res_gan_neta + $res_cost_total;
 
-	$porc_gan_neta   = ($res_gan_neta / $mont_neg)*100;
-	$porc_cost_total = ($res_cost_total / $mont_neg)*100;
-	$por_var_total   = ($res_var_total / $mont_neg)*100;
+	$porc_gan_neta   = ($mont_neg>0)?($res_gan_neta / $mont_neg)*100:0;
+	$porc_cost_total = ($mont_neg>0)?($res_cost_total / $mont_neg)*100:0;
+	$por_var_total   = ($mont_neg>0)?($res_var_total / $mont_neg)*100:0;
 
 	$info = array(
 				//CABECERA

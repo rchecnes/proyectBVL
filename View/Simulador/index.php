@@ -64,6 +64,10 @@
 					<table class="table table-bordered excel" id="inversion">
 						<tr>
 							<th>Inversión:</th>
+							<th class="align-center">
+								<label id="recomendacion"></label>
+								<img src="../Assets/img/load.gif" id="loading" style="display: none">
+							</th>
 						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
@@ -232,6 +236,7 @@
 			<button type="button" id="add_portafolio" class="btn btn-danger">Guardar</button>
 			<button type="button" id="new_simulacion" class="btn btn-success">Nuevo</button>
 			<button type="button" id="ver_portafolio" class="btn btn-warning">Portafolio</button>
+			<button type="button" id="ver_recgrafico" class="btn btn-warning">Ver REC.</button>
 		</p>
 	</div>
 	<script type="text/javascript">
@@ -268,6 +273,25 @@
 				});
 			});
 
+			//Recomendacion
+			getRecomendacion = function(){
+
+				var cod_emp = $("#cod_emp").val();
+				var prec_unit = $("#precio_unitario").val();
+
+				$("#loading").show();
+
+				$.ajax({
+				    type:'GET',
+				    url: '../Controller/GraficoC.php?accion=recSimulador',
+				    data:{cod_emp:cod_emp, prec_unit:prec_unit},
+				    success:function(data){
+				        $("#recomendacion").html('REC: '+data);
+				        $("#loading").hide();
+				    }
+				});
+			}
+
 			buscar = function(tipo,tipo_two){
 
 				var monto_estimado  = '';
@@ -295,6 +319,8 @@
 
 				$("#buscar").attr('disabled','disabled');
 				$("#add_portafolio").attr('disabled','disabled');
+
+				$("#loading").show();
 
 				$.ajax({
 				    type:'GET',
@@ -350,6 +376,10 @@
 
 						$("#buscar").removeAttr('disabled');
 						$("#add_portafolio").removeAttr('disabled');
+
+						$("#loading").hide();
+						//Recomendacion
+						getRecomendacion();
 				    }
 				});
 			}
@@ -364,6 +394,14 @@
 				buscar('uno','');
 			});
 
+			$("#ver_recgrafico").on("click", function(){
+
+				var simu_prec_unit = $("#precio_unitario").val();
+				var cod_grupo      = $("#cod_grupo").val();
+				var cod_emp        = $("#cod_emp").val();
+				window.location.href = "../Controller/GraficoC.php?accion=index&simu_prec_unit="+simu_prec_unit+"&simu_cod_grupo="+cod_grupo+"&simu_cod_emp="+cod_emp;
+			});
+				
 			verPortafolio = function(){
 				window.location.href = "./PortafolioC.php?accion=index";
 			}
@@ -434,8 +472,7 @@
 				    }
 				});
 			});
-
-
+			
         });
 	</script>
 </body>
