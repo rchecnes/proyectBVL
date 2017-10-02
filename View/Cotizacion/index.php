@@ -201,7 +201,7 @@
                     }
                     
                 });
-
+                //console.log(apertura);
                 if (valor_c != '') {
                     dataFila.push(dataCols);
                 }
