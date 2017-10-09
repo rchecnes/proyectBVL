@@ -105,35 +105,25 @@
         options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
       }
     });
-    /*var subscriptionKey = "13hc77781f7e4b19b5fcdd72a8df7156";
+
+    var subscriptionKey = "13hc77781f7e4b19b5fcdd72a8df7156";
+    var params = '?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=64801&_informaciongeneral_WAR_servicesbvlportlet_nemonico=VOLCABC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp';
+
     $.ajax({
-        url: 'https://www.bvl.com.pe/web/guest/informacion-general-empresa',
+        url: 'https://www.bvl.com.pe/web/guest/informacion-general-empresa'+params,
         type: 'POST',
         data: {
-                p_p_id:'informaciongeneral_WAR_servicesbvlportlet',
-                p_p_lifecycle:'2',
-                p_p_state:'normal',
-                p_p_mode:'view',
-                p_p_cacheability:'cacheLevelPage',
-                p_p_col_id:'column-2',
-                p_p_col_count:'1',
-                _informaciongeneral_WAR_servicesbvlportlet_cmd:'getListaHistoricoCotizaciones',
-                _informaciongeneral_WAR_servicesbvlportlet_codigoempresa:'60800',
-                _informaciongeneral_WAR_servicesbvlportlet_nemonico:'ATACOBC1',
-                _informaciongeneral_WAR_servicesbvlportlet_tabindex:'4',
-                _informaciongeneral_WAR_servicesbvlportlet_jspPage:'/html/informaciongeneral/view.jsp',
-
-                _informaciongeneral_WAR_servicesbvlportlet_anoini:'2013',
-                _informaciongeneral_WAR_servicesbvlportlet_mesini:'01',
+                _informaciongeneral_WAR_servicesbvlportlet_anoini:'2017',
+                _informaciongeneral_WAR_servicesbvlportlet_mesini:'10',
                 _informaciongeneral_WAR_servicesbvlportlet_anofin:'2017',
                 _informaciongeneral_WAR_servicesbvlportlet_mesfin:'10',
-                _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect:'ATACOAC1'
+                _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect:'VOLCABC1'
             },
         dataType: 'json',
         success: function(data){
             console.log(data);
         }
-    });*/
+    });
 
     getHistorico = function(){
 
