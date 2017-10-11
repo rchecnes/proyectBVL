@@ -99,41 +99,74 @@
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
 
-    $.ajaxPrefilter( function (options) {
+    /*$.ajaxPrefilter( function (options) {
       if (options.crossDomain && jQuery.support.cors) {
         var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
         options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
       }
-    });
-    /*var subscriptionKey = "13hc77781f7e4b19b5fcdd72a8df7156";
-    $.ajax({
-        url: 'https://www.bvl.com.pe/web/guest/informacion-general-empresa',
-        type: 'POST',
-        data: {
-                p_p_id:'informaciongeneral_WAR_servicesbvlportlet',
-                p_p_lifecycle:'2',
-                p_p_state:'normal',
-                p_p_mode:'view',
-                p_p_cacheability:'cacheLevelPage',
-                p_p_col_id:'column-2',
-                p_p_col_count:'1',
-                _informaciongeneral_WAR_servicesbvlportlet_cmd:'getListaHistoricoCotizaciones',
-                _informaciongeneral_WAR_servicesbvlportlet_codigoempresa:'60800',
-                _informaciongeneral_WAR_servicesbvlportlet_nemonico:'ATACOBC1',
-                _informaciongeneral_WAR_servicesbvlportlet_tabindex:'4',
-                _informaciongeneral_WAR_servicesbvlportlet_jspPage:'/html/informaciongeneral/view.jsp',
+    });*/
 
-                _informaciongeneral_WAR_servicesbvlportlet_anoini:'2013',
-                _informaciongeneral_WAR_servicesbvlportlet_mesini:'01',
-                _informaciongeneral_WAR_servicesbvlportlet_anofin:'2017',
-                _informaciongeneral_WAR_servicesbvlportlet_mesfin:'10',
-                _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect:'ATACOAC1'
+    /*var mesini = 2017;
+    var anoini = 10;
+    var mesfin = 2017;
+    var anofin = 10;
+    var nemonico = 'BVN';//A.one("#_informaciongeneral_WAR_servicesbvlportlet_valor_resumen").get('value');
+
+
+
+    $.ajax({
+        url: 'https://www.bvl.com.pe:443/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=61200&_informaciongeneral_WAR_servicesbvlportlet_nemonico=BVN&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp',
+            method : 'POST',
+            dataType: 'json',
+            data : {
+                _informaciongeneral_WAR_servicesbvlportlet_anoini: anoini,
+                _informaciongeneral_WAR_servicesbvlportlet_mesini: mesini,
+                _informaciongeneral_WAR_servicesbvlportlet_anofin: anofin,
+                _informaciongeneral_WAR_servicesbvlportlet_mesfin: mesfin,
+                _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect: nemonico
             },
-        dataType: 'json',
+
         success: function(data){
             console.log(data);
         }
     });*/
+
+    function requestCrossDomain( site, callback ) {
+     
+        // If no url was passed, exit.
+        if ( !site ) {
+            alert('No site was passed.');
+            return false;
+        }
+         
+        // Take the provided url, and add it to a YQL query. Make sure you encode it!
+        var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from html where url="' + site + '"') + '&format=xml&callback=cbFunc';
+         
+        // Request that YSQL string, and run a callback function.
+        // Pass a defined function to prevent cache-busting.
+        $.getJSON( yql, cbFunc );
+         
+        function cbFunc(data) {
+        // If we have something to work with...
+        if ( data.results[0] ) {
+            // Strip out all script tags, for security reasons.
+            // BE VERY CAREFUL. This helps, but we should do more. 
+            data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+             
+            // If the user passed a callback, and it
+            // is a function, call it, and send through the data var.
+            if ( typeof callback === 'function') {
+                callback(data);
+            }
+        }
+        // Else, Maybe we requested a site that doesn't exist, and nothing returned.
+        else throw new Error('Nothing returned from getJSON.');
+        }
+    }
+
+    requestCrossDomain('http://bvl.worldapu.com', function(results) {
+       $('#divCotizaciones').html(results);
+    });
 
     getHistorico = function(){
 
@@ -157,7 +190,11 @@
         });
     }
 
-    getCotizacion = function(){
+    /*getCotizacion = function(){
+        $( '#divCotizaciones' ).load( '../Controller/CotizacionC.php?accion=getcontent' );
+    }*/
+
+    /*getCotizacion = function(){
 
         var p_Nemonico    = $("#empresa").val();
         var fecha_inicio  = $("#fecha_inicio").val().split('-');
@@ -180,7 +217,7 @@
                 
             }
         });
-    }
+    }*/
 
     guardarData = function(data,p_Nemonico){
         //console.log(data);

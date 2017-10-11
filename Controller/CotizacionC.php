@@ -104,28 +104,11 @@ function listarAction(){
 	include('../View/Cotizacion/listar.php');
 }
 
-/*function buscarEmpresaAction(){
+function incluirPagina(){
 
-	include('../Config/Conexion.php');
-	$link = getConexion();
-
-	$sector = '';//($_GET['sector']!='')?" AND cod_sector= '".$_GET['sector']."'":"";
-	$moneda = '';//($_GET['moneda']!='')?" AND moneda LIKE '%".$_GET['moneda']."%'":"";
-	$term   = $_GET['term'];
-
-	$sql = "SELECT *, CONCAT(nemonico,' - ',nombre,' - ', moneda)AS label, CONCAT(nemonico,' - ',nombre)AS value FROM empresa WHERE (nombre LIKE '%$term%' OR nemonico LIKE '%$term%') $sector $moneda";
-	//echo $sql;
-	$resp = mysqli_query($link,$sql);
-
-	$empresa = array();
-
-	while ($row = mysqli_fetch_array($resp)) {
-		$empresa[] = $row;
-
-	}
-
-	echo json_encode($empresa);
-}*/
+	//echo file_get_contents("https://www.bvl.com.pe/informacion-general-empresa/-/informacion/BVN/61200/4");
+	echo file_get_contents("https://www.google.com.pe/?gfe_rd=cr&dcr=0&ei=utHcWd_AIYTLXo7FsuAE");
+}
 
 function buscarEmpresaAction(){
 
@@ -167,7 +150,9 @@ switch ($_GET['accion']) {
 	case 'busemp':
 		buscarEmpresaAction();
 		break;
-	
+	case 'getcontent':
+		incluirPagina();
+		break;
 	default:
 		# code...
 		break;
