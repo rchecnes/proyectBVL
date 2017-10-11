@@ -104,32 +104,8 @@
         var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
         options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
       }
-    });*/
 
-    /*var mesini = 2017;
-    var anoini = 10;
-    var mesfin = 2017;
-    var anofin = 10;
-    var nemonico = 'BVN';//A.one("#_informaciongeneral_WAR_servicesbvlportlet_valor_resumen").get('value');
-
-
-
-    $.ajax({
-        url: 'https://www.bvl.com.pe:443/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=61200&_informaciongeneral_WAR_servicesbvlportlet_nemonico=BVN&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp',
-            method : 'POST',
-            dataType: 'json',
-            data : {
-                _informaciongeneral_WAR_servicesbvlportlet_anoini: anoini,
-                _informaciongeneral_WAR_servicesbvlportlet_mesini: mesini,
-                _informaciongeneral_WAR_servicesbvlportlet_anofin: anofin,
-                _informaciongeneral_WAR_servicesbvlportlet_mesfin: mesfin,
-                _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect: nemonico
-            },
-
-        success: function(data){
-            console.log(data);
-        }
-    });*/
+    });
 
     function requestCrossDomain( site, callback ) {
      
