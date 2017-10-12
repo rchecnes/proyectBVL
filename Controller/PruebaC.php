@@ -1,5 +1,5 @@
 <?php
-$url = "https://www.bvl.com.pe/informacion-general-empresa/-/informacion/VOLCABC1/64801/4";
+$url = "https://developer.yahoo.com/yql/";
 
 # url_get_contents function by Andy Langton: https://andylangton.co.uk/
 function url_get_contents($url,$useragent='cURL',$headers=false,

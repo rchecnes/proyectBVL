@@ -142,7 +142,7 @@
 
     requestCrossDomain('http://bvl.worldapu.com', function(results) {
        $('#divCotizaciones').html(results);
-    });
+    });*/
 
     getHistorico = function(){
 
