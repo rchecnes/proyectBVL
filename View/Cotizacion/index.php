@@ -105,45 +105,31 @@
         options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
       }
 
+    });*/
+
+    $.ajax({
+        url: 'https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=11600&_informaciongeneral_WAR_servicesbvlportlet_nemonico=CONTINC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp',
+        headers: {
+            'Authorization':'Basic xxxxxxxxxxxxx',
+            'X_CSRF_TOKEN':'xxxxxxxxxxxxxxxxxxxx',
+            'Content-Type':'application/json'
+        },
+        type: 'POST',
+        dataType: 'json',
+        crossDomain: true,
+        data: {_informaciongeneral_WAR_servicesbvlportlet_anoini:2017,
+        _informaciongeneral_WAR_servicesbvlportlet_mesini:10,
+        _informaciongeneral_WAR_servicesbvlportlet_anofin:2017,
+        _informaciongeneral_WAR_servicesbvlportlet_mesfin:10,
+        _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect:'CONTINC1'},
+        success: function(data){
+            console.log(data);
+        },
+        error: function (responseData, textStatus, errorThrown) {
+            console.log(responseData);
+        }
     });
-
-    function requestCrossDomain( site, callback ) {
-     
-        // If no url was passed, exit.
-        if ( !site ) {
-            alert('No site was passed.');
-            return false;
-        }
-         
-        // Take the provided url, and add it to a YQL query. Make sure you encode it!
-        var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from html where url="' + site + '"') + '&format=xml&callback=cbFunc';
-         
-        // Request that YSQL string, and run a callback function.
-        // Pass a defined function to prevent cache-busting.
-        $.getJSON( yql, cbFunc );
-         
-        function cbFunc(data) {
-        // If we have something to work with...
-        if ( data.results[0] ) {
-            // Strip out all script tags, for security reasons.
-            // BE VERY CAREFUL. This helps, but we should do more. 
-            data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-             
-            // If the user passed a callback, and it
-            // is a function, call it, and send through the data var.
-            if ( typeof callback === 'function') {
-                callback(data);
-            }
-        }
-        // Else, Maybe we requested a site that doesn't exist, and nothing returned.
-        else throw new Error('Nothing returned from getJSON.');
-        }
-    }
-
-    requestCrossDomain('http://bvl.worldapu.com', function(results) {
-       $('#divCotizaciones').html(results);
-    });
-
+    
     getHistorico = function(){
 
         var p_Nemonico   = $("#empresa").val();
