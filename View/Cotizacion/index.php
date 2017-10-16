@@ -107,21 +107,23 @@
 
     });*/
 
+    
+
     $.ajax({
         url: 'https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=11600&_informaciongeneral_WAR_servicesbvlportlet_nemonico=CONTINC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp',
-        headers: {
-            'Authorization':'Basic xxxxxxxxxxxxx',
-            'X_CSRF_TOKEN':'xxxxxxxxxxxxxxxxxxxx',
-            'Content-Type':'application/json'
-        },
+        
         type: 'POST',
         dataType: 'json',
         crossDomain: true,
+        headers: { 'Access-Control-Allow-Origin': '*' },
         data: {_informaciongeneral_WAR_servicesbvlportlet_anoini:2017,
         _informaciongeneral_WAR_servicesbvlportlet_mesini:10,
         _informaciongeneral_WAR_servicesbvlportlet_anofin:2017,
         _informaciongeneral_WAR_servicesbvlportlet_mesfin:10,
         _informaciongeneral_WAR_servicesbvlportlet_nemonicoselect:'CONTINC1'},
+        xhrFields: {
+            withCredentials: true
+        },
         success: function(data){
             console.log(data);
         },
@@ -129,8 +131,17 @@
             console.log(responseData);
         }
     });
+
+    /*var xhr = new XMLHttpRequest();
+    xhr.open("POST", 'https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=11600&_informaciongeneral_WAR_servicesbvlportlet_nemonico=CONTINC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp', true);
+    xhr.setRequestHeader("X-My-Custom-Header", "Hola");
+    xhr.withCredentials = true;
+    xhr.onload = function () {
+        console.log(xhr.responseText);
+    };
+    xhr.send();*/
     
-    getHistorico = function(){
+    /*getHistorico = function(){
 
         var p_Nemonico   = $("#empresa").val();
         var fecha_inicio = $("#fecha_inicio").val().split('-');
@@ -150,7 +161,7 @@
                 $("#loading").hide();
             }
         });
-    }
+    }*/
 
     /*getCotizacion = function(){
         $( '#divCotizaciones' ).load( '../Controller/CotizacionC.php?accion=getcontent' );
@@ -241,7 +252,7 @@
     }
 
 
-    getHistorico();
+    //getHistorico();
 
     /*$( "#bus_empresa" ).autocomplete({
       source: function( request, response ) {
