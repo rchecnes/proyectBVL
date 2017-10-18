@@ -3,6 +3,8 @@
 //Cron: 15 22 * * * /usr/local/zend/bin/php -f /var/www/html/AppChecnes/proyectBVL/Controller/CotizaGrupoC.php
 //El cron se ejecuta a las 10:15pm de cada dia
 //Se esta registrando desde el dia 22/05/2017
+//CONFIGURAR CRON CON ESTA LINEA
+//opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
 $ruta = 'public_html/domains/bvl.worldapu.com';
 //$ruta = '..';
