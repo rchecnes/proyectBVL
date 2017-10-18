@@ -96,6 +96,6 @@ function wget($url, $follow = true) {
     return $result;
 }
 
-echo(wget('https://www.bvl.com.pe'));
+echo(url_get_contents('https://www.bvl.com.pe/web/guest/cotizaciones-y-negociacion-renta-fija'));
 
 ?>
