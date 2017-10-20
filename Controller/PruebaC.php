@@ -56,6 +56,7 @@ $replace = array (
 $str = str_replace(array_keys($replace), array_values($replace), $str);
 
 return $str;
+
 }
 
 
@@ -177,7 +178,6 @@ function get_remote_data($url, $post_paramtrs = false) {
         }
     } return "ERRORCODE22 with $url!!<br/>Last status codes<b/>:" . json_encode($status) . "<br/><br/>Last data got<br/>:$data";
 }
-
 
 
 $txtSunat=$directorio."richard.txt";
