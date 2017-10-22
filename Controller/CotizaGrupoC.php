@@ -8,19 +8,8 @@
 
 $ruta = 'public_html/domains/bvl.worldapu.com';
 //$ruta = '..';
-include($ruta.'/Util/simple_html_dom_php5.6.php');
+//include($ruta.'/Util/simple_html_dom_php5.6.php');
 include($ruta.'/Config/Conexion.php');
-/*function getConexion(){
-
-    $DB_SERVER = '108.167.189.18';//Publico
-    $DB_USER   = 'rchecnes_apu';
-    $DB_PASS   = 'raisa6242016apu';
-    $DB_NAME   = 'rchecnes_bvl';
-
-    $link = mysqli_connect($DB_SERVER,$DB_USER,$DB_PASS,$DB_NAME);
-
-    return $link;
-}*/
 
 function getCotizacionGrupo(){
 
@@ -88,56 +77,6 @@ function getPrepareDataTwo($empresa, $data){
         }
     }
     unset($html);
-
-    return $cotiza;
-}
-
-function getPrepareData($empresa, $data){
-
-	//global $ruta;
-
-	//include('../Util/simple_html_dom.php');
-
-	$dom = new domDocument; 
-
-    // load the html into the object 
-    $dom->loadHTML($data);
-
-    // discard white space 
-    $dom->preserveWhiteSpace = false;
-
-    // the table by its tag name 
-    $tables = $dom->getElementsByTagName('table'); 
-
-    // get all rows from the table 
-    $rows = $tables->item(0)->getElementsByTagName('tr'); 
-
-    $cotiza = array();
-    // loop over the table rows
-    foreach ($rows as $row) 
-    { 
-       
-        $cols = $row->getElementsByTagName('td');
-
-        $fecha = str_replace(" ","",$cols->item(0)->nodeValue);
-
-        if ($fecha !='') {
-
-            $cotiza = array(
-                    'emp'=> $empresa,
-                    'f'  => $fecha,
-                    'a'  => (double)str_replace(" ","",$cols->item(1)->nodeValue),
-                    'c'  => (double)str_replace(" ","",$cols->item(2)->nodeValue),
-                    'max'=> (double)str_replace(" ","",$cols->item(3)->nodeValue),
-                    'min'=> (double)str_replace(" ","",$cols->item(4)->nodeValue),
-                    'prd'=> (double)str_replace(" ","",$cols->item(5)->nodeValue),
-                    'cn' => (double)str_replace(" ","",$cols->item(6)->nodeValue),
-                    'mn' => (double)str_replace(" ","",$cols->item(7)->nodeValue),
-                    'fa' => str_replace(" ","",$cols->item(8)->nodeValue),
-                    'ca' => (double)str_replace(" ","",$cols->item(9)->nodeValue)
-                    );
-        }
-    }
 
     return $cotiza;
 }

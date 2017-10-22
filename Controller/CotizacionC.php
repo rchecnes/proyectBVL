@@ -11,6 +11,42 @@ function indexAction(){
 	include('../View/Cotizacion/index.php');
 }
 
+function importarManualAction(){
+
+	require_once("../Model/CotizaGrupoM.php");
+
+	$nemonico = $_POST['p_Nemonico'];
+	$codemp = '';
+	$anioini   = $_POST['anio_ini'];
+	$mesini    = $_POST['mes_ini'];
+	$aniofin   = $_POST['anio_fin'];
+	$mesfin    = $_POST['mes_fin'];
+
+	$data = get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=$codemp&_informaciongeneral_WAR_servicesbvlportlet_nemonico=$nemonico&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=$anioini&_informaciongeneral_WAR_servicesbvlportlet_mesini=$mesini &_informaciongeneral_WAR_servicesbvlportlet_anofin=$aniofin&_informaciongeneral_WAR_servicesbvlportlet_mesfin=$mesfin&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=$nemonico");
+
+	//$data = json_decode($data, true);
+	var_dump($data);
+	$sav_data = array();
+
+	/*foreach ($data['data'] as $key => $v) {
+
+		$sav_data[] = array(
+						'f'=>$v['fecDt'],
+						'a'=>$v['valOpen'],
+						'c'=>'',
+						'max'=>'',
+						'min'=>'',
+						'prd'=>'',
+						'cn'=>$v['valVol'],
+						'mn'=>$v['valAmt'],
+						'fa'=>$v['fecTimp'],
+						'ca'=>$v['valPts']
+					);
+	}*/
+
+	//print_r($data['data']);
+}
+
 function savAction(){
 
 	include('../Config/Conexion.php');
@@ -104,12 +140,6 @@ function listarAction(){
 	include('../View/Cotizacion/listar.php');
 }
 
-function incluirPagina(){
-
-	//echo file_get_contents("https://www.bvl.com.pe/informacion-general-empresa/-/informacion/BVN/61200/4");
-	echo file_get_contents("https://www.google.com.pe/?gfe_rd=cr&dcr=0&ei=utHcWd_AIYTLXo7FsuAE");
-}
-
 function buscarEmpresaAction(){
 
 	include('../Config/Conexion.php');
@@ -150,8 +180,8 @@ switch ($_GET['accion']) {
 	case 'busemp':
 		buscarEmpresaAction();
 		break;
-	case 'getcontent':
-		incluirPagina();
+	case 'importarmanual':
+		importarManualAction();
 		break;
 	default:
 		# code...

@@ -55,13 +55,6 @@
                         Combobox($link, $params);
                       ?>
                 </div>
-
-                <!--<label>Buscar Empresa(Busca del tercer caracter):</label>
-                <div class="form-group">
-                    <input type="hidden" id="empresa" name="empresa">
-                    <input type="hidden" id="cod_empresa" name="cod_empresa">
-                    <input type="text" id="bus_empresa" name="bus_empresa" class="form-control ui-autocomplete-input" placeholder="Buscar Empresa">
-                </div>-->
             </div>
         </div>
         <div class="row">
@@ -99,13 +92,13 @@
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
 
-    /*$.ajaxPrefilter( function (options) {
-      if (options.crossDomain && jQuery.support.cors) {
-        var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
-        options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
-      }
+    //$.ajaxPrefilter( function (options) {
+    //  if (options.crossDomain && jQuery.support.cors) {
+    //    var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+    //    options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+    //  }
 
-    });*/
+    //});
 
     
     getHistorico = function(){
@@ -131,35 +124,29 @@
     }
 
     getCotizacion = function(){
-        $( '#divCotizaciones' ).load( '../Controller/CotizacionC.php?accion=getcontent' );
-    }
-
-    /*getCotizacion = function(){
 
         var p_Nemonico    = $("#empresa").val();
         var fecha_inicio  = $("#fecha_inicio").val().split('-');
-        var p_Ini         = fecha_inicio[0]+fecha_inicio[1]+fecha_inicio[2];
+        var anio_ini      = fecha_inicio[0];
+        var mes_ini       = fecha_inicio[1];
         var fecha_fin     = $("#fecha_fin").val().split('-');
-        var P_Fin         = fecha_fin[0]+fecha_fin[1]+fecha_fin[2];
-
-        var url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio="+p_Ini+"&fec_fin="+P_Fin+"&nemonico="+p_Nemonico;
+        var anio_fin      = fecha_fin[0];
+        var mes_fin       = fecha_fin[1];
 
         $("#loading").show();
 
         $.ajax({
-            type:'GET',
-            url: url,
+            type:'POST',
+            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin},
+            url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
-
-                $("#divCotizaciones").html(data).hide();
-                var HBVL = prepararData(data);
-                guardarData(HBVL,p_Nemonico);
-                
+                //getHistorico();
+                $("#loading").hide();                
             }
         });
-    }*/
+    }
 
-    guardarData = function(data,p_Nemonico){
+    /*guardarData = function(data,p_Nemonico){
         //console.log(data);
         $.ajax({
             type: 'POST',
@@ -216,30 +203,12 @@
         });
 
         return dataFila;
-    }
+    }*/
 
 
     getHistorico();
 
-    /*$( "#bus_empresa" ).autocomplete({
-      source: function( request, response ) {
-        $.ajax({
-            type: 'GET',
-            url: "../Controller/CotizacionC.php?accion=busemp",
-            data: {term: request.term,sector: $("#sector").val(),moneda: $("#moneda").val()},
-            dataType: "json",
-            success: function( data ) {
-                response(data);
-            }
-        });
-      },
-      minLength: 1,
-      select: function(event, ui) {
-          $("#empresa").val(ui.item.nemonico);
-          $("#cod_empresa").val(ui.item.cod_emp);
-      }
-    });*/
-
+    
     buscarEmpresa = function(){
         $("#empresa").attr('disabled','disabled');
         $.ajax({
