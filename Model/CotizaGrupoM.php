@@ -75,4 +75,53 @@ function get_remote_data($url, $post_paramtrs = false) {
 
     return $xxx;
 }*/
+
+function savAction($link,$data, $cz_codemp){
+
+    $del = "";
+    $sql = "";
+
+    foreach ($data as $key => $f) {
+
+        list($dia, $mes, $ano) = explode('/', $f['f']);
+
+        $cod             = $ano.$mes.$dia;
+        $fecha           = $ano.'-'.$mes.'-'.$dia;
+        $apertura        = (double)$f['a'];
+        if ($apertura !='' && $apertura>0) {
+            
+            $cierre          = $f['c'];
+            $maxima          = $f['max'];
+            $minima          = $f['min'];
+            $promedio        = $f['prd'];
+            $cant_negociado  = (int)str_replace(',', '', $f['cn']);
+            $monto_negociado = (float)str_replace(',','',$f['mn']);
+            list($dia, $mes, $ano) = explode('/', $f['fa']);
+            $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;
+            $cierre_anterior = $f['ca'];
+
+            //Actualizamos empres con la ultima cotizacion
+            //$upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$cz_codemp'";
+            //$respup    = mysqli_query($link,$upd_x_emp);
+            //Fin actualizar
+
+            $del .= "'".$cod."',";
+            
+            $sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+        }
+    }
+
+    if ($del !='' && $sql !='') {
+
+        $delete = "DELETE FROM cotizacion WHERE cz_cod IN(".trim($del,',').") AND cz_codemp='$cz_codemp'";
+        
+        $respdel = mysqli_query($link,$delete);
+
+        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_montnegd,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
+        
+        $resp    = mysqli_query($link,$insert);
+    }
+    
+    return "ok";
+}
 ?>

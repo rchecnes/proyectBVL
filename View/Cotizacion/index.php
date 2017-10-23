@@ -140,7 +140,7 @@
             data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
-                //getHistorico();
+                getHistorico();
                 $("#loading").hide();                
             }
         });

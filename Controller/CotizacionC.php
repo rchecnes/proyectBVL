@@ -15,6 +15,9 @@ function importarManualAction(){
 
 	require_once("../Model/CotizaGrupoM.php");
 
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
 	$nemonico = $_POST['p_Nemonico'];
 	$codemp = '';
 	$anioini   = $_POST['anio_ini'];
@@ -24,30 +27,39 @@ function importarManualAction(){
 
 	$data = get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=$codemp&_informaciongeneral_WAR_servicesbvlportlet_nemonico=$nemonico&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=$anioini&_informaciongeneral_WAR_servicesbvlportlet_mesini=$mesini &_informaciongeneral_WAR_servicesbvlportlet_anofin=$aniofin&_informaciongeneral_WAR_servicesbvlportlet_mesfin=$mesfin&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=$nemonico");
 
-	//$data = json_decode($data, true);
-	var_dump($data);
-	$sav_data = array();
+	$data     = json_decode($data, true);
 
-	/*foreach ($data['data'] as $key => $v) {
+	$new_data = array();
 
-		$sav_data[] = array(
-						'f'=>$v['fecDt'],
-						'a'=>$v['valOpen'],
-						'c'=>'',
-						'max'=>'',
-						'min'=>'',
-						'prd'=>'',
-						'cn'=>$v['valVol'],
-						'mn'=>$v['valAmt'],
-						'fa'=>$v['fecTimp'],
-						'ca'=>$v['valPts']
-					);
-	}*/
+	if (isset($data['data'])) {
+		
+		foreach ($data['data'] as $key => $v) {
 
-	//print_r($data['data']);
+			$new_data[] = array(
+							'f'=>$v['fecDt'],
+							'a'=>$v['valOpen'],
+							'c'=>$v['valLasts'],
+							'max'=>$v['valHighs'],
+							'min'=>$v['valLows'],
+							'prd'=>$v['valAmt']/$v['valVol'],
+							'cn'=>$v['valVol'],
+							'mn'=>$v['valAmtSol'],
+							'fa'=>$v['fecTimp'],
+							'ca'=>$v['valPts']
+						);
+		}
+
+		$res = savAction($link,$new_data, $nemonico);
+		
+		echo $res;
+
+	}else{
+		echo "No se puede acceder";
+	}
+
 }
 
-function savAction(){
+/*function savAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
@@ -101,7 +113,7 @@ function savAction(){
 	}
 	
 	echo "ok";
-}
+}*/
 
 function listarAction(){
 
