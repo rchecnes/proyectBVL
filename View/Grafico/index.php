@@ -187,6 +187,8 @@
 
     getPromedioMontoPorPrecio = function(){
 
+        console.log("Hola:<?=$simu_prec_unit?>");
+
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
             
@@ -204,8 +206,10 @@
                     $("#min").val(data.min);
                     $("#long").val(data.long);
                     $("#med").val(data.med);
-                    $("#prec_unit").val(data.cz_ci_fin);
-                   
+                    if ("<?=$simu_prec_unit?>"=="") {
+                        $("#prec_unit").val(data.cz_ci_fin);
+                    }
+                    
                     resultadomontoporprecio();
                 }
             });
