@@ -70,38 +70,6 @@ function getPromedioPrecio(){
 	echo json_encode(array('max'=>number_format($max,3,'.',','),'min'=>number_format($min,3,'.',','),'long'=>number_format($long,3,'.',','),'med'=>number_format($med,3,'.',','),'cz_ci_fin'=>number_format($rpre['cz_ci_fin'],3,'.',',')));
 }
 
-/*function insertaRecomend($cx, $empresa, $cod_rec, $mes){
-
-	$tp_fecha = date('Y-m-d');
-	$tp_hora = date('h:i:s');
-
-	$ps_cod = 1;
-	if ($mes == '12') { $ps_cod =1;}
-	if ($mes == '6') { $ps_cod =2;}
-	if ($mes == '3') { $ps_cod =3;}
-
-	$cod_user = $_SESSION['cod_user'];
-
-	//Emores
-	$sqlemp = "SELECT cod_emp FROM empresa WHERE nemonico='$empresa'";
-	$resemp = mysqli_query($cx, $sqlemp);
-	$rowemp = mysqli_fetch_array($resemp);
-	$cod_emp = $rowemp['cod_emp'];
-
-	//Validamos si existe registro en es fecha
-	$sqlcon = "SELECT rc_cod FROM temp_recomendacion WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-	$rescon = mysqli_query($cx, $sqlcon);
-	$rowcon = mysqli_fetch_array($rescon);
-
-	if ($rowcon['rc_cod'] !='') {
-		$sqlup = "UPDATE temp_recomendacion SET rc_cod='$cod_rec' WHERE ps_cod='$ps_cod' AND cod_emp='$cod_emp' AND cod_user='$cod_user' AND tp_fecha='$tp_fecha'";
-		mysqli_query($cx, $sqlup);
-	}else{
-		$sqlin = "INSERT INTO temp_recomendacion(ps_cod,cod_emp,cod_user,tp_fecha,tp_hora,rc_cod)VALUES('$ps_cod','$cod_emp','$cod_user','$tp_fecha','$tp_hora','$cod_rec' )";
-		mysqli_query($cx, $sqlin);
-	}	
-}*/
-
 function grafico1Action(){
 
 	include('../Config/Conexion.php');
@@ -317,14 +285,18 @@ function crearcuadrorecAction(){
 	list($codRec12m, $nomRec12) = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 12); //($rctp[1]['rc_nom']!='')?$rctp[1]['rc_nom']:"-";
 	list($codRec6m, $nomRec6 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 6);//($rctp[2]['rc_nom']!='')?$rctp[2]['rc_nom']:"-";
 	list($codRec3m, $nomRec3 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 3);//($rctp[3]['rc_nom']!='')?$rctp[3]['rc_nom']:"-";
-
+	
+	
 	$valRec12m = (isset($rec[$codRec12m]['rc_valor']))?$rec[$codRec12m]['rc_valor']:0;
 	$valRec6m  = (isset($rec[$codRec6m]['rc_valor']))?$rec[$codRec6m]['rc_valor']:0;
 	$valRec3m  = (isset($rec[$codRec3m]['rc_valor']))?$rec[$codRec3m]['rc_valor']:0;
 
 	$recfinaltxt = '';
-	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($rec[3]['ps_peso']/100*($valRec3m)));
+	//echo "((".$prec[1]['ps_peso']."/100)*(".$valRec12m."))+((".$prec[2]['ps_peso']."/100)*(".$valRec6m."))+((".$prec[3]['ps_peso']."/100)*(".$valRec3m."))";
+	$recfinal = (($prec[1]['ps_peso']/100)*($valRec12m))+(($prec[2]['ps_peso']/100)*($valRec6m))+(($prec[3]['ps_peso']/100)*($valRec3m));
+	
 	$recfinal = round($recfinal,0);
+
 	foreach ($rec as $key => $v) {
 		if ($recfinal == $v['rc_valor']) {
 			$recfinaltxt = $v['rc_nom'];
@@ -400,7 +372,7 @@ function recomendacionSimuladorAction(){
 	$valRec3m  = (isset($rec[$codRec3m]['rc_valor']))?$rec[$codRec3m]['rc_valor']:0;
 
 	$recfinaltxt = '';
-	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($rec[3]['ps_peso']/100*($valRec3m)));
+	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($prec[3]['ps_peso']/100*($valRec3m)));
 	$recfinal = round($recfinal,0);
 	foreach ($rec as $key => $v) {
 		if ($recfinal == $v['rc_valor']) {

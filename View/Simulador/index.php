@@ -280,7 +280,8 @@
 				var prec_unit = $("#precio_unitario").val();
 
 				$("#loading").show();
-
+				$("button").attr('disabled','disabled');
+				
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/GraficoC.php?accion=recSimulador',
@@ -288,6 +289,7 @@
 				    success:function(data){
 				        $("#recomendacion").html('REC: '+data);
 				        $("#loading").hide();
+				        $("button").removeAttr('disabled');
 				    }
 				});
 			}
@@ -317,8 +319,9 @@
 				gan_renta_obj = $("#gan_rent_obj").val();
 				gan_pre_obj   =  $("#gan_pre_obj").val();
 
-				$("#buscar").attr('disabled','disabled');
-				$("#add_portafolio").attr('disabled','disabled');
+				//$("#buscar").attr('disabled','disabled');
+				//$("#add_portafolio").attr('disabled','disabled');
+				$("button").attr('disabled','disabled');
 
 				$("#loading").show();
 
@@ -374,8 +377,9 @@
 						$("#porc_cost_total").val(data.porc_cost_total);
 						$("#por_var_total").val(data.por_var_total);
 
-						$("#buscar").removeAttr('disabled');
-						$("#add_portafolio").removeAttr('disabled');
+						//$("#buscar").removeAttr('disabled');
+						//$("#add_portafolio").removeAttr('disabled');
+						$("button").removeAttr('disabled');
 
 						$("#loading").hide();
 						//Recomendacion

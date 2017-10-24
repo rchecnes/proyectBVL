@@ -76,6 +76,37 @@ function get_remote_data($url, $post_paramtrs = false) {
     return $xxx;
 }*/
 
+function prepararData($data){
+
+    $data     = json_decode($data, true);
+
+    if (isset($data['data'])) {
+
+        $new_data = array();
+        
+        foreach ($data['data'] as $key => $v) {
+
+            $new_data[] = array(
+                            'f'=>$v['fecDt'],
+                            'a'=>$v['valOpen'],
+                            'c'=>$v['valLasts'],
+                            'max'=>$v['valHighs'],
+                            'min'=>$v['valLows'],
+                            'prd'=>$v['valAmt']/$v['valVol'],
+                            'cn'=>$v['valVol'],
+                            'mn'=>$v['valAmtSol'],
+                            'fa'=>$v['fecTimp'],
+                            'ca'=>$v['valPts']
+                        );
+        }
+
+        return $new_data;
+
+    }else{
+        return "";
+    }
+}
+
 function savAction($link,$data, $cz_codemp){
 
     $del = "";
