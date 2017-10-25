@@ -86,18 +86,29 @@ function prepararData($data){
         
         foreach ($data['data'] as $key => $v) {
 
-            $new_data[] = array(
-                            'f'=>$v['fecDt'],
-                            'a'=>$v['valOpen'],
-                            'c'=>$v['valLasts'],
-                            'max'=>$v['valHighs'],
-                            'min'=>$v['valLows'],
-                            'prd'=>$v['valAmt']/$v['valVol'],
-                            'cn'=>$v['valVol'],
-                            'mn'=>$v['valAmtSol'],
-                            'fa'=>$v['fecTimp'],
-                            'ca'=>$v['valPts']
-                        );
+            list($dia, $mes, $ano) = explode('/', $v['fecDt']);
+            $fecha = $ano.'-'.$mes.'-'.$dia;
+
+            list($dia, $mes, $ano) = explode('/', $v['fecTimp']);
+            $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;   
+
+            $apertura        = (double)$v['valOpen'];
+
+            if ($apertura !='' && $apertura>0){
+
+                $new_data[] = array(
+                                'f'=>$fecha,
+                                'a'=>$v['valOpen'],
+                                'c'=>$v['valLasts'],
+                                'max'=>$v['valHighs'],
+                                'min'=>$v['valLows'],
+                                'prd'=>($v['valVol']>0 && $v['valVol']!='')?$v['valAmt']/$v['valVol']:0,
+                                'cn'=>$v['valVol'],
+                                'mn'=>$v['valAmtSol'],
+                                'fa'=>$fecha_anterior,
+                                'ca'=>$v['valPts']
+                            );
+            }
         }
 
         return $new_data;
@@ -107,39 +118,73 @@ function prepararData($data){
     }
 }
 
+function formatDate($datetime,$format){
+  $date=date_create($datetime);
+  return date_format($date,$format);
+}
+
+function ordenarArray($array, $campo, $tipo){
+
+    //Creamos un arrelgo con lo que se va a ordenar
+    $camp_ord = array();
+    foreach ($array as $key => $r) {
+        //list($dia,$mes,$anio) = $r['f'];
+        $camp_ord[$key] = $r[$campo];
+    }
+
+    //Ordenamos el arreglo
+    if ($tipo =='ASC') {
+        array_multisort($camp_ord, SORT_ASC, $array);
+    }else{
+        array_multisort($camp_ord, SORT_DESC, $array);
+    }
+    
+    return $array;
+}
+
 function savAction($link,$data, $cz_codemp){
 
     $del = "";
     $sql = "";
 
+    $data = ordenarArray($data,'f','ASC');
+
+  
+    $cant_data = count($data);
+    $contador  = 0;
+
     foreach ($data as $key => $f) {
 
-        list($dia, $mes, $ano) = explode('/', $f['f']);
+        $contador ++;
+
+        list($ano, $mes, $dia) = explode('-', $f['f']);
 
         $cod             = $ano.$mes.$dia;
-        $fecha           = $ano.'-'.$mes.'-'.$dia;
-        $apertura        = (double)$f['a'];
-        if ($apertura !='' && $apertura>0) {
-            
-            $cierre          = $f['c'];
-            $maxima          = $f['max'];
-            $minima          = $f['min'];
-            $promedio        = $f['prd'];
-            $cant_negociado  = (int)str_replace(',', '', $f['cn']);
-            $monto_negociado = (float)str_replace(',','',$f['mn']);
-            list($dia, $mes, $ano) = explode('/', $f['fa']);
-            $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;
-            $cierre_anterior = $f['ca'];
+        $fecha           = $f['f'];
+        $apertura        = (double)$f['a'];  
+        $cierre          = $f['c'];
+        $maxima          = $f['max'];
+        $minima          = $f['min'];
+        $promedio        = $f['prd'];
+        $cant_negociado  = (int)str_replace(',', '', $f['cn']);
+        $monto_negociado = (float)str_replace(',','',$f['mn']);
+        //list($dia, $mes, $ano) = explode('/', $f['fa']);
+        $fecha_anterior  = $f['fa'];
+        $cierre_anterior = $f['ca'];
 
-            //Actualizamos empres con la ultima cotizacion
-            //$upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$cz_codemp'";
-            //$respup    = mysqli_query($link,$upd_x_emp);
-            //Fin actualizar
+        //Actualizamos empres con la ultima cotizacion
 
-            $del .= "'".$cod."',";
-            
-            $sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+        if ($cant_data == $contador) {
+            $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$cz_codemp'";
+            //echo $upd_x_emp;
+            $respup    = mysqli_query($link,$upd_x_emp);
         }
+        //Fin actualizar
+
+        $del .= "'".$cod."',";
+        
+        $sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+
     }
 
     if ($del !='' && $sql !='') {
@@ -152,6 +197,8 @@ function savAction($link,$data, $cz_codemp){
         
         $resp    = mysqli_query($link,$insert);
     }
+
+    unset($data);
     
     return "ok";
 }

@@ -9,7 +9,8 @@
 $ruta = 'public_html/domains/bvl.worldapu.com';
 //$ruta = '..';
 //include($ruta.'/Util/simple_html_dom_php5.6.php');
-include($ruta.'/Config/Conexion.php');
+require_once($ruta.'/Config/Conexion.php');
+require_once($ruta."/Model/CotizaGrupoM.php");
 
 function getCotizacionGrupo(){
 
@@ -18,37 +19,38 @@ function getCotizacionGrupo(){
 
 	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.nemonico ASC";
 	$respemp   = mysqli_query($link, $sqlemp);
-	$emp_array = array();
 
-	$p_Ini = date('Ymd');
-	$P_Fin = date('Ymd');
+    $anioini   = data('Y');
+    $mesini    = data('m');
+    $aniofin   = data('Y');
+    $mesfin    = data('m');
+    $diaini = '23';
+    $diafin = '23';
 
-    $c = 1;
-    $cotiza = array();
+    $c = 0;
 	while ($e = mysqli_fetch_array($respemp)) {
-		$empresa = $e['nemonico'];
-		$url     = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$p_Ini&fec_fin=$P_Fin&nemonico=$empresa";
-		//$data    = file_get_contents($url);
-        $cotiza_row = getPrepareDataTwo($empresa,$url);
-        //var_dump($cotiza_row)."<br><br>";
-        if (count($cotiza_row)>0) {
-            $cotiza[] = $cotiza_row;
-        }
 		
-        //unset($data);
-        unset($cotiza_row);
+        $nemonico = $e['nemonico'];
+        $codemp = '';
 
-        $c++;
+        $data = get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=$codemp&_informaciongeneral_WAR_servicesbvlportlet_nemonico=$nemonico&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=$anioini&_informaciongeneral_WAR_servicesbvlportlet_mesini=$mesini&_informaciongeneral_WAR_servicesbvlportlet_anofin=$aniofin&_informaciongeneral_WAR_servicesbvlportlet_mesfin=$mesfin&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=$nemonico");
+
+        $new_data = prepararData($data);
+
+        if ($new_data != '') {
+
+            $res = savAction($link,$new_data, $nemonico);
+
+            $c ++;
+        }
+
+        unset($new_data);
 	}
     
-    $resp = savCatiza($cotiza);
-
-    echo $resp;
-
-    unset($cotiza);
+    echo $c." Empresas actualizadas";
 }
 
-function getPrepareDataTwo($empresa, $data){
+/*function getPrepareDataTwo($empresa, $data){
 
     $cotiza = array();
 
@@ -79,9 +81,9 @@ function getPrepareDataTwo($empresa, $data){
     unset($html);
 
     return $cotiza;
-}
+}*/
 
-function savCatiza($cotiza){
+/*function savCatiza($cotiza){
 
     //global $ruta;
 
@@ -146,7 +148,7 @@ function savCatiza($cotiza){
     unset($sql);
     
     return "ok";
-}
+}*/
 
 getCotizacionGrupo();
 

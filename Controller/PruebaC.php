@@ -162,14 +162,15 @@ function get_remote_data($url, $post_paramtrs = false) {
 
 //$txtSunat=$directorio."richard.txt";
 
-$xxx=get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=60800&_informaciongeneral_WAR_servicesbvlportlet_nemonico=ATACOBC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=2017&_informaciongeneral_WAR_servicesbvlportlet_mesini=10&_informaciongeneral_WAR_servicesbvlportlet_anofin=2017&_informaciongeneral_WAR_servicesbvlportlet_mesfin=10&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=ATACOBC1");
+/*$xxx=get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=60800&_informaciongeneral_WAR_servicesbvlportlet_nemonico=ATACOBC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=2017&_informaciongeneral_WAR_servicesbvlportlet_mesini=10&_informaciongeneral_WAR_servicesbvlportlet_anofin=2017&_informaciongeneral_WAR_servicesbvlportlet_mesfin=10&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=ATACOBC1");*/
 
-print_r($xxx);
+
 //GUARDAR CONTENIDO EN UN TEXTO
 //file_put_contents($txtSunat, $xxx);
 
 //$lines = file($txtSunat);
 
 //print_r($lines);
+
 
 ?>
