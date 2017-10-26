@@ -16,13 +16,18 @@
 		</p>
 		<div id="empresas_import"></div>
 		<table class="table table-bordered">
+			<tr>
+				<th colspan="4">&nbsp;</th>
+				<th colspan="2" width="140">Cotización</th>
+				<th colspan="2">&nbsp;</th>
+			</tr>
 		    <tr>
-		        <th>Código</th>
 		        <th>Nemónico</th>
 		        <th>Nombre</th>		        
 		        <th>Sector</th>
-		        <th>Segmento</th>
-		        <th>Moneda</th>
+		        <th>Mon.</th>
+		        <th width="90">Fecha</th>
+		        <th width="50">Cierre</th>
 		        <th>Estado</th>
 		        <th>Acciones</th>
 		    </tr>
@@ -30,16 +35,16 @@
 		    while ($em = mysqli_fetch_array($empresas)) {
 		    ?>
 		    <tr>
-		        <td><?=$em['cod_emp']?></td>
 		        <td><?=$em['nemonico']?></td>
 		        <td><?=$em['nom_empresa']?></td>		        
 		        <td><?=$em['nom_sector']?></td>
-		        <td><?=$em['segmento']?></td>
 		        <td><?=$em['moneda']?></td>
+		        <td align="center"><?=$em['cz_fe_fin']?></td>
+		        <td align="right"><?=$em['cz_ci_fin']?></td>
 		        <td><?=($em['estado']=='1')?'Habilitado':'Deshabilitado'?></td>
-		        <td width="200">
-		        	<a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="btn btn-default" role="button">Editar</a>
-		        	<a href="../Controller/EmpresaC.php?accion=delete&codigo=<?=$em['cod_emp']?>" class="btn btn-danger" role="button">Eliminar</a>
+		        <td width="50" align="center">
+		        	<a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;
+		        	<a href="../Controller/EmpresaC.php?accion=delete&codigo=<?=$em['cod_emp']?>" class="color-red" role="button"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
 		        </td>
 		    </tr>
 		    <?php

@@ -17,7 +17,13 @@ function getCotizacionGrupo(){
     //global $ruta;
 	$link      = getConexion();
 
-	$sqlemp    = "SELECT em.nemonico FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.nemonico ASC";
+    $date      = date('Y-m-d');
+	$sqlemp    = "SELECT em.nemonico FROM empresa em
+                LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
+                WHERE se.estado='1'
+                AND em.estado='1'
+                AND em.last_feem_imp_cz !='$date'
+                LIMIT 32";
 	$respemp   = mysqli_query($link, $sqlemp);
 
     $anioini   = data('Y');
@@ -40,6 +46,10 @@ function getCotizacionGrupo(){
         if ($new_data != '') {
 
             $res = savAction($link,$new_data, $nemonico);
+
+            //Actualizamos la fecha de la ultima importacion
+            $upimp = "UPDATE empresa em SET em.last_feem_imp_cz='$date' WHERE em.nemonico='$nemonico'"; 
+            mysqli_query($link, $upimp);
 
             $c ++;
         }
