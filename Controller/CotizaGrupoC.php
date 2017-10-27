@@ -24,14 +24,13 @@ function getCotizacionGrupo(){
                 AND em.estado='1'
                 AND em.last_feem_imp_cz !='$date'
                 LIMIT 32";
+
 	$respemp   = mysqli_query($link, $sqlemp);
 
-    $anioini   = data('Y');
-    $mesini    = data('m');
-    $aniofin   = data('Y');
-    $mesfin    = data('m');
-    $diaini = '23';
-    $diafin = '23';
+    $anioini   = date('Y');
+    $mesini    = date('m');
+    $aniofin   = date('Y');
+    $mesfin    = date('m');
 
     $c = 0;
 	while ($e = mysqli_fetch_array($respemp)) {

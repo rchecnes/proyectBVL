@@ -86,12 +86,24 @@ function prepararData($data){
         
         foreach ($data['data'] as $key => $v) {
 
-            list($dia, $mes, $ano) = explode('/', $v['fecDt']);
-            $fecha = $ano.'-'.$mes.'-'.$dia;
-
-            list($dia, $mes, $ano) = explode('/', $v['fecTimp']);
-            $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;;   
-
+            $fecha = "";
+            if ($v['fecDt'] !='') {
+                $list = count(explode('/', $v['fecDt']));
+                if ($list == 3) {
+                    list($dia, $mes, $ano) = explode('/', $v['fecDt']);
+                    $fecha = $ano.'-'.$mes.'-'.$dia;
+                }
+            }
+            
+            $fecha_anterior = "";
+            if ($v['fecTimp'] !='') {
+                $list = count(explode('/', $v['fecTimp']));
+                if ($list == 3) {
+                    list($dia, $mes, $ano) = explode('/', $v['fecTimp']);
+                    $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;
+                }
+            }
+               
             $apertura        = (double)$v['valOpen'];
 
             if ($apertura !='' && $apertura>0){
