@@ -36,7 +36,7 @@
                         'sql'    => "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'",
                         'attrib' => array('value'=>'cod_grupo','desc'=>'nom_grupo', 'concat'=>' - ','descextra'=>''),
                         'empty'  => 'Todos',
-                        'defect' => ($simu_cod_grupo!='')?$simu_cod_grupo:'',
+                        'defect' => ($cod_grupo!='')?$cod_grupo:'',
                         'edit'   => '',
                         'enable' => 'enable'
                     );
@@ -48,9 +48,13 @@
             <div class="form-group">
                 <label>Empresa:</label>
                 <?php
+                  $andwhere = ($cod_grupo !='')?" AND ug.cod_grupo='$cod_grupo'":"";
                   $params = array(
                         'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
-                        'sql'    => "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp) WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user'",
+                        'sql'    => "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef 
+                                    INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+                                    INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
+                                    WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
                         'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
                         'empty'  => false,
                         'defect' => ($simu_cod_emp!='')?$simu_cod_emp:'ENGEPEC1',
@@ -170,13 +174,13 @@
         $(this).select();
     });
 
-    buscar = function(){
+    buscar = function(origen){
 
         var grafico = $("#tabs li.active>a").attr('href');
 
         if (grafico == '#monto_por_precio') {
             //resultadomontoporprecio();
-            getPromedioMontoPorPrecio();
+            getPromedioMontoPorPrecio(origen);
         }else if(grafico == '#analisis_de_precio'){
             resultadoanalisisdeprecio();
         }else if (grafico == '#cotizacion') {
@@ -185,9 +189,9 @@
 
     }
 
-    getPromedioMontoPorPrecio = function(){
+    getPromedioMontoPorPrecio = function(origen){
 
-        console.log("Hola:<?=$simu_prec_unit?>");
+        //console.log("Hola:<?=$simu_prec_unit?>");
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
@@ -206,7 +210,7 @@
                     $("#min").val(data.min);
                     $("#long").val(data.long);
                     $("#med").val(data.med);
-                    if ("<?=$simu_prec_unit?>"=="") {
+                    if ("<?=$simu_prec_unit?>"=="" && origen!='RMES') {
                         $("#prec_unit").val(data.cz_ci_fin);
                     }
                     
@@ -312,7 +316,7 @@
         }
     }
 
-    getPromedioMontoPorPrecio();
+    getPromedioMontoPorPrecio('');
 
     function restarFecha(fecha, cantidad){
         /*var d    = Date.parse(fecha);
@@ -329,7 +333,7 @@
             success: function(data){
                 $("#fecha_inicio").val(data);
                 //Buscamos
-                buscar();
+                buscar('RMES');
             }
         });
         
@@ -368,7 +372,7 @@
 
         if ($(this).attr('href')=='#monto_por_precio') {
 
-            getPromedioMontoPorPrecio();
+            getPromedioMontoPorPrecio('');
 
         }else if($(this).attr('href')=='#analisis_de_precio'){
             resultadoanalisisdeprecio();
@@ -379,17 +383,20 @@
     });
 
     //CLICK EN EL COMBO EMPRESA
-    $("#empresa").on("change", function(){
+    buscarClikEmpresa = function(){
 
         var pestana = $("#tabs li.active a").attr('href');
 
         if (pestana == '#monto_por_precio') {
-            getPromedioMontoPorPrecio();
+            getPromedioMontoPorPrecio('');
         }else if(pestana == '#analisis_de_precio'){
             resultadoanalisisdeprecio();
         }else if(pestana == '#cotizacion'){
             resultadocotizacion();
         }
+    }
+    $("#empresa").on("change", function(){
+        buscarClikEmpresa()        
     });
 
 
@@ -405,6 +412,10 @@
 
                 $("#empresa").html(data);
                 $("#empresa").removeAttr('disabled');
+
+                if ($("#empresa").val()!='') {
+                    buscarClikEmpresa();
+                }
             }
         });
     });

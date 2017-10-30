@@ -258,43 +258,7 @@
             	$("#update_portafolio").hide();
             }
 
-			$("#cod_grupo").change(function(){
-
-				$("#cod_emp").attr('disabled','disabled');
-				$.ajax({
-				    type:'GET',
-				    url: '../Controller/SimuladorC.php?accion=empresaporgrupo',
-				    data:{cod_grupo:$(this).val()},
-				    success:function(data){
-
-				        $("#cod_emp").html(data);
-				        $("#cod_emp").removeAttr('disabled');
-				    }
-				});
-			});
-
-			//Recomendacion
-			getRecomendacion = function(){
-
-				var cod_emp = $("#cod_emp").val();
-				var prec_unit = $("#precio_unitario").val();
-
-				$("#loading").show();
-				$("button").attr('disabled','disabled');
-				
-				$.ajax({
-				    type:'GET',
-				    url: '../Controller/GraficoC.php?accion=recSimulador',
-				    data:{cod_emp:cod_emp, prec_unit:prec_unit},
-				    success:function(data){
-				        $("#recomendacion").html('REC: '+data);
-				        $("#loading").hide();
-				        $("button").removeAttr('disabled');
-				    }
-				});
-			}
-
-			buscar = function(tipo,tipo_two){
+            buscar = function(tipo,tipo_two){
 
 				var monto_estimado  = '';
 				var precio_unitario = '';
@@ -384,6 +348,46 @@
 						$("#loading").hide();
 						//Recomendacion
 						getRecomendacion();
+				    }
+				});
+			}
+
+			$("#cod_grupo").change(function(){
+
+				$("#cod_emp").attr('disabled','disabled');
+				$.ajax({
+				    type:'GET',
+				    url: '../Controller/SimuladorC.php?accion=empresaporgrupo',
+				    data:{cod_grupo:$(this).val()},
+				    success:function(data){
+
+				        $("#cod_emp").html(data);
+				        $("#cod_emp").removeAttr('disabled');
+
+				        if ($("#cod_emp").val()!='') {
+				        	buscar('uno','');
+				        }
+				    }
+				});
+			});
+
+			//Recomendacion
+			getRecomendacion = function(){
+
+				var cod_emp = $("#cod_emp").val();
+				var prec_unit = $("#precio_unitario").val();
+
+				$("#loading").show();
+				$("button").attr('disabled','disabled');
+				
+				$.ajax({
+				    type:'GET',
+				    url: '../Controller/GraficoC.php?accion=recSimulador',
+				    data:{cod_emp:cod_emp, prec_unit:prec_unit},
+				    success:function(data){
+				        $("#recomendacion").html('REC: '+data);
+				        $("#loading").hide();
+				        $("button").removeAttr('disabled');
 				    }
 				});
 			}

@@ -116,9 +116,14 @@ function prepararData($data){
                                 'min'=>$v['valLows'],
                                 'prd'=>($v['valVol']>0 && $v['valVol']!='')?$v['valAmt']/$v['valVol']:0,
                                 'cn'=>$v['valVol'],
-                                'mn'=>$v['valAmtSol'],
+                                'mnd'=>$v['valAmtDol'],
+                                'mns'=>$v['valAmtSol'],
+                                'mno'=>$v['valAmt'],
                                 'fa'=>$fecha_anterior,
-                                'ca'=>$v['valPts']
+                                'ca'=>$v['valPts'],
+                                'nop'=>$v['valNop'],
+                                'ncp'=>$v['valAsks'],
+                                'nvt'=>$v['valBids']
                             );
             }
         }
@@ -179,15 +184,21 @@ function savAction($link,$data, $cz_codemp){
         $minima          = $f['min'];
         $promedio        = $f['prd'];
         $cant_negociado  = (int)str_replace(',', '', $f['cn']);
-        $monto_negociado = (float)str_replace(',','',$f['mn']);
+        $monto_negociado_dol = (float)str_replace(',','',$f['mnd']);
+        $monto_negociado_sol = (float)str_replace(',','',$f['mns']);
+        $monto_negociado_ori = (float)str_replace(',','',$f['mno']);
         //list($dia, $mes, $ano) = explode('/', $f['fa']);
         $fecha_anterior  = $f['fa'];
         $cierre_anterior = $f['ca'];
 
+        $num_operac = $f['nop'];
+        $num_compra = $f['ncp'];
+        $num_venta  = $f['nvt'];
+
         //Actualizamos empres con la ultima cotizacion
 
         if ($cant_data == $contador) {
-            $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$cz_codemp'";
+            $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado_ori' WHERE em.nemonico='$cz_codemp'";
             //echo $upd_x_emp;
             $respup    = mysqli_query($link,$upd_x_emp);
         }
@@ -195,7 +206,7 @@ function savAction($link,$data, $cz_codemp){
 
         $del .= "'".$cod."',";
         
-        $sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+        $sql .= "('$cod','$cz_codemp','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado_dol','$monto_negociado_sol','$monto_negociado_ori','$fecha_anterior','$cierre_anterior','$num_operac','$num_compra','$num_venta'),";
 
     }
 
@@ -205,7 +216,7 @@ function savAction($link,$data, $cz_codemp){
         
         $respdel = mysqli_query($link,$delete);
 
-        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_montnegd,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_dol,cz_monto_neg_sol,cz_monto_neg_ori,cz_fechant,cz_cierreant,cz_num_oper,cz_num_compra,cz_num_venta) VALUES ".trim($sql,',').";";
         
         $resp    = mysqli_query($link,$insert);
     }

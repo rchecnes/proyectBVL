@@ -10,7 +10,7 @@ function indexAction(){
 
 	//ORIGEN SIMULADOR
 	$simu_prec_unit = '';
-	$simu_cod_grupo = '';
+	$cod_grupo = '';
 	$simu_cod_emp   = '';
 	if (isset($_GET['simu_prec_unit'])) {
 
@@ -19,7 +19,7 @@ function indexAction(){
 		$ep       = mysqli_fetch_array($resemp);
 
 		$simu_prec_unit = $_GET['simu_prec_unit'];
-		$simu_cod_grupo = $_GET['simu_cod_grupo'];
+		$cod_grupo = $_GET['simu_cod_grupo'];
 		$simu_cod_emp   = $ep['nemonico'];
 	}
 	//FIN SIMULADOR
@@ -122,7 +122,7 @@ function grafico1Action(){
 			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_montnegd)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_sol)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 		}else{
 
@@ -130,7 +130,7 @@ function grafico1Action(){
 			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_montnegd)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_sol)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 			
 		}
 		
@@ -441,7 +441,7 @@ function grafico2Action(){
 			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_montnegd)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_sol)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 		}else{
 
@@ -449,7 +449,7 @@ function grafico2Action(){
 			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_montnegd)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_sol)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 			
 		}
 		
