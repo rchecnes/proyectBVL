@@ -195,17 +195,17 @@ function get_web_page($url){
     return $header;
 }
 
-/*$txtSunat=$directorio."richard.txt";
+$txtSunat=$directorio."richard.txt";
 $result = get_remote_data_amadu("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable",false);
 //GUARDAR CONTENIDO EN UN TEXTO
 file_put_contents($txtSunat, $result);
 
 $lines = file($txtSunat);
 
-print_r($lines);*/
+print_r($lines);
 
 
-$result = get_web_page("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable");
+/**$result = get_web_page("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable");
 
 if ( $result['errno'] != 0 )
     echo "excelente";
@@ -214,6 +214,6 @@ if ( $result['http_code'] != 200 )
     echo "no hay permiso";
 
 $page = $result['content'];
-echo $page;
+echo $page;*/
 
 ?>
