@@ -196,7 +196,7 @@ function get_web_page($url){
 }
 
 $txtSunat=$directorio."richard.txt";
-$result = get_remote_data_amadu("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable",false);
+$result = get_remote_data_amadu("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=64801&_informaciongeneral_WAR_servicesbvlportlet_nemonico=VOLCABC1&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=2017&_informaciongeneral_WAR_servicesbvlportlet_mesini=10&_informaciongeneral_WAR_servicesbvlportlet_anofin=2017&_informaciongeneral_WAR_servicesbvlportlet_mesfin=11&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=VOLCABC1");
 //GUARDAR CONTENIDO EN UN TEXTO
 file_put_contents($txtSunat, $result);
 
@@ -215,5 +215,22 @@ if ( $result['http_code'] != 200 )
 
 $page = $result['content'];
 echo $page;*/
+
+//file_put_contents("../Temp/page.php",file_get_contents("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable"));
+
+/*$page = get_remote_data_amadu("https://www.bvl.com.pe:443/web/guest/inicio?p_p_id=actualizacion_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_pos=1&p_p_col_count=2&_actualizacion_WAR_servicesbvlportlet_cmd=getActualizacion",false);
+
+//print_r($result);
+
+
+
+$regex = '<div id="cotizaciones">(.*?)</div>/s'; 
+  
+if ( preg_match($regex, $page, $list) ) 
+
+    echo $list[0];   
+else 
+
+    echo "No se encontró";*/
 
 ?>
