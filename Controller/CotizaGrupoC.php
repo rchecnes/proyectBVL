@@ -6,8 +6,8 @@
 //CONFIGURAR CRON CON ESTA LINEA
 //opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
@@ -75,8 +75,8 @@ function getCotizacionGrupoActiguo(){
 
     $respemp   = mysqli_query($link, $sqlemp);
 
-    $fec_inicio   = '20170101';//date('Ymd');
-    $fec_fin      = '20171101';//date('Ymd');
+    $fec_inicio   = '20130101';//date('Ymd');
+    $fec_fin      = '20171108';//date('Ymd');
 
     $c = 0;
     while ($e = mysqli_fetch_array($respemp)) {
@@ -84,9 +84,11 @@ function getCotizacionGrupoActiguo(){
         $nemonico = $e['nemonico'];
         $codemp = '';
 
-        $data = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fec_inicio&fec_fin=$fec_fin&nemonico=$nemonico";
+        $url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fec_inicio&fec_fin=$fec_fin&nemonico=$nemonico";
+        $html = file_get_html($url);
 
-        $new_data = getPrepareDataTwo($nemonico, $data);
+        $new_data = getPrepareDataAntiguo($nemonico, $html);
+
 
         if (count($new_data)>0) {
 
@@ -96,7 +98,7 @@ function getCotizacionGrupoActiguo(){
             //$upimp = "UPDATE empresa em SET em.last_feem_imp_cz='$date' WHERE em.nemonico='$nemonico'"; 
             //mysqli_query($link, $upimp);
 
-            $c ++;
+            //$c ++;
         }
 
         unset($new_data);
@@ -105,6 +107,7 @@ function getCotizacionGrupoActiguo(){
     //echo $c." Empresas actualizadas";
 }
 
+//http://www.bvl.com.pe/includes/cotizaciones_busca.dat
 //getCotizacionGrupoActiguo();
 getCotizacionGrupo();
 

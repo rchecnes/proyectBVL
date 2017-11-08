@@ -29,7 +29,7 @@ function savCatizaActiguo($cotiza, $link){
             $del_x_cod = "'".$cod."',";
             $del_x_emp .= "'".$empresa."',";
             
-            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior',0,0,0),";
 
         }
     }
@@ -42,7 +42,8 @@ function savCatizaActiguo($cotiza, $link){
         $respdel = mysqli_query($link,$delete);
         unset($delete);
 
-        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_montnegd,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant,cz_num_oper
+cz_num_compra,cz_num_venta) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link,$insert);
         unset($insert);
         
@@ -55,11 +56,9 @@ function savCatizaActiguo($cotiza, $link){
     return "ok";
 }
 
-function getPrepareDataTwo($empresa, $data){
+function getPrepareDataAntiguo($empresa, $html){
 
     $cotiza = array();
-
-    $html = file_get_html($data);
 
     foreach($html->find('tr') as $e){
     	
