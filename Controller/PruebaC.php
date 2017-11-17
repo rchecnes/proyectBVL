@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL);
 //require_once('simple_html_dom.php');
+include('../Util/simple_html_dom_php5.6.php');
 //V2. AGREGADO
 function normalize_str($str){
 
@@ -195,25 +196,28 @@ function get_web_page($url){
     return $header;
 }
 
-$txtSunat=$directorio."richard.txt";
-$result = get_remote_data_amadu("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable",false);
+/*$txtSunat=$directorio."richard.txt";
+$result = get_web_page("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable",false);
 //GUARDAR CONTENIDO EN UN TEXTO
 file_put_contents($txtSunat, $result);
 
 $lines = file($txtSunat);
 
-print_r($lines);
+print_r($lines);*/
 
 
-/**$result = get_web_page("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable");
+//$result = get_web_page("https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable");
+$html = file_get_html('https://www.bvl.com.pe/cotizaciones-y-negociacion-renta-variable');
 
-if ( $result['errno'] != 0 )
+/*if ( $result['errno'] != 0 )
     echo "excelente";
 
 if ( $result['http_code'] != 200 )
     echo "no hay permiso";
 
-$page = $result['content'];
-echo $page;*/
+$html = $result['content'];
 
-?>
+foreach($html->find('body') as $e){
+	echo $e->script;
+}
+*/       
