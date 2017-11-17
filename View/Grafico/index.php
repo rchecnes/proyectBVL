@@ -420,9 +420,17 @@
         });
     });
 
-    $("#prec_unit").keyup(function(event) {
+    /*$("#prec_unit").keypess(function(event) {
         resultadomontoporprecio();
-    })
+    });*/
+
+    var timer;
+    $('#prec_unit').keyup(function () {
+        clearTimeout(timer);
+        timer = setTimeout(function (event) {
+            resultadomontoporprecio();
+        }, 500);
+    });
 
 
 
