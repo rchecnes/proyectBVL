@@ -5,6 +5,8 @@ function savCatizaActiguo($cotiza, $link){
     $del_x_emp = "";
     $sql = "";
 
+    $upd_x_emp = "";
+
     foreach ($cotiza as $key => $f) {
 
         $empresa = $f['emp'];
@@ -31,6 +33,8 @@ function savCatizaActiguo($cotiza, $link){
             
             $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior',0,0,0),";
 
+            $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$empresa'";
+
         }
     }
 
@@ -47,6 +51,8 @@ cz_num_compra,cz_num_venta) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link,$insert);
         unset($insert);
         
+        $respup    = mysqli_query($link,$upd_x_emp);
+        unset($respup);
     }
 
     unset($del_x_cod);
