@@ -74,29 +74,24 @@ function getCotizacionGrupoActiguo(){
 
     $respemp   = mysqli_query($link, $sqlemp);
 
-    $fec_inicio   = '20171117';//date('Ymd');
-    $fec_fin      = '20171117';//date('Ymd');
-
-    $fecha        = date('Y-m-d');
+    $fec_inicio   = date('Ymd');
+    $fec_fin      = date('Ymd');
 
     $c = 0;
     while ($e = mysqli_fetch_array($respemp)) {
         
         $nemonico = $e['nemonico'];
-        $codemp = '';
 
         $url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fec_inicio&fec_fin=$fec_fin&nemonico=$nemonico";
         $html = file_get_html($url);
 
         $new_data = getPrepareDataAntiguo($nemonico, $html);
 
+        $new_data = ordenarArray($new_data,'f','ASC');
+
         if (count($new_data)>0) {
 
-            $res = savCatizaActiguo($link,$new_data, $nemonico);
-
-            //Actualizamos la fecha de la ultima importacion
-            //$upimp = "UPDATE empresa em SET em.last_feem_imp_cz='$date' WHERE em.nemonico='$nemonico'"; 
-            //mysqli_query($link, $upimp);
+            $res = savCatizaActiguo($link, $new_data, $nemonico);
 
             $c ++;
         }

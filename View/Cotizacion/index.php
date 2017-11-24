@@ -137,7 +137,7 @@
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin},
+            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val()},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
                 getHistorico();

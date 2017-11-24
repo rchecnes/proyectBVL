@@ -14,6 +14,8 @@ function indexAction(){
 function importarManualAction(){
 
 	require_once("../Model/CotizaGrupoM.php");
+	require_once("../Model/ImportarAntiguoM.php");
+	include("../Util/simple_html_dom_php5.6.php");
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
@@ -27,7 +29,7 @@ function importarManualAction(){
 	$diaini = '23';
 	$diafin = '23';
 
-	$data = get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=$codemp&_informaciongeneral_WAR_servicesbvlportlet_nemonico=$nemonico&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=$anioini&_informaciongeneral_WAR_servicesbvlportlet_mesini=$mesini&_informaciongeneral_WAR_servicesbvlportlet_anofin=$aniofin&_informaciongeneral_WAR_servicesbvlportlet_mesfin=$mesfin&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=$nemonico");
+	/*$data = get_remote_data("https://www.bvl.com.pe/web/guest/informacion-general-empresa?p_p_id=informaciongeneral_WAR_servicesbvlportlet&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=1&_informaciongeneral_WAR_servicesbvlportlet_cmd=getListaHistoricoCotizaciones&_informaciongeneral_WAR_servicesbvlportlet_codigoempresa=$codemp&_informaciongeneral_WAR_servicesbvlportlet_nemonico=$nemonico&_informaciongeneral_WAR_servicesbvlportlet_tabindex=4&_informaciongeneral_WAR_servicesbvlportlet_jspPage=%2Fhtml%2Finformaciongeneral%2Fview.jsp","_informaciongeneral_WAR_servicesbvlportlet_anoini=$anioini&_informaciongeneral_WAR_servicesbvlportlet_mesini=$mesini&_informaciongeneral_WAR_servicesbvlportlet_anofin=$aniofin&_informaciongeneral_WAR_servicesbvlportlet_mesfin=$mesfin&_informaciongeneral_WAR_servicesbvlportlet_nemonicoselect=$nemonico");
 
 	$new_data = prepararData($data);
 
@@ -38,7 +40,25 @@ function importarManualAction(){
 		$res = savAction($link,$new_data, $nemonico);
 		
 		echo $res;
-	}
+	}*/
+
+	$fecha_inicio = str_replace("-","",$_POST['fecha_inicio']);
+	$fecha_fin = str_replace("-","",$_POST['fecha_fin']);
+	$url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";
+
+    $html = file_get_html($url);
+
+    $new_data = getPrepareDataAntiguo($nemonico, $html);
+
+    $new_data = ordenarArray($new_data,'f','ASC');
+    //var_dump($new_data);
+
+    if (count($new_data)>0) {
+
+        $res = savCatizaActiguo($link, $new_data, $nemonico);
+    }
+
+    unset($new_data);
 }
 
 function listarAction(){
