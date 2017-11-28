@@ -4,10 +4,10 @@
 //El cron se ejecuta a las 10:15pm de cada dia
 //Se esta registrando desde el dia 22/05/2017
 //CONFIGURAR CRON CON ESTA LINEA
-//opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
+# /opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
@@ -99,7 +99,9 @@ function getCotizacionGrupoActiguo(){
         unset($new_data);
     }
     
-    echo $c." Empresas actualizadas";
+    
+    echo ":".$c." Empresas actualizadas de $fec_inicio al  $fec_fin";
+    
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat
