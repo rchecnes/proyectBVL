@@ -1,7 +1,7 @@
 <?php
 require_once('TiempoC.php');
 
-require "../vendor/autoload.php";
+//require "../vendor/autoload.php";
 
 function getFavoritoGrupo($cod_user,$cod_grupo){
 
