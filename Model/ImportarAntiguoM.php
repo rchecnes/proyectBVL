@@ -112,7 +112,7 @@ function getPrepareDataAntiguo($empresa, $html){
 	                    'min'=> (double)str_replace(" ","",$e->find('td',4)->plaintext),
 	                    'prd'=> (double)str_replace(" ","",$e->find('td',5)->plaintext),
 	                    'cn' => (double)str_replace(" ","",$e->find('td',6)->plaintext),
-	                    'mn' => (double)str_replace(" ","",$e->find('td',7)->plaintext),
+	                    'mn' => (double)str_replace(",","",$e->find('td',7)->plaintext),
 	                    'fa' => ($fecha_anterior!='')?$fecha_anterior:"0000-00-00",
 	                    'ca' => (double)str_replace(" ","",$e->find('td',9)->plaintext)
 	                    );
