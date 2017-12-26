@@ -71,7 +71,7 @@ function getCotizacionGrupoActiguo(){
                 LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
                 WHERE se.estado='1'
                 AND em.estado='1'";
-
+                //AND (em.nemonico LIKE 'T%' OR em.nemonico LIKE 'U%' OR em.nemonico LIKE 'V%' OR em.nemonico LIKE 'X%' OR em.nemonico LIKE 'Y%')
     $respemp   = mysqli_query($link, $sqlemp);
 
     $fec_inicio   = date('Ymd');
