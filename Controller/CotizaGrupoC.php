@@ -61,7 +61,7 @@ function getCotizacionGrupo(){
     echo $c." Empresas actualizadas";
 }
 
-function getCotizacionGrupoActiguo(){
+function getCotizacionGrupoAntiguo(){
 
     //global $ruta;
     $link      = getConexion();
@@ -87,17 +87,21 @@ function getCotizacionGrupoActiguo(){
 
         $new_data = getPrepareDataAntiguo($nemonico, $html);
 
-        $new_data = ordenarArray($new_data,'f','ASC');
+        //$new_data = ordenarArray($new_data,'f','ASC');
 
         if (count($new_data)>0) {
 
-            $res = savCatizaActiguo($link, $new_data, $nemonico);
+            $res = savCatizaAntiguo($link, $new_data, $nemonico);
 
             $c ++;
         }
 
+        unset($url);
+        unset($html);
         unset($new_data);
     }
+
+    mysqli_free_result($respemp);
     
     
     echo ":".$c." Empresas actualizadas de $fec_inicio al  $fec_fin";
@@ -105,7 +109,7 @@ function getCotizacionGrupoActiguo(){
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat
-getCotizacionGrupoActiguo();
+getCotizacionGrupoAntiguo();
 //getCotizacionGrupo();
 
 ?>

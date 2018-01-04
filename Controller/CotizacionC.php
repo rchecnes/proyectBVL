@@ -48,13 +48,13 @@ function importarManualAction(){
 
     $new_data = getPrepareDataAntiguo($nemonico, $html);
 
-    $new_data = ordenarArray($new_data,'f','ASC');
+    //$new_data = ordenarArray($new_data,'f','ASC');
     //var_dump($new_data);
     //exit();
 
     if (count($new_data)>0) {
 
-        $res = savCatizaActiguo($link, $new_data, $nemonico);
+        $res = savCatizaAntiguo($link, $new_data, $nemonico);
     }
 
     unset($new_data);
