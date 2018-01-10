@@ -6,8 +6,8 @@
 //CONFIGURAR CRON CON ESTA LINEA
 # /opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
@@ -61,7 +61,7 @@ function getCotizacionGrupo(){
     echo $c." Empresas actualizadas";
 }
 
-function getCotizacionGrupoActiguo(){
+function getCotizacionGrupoAntiguo(){
 
     //global $ruta;
     $link      = getConexion();
@@ -70,12 +70,14 @@ function getCotizacionGrupoActiguo(){
     $sqlemp    = "SELECT em.nemonico FROM empresa em
                 LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
                 WHERE se.estado='1'
-                AND em.estado='1'
-                AND em.nemonico LIKE 'C%'";
-
+                AND em.estado='1'";
+                //AND (em.nemonico LIKE 'I%')
+                //AND em.nemonico IN('CITIBKC1','COCESUC1','COCESUI1','COFACEC1','COFIDCC1','COFIINC1','COLPERC1','COMACEC1','COMPFC1','CONCESI1','CONTINC1','CORAREC1','CORAREI1','CORLINI1','CPAC','CPACASC1','CPACASI1','CRANDEC1','CRECAPC1','CRECERC1','CREDITC1','CRETEXC1','CRETEXI1','CSCO','CSCOTIC1','CSJ','CSPBFINC','CSPBFINP','CSPFILXG','CVERDEC1')
+                //AND (em.nemonico LIKE 'T%' OR em.nemonico LIKE 'U%' OR em.nemonico LIKE 'V%' OR em.nemonico LIKE 'X%' OR em.nemonico LIKE 'Y%')
+                
     $respemp   = mysqli_query($link, $sqlemp);
 
-    $fec_inicio   = '20170101';//date('Ymd');
+    $fec_inicio   = date('Ymd');
     $fec_fin      = date('Ymd');
 
     $c = 0;
@@ -97,8 +99,12 @@ function getCotizacionGrupoActiguo(){
             $c ++;
         }
 
+        unset($url);
+        unset($html);
         unset($new_data);
     }
+
+    mysqli_free_result($respemp);
     
     
     echo ":".$c." Empresas actualizadas de $fec_inicio al  $fec_fin";
@@ -106,7 +112,7 @@ function getCotizacionGrupoActiguo(){
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat
-getCotizacionGrupoActiguo();
+getCotizacionGrupoAntiguo();
 //getCotizacionGrupo();
 
 ?>
