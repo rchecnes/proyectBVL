@@ -44,6 +44,7 @@ function importarManualAction(){
 	$fecha_fin = str_replace("-","",$_POST['fecha_fin']);
 	$url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";
 
+
     $html = file_get_html($url);
 
     $new_data = getPrepareDataAntiguo($nemonico, $html);
