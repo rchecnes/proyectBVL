@@ -1,5 +1,5 @@
 <?php
-function savCatizaActiguo($link, $cotiza, $nemonico){
+function savCatizaAntiguo($link, $cotiza, $nemonico){
 
     $del_x_cod = "";
     $del_x_emp = "";

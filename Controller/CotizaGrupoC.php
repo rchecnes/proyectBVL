@@ -6,8 +6,8 @@
 //CONFIGURAR CRON CON ESTA LINEA
 # /opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-$ruta = 'public_html/domains/bvl.worldapu.com';
-//$ruta = '..';
+//$ruta = 'public_html/domains/bvl.worldapu.com';
+$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
@@ -70,11 +70,12 @@ function getCotizacionGrupoActiguo(){
     $sqlemp    = "SELECT em.nemonico FROM empresa em
                 LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
                 WHERE se.estado='1'
-                AND em.estado='1'";
+                AND em.estado='1'
+                AND em.nemonico LIKE 'C%'";
 
     $respemp   = mysqli_query($link, $sqlemp);
 
-    $fec_inicio   = date('Ymd');
+    $fec_inicio   = '20170101';//date('Ymd');
     $fec_fin      = date('Ymd');
 
     $c = 0;
@@ -87,11 +88,11 @@ function getCotizacionGrupoActiguo(){
 
         $new_data = getPrepareDataAntiguo($nemonico, $html);
 
-        $new_data = ordenarArray($new_data,'f','ASC');
+        //$new_data = ordenarArray($new_data,'f','ASC');
 
         if (count($new_data)>0) {
 
-            $res = savCatizaActiguo($link, $new_data, $nemonico);
+            $res = savCatizaAntiguo($link, $new_data, $nemonico);
 
             $c ++;
         }
