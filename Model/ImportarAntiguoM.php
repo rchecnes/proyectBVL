@@ -36,12 +36,12 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
             
             $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior',0,0,0),";
 
-            /*if ($cant_data == $contador) {
+            if ($cant_data == $contador) {
 
                 $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$empresa'";
 
                 $respup    = mysqli_query($link, $upd_x_emp);
-            }*/
+            }
 
         }
     }

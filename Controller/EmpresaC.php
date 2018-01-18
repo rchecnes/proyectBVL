@@ -8,7 +8,7 @@ function indexAction(){
 
 	$url = str_replace('/AppChecnes/proyectblv', '', $_SERVER['REQUEST_URI']);
 
-	$sql = "SELECT em.*, se.nombre AS nom_sector, em.nombre AS nom_empresa FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' AND em.estado='1' ORDER BY em.cz_fe_fin DESC, em.nemonico ASC";
+	$sql = "SELECT em.*, se.nombre AS nom_sector, em.nombre AS nom_empresa FROM empresa em LEFT JOIN sector se ON(em.cod_sector=se.cod_sector) WHERE se.estado='1' ORDER BY em.cz_fe_fin DESC, em.nemonico ASC";
 	$empresas = mysqli_query($link, $sql);
 
 	include('../View/Empresa/index.php');
