@@ -119,7 +119,7 @@ function grafico1Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_cierre))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
@@ -127,13 +127,13 @@ function grafico1Action(){
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_cierre))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 	
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 			
 		}
-		
+		//echo $sqlc;
 		//Get Dias col cierre
 		$resc = mysqli_query($link, $sqlc);
 		$rowc = mysqli_fetch_array($resc);
@@ -176,11 +176,14 @@ function grafico1Action(){
 			
 		$roud_serie = ($suma_monto>0)?round((($f['monto']/$suma_monto)*100),0):0;
 
-		if ($roud_serie>0) {
+		if ($roud_serie > 0) {
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = $roud_serie;
-		}	
+		}else{
+			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
+			$series[]    = '';
+		}
 	}
 
 	$categoria = json_encode($categoria);
