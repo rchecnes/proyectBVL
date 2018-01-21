@@ -6,13 +6,12 @@
 //CONFIGURAR CRON CON ESTA LINEA
 # /opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
 require_once($ruta."/Model/ImportarAntiguoM.php");
-require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 
 
 function getCotizacionGrupo(){
@@ -113,43 +112,7 @@ function getCotizacionGrupoAntiguo(){
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat
-//getCotizacionGrupoAntiguo();
+getCotizacionGrupoAntiguo();
 //getCotizacionGrupo();
-
-#Enviar correo a clientes
-#========================
-$link      = getConexion();
-$sqlfa = "SELECT * FROM empresa_favorito";
-$resfa = mysqli_query($link, $sqlfa);
-
-$body = "";
-while ($rf = mysqli_fetch_array($resfa)) {
-    //echo $rf['cod_emp']."<br>";
-    $body .= $rf['cod_emp'];
-
-}
-
-$mail = new PHPMailer(); // defaults to using php "mail()"
-
-
-$mail->SetFrom('rchecnes@acuario.com.pe', 'ADMIN'); //DE
-//$mail->AddReplyTo("name@yourdomain.com","First Last");
-$address = "richardchec@gmail.com";//A QUIEN
-$mail->AddAddress($address, "John Doe");
-
-$mail->Subject    = "Información Actualizado a ".date('d/m/Y');
-
-//$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
-
-$mail->MsgHTML("<h1>".$body."</h1>");
-
-//$mail->AddAttachment("images/phpmailer.gif");      // attachment
-//$mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
-
-if(!$mail->Send()) {
-  echo "Mailer Error: " . $mail->ErrorInfo;
-} else {
-  echo "Message sent!";
-}
 
 ?>
