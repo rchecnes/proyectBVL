@@ -65,7 +65,7 @@ function updatePortafolioAction(){
 	$gan_neta = (double)str_replace(',', '', $_POST['gan_neta']);
 
 	$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_obj='$por_prec_obj',por_gan_net='$gan_neta' WHERE por_cod='$por_cod'";
-	echo $update;
+	//echo $update;
 	$resp = mysqli_query($link,$update);
 
 	echo 'ok';

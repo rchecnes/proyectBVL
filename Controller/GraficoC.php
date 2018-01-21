@@ -119,7 +119,7 @@ function grafico1Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_cierre))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
@@ -127,7 +127,7 @@ function grafico1Action(){
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_cierre))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 	
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
@@ -395,6 +395,13 @@ function grafico2Action(){
 	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 	$rango        = ($_GET['rango']!='')?$_GET['rango']:1;
 
+	$max     = (float)$_GET['max'];
+	$min     = (float)$_GET['min'];
+	$long    = (float)$_GET['long'];
+	$med     = (float)$_GET['med'];
+	$precio  = (float)$_GET['precio'];
+
+	/*
 	//Obtener Max
 	$sqlmax = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
 	$resmax = mysqli_query($link, $sqlmax);
@@ -407,6 +414,9 @@ function grafico2Action(){
 	$min    = ($rowmin['min'] !='')?$rowmin['min']:0;
 	//Obtener Long
 	$long = $max - $min;
+	//Obtener media
+	$med = ($max + $min)/2;
+	*/
 
 	//Fabricar los rangos segun rango de ingreso (caja de texto)
 	//$porcen  = array('0.100','0.225','0.350','0.225','0.100');
@@ -441,7 +451,7 @@ function grafico2Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
@@ -449,7 +459,7 @@ function grafico2Action(){
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(cz_cierre)AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 	
 			//Get Monto
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
@@ -474,10 +484,11 @@ function grafico2Action(){
 	$categoria  = array();
 	$series     = array();
 	$suma_monto = getSumaMonto($tabla);
+	$serie_selected = 0;
 	foreach ($tabla as $key => $f) {
 		//Categorias
 		$fecha_ini = 0;
-		$fecha_fin    = 0;
+		$fecha_fin = 0;
 
 		if ($f['rango_ini'] >=10){
 			$fecha_ini = number_format($f['rango_ini'],2,'.',',');
@@ -501,6 +512,11 @@ function grafico2Action(){
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = $round_serie;
+
+			if ($precio<=$f['rango_ini'] && $precio>=$f['rango_fin']) {
+				$serie_selected = $round_serie;
+			}
+
 		}else{
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
 			$series[]    = '';
@@ -510,6 +526,7 @@ function grafico2Action(){
 
 	$tabla_ult_rf = $tabla[$p-1]['rango_fin'];
 	$categoria    = json_encode($categoria);
+	//echo $categoria."<br>";
 	$series       = json_encode($series);
 
 	include('../View/Grafico/grafico2.php');

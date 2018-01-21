@@ -25,4 +25,5 @@ function limpiarCadena($valor)
 	return $valor;
 }
 
+
 ?>

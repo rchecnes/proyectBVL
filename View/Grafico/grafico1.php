@@ -25,12 +25,15 @@
             $suma_dias  = 0;
             $suma_monto = 0;
             ?>
+            <?php if($prec_unit>$max && $rec_cod=='1'):?>
             <tr bgcolor="<?=($prec_unit>$max && $rec_cod=='1')?'#d2cea3':''?>">
                 <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td align="center">Mantener <i class="glyphicon glyphicon-arrow-up"></i></td>
             </tr>
+            <?php endif; ?>
+
             <?php
             foreach ($tabla as $key => $c):?>
                 <tr bgcolor="<?=($c['rec_cod']==$rec_cod )?'#d2cea3':''?>">
@@ -54,12 +57,16 @@
                 $suma_monto += $c['monto'];
             endforeach;
             ?>
+
+            <?php if($prec_unit<$min && $rec_cod=='7'):?>
             <tr bgcolor="<?=($prec_unit<$min && $rec_cod=='7')?'#d2cea3':''?>">
                 <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td align="center">Mantener <i class="glyphicon glyphicon-arrow-down"></i></i></td>
             </tr>
+            <?php endif; ?>
+
             <tr>
                 <th colspan="2">&nbsp;</th>
                 <th class="align-center"><?=$suma_dias?></th>

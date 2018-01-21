@@ -104,37 +104,9 @@
                             <tr><td>Long</td><td align="center"><input type="text" name="long" id="long" class="align-center" readonly="readonly"></td></tr>
                         </table>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="recomendacion">
-                        <!--<table class="table table-bordered grafico">
-                            <tr><th colspan="4" class="align-center">RECOMENDACIÓN</th></tr></th>
-                            <tr>
-                                <th class="align-center">PESO</th>
-                                <th class="align-center">MES</th>
-                                <th class="align-center">&nbsp;</th>
-                                <th class="align-center">&nbsp;</th>
-                            </tr>
-                            <tr>
-                                <td class="align-center">48.81%</td>
-                                <td class="align-center">12</td>
-                                <th class="align-center">&nbsp;</th>
-                                <th class="align-center">&nbsp;</th>
-                            <tr>
-                            <tr>
-                                <td class="align-center">31.22%</td>
-                                <td class="align-center">6</td>
-                                <th class="align-center">&nbsp;</th>
-                                <th class="align-center">&nbsp;</th>
-                            <tr>
-                            <tr>
-                                <td class="align-center">19.97%</td>
-                                <td class="align-center">3</td>
-                                <th class="align-center">&nbsp;</th>
-                                <th class="align-center">&nbsp;</th>
-                            <tr>
-                        </table>-->
-                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="recomendacion"><!--recomendacion--></div>
                 </div>
-                <div class="row">
+                <div class="row">                    
                     <div class="col-lg-12" id="resultadomontoporprecio"><!--contenido--></div>
                 </div>
             </div>
@@ -145,6 +117,17 @@
                             <label>Rango: 1-100</label>
                             <input type="text" name="rango" id="rango" class="form-control" value="2" size="5" style="max-width: 100px" onkeyup='validaNum(this.value,0,100)'>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <table class="table table-bordered grafico">
+                            <tr><td style="width: 98px!important;">P. Actual</td><td align="center"><input type="text" name="ap_prec_unit" id="ap_prec_unit" class="form-control" style="text-align: center" value="<?=$simu_prec_unit?>"></td></tr></th>
+                            <tr><td>Max</td><td align="center"><input type="text" name="ap_max" id="ap_max" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Min</td><td align="center"><input type="text" name="ap_min" id="ap_min" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Med</td><td align="center"><input type="text" name="ap_med" id="ap_med" class="align-center" readonly="readonly"></td></tr>
+                            <tr><td>Long</td><td align="center"><input type="text" name="ap_long" id="ap_long" class="align-center" readonly="readonly"></td></tr>
+                        </table>
                     </div>
                 </div>
                 <div class="row">
@@ -182,7 +165,7 @@
             //resultadomontoporprecio();
             getPromedioMontoPorPrecio(origen);
         }else if(grafico == '#analisis_de_precio'){
-            resultadoanalisisdeprecio();
+            getPromedioAnalisiDePrecio();
         }else if (grafico == '#cotizacion') {
             resultadocotizacion();
         }
@@ -264,19 +247,63 @@
         });
     }
 
+    getPromedioAnalisiDePrecio = function(origen){
+
+        //console.log("Hola:<?=$simu_prec_unit?>");
+
+        if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
+
+            var fecha_inicio = $("#fecha_inicio").val();
+            var fecha_final = $("#fecha_final").val();
+            var empresa = $("#empresa").val();
+            
+            $("#loading").show();
+
+            $.ajax({
+                type:'GET',
+                dataType: 'json',
+                url: '../Controller/GraficoC.php?accion=promedio',
+                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa},
+
+                success:function(data){
+
+                    $("#ap_max").val(data.max);
+                    $("#ap_min").val(data.min);
+                    $("#ap_long").val(data.long);
+                    $("#ap_med").val(data.med);
+                    if ("<?=$simu_prec_unit?>"=="" && origen!='RMES') {
+                        $("#ap_prec_unit").val(data.cz_ci_fin);
+                    }
+                    
+                    resultadoanalisisdeprecio();
+                }
+            });
+        }else{
+            alert("Debe ingresar Fecha Inicio y Fecha Final");
+        }
+    }
     resultadoanalisisdeprecio = function(){
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='' && $("#rango").val() !='') {
 
-            n = parseInt($("#rango").val());
-            if (n>0 && n<=100){
+            var rango = parseInt($("#rango").val());
+            if (rango>0 && rango<=100){
+
+                var fecha_inicio = $("#fecha_inicio").val();
+                var fecha_final  = $("#fecha_final").val();
+                var empresa      = $("#empresa").val();
+                var max          = $("#ap_max").val();
+                var min          = $("#ap_min").val();
+                var long         = $("#ap_long").val();
+                var med          = $("#ap_med").val();
+                var precio = $("#ap_prec_unit").val();
 
                 $("#loading").show();
 
                 $.ajax({
                     type:'GET',
                     url: '../Controller/GraficoC.php?accion=grafico2',
-                    data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val()},
+                    data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa, max:max, min:min, long:long, med:med, precio:precio, rango:rango},
 
                     success:function(data){
 
@@ -375,7 +402,7 @@
             getPromedioMontoPorPrecio('');
 
         }else if($(this).attr('href')=='#analisis_de_precio'){
-            resultadoanalisisdeprecio();
+            getPromedioAnalisiDePrecio();
             
         }else if($(this).attr('href')=='#cotizacion'){
             resultadocotizacion();
@@ -390,7 +417,7 @@
         if (pestana == '#monto_por_precio') {
             getPromedioMontoPorPrecio('');
         }else if(pestana == '#analisis_de_precio'){
-            resultadoanalisisdeprecio();
+            getPromedioAnalisiDePrecio();
         }else if(pestana == '#cotizacion'){
             resultadocotizacion();
         }
@@ -429,6 +456,14 @@
         clearTimeout(timer);
         timer = setTimeout(function (event) {
             resultadomontoporprecio();
+        }, 500);
+    });
+
+    var timer2;
+    $('#ap_prec_unit').keyup(function () {
+        clearTimeout(timer2);
+        timer2 = setTimeout(function (event) {
+            resultadoanalisisdeprecio();
         }, 500);
     });
 

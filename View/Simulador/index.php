@@ -71,13 +71,13 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Monto Estimado (S/.)</td>
-							<td><input type="text" id="monto_estimado" class="form-control align-center" value="<?=$mont_est?>" onkeyup="buscar('dos','')"></input>
+							<td><input type="text" id="monto_estimado" class="form-control align-center" value="<?=$mont_est?>" param1="dos" param2=""></input>
 							<input type="hidden" name="por_cod" id="por_cod" value="<?=$por_cod?>">
 							</td>
 						</tr>
 						<tr>
 							<td>Precio Unit.</td>
-							<td><input type="text" id="precio_unitario" class="form-control align-center" value="<?=$prec?>" onkeyup="buscar('dos','')"></input></td>
+							<td><input type="text" id="precio_unitario" class="form-control align-center" value="<?=$prec?>" param1="dos" param2=""></input></td>
 						</tr>
 						<tr>
 							<td>Cant. Acciones</td>
@@ -94,7 +94,7 @@
 						</tr>
 						<tr>
 							<td style="width: 50%">Renta. Objetivo</td>
-							<td><input type="text" id="gan_rent_obj" class="form-control align-center" onkeyup="buscar('dos','renta_obj')" value="<?=$rent_obj?>"></input></td>
+							<td><input type="text" id="gan_rent_obj" class="form-control align-center" param1="dos" param2="renta_obj" value="<?=$rent_obj?>"></input></td>
 						</tr>
 						<tr>
 							<td>Precio Min.</td>
@@ -102,7 +102,7 @@
 						</tr>
 						<tr>
 							<td>Precio Objetivo</td>
-							<td><input type="text" id="gan_pre_obj" class="form-control align-center" value="<?=$prec_act?>" onkeyup="buscar('dos','precio_obj')"></input></td>
+							<td><input type="text" id="gan_pre_obj" class="form-control align-center" value="<?=$prec_act?>" param1="dos" param2="precio_obj"></input></td>
 						</tr>
 						<tr>
 							<td>Var. Precio</td>
@@ -249,14 +249,15 @@
 				$("#add_portafolio").hide();
 				$("#update_portafolio").show();
 
-				$("#monto_estimado").attr('disabled','disabled');
-				$("#precio_unitario").attr('disabled','disabled');
+				//$("#monto_estimado").attr('disabled','disabled');
+				//$("#precio_unitario").attr('disabled','disabled');
 				//$("#gan_rent_obj").attr('disabled','disabled');
 				//$("#gan_pre_obj").attr('disabled','disabled');
             }else{
             	$("#new_simulacion").hide();
             	$("#update_portafolio").hide();
             }
+
 
             buscar = function(tipo,tipo_two){
 
@@ -351,6 +352,46 @@
 				    }
 				});
 			}
+
+			var timer1;
+		    $('#monto_estimado').keyup(function () {
+		    	var param1 = $(this).attr("param1");
+		    	var param2 = $(this).attr("param2");
+		        clearTimeout(timer1);
+		        timer1 = setTimeout(function (event) {
+		            buscar(param1, param2);
+		        }, 500);
+		    });
+
+		    var timer2;
+		    $('#precio_unitario').keyup(function () {
+		    	var param1 = $(this).attr("param1");
+		    	var param2 = $(this).attr("param2");
+		        clearTimeout(timer2);
+		        timer2 = setTimeout(function (event) {
+		            buscar(param1, param2);
+		        }, 500);
+		    });
+
+		    var timer3;
+		    $('#gan_rent_obj').keyup(function () {
+		    	var param1 = $(this).attr("param1");
+		    	var param2 = $(this).attr("param2");
+		        clearTimeout(timer3);
+		        timer3 = setTimeout(function (event) {
+		            buscar(param1, param2);
+		        }, 500);
+		    });
+
+		    var timer4;
+		    $('#gan_pre_obj').keyup(function () {
+		    	var param1 = $(this).attr("param1");
+		    	var param2 = $(this).attr("param2");
+		        clearTimeout(timer4);
+		        timer4 = setTimeout(function (event) {
+		            buscar(param1, param2);
+		        }, 500);
+		    });
 
 			$("#cod_grupo").change(function(){
 

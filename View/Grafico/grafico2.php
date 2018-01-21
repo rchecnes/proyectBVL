@@ -1,13 +1,17 @@
 <br>
-<div class="row">
+<!--<div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
         <table class="table table-bordered">
+            <tr>
+                <td style="width: 98px!important;">P. Actual</td><td align="center"><input type="text" name="prec_unit" id="prec_unit" class="form-control" style="text-align: center" value="<?=$simu_prec_unit?>"></td>
+            </tr>
             <tr><td>Max</td><td><?=number_format($max,3,'.',',')?></td></tr>
             <tr><td>Min</td><td><?=number_format($min,3,'.',',')?></td></tr>
+            <tr><td>Med</td><td><?=number_format($med,3,'.',',')?></td></tr>
             <tr><td>Long</td><td><?=number_format($long,3,'.',',')?></td></tr>
         </table>
     </div>
-</div>
+</div>-->
 <div class="row">
     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
         <table class="table table-bordered" id="tabla_grafico2">
@@ -18,11 +22,23 @@
                 <th class="align-center">Días</th>
                 <th class="align-center">Monto</th>
             </tr>
+
+            <?php if($precio>$max):?>
+            <tr bgcolor="<?=($precio>$max)?'#d2cea3':''?>">
+                <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <?php endif; ?>
+
             <?php 
             $suma_dias  = 0;
             $suma_monto = 0;
-            foreach ($tabla as $key => $c):?>
-                <tr>
+            foreach ($tabla as $key => $c):
+
+                $selected = ($precio<=$c['rango_ini'] && $precio>=$c['rango_fin'])?"#d2cea3":"";
+            ?>
+                <tr bgcolor="<?=$selected?>">
                     <?php
                     $style = '';
                     $tabla_ult_rf = number_format($tabla_ult_rf,3,'.',',');
@@ -54,6 +70,14 @@
                 $suma_monto += $c['monto'];
             endforeach;
             ?>
+            <?php if($precio<$min):?>
+            <tr bgcolor="<?=($precio<$min)?'#d2cea3':''?>">
+                <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <?php endif; ?>
+
             <tr>
                 <th colspan="2">&nbsp;</th>
                 <th class="align-center"><?=$suma_dias?></th>
@@ -69,14 +93,18 @@
 </div>
 <br>
 <br>
+<?php
+echo "Medio:".$serie_selected;
+?>
 
 <script type="text/javascript">
-$(document).ready(function(){
-    //Tamaño de la grafica
-    var heightc = ($("#tabla_grafico2").height() > 300)?$("#tabla_grafico2").height():300;
-    $("#container2").css({height:heightc+'px'});
-    //console.log();
-});
+    $(document).ready(function(){
+        //Tamaño de la grafica
+        var heightc = ($("#tabla_grafico2").height() > 300)?$("#tabla_grafico2").height():300;
+        $("#container2").css({height:heightc+'px'});
+        //console.log();
+    });
+
 	Highcharts.chart('container2', {
     chart: {
         type: 'bar'
@@ -142,7 +170,13 @@ $(document).ready(function(){
         name: 'MONTO NEGOCIADO (%)',
         valueSuffix: ' %',
         groupPadding: 0,
-        data: <?=$series?>
+        data: <?=$series?>/*,
+        zones: [{
+            value: <?=$serie_selected?>,
+            color: '#d2cea3'
+        }, {
+            color: '#90ed7d'
+        }]*/
     }]
 });
 </script>
