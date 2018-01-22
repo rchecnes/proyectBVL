@@ -24,7 +24,7 @@
             </tr>
 
             <?php if($precio>$max):?>
-            <tr bgcolor="<?=($precio>$max)?'#d2cea3':''?>">
+            <tr bgcolor="<?=($precio>$max)?'#ff9966':''?>">
                 <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -36,7 +36,7 @@
             $suma_monto = 0;
             foreach ($tabla as $key => $c):
 
-                $selected = ($precio<=$c['rango_ini'] && $precio>=$c['rango_fin'])?"#d2cea3":"";
+                $selected = ($precio<=$c['rango_ini'] && $precio>=$c['rango_fin'])?"#ff9966":"";
             ?>
                 <tr bgcolor="<?=$selected?>">
                     <?php
@@ -71,7 +71,7 @@
             endforeach;
             ?>
             <?php if($precio<$min):?>
-            <tr bgcolor="<?=($precio<$min)?'#d2cea3':''?>">
+            <tr bgcolor="<?=($precio<$min)?'#ff9966':''?>">
                 <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -94,7 +94,7 @@
 <br>
 <br>
 <?php
-echo "Medio:".$serie_selected;
+//echo "Medio:".$serie_selected;
 ?>
 
 <script type="text/javascript">
@@ -170,13 +170,7 @@ echo "Medio:".$serie_selected;
         name: 'MONTO NEGOCIADO (%)',
         valueSuffix: ' %',
         groupPadding: 0,
-        data: <?=$series?>/*,
-        zones: [{
-            value: <?=$serie_selected?>,
-            color: '#d2cea3'
-        }, {
-            color: '#90ed7d'
-        }]*/
+        data: <?=$series?>
     }]
 });
 </script>

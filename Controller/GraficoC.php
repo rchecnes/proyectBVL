@@ -179,10 +179,11 @@ function grafico1Action(){
 		if ($roud_serie > 0) {
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = $roud_serie;
+			$color_serie = ($f['rec_cod']==$rec_cod )?'#ff7733':'#1aa3ff';
+			$series[]    = array('name'=>'Colum','y'=>$roud_serie,'color'=>$color_serie);
 		}else{
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = '';
+			$series[]    = array('name'=>'Colum','y'=>0,'color'=>'');
 		}
 	}
 
@@ -511,15 +512,14 @@ function grafico2Action(){
 		if ($round_serie > 0) {
 
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = $round_serie;
-
-			if ($precio<=$f['rango_ini'] && $precio>=$f['rango_fin']) {
-				$serie_selected = $round_serie;
-			}
+			
+			$color_serie = ($precio<=$f['rango_ini'] && $precio>=$f['rango_fin'])?'#ff7733':'#1aa3ff';
+			
+			$series[]    = array('name'=>'Colum','y'=>$round_serie,'color'=>$color_serie);
 
 		}else{
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = '';
+			$series[]    = array('name'=>'Colum','y'=>0,'color'=>'#1aa3ff');
 		}
 		
 	}
@@ -528,7 +528,7 @@ function grafico2Action(){
 	$categoria    = json_encode($categoria);
 	//echo $categoria."<br>";
 	$series       = json_encode($series);
-
+	//echo $series;
 	include('../View/Grafico/grafico2.php');
 }
 

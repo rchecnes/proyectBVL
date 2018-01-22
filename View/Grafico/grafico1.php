@@ -26,7 +26,7 @@
             $suma_monto = 0;
             ?>
             <?php if($prec_unit>$max && $rec_cod=='1'):?>
-            <tr bgcolor="<?=($prec_unit>$max && $rec_cod=='1')?'#d2cea3':''?>">
+            <tr bgcolor="<?=($prec_unit>$max && $rec_cod=='1')?'#ff9966':''?>">
                 <td colspan="2" align="center">> <?=number_format($max,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -36,7 +36,7 @@
 
             <?php
             foreach ($tabla as $key => $c):?>
-                <tr bgcolor="<?=($c['rec_cod']==$rec_cod )?'#d2cea3':''?>">
+                <tr bgcolor="<?=($c['rec_cod']==$rec_cod )?'#ff9966':''?>">
                     <!--<td><?=$c['porcen']?></td>-->
                     <td class="align-center"><?php if($c['rango_ini']>=10):echo number_format($c['rango_ini'],2,'.',',');
                         elseif($c['rango_ini']>=1 && $c['rango_ini']<10):echo number_format($c['rango_ini'],3,'.',',');
@@ -59,7 +59,7 @@
             ?>
 
             <?php if($prec_unit<$min && $rec_cod=='7'):?>
-            <tr bgcolor="<?=($prec_unit<$min && $rec_cod=='7')?'#d2cea3':''?>">
+            <tr bgcolor="<?=($prec_unit<$min && $rec_cod=='7')?'#ff9966':''?>">
                 <td colspan="2" align="center">< <?=number_format($min,3,'.','')?></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -84,6 +84,8 @@
 <br>
 
 <script type="text/javascript">
+    var colors = ['#3B97B2', '#67BC42', '#FF56DE', '#E6D605', '#BC36FE', '#000'];
+
 	Highcharts.chart('container1', {
     chart: {
         type: 'bar'
@@ -150,6 +152,7 @@
         valueSuffix: ' %',
         groupPadding: 0,
         data: <?=$series?>
+        
     }]
 });
 </script>
