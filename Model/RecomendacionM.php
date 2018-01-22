@@ -1,6 +1,6 @@
 <?php
 
-function calcularRecomendacion($link, $fecha_final, $nemonico, $prec_unit, $mes){
+function getRecomendacioPorMes($link, $fecha_final, $nemonico, $prec_unit, $mes){
 
 	//Restamos mese a la fecha final
 	$fecha    = $fecha_final;
@@ -65,21 +65,9 @@ function calcularRecomendacion($link, $fecha_final, $nemonico, $prec_unit, $mes)
 	return array($cod_rec, $nom_rec);
 }
 
-function recomendacionSimuladorAction(){
+function getRecomendacionFinal($link, $nemonico, $prec_unit){
 
-	include('../Config/Conexion.php');
-	$link = getConexion();
-
-	$cod_emp   = $_GET['cod_emp'];
-	$cod_user  = $_SESSION['cod_user'];
-	$prec_unit = $_GET['prec_unit'];
 	$tp_fecha  = date('Y-m-d');
-
-	//CODIGO EMPRESA
-	$sqlemp   = "SELECT * FROM empresa WHERE cod_emp='$cod_emp'";
-	$resemp   = mysqli_query($link, $sqlemp);
-	$ep       = mysqli_fetch_array($resemp);
-	$nemonico = $ep['nemonico'];
 
 	//PORCENTAJE RECOMENDACION
 	$sqlpre = "SELECT * FROM porce_recomendacion";
@@ -98,9 +86,9 @@ function recomendacionSimuladorAction(){
 	}
 
 	//RECOMENDACION
-	list($codRec12m, $valRec12) = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 12);
-	list($codRec6m, $valRec6 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 6);
-	list($codRec3m, $valRec3 )  = calcularRecomendacion($link, $tp_fecha, $nemonico, $prec_unit, 3);
+	list($codRec12m, $valRec12) = getRecomendacioPorMes($link, $tp_fecha, $nemonico, $prec_unit, 12);
+	list($codRec6m, $valRec6 )  = getRecomendacioPorMes($link, $tp_fecha, $nemonico, $prec_unit, 6);
+	list($codRec3m, $valRec3 )  = getRecomendacioPorMes($link, $tp_fecha, $nemonico, $prec_unit, 3);
 
 	$valRec12m = (isset($rec[$codRec12m]['rc_valor']))?$rec[$codRec12m]['rc_valor']:0;
 	$valRec6m  = (isset($rec[$codRec6m]['rc_valor']))?$rec[$codRec6m]['rc_valor']:0;
@@ -114,5 +102,6 @@ function recomendacionSimuladorAction(){
 			$recfinaltxt = $v['rc_nom'];
 		}
 	}
-	echo $recfinaltxt;
+
+	return  $recfinaltxt;
 }

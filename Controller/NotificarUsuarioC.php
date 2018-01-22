@@ -1,8 +1,9 @@
 <?php
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 require_once($ruta.'/Config/Conexion.php');
+require_once($ruta.'/Model/RecomendacionM.php');
 
 
 function enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido){
@@ -28,23 +29,76 @@ function enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido)
 	//$mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
 
 	if(!$mail->Send()) {
-	  echo "Mailer Error: " . $mail->ErrorInfo;
+	  return $mail->ErrorInfo;
 	} else {
-	  echo "Message sent!";
+	  return true;
 	}
+}
+
+function getContenidoCorreo($link, $cod_user){
+
+	$sqlfa = "SELECT * FROM empresa_favorito ef
+			  INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+			  WHERE ef.cod_user='$cod_user' AND ef.est_fab='1' ORDER BY e.cz_fe_fin DESC";
+	$resfa = mysqli_query($link, $sqlfa);
+
+	$body = "<table border='1' cellpadding='0' cellspacing='0'>";
+	$body .= "<tr><th colspan='2' align='center'>Empresa</th><th colspan='2' align='center'>Última Cotización</th><th>&nbsp;</th></tr>";
+	$body .= "<tr><th bgcolor='#e8bd19' align='center'>Nemónico</th><th bgcolor='#e8bd19' align='center'>Nombre</th><th bgcolor='#e8bd19' align='center'>Fecha</th><th bgcolor='#e8bd19' align='center'>Precio</th><th bgcolor='#e8bd19' align='center'>Recomendación</th></tr>";
+
+	while ($rf = mysqli_fetch_array($resfa)) {
+	    //echo $rf['cod_emp']."<br>";
+		$nemonico   = $rf['nemonico'];
+		$empresa    = $rf['nombre'];
+		$cz_fe_fin  = $rf['cz_fe_fin'];
+		$prec_unit  = $rf['cz_ci_fin'];
+
+	    $recomendacion = getRecomendacionFinal($link, $nemonico, $prec_unit);
+
+	    $body .= "<tr>";
+	    	$body .= "<td align='center'>$nemonico</td>";
+	    	$body .= "<td align='left'>$empresa</td>";
+	    	$body .= "<td align='center'>$cz_fe_fin</td>";
+	    	$body .= "<td align='right'>".number_format($prec_unit,3,'.',',')."</td>";
+	    	$body .= "<td align='center'>$recomendacion</td>";
+
+	    $body .= "</tr>";
+
+	}
+
+	$body .= "</table>";
+
+	return $body;
 }
 
 function NotificarCotizacion(){
+	
+	$link  = getConexion();
 
-	$link      = getConexion();
-	$sqlfa = "SELECT * FROM empresa_favorito";
-	$resfa = mysqli_query($link, $sqlfa);
+	$sqluser = "SELECT * FROM user WHERE cod_role='1'";
+	$resuser = mysqli_query($link, $sqluser);
+	
+	$remitente['correo'] = "rchecnes@gmail.com";
+	$remitente['nombre'] = "Robot";
 
-	$body = "";
-	while ($rf = mysqli_fetch_array($resfa)) {
-	    //echo $rf['cod_emp']."<br>";
-	    $body .= $rf['cod_emp'];
+	while ($wu = mysqli_fetch_array($resuser)) {
+		
+		$receptor['correo'] = $wu['email_user'];
+		$receptor['nombre'] = $wu['nomb_user'];
 
+		$copia['correo'] = "rchecnes@gmail.com";
+		$copia['nombre'] = "Richard Checnes";
+
+		$asunto = "Notificacion BVL - Cotización";
+
+		$contenido  = getContenidoCorreo($link, $wu['cod_user']);
+
+		//echo $contenido;
+		$rptacorreo = enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido);
+
+		echo "Envio a ".$wu['email_user'].":".$rptacorreo."<br>";
 	}
 }
+
+NotificarCotizacion();
 ?>
