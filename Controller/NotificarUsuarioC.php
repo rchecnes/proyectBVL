@@ -15,7 +15,7 @@ function enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido)
 
 	$mail->SetFrom($remitente['correo'], $remitente['nombre']); //DE
 	
-	$mail->AddReplyTo($copia['correo'], $copia['nombre']);
+	//$mail->AddReplyTo($copia['correo'], $copia['nombre']);
 
 	$mail->AddAddress($receptor['correo'], $receptor['nombre']);
 
@@ -75,10 +75,10 @@ function NotificarCotizacion(){
 	
 	$link  = getConexion();
 
-	$sqluser = "SELECT * FROM user WHERE cod_role='1'";
+	$sqluser = "SELECT * FROM user";
 	$resuser = mysqli_query($link, $sqluser);
 	
-	$remitente['correo'] = "rchecnes@gmail.com";
+	$remitente['correo'] = "rchecnes@acuario.com.pe";
 	$remitente['nombre'] = "Robot";
 
 	while ($wu = mysqli_fetch_array($resuser)) {
@@ -89,7 +89,7 @@ function NotificarCotizacion(){
 		$copia['correo'] = "rchecnes@gmail.com";
 		$copia['nombre'] = "Richard Checnes";
 
-		$asunto = "Notificacion BVL - Cotización";
+		$asunto = utf8_decode("Notificación BVL - Cotización");
 
 		$contenido  = getContenidoCorreo($link, $wu['cod_user']);
 
