@@ -1,6 +1,6 @@
 <?php
-$ruta = 'public_html/domains/bvl.worldapu.com';
-//$ruta = '..';
+//$ruta = 'public_html/domains/bvl.worldapu.com';
+$ruta = '..';
 require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta.'/Model/RecomendacionM.php');
@@ -39,7 +39,11 @@ function getContenidoCorreo($link, $cod_user){
 
 	$sqlfa = "SELECT * FROM empresa_favorito ef
 			  INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
-			  WHERE ef.cod_user='$cod_user' AND ef.est_fab='1' ORDER BY e.cz_fe_fin DESC";
+			  INNER JOIN user_grupo  ug ON(ef.cod_grupo=ug.cod_grupo)
+			  WHERE ef.cod_user='$cod_user'
+			  AND ef.est_fab='1'
+			  AND ug.cod_user='1'
+			  ORDER BY e.cz_fe_fin DESC";
 	$resfa = mysqli_query($link, $sqlfa);
 
 	$body = "<table border='1' cellpadding='0' cellspacing='0'>";

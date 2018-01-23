@@ -190,7 +190,7 @@ function grafico1Action(){
 			$series[]    = array('name'=>'Colum','y'=>$roud_serie,'color'=>$color_serie);
 		}else{
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = array('name'=>'Colum','y'=>0,'color'=>'');
+			$series[]    = array('name'=>'Colum','y'=>null,'color'=>'');
 		}
 	}
 
@@ -525,7 +525,7 @@ function grafico2Action(){
 
 		}else{
 			$categoria[] = '['.$fecha_ini.' - '.$fecha_fin.']';
-			$series[]    = array('name'=>'Colum','y'=>0,'color'=>'#1aa3ff');
+			$series[]    = array('name'=>'Colum','y'=>null,'color'=>'#1aa3ff');
 		}
 		
 	}
