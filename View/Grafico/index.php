@@ -209,16 +209,22 @@
 
         if ($("#fecha_inicio").val()!='' && $("#fecha_final").val() !='') {
 
-            var mes       = $(".mostrar_graf.active").val();
-            var empresa   = $("#empresa").val();
-            var prec_unit = $("#prec_unit").val();
+            var mes          = $(".mostrar_graf.active").val();
+            var fecha_inicio = $("#fecha_inicio").val();
+            var fecha_final  = $("#fecha_final").val();
+            var empresa      = $("#empresa").val();
+            var max          = $("#max").val();
+            var min          = $("#min").val();
+            var long         = $("#long").val();
+            var med          = $("#med").val();
+            var prec_unit    = $("#prec_unit").val();
             
             $("#loading").show();
 
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico1',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:empresa,prec_unit:prec_unit,mes:mes},
+                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa, prec_unit:prec_unit, mes:mes, max:max, min:min, long:long},
 
                 success:function(data){
 

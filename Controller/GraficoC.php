@@ -78,9 +78,15 @@ function grafico1Action(){
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
 	$nemonico     = $_GET['empresa'];//Empresa
-	$prec_unit    = ($_GET['prec_unit']>0 && $_GET['prec_unit']!='')?$_GET['prec_unit']:0;
+	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
 	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
 
+	$max     = (float)$_GET['max'];
+	$min     = (float)$_GET['min'];
+	$long    = (float)$_GET['long'];
+	$med     = (float)$_GET['med'];
+	$prec_unit  = (float)$_GET['prec_unit'];
+	/*
 	//Obtener Max
 	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
 	$resp = mysqli_query($link, $sql);
@@ -92,6 +98,7 @@ function grafico1Action(){
 	$long = $max - $min;
 	//Obtener media
 	$med = ($max + $min)/2;
+	*/
 
 	//Tabla Grafica
 	$porcen   = array('0.100','0.225','0.350','0.225','0.100');
@@ -119,18 +126,18 @@ function grafico1Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
 
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
 			
 		}
 		//echo $sqlc;
@@ -466,7 +473,6 @@ function grafico2Action(){
 			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
 			
 		}
-		
 
 		//Get Dias col cierre
 		$resc = mysqli_query($link, $sqlc);
