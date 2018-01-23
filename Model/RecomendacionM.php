@@ -82,7 +82,7 @@ function getRecomendacionFinal($link, $nemonico, $prec_unit){
 	$resre = mysqli_query($link,$sqlre);
 	$rec   = array();
 	while ($re = mysqli_fetch_array($resre)) {
-		$rec[$re['rc_cod']] = array('rc_cod'=>$re['rc_cod'],'rc_nom'=>$re['rc_nom'],'rc_valor'=>$re['rc_valor']);
+		$rec[$re['rc_cod']] = array('rc_cod'=>$re['rc_cod'],'rc_nom'=>$re['rc_nom'],'rc_valor'=>$re['rc_valor'],'rc_ord_email'=>$re['rc_ord_email']);
 	}
 
 	//RECOMENDACION
@@ -95,13 +95,15 @@ function getRecomendacionFinal($link, $nemonico, $prec_unit){
 	$valRec3m  = (isset($rec[$codRec3m]['rc_valor']))?$rec[$codRec3m]['rc_valor']:0;
 
 	$recfinaltxt = '';
+	$recfinalord = '';
 	$recfinal = (($prec[1]['ps_peso']/100*($valRec12m))+($prec[2]['ps_peso']/100*($valRec6m))+($prec[3]['ps_peso']/100*($valRec3m)));
 	$recfinal = round($recfinal,0);
 	foreach ($rec as $key => $v) {
 		if ($recfinal == $v['rc_valor']) {
+			$recfinalord = $v['rc_ord_email'];
 			$recfinaltxt = $v['rc_nom'];
 		}
 	}
 
-	return  $recfinaltxt;
+	return  array('rec_ord_email'=>$recfinalord, 'rec_nombre'=>$recfinaltxt);
 }
