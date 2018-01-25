@@ -159,7 +159,7 @@ function datoscabAction(){
 	$info = array(
 				//CABECERA
 				'mont_est'=>number_format($cz_cn_fin,2,'.',''),
-				'pre_unit'=>($cz_ci_fin>=1)?number_format($cz_ci_fin,2,'.',''):number_format($cz_ci_fin,3,'.',''),
+				'pre_unit'=>($cz_ci_fin>=1)?number_format($cz_ci_fin,2,'.',''):number_format($cz_ci_fin,4,'.',''),
 				'cant_acc'=>number_format($cant_acc,0,'.',','),				
 				'mont_neg'=>number_format($mont_neg,2,'.',','),
 				//COMPRA

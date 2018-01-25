@@ -11,13 +11,28 @@ function indexAction(){
 	$cod_user  = $_SESSION['cod_user'];
 
 	
+	/*$sql = "SELECT *,DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new FROM empresa_portafolio ep
+			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
+			WHERE ep.cod_user='$cod_user' ORDER BY em.nemonico ASC";*/
+
 	$sql = "SELECT *,DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new FROM empresa_portafolio ep
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
-			WHERE ep.cod_user='$cod_user' ORDER BY em.nemonico ASC";
+			WHERE ep.cod_user='$cod_user' GROUP BY em.nemonico ORDER BY em.nemonico ASC";
+
 	$portafolio = mysqli_query($link, $sql);
+
 	$cant_reg_port = mysqli_num_rows($portafolio);
 
-	include('../View/Portafolio/index.php');
+	include('../View/Portafolio/indexTwo.php');
+}
+
+function verDetalleAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+	
+	$cod_emp = $_GET['cod_emp'];//numero
+	echo $cod_emp;
 }
 
 function addPortafolioAction(){
@@ -64,7 +79,7 @@ function updatePortafolioAction(){
 	$por_prec_obj = (double)str_replace(',', '', $_POST['prec_act']);
 	$gan_neta = (double)str_replace(',', '', $_POST['gan_neta']);
 
-	$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_obj='$por_prec_obj',por_gan_net='$gan_neta' WHERE por_cod='$por_cod'";
+	$update = "UPDATE empresa_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_obj='$por_prec_obj',por_gan_net='$gan_neta', por_mont_neg='$mont_neg'  WHERE por_cod='$por_cod'";
 	//echo $update;
 	$resp = mysqli_query($link,$update);
 
@@ -92,6 +107,9 @@ function deleteAction(){
 switch ($_GET['accion']) {
 	case 'index':
 		indexAction();
+		break;
+	case 'ver_detalle':
+		verDetalleAction();
 		break;
 	case 'delete':
 		deleteAction();

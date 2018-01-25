@@ -38,7 +38,7 @@
 		
 			<?php
 			$nemonico = '';
-			$sum_mont_neg = $sum_cant = $sum_gan_net = $sum_gan_net_act = 0;
+			$sum_mont_est = $sum_cant = $sum_gan_net = $sum_gan_net_act = 0;
 			$c = 0;
 			while ($p = mysqli_fetch_array($portafolio)):
 
@@ -50,7 +50,7 @@
 		        	$gan_net_act  = getGananciaNeta($link, $p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
-					$sum_mont_neg     += $p['por_mont_neg'];
+					$sum_mont_est     += $p['por_mont_est'];
 					$sum_cant         += $p['por_cant'];
 					$sum_gan_net_obj  += $p['por_gan_net'];
 					$sum_gan_net_act  += $gan_net_act;
@@ -59,10 +59,10 @@
 				        <td class=""><?=($c==0)?$p['nemonico']:'&nbsp;'?></td>
 				        <td class=""><?=($c==0)?$p['nombre']:'&nbsp;'?></td>
 				        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
-				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
+				        <td class="">S/. <?=number_format($p['por_mont_est'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
-				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],3,'.',',')?></td>
-				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],3,'.',',')?></td>
+				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],4,'.',',')?></td>
+				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],4,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
 				        <td class=""><?=($p['por_prec_obj']>=1)?number_format($p['por_prec_obj'],2,'.',','):number_format($p['por_prec_obj'],3,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
@@ -83,9 +83,9 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<th>Total</th>
-						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td>S/. <?=number_format($sum_mont_est,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
+						<td><?=($sum_mont_est / $sum_cant>=1)?number_format($sum_mont_est / $sum_cant,2,'.',','):number_format($sum_mont_est / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						
@@ -100,9 +100,9 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<th>Total</th>
-						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td>S/. <?=number_format($sum_mont_est,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
+						<td><?=($sum_mont_est / $sum_cant>=1)?number_format($sum_mont_est / $sum_cant,2,'.',','):number_format($sum_mont_est / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						
@@ -114,7 +114,7 @@
 		        	$gan_net_act  = getGananciaNeta($link, $p['por_mont_est'], $p['por_prec'], $p['por_cant'], $p['por_rent_obj'], $p['cz_ci_fin']);
 
 
-					$sum_mont_neg     = $p['por_mont_neg'];
+					$sum_mont_est     = $p['por_mont_est'];
 					$sum_cant         = $p['por_cant'];
 					$sum_gan_net_obj  = $p['por_gan_net'];
 					$sum_gan_net_act  = $gan_net_act;
@@ -123,10 +123,10 @@
 				        <td class=""><?=$p['nemonico']?></td>
 				        <td class=""><?=$p['nombre']?></td>
 				        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
-				        <td class="">S/. <?=number_format($p['por_mont_neg'],2,'.',',')?></td>
+				        <td class="">S/. <?=number_format($p['por_mont_est'],2,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_cant'],2,'.',',')?></td>
-				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],3,'.',',')?></td>
-				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],3,'.',',')?></td>
+				        <td class=""><?=($p['por_prec']>=1)?number_format($p['por_prec'],2,'.',','):number_format($p['por_prec'],4,'.',',')?></td>
+				        <td class=""><?=($p['cz_ci_fin']>=1)?number_format($p['cz_ci_fin'],2,'.',','):number_format($p['cz_ci_fin'],4,'.',',')?></td>
 				        <td class=""><?=number_format($gan_net_act,2,'.',',')?></td>
 				        <td class=""><?=($p['por_prec_obj']>=1)?number_format($p['por_prec_obj'],2,'.',','):number_format($p['por_prec_obj'],3,'.',',')?></td>
 				        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
@@ -146,9 +146,9 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<th>Total</th>
-						<td>S/. <?=number_format($sum_mont_neg,2,'.',',')?></td>
+						<td>S/. <?=number_format($sum_mont_est,2,'.',',')?></td>
 						<td><?=number_format($sum_cant,2,'.',',')?></td>
-						<td><?=($sum_mont_neg / $sum_cant>=1)?number_format($sum_mont_neg / $sum_cant,2,'.',','):number_format($sum_mont_neg / $sum_cant,3,'.',',')?></td>
+						<td><?=($sum_mont_est / $sum_cant>=1)?number_format($sum_mont_est / $sum_cant,2,'.',','):number_format($sum_mont_est / $sum_cant,3,'.',',')?></td>
 						<td>&nbsp;</td>
 						<td><?=number_format($sum_gan_net_act,2,'.',',')?></td>
 						<td>&nbsp;</td>						
