@@ -15,7 +15,11 @@ function indexAction(){
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
 			WHERE ep.cod_user='$cod_user' ORDER BY em.nemonico ASC";*/
 
-	$sql = "SELECT *,DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new FROM empresa_portafolio ep
+	$sql = "SELECT *,
+			DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new,
+			SUM(ep.por_mont_est)AS por_mont_est_new,
+			SUM(ep.por_cant)AS por_cant_new
+			FROM empresa_portafolio ep
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
 			WHERE ep.cod_user='$cod_user' GROUP BY em.nemonico ORDER BY em.nemonico ASC";
 
@@ -34,40 +38,12 @@ function verDetalleAction(){
 	
 	$cod_emp = $_GET['cod_emp'];//numero
 
-	$sql = "SELECT * FROM empresa_portafolio ep WHERE ep.cod_emp='$cod_emp' ORDER BY ep.por_fech,ep.por_hora ASC";
+	$sql = "SELECT * FROM empresa_portafolio ep
+			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
+			WHERE ep.cod_emp='$cod_emp' ORDER BY ep.por_fech,ep.por_hora ASC";
 	$res = mysqli_query($link, $sql);
 
-	$html = "";
-	while ($w = mysqli_fetch_array($res)) {
-		$fecha_hora   = $w['por_fech'].' '.$w['por_hora'];
-		$por_mont_est = number_format($w['por_mont_est'],2,'.',',');
-		$por_cant     = number_format($w['por_cant'],2,'.',',');
-		$por_prec     = ($w['por_prec']>=1)?number_format($w['por_prec'],2,'.',','):number_format($w['por_prec'],4,'.',',');
-		$cz_ci_fin    = ($w['cz_ci_fin']>=1)?number_format($w['cz_ci_fin'],2,'.',','):number_format($w['cz_ci_fin'],4,'.',',');
-		$gan_net_act  = getGananciaNeta($link, $w['por_mont_est'], $w['por_prec'], $w['por_cant'], $w['por_rent_obj'], $w['cz_ci_fin']);
-		$gan_net_act  = number_format($gan_net_act,2,'.',',');
-		$por_prec_obj = ($w['por_prec_obj']>=1)?number_format($w['por_prec_obj'],2,'.',','):number_format($w['por_prec_obj'],3,'.',',');
-		$por_gan_net  = number_format($w['por_gan_net'],2,'.',',');
-
-		$html .= "<tr class='port_detalle_$cod_emp'>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>$fecha_hora</td>
-					<td>S/. $por_mont_est</td>
-					<td>$por_cant</td>
-					<td>$por_prec</td>
-					<td>$cz_ci_fin</td>
-					<td>$gan_net_act</td>
-					<td>$por_prec_obj</td>
-					<td>$por_gan_net</td>
-				</tr>";
-	}
-	
-	if ($html=='') {
-		$html .= "";
-	}
-
-	echo $html;
+	include('../View/Portafolio/detalle.php');
 }
 
 function addPortafolioAction(){
@@ -131,8 +107,12 @@ function deleteAction(){
 	$cod_user  = $_GET['cod_user'];
 	$cod_emp   = $_GET['cod_emp'];
 	$por_fech  = $_GET['por_fech'];
+	$por_cod  = $_GET['por_cod'];
+	$todo      = $_GET['todo'];
 
-	$sql  = "DELETE FROM empresa_portafolio WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$por_fech'";
+	$AND_WHERE = ($todo!='si')?" por_cod='$por_cod' AND":"";
+
+	$sql  = "DELETE FROM empresa_portafolio WHERE $AND_WHERE cod_emp='$cod_emp' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$por_fech'";
 	$resp = mysqli_query($link,$sql);
 
 	header("location:../Controller/PortafolioC.php?accion=index");
