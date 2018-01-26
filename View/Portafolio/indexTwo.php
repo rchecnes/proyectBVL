@@ -43,7 +43,7 @@
 			while ($p = mysqli_fetch_array($portafolio)):
 			?>
 				
-				<tr>
+				<tr id="port_cabecera_<?=$p['cod_emp']?>">
 			        <td class=""><?=$p['nemonico']?></td>
 			        <td class=""><?=$p['nombre']?></td>
 			        <td class=""><?=$p['por_fech_new'].' '.$p['por_hora']?></td>
@@ -55,9 +55,9 @@
 			        <td class=""><?=($p['por_prec_obj']>=1)?number_format($p['por_prec_obj'],2,'.',','):number_format($p['por_prec_obj'],3,'.',',')?></td>
 			        <td class=""><?=number_format($p['por_gan_net'],2,'.',',')?></td>
 			        <td class="">
-			        	<a href="#" title="Eliminar" class="ver-detalle button" data="<?=$p['cod_emp']?>">
-				            <i class="fa fa-plus-square fa-2x color-red" aria-hidden="true"></i>
-				        </a>
+			        	<span href="#" title="Eliminar" class="ver-detalle" data="<?=$p['cod_emp']?>">
+				            <i class="fa fa-plus-square fa-2x" aria-hidden="true"></i>
+				        </span>
 			        	<a href="../Controller/PortafolioC.php?accion=delete&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>" title="Eliminar">
 				            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 				        </a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -84,15 +84,27 @@
 
 				var cod_emp = $(this).attr('data');
 
-				$.ajax({
-					url: '../Controller/PortafolioC.php?accion=ver_detalle',
-					type: 'GET',
-					dataType: 'html',
-					data: {cod_emp:cod_emp},
-					success: function(data){
-						console.log(data);
-					}
-				});
+				if ($(".port_detalle_"+cod_emp).is(":visible") == false) {
+
+					//fa fa-minus-square-o
+					$("span", this).hide();
+
+					$.ajax({
+						url: '../Controller/PortafolioC.php?accion=ver_detalle',
+						type: 'GET',
+						dataType: 'html',
+						data: {cod_emp:cod_emp},
+						success: function(data){
+							$(data).insertAfter("#port_cabecera_"+cod_emp);
+						}
+					});
+
+				}else{
+
+					$(".port_detalle_"+cod_emp).remove();
+				}
+
+				
 				
 
 			});
