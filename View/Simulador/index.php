@@ -247,7 +247,17 @@
             	$("#cod_emp").attr('disabled','disabled');
 				$("#cod_grupo").attr('disabled','disabled');
 				$("#add_portafolio").hide();
-				$("#update_portafolio").show();
+				if ('<?=$origen?>' =='por_cab') {
+					$("#update_portafolio").hide();
+
+					$("#monto_estimado").attr('disabled','disabled');
+					$("#precio_unitario").attr('disabled','disabled');
+					$("#gan_rent_obj").attr('disabled','disabled');
+					$("#gan_pre_obj").attr('disabled','disabled');
+				}else{
+					$("#update_portafolio").show();
+				}
+				
 
 				//$("#monto_estimado").attr('disabled','disabled');
 				//$("#precio_unitario").attr('disabled','disabled');

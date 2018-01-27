@@ -10,12 +10,13 @@ function indexAction(){
 	//Estas variable bienen del simulador
 	$por_cod   = isset($_GET['por_cod'])?$_GET['por_cod']:'';
 	$oper      = isset($_GET['oper'])?$_GET['oper']:'';
-	$mont_est  = isset($_GET['mont_est'])?$_GET['mont_est']:'5000.00';
-	$prec      = isset($_GET['prec'])?$_GET['prec']:'';
+	$mont_est  = isset($_GET['mont_est'])?number_format((float)$_GET['mont_est'],2,'.',''):'5000.00';
+	$prec      = isset($_GET['prec'])?number_format((float)$_GET['prec'],2,'.',''):'';
 	$cant      = isset($_GET['cant'])?$_GET['cant']:'';
-	$rent_obj  = isset($_GET['rent_obj'])?$_GET['rent_obj']:'500.00';
-	$prec_act  = isset($_GET['prec_act'])?$_GET['prec_act']:'';
+	$rent_obj  = isset($_GET['rent_obj'])?number_format((float)$_GET['rent_obj'],2,'.',''):'500.00';
+	$prec_act  = isset($_GET['prec_act'])?number_format((float)$_GET['prec_act'],2,'.',''):'';
 	$cod_emp   = isset($_GET['cod_emp'])?$_GET['cod_emp']:'';
+	$origen    = isset($_GET['origen'])?$_GET['origen']:'';
 	$cod_grupo = (isset($_GET['cod_grupo']) && $_GET['cod_grupo']!=0)?$_GET['cod_grupo']:'';
 
 	$cod_user = $_SESSION['cod_user'];
@@ -23,36 +24,11 @@ function indexAction(){
 	include('../View/Simulador/index.php');
 }
 
-function getComision($link, $tipo){
-
-	$sql  = "SELECT * FROM comision WHERE concep='$tipo' LIMIT 1";
-	$resp = mysqli_query($link,$sql);
-	$r    = mysqli_fetch_array($resp);
-
-	return array(
-		'COM_SAB'    =>$r['comis_neta_sab'],
-		'BASE_SAB'   =>5000,
-		'MIN_SAB'    =>50,
-		'COM_BVL'    =>$r['retrib_bvl'],
-		'COM_SMV'    =>$r['contrib_smv'],
-		'F_GARANT'   =>$r['fondo_garant'],
-		'VAL_IGV'    =>$r['igv'],
-		'F_LIQUI'    =>$r['fondo_liq'],
-		'MIN_CAVAL'  =>5,
-		'BASE_CAVAL' =>12210.01,
-		'COM_CAVAL' =>$r['retrib_caval_iclv']
-	);
-}
-
-function round_out ($value, $places=0) {
-  if ($places < 0) { $places = 0; }
-  $mult = pow(10, $places);
-  return ($value >= 0 ? ceil($value * $mult):floor($value * $mult)) / $mult;
-}
 
 function datoscabAction(){
 	
 	include('../Config/Conexion.php');
+	include('../Util/util.php');
 	$link = getConexion();
 
 	$com = getComision($link, 'contado');

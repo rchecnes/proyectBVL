@@ -5,7 +5,7 @@ function indexAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
-
+	include('../Util/util.php');
 	include('../Model/PortafolioM.php');
 
 	$cod_user  = $_SESSION['cod_user'];
@@ -18,7 +18,8 @@ function indexAction(){
 	$sql = "SELECT *,
 			DATE_FORMAT(por_fech,'%d/%m/%Y')AS por_fech_new,
 			SUM(ep.por_mont_est)AS por_mont_est_new,
-			SUM(ep.por_cant)AS por_cant_new
+			SUM(ep.por_cant)AS por_cant_new,
+			SUM(ep.por_gan_net)AS por_gan_net_obj
 			FROM empresa_portafolio ep
 			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
 			WHERE ep.cod_user='$cod_user' GROUP BY em.nemonico ORDER BY em.nemonico ASC";
@@ -28,6 +29,23 @@ function indexAction(){
 	$cant_reg_port = mysqli_num_rows($portafolio);
 
 	include('../View/Portafolio/indexTwo.php');
+}
+
+function getGananciaNetaPorEmpresa($link, $cod_user, $cod_emp){
+
+
+	$sql = "SELECT * FROM empresa_portafolio ep
+			INNER JOIN empresa em ON(ep.cod_emp=em.cod_emp)
+			WHERE ep.cod_user='$cod_user' AND ep.cod_emp='$cod_emp'";
+	$res = mysqli_query($link, $sql);
+
+	$gan_neta = 0;
+	while ($r = mysqli_fetch_array($res)) {
+		
+		$gan_neta += getGananciaNeta($link, $r['por_mont_est'], $r['por_prec'], $r['por_cant'], $r['por_rent_obj'], $r['cz_ci_fin']);
+	}
+
+	return $gan_neta;
 }
 
 function verDetalleAction(){

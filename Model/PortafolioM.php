@@ -1,5 +1,5 @@
 <?php
-function getComision($link, $tipo){
+function getComisionTwo($link, $tipo){
 	//include('../Config/Conexion.php');
 	//$link = getConexion();
 
@@ -24,7 +24,7 @@ function getComision($link, $tipo){
 
 function getGananciaNeta($link, $mont_est, $prec, $cant,  $rent_obj, $prec_act){
 
-	$com = getComision($link, 'contado');
+	$com = getComisionTwo($link, 'contado');
 
 	$cz_cn_fin = $mont_est;//5000.00; //Monto estimado
 	$cz_ci_fin = $prec; //precio unitario

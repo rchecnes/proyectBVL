@@ -44,33 +44,53 @@
 			$c = 0;
 			while ($p = mysqli_fetch_array($portafolio)):
 
-				$por_mont_est_new = $p['por_mont_est_new'];
-				$por_cant_new     = $p['por_cant_new'];
-				$pre_compra = ($por_mont_est_new / $por_cant_new>=1)?number_format($por_mont_est_new / $por_cant_new,2,'.',','):number_format($por_mont_est_new / $por_cant_new,3,'.',',');
+				$por_mont_est = $p['por_mont_est_new'];
+				$por_cant     = $p['por_cant_new'];
+				$por_pre       = $por_mont_est / $por_cant;
+				$gan_net_act      = getGananciaNetaPorEmpresa($link, $p['cod_user'], $p['cod_emp']);
+				$por_gan_net_obj  = $p['por_gan_net_obj'];
+
+				//VARIABLES COMPRAS PARA OBTENER PRECIO OBJETIVO
+				//::::::::::::::::::::::::::::::::::::::::::::::
+				$com = getComision($link, 'contado');
+				$mont_neg       = $por_pre*$por_cant;
+				$c_comision_sab = ($mont_neg>$com['BASE_SAB'])?$mont_neg*($com['COM_SAB']/100):$com['MIN_SAB'];
+				$c_cuota_bvl    = $mont_neg*($com['COM_BVL']/100);
+				$c_f_garantia   = $mont_neg*($com['F_GARANT']/100);
+				$c_cavali       = 0;
+				if ($mont_neg <= $com['BASE_CAVAL']) {
+					if ($mont_neg*($com['COM_CAVAL']/100)<$com['MIN_CAVAL']) {$c_cavali=$com['MIN_CAVAL'];}else{$c_cavali=$mont_neg*($com['COM_CAVAL']/100);}
+				}
+				$c_f_liquidacion = ($mont_neg*($com['F_LIQUI']/100)<1)?0:$mont_neg*($com['F_LIQUI']/100);
+				$c_compra_total  = $c_comision_sab +$c_cuota_bvl+$c_f_garantia+$c_cavali+$c_f_liquidacion;
+				$c_igv           = $c_compra_total*($com['VAL_IGV']/100);
+				$c_compra_smv    = ($mont_neg+$c_compra_total)*($com['COM_SMV']/100);
+				$c_costo_compra  = $c_compra_total+$c_igv+$c_compra_smv;
+				$c_poliza_compra = $c_costo_compra+$mont_neg;
+				$gan_pre_obj     = ($por_cant>0)?round_out(($mont_neg+$por_gan_net_obj+($c_costo_compra*2.1285))/$por_cant,2):0;
 			?>
 				
 				<tr id="port_cabecera_<?=$p['cod_emp']?>" bgcolor="#f9f9f9">
 			        <td class=""><?=$p['nemonico']?></td>
 			        <td class=""><?=$p['nombre']?></td>
 			        <td class="">--</td>
-			        <td class="">S/. <?=number_format($por_mont_est_new,2,'.',',')?></td>
-			        <td class=""><?=number_format($por_cant_new,2,'.',',')?></td>
-			        <td class=""><?=$pre_compra?></td>
-			        <td class=""></td>
-			        <td class=""></td>
-			        <td class=""></td>
-			        <td class=""></td>
-			        <td class="">
-			        	<span href="#" title="Ver Detalle" class="ver-detalle" data="<?=$p['cod_emp']?>">
+			        <td class="" align="right">S/. <?=number_format($por_mont_est,2,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($por_cant,2,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($por_mont_est / $por_cant,4,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($p['cz_ci_fin'],4,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($gan_net_act,2,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($gan_pre_obj,4,'.',',')?></td>
+			        <td class="" align="right"><?=number_format($por_gan_net_obj,2,'.',',')?></td>
+			        <td class="" align="right">
+			        	<span title="Ver Detalle" class="ver-detalle icon-button" data="<?=$p['cod_emp']?>">
 				            <i class="fa fa-plus-square-o fa-2x" aria-hidden="true"></i>
 				        </span>
 			        	<a href="../Controller/PortafolioC.php?accion=delete&por_cod=''&cod_emp=<?=$p['cod_emp']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>&todo=si" title="Eliminar Todo El historial">
 				            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 				        </a>&nbsp;&nbsp;
-				        <a href="../Controller/SimuladorC.php?accion=index&por_cod='<?=$p['por_cod']?>'&oper=ver_simu&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$p['por_mont_est']?>&prec=<?=$p['por_prec']?>&cant=<?=$p['por_cant']?>&rent_obj=<?=$p['por_rent_obj']?>&prec_act=<?=$p['cz_ci_fin']?>" title="Ver en simulador">
+				        <a href="../Controller/SimuladorC.php?accion=index&por_cod=''&oper=ver_simu&origen=por_cab&cod_emp=<?=$p['cod_emp']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$por_mont_est?>&prec=<?=$por_pre?>&cant=<?=$por_cant?>&rent_obj=<?=$por_gan_net_obj?>&prec_act=<?=$gan_pre_obj?>" title="Ver en simulador">
 				            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
 				        </a>
-
 			        </td>
 			    </tr>
 				
@@ -97,6 +117,9 @@
 					//fa fa-minus-square-o
 					//fa-minus-square-o
 					//fa-plus-square-o
+
+					node.children('i').removeClass('fa-plus-square-o');
+					node.children('i').addClass('fa-refresh fa-spin');
 					
 					$.ajax({
 						url: '../Controller/PortafolioC.php?accion=ver_detalle',
@@ -104,7 +127,7 @@
 						dataType: 'html',
 						data: {cod_emp:cod_emp},
 						success: function(data){
-							node.children('i').removeClass('fa-plus-square-o');
+							node.children('i').removeClass('fa-refresh fa-spin');
 							node.children('i').addClass('fa-minus-square-o');
 							$(data).insertAfter("#port_cabecera_"+cod_emp);
 						}

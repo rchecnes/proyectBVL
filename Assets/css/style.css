@@ -127,6 +127,9 @@ input[readonly='readonly'] {
 .color-blue{
     color: #4b8cde!important;
 }
+.color-black{
+    color: #6b6b69!important;
+}
 .bigger-50{
     font-size: 50%!important;
 }
@@ -138,6 +141,9 @@ input[readonly='readonly'] {
 }
 .bigger-300{
     font-size: 300%!important;
+}
+.icon-button:hover{
+    cursor: pointer;
 }
 /*FIN ICONS*/
 

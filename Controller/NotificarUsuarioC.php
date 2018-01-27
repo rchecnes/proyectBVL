@@ -1,9 +1,10 @@
 <?php
-$ruta = 'public_html/domains/bvl.worldapu.com';
-//$ruta = '..';
+//$ruta = 'public_html/domains/bvl.worldapu.com';
+$ruta = '..';
 require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta.'/Model/RecomendacionM.php');
+require_once($ruta.'/Util/util.php');
 
 function ordenarArray($array, $campo, $tipo){
 
@@ -40,6 +41,7 @@ function enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido)
 	$mail->Subject  = $asunto;
 
 	//$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+	$mail->IsHTML(true);
 
 	$mail->MsgHTML($contenido);
 
@@ -85,16 +87,16 @@ function getContenidoCorreo($link, $cod_user){
 
 	//Creamos la cabecera del correo
 	$html_cab = "<table border='1' cellpadding='0' cellspacing='0'>";
-	$html_cab .= "<tr><th>&nbsp;</th><th colspan='2' align='center'>Empresa</th><th colspan='2' align='center'>Última Cotización</th><th>&nbsp;</th></tr>";
-	$html_cab .= "<tr><th bgcolor='#e8bd19' align='center'>Grupo</th><th bgcolor='#e8bd19' align='center'>Nemónico</th><th bgcolor='#e8bd19' align='center'>Nombre</th><th bgcolor='#e8bd19' align='center'>Fecha</th><th bgcolor='#e8bd19' align='center'>Precio</th><th bgcolor='#e8bd19' align='center'>Recomendación</th></tr>";
+	$html_cab .= "<tr><th>&nbsp;</th><th colspan='2' align='center'>Empresa</th><th colspan='2' align='center'>Ultima Cotizacion</th><th>&nbsp;</th></tr>";
+	$html_cab .= "<tr><th bgcolor='#e8bd19' align='center'>Grupo</th><th bgcolor='#e8bd19' align='center'>Nemonico</th><th bgcolor='#e8bd19' align='center'>Nombre</th><th bgcolor='#e8bd19' align='center'>Fecha</th><th bgcolor='#e8bd19' align='center'>Precio</th><th bgcolor='#e8bd19' align='center'>Recomendacion</th></tr>";
 
 	//Creamos el contenido del correo
 	$html_det = "";
 	foreach ($new_array_emp as $key => $v) {
 		
-		$grupo             = $v['grupo'];
-		$nemonico          = $v['nemonico'];
-		$empresa           = $v['empresa'];
+		$grupo             = quitar_tildes($v['grupo']);
+		$nemonico          = quitar_tildes($v['nemonico']);
+		$empresa           = quitar_tildes($v['empresa']);
 		$fecha             = $v['fecha'];
 		$precio            = $v['precio'];
 		$recomendacion     = $v['recomendacion'];
@@ -141,6 +143,7 @@ function NotificarCotizacion(){
 		if($contenido !=''){
 			$rptacorreo = enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido);
 		  	echo "Envio a ".$wu['email_user'].":".$rptacorreo."<br>";
+		  	//echo $contenido."<br>";
 		}
 		
 	}

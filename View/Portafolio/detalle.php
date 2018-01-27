@@ -25,18 +25,18 @@ while ($w = mysqli_fetch_array($res)) {
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		<td><?=$w['por_fech'].' '.$w['por_hora']?></td>
-		<td>S/. <?=number_format($w['por_mont_est'],2,'.',',')?></td>
-		<td><?=number_format($w['por_cant'],2,'.',',')?></td>
-		<td><?=$por_prec?></td>
-		<td><?=$cz_ci_fin?></td>
-		<td><?=$gan_net_act?></td>
-		<td><?=$por_prec_obj?></td>
-		<td><?=$por_gan_net?></td>
+		<td align="right">S/. <?=number_format($w['por_mont_est'],2,'.',',')?></td>
+		<td align="right"><?=number_format($w['por_cant'],2,'.',',')?></td>
+		<td align="right"><?=$por_prec?></td>
+		<td align="right"><?=$cz_ci_fin?></td>
+		<td align="right"><?=$gan_net_act?></td>
+		<td align="right"><?=$por_prec_obj?></td>
+		<td align="right"><?=$por_gan_net?></td>
 		<td>
 			<a href='../Controller/PortafolioC.php?accion=delete&por_cod=<?=$por_cod?>&cod_emp=<?=$cod_emp?>&cod_user=<?=$cod_user?>&por_fech=<?=$por_fech?>&todo=no' title='Eliminar'><i class='fa fa-trash-o fa-2x color-red' aria-hidden='true'></i>
 			</a>&nbsp;&nbsp;
-			<a href='../Controller/SimuladorC.php?accion=index&por_cod=<?=$por_cod?>&oper=ver_simu&cod_emp=<?=$cod_emp?>&cod_grupo=<?=$cod_grupo?>&mont_est=<?=$w['por_mont_est']?>&prec=<?=$w['por_prec']?>&cant=<?=$w['por_cant']?>&rent_obj=<?=$w['por_rent_obj']?>&prec_act=<?=$w['cz_ci_fin']?>' title='Ver en simulador'>
-			    <i class='fa fa-share fa-2x color-blue' aria-hidden='true'></i> 
+			<a href='../Controller/SimuladorC.php?accion=index&por_cod=<?=$por_cod?>&oper=ver_simu&cod_emp=<?=$cod_emp?>&cod_grupo=<?=$cod_grupo?>&mont_est=<?=$w['por_mont_est']?>&prec=<?=$w['por_prec']?>&cant=<?=$w['por_cant']?>&rent_obj=<?=$w['por_rent_obj']?>&prec_act=<?=$w['por_prec_obj']?>' title='Ver en simulador'>
+			    <i class='fa fa-share fa-2x color-black' aria-hidden='true'></i> 
 			</a>
 		</td>
 	</tr>
