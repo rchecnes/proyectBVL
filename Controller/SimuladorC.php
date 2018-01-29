@@ -10,11 +10,11 @@ function indexAction(){
 	//Estas variable bienen del simulador
 	$por_cod   = isset($_GET['por_cod'])?$_GET['por_cod']:'';
 	$oper      = isset($_GET['oper'])?$_GET['oper']:'';
-	$mont_est  = isset($_GET['mont_est'])?number_format((float)$_GET['mont_est'],2,'.',''):'5000.00';
-	$prec      = isset($_GET['prec'])?number_format((float)$_GET['prec'],2,'.',''):'';
+	$mont_est  = isset($_GET['mont_est'])?(float)$_GET['mont_est']:'5000.00';
+	$prec      = isset($_GET['prec'])?(float)$_GET['prec']:'';
 	$cant      = isset($_GET['cant'])?$_GET['cant']:'';
-	$rent_obj  = isset($_GET['rent_obj'])?number_format((float)$_GET['rent_obj'],2,'.',''):'500.00';
-	$prec_act  = isset($_GET['prec_act'])?number_format((float)$_GET['prec_act'],2,'.',''):'';
+	$rent_obj  = isset($_GET['rent_obj'])?(float)$_GET['rent_obj']:'500.00';
+	$prec_act  = isset($_GET['prec_act'])?(float)$_GET['prec_act']:'';
 	$cod_emp   = isset($_GET['cod_emp'])?$_GET['cod_emp']:'';
 	$origen    = isset($_GET['origen'])?$_GET['origen']:'';
 	$cod_grupo = (isset($_GET['cod_grupo']) && $_GET['cod_grupo']!=0)?$_GET['cod_grupo']:'';
@@ -69,7 +69,7 @@ function datoscabAction(){
 		
 	}
 	
-	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?ceil($cz_cn_fin/$cz_ci_fin):0;
+	$cant_acc = ($cz_cn_fin > 0 && $cz_ci_fin>0)?round($cz_cn_fin/$cz_ci_fin):0;
 	$mont_neg = $cz_ci_fin*$cant_acc;
 
 	//VARIABLES COMPRAS
@@ -90,15 +90,15 @@ function datoscabAction(){
 
 	//VARIABLES GANANCIA
 	//::::::::::::::::::
-	$gan_pre_min = ($cant_acc>0)?round_out(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,2):0;
+	$gan_pre_min = ($cant_acc>0)?round_out(($mont_neg+($c_costo_compra*2.12850))/$cant_acc,4):0;
 	
 	if ($tipo_two =='precio_obj') {
-		$gan_pre_obj = $gan_pre_obj;
+		$gan_pre_obj = round_out($gan_pre_obj,4);
 	}else{
 		if ($oper =='ver_simu') {
-			$gan_pre_obj = $gan_pre_obj;
+			$gan_pre_obj = round_out($gan_pre_obj,4);
 		}else{
-			$gan_pre_obj = ($cant_acc>0)?round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,2):0;
+			$gan_pre_obj = ($cant_acc>0)?round_out(($mont_neg+$gan_renta_obj+($c_costo_compra*2.1285))/$cant_acc,4):0;
 		}
 		
 	}

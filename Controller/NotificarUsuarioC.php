@@ -1,6 +1,6 @@
 <?php
-//$ruta = 'public_html/domains/bvl.worldapu.com';
-$ruta = '..';
+$ruta = 'public_html/domains/bvl.worldapu.com';
+//$ruta = '..';
 require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 require_once($ruta.'/Config/Conexion.php');
 require_once($ruta.'/Model/RecomendacionM.php');

@@ -67,7 +67,7 @@
 				$c_compra_smv    = ($mont_neg+$c_compra_total)*($com['COM_SMV']/100);
 				$c_costo_compra  = $c_compra_total+$c_igv+$c_compra_smv;
 				$c_poliza_compra = $c_costo_compra+$mont_neg;
-				$gan_pre_obj     = ($por_cant>0)?round_out(($mont_neg+$por_gan_net_obj+($c_costo_compra*2.1285))/$por_cant,2):0;
+				$gan_pre_obj     = ($por_cant>0)?round_out(($mont_neg+$por_gan_net_obj+($c_costo_compra*2.1285))/$por_cant,4):0;
 			?>
 				
 				<tr id="port_cabecera_<?=$p['cod_emp']?>" bgcolor="#f9f9f9">
