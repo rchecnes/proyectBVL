@@ -61,6 +61,45 @@ function getCotizacionGrupo(){
     echo $c." Empresas actualizadas";
 }
 
+function getDatosGeneralesActiguo($link){
+
+    $url  = "http://www.bvl.com.pe/includes/cotizaciones_busca.dat";
+    $html = file_get_html($url);
+
+    $cotiza = array();
+
+    $cup   = 0;
+
+    foreach($html->find('tr') as $e){
+        
+        if (isset($e->find('td',1)->plaintext)) {
+
+            $compra = (isset($e->find('td',11)->plaintext)==true && $e->find('td',11)->plaintext!='')?$e->find('td',11)->plaintext:0.00;
+            $venta  = (isset($e->find('td',12)->plaintext)==true && $e->find('td',12)->plaintext!='')?$e->find('td',12)->plaintext:0.00;
+            $nro_op = (isset($e->find('td',14)->plaintext)==true && $e->find('td',14)->plaintext!='')?$e->find('td',14)->plaintext:0.00;
+
+            $compra = (double)str_replace(",","",str_replace(" ","",$compra));
+            $venta  = (double)str_replace(",","",str_replace(" ","",$venta));
+            $nro_op = (double)str_replace(",","",str_replace(" ","",$nro_op));
+
+            $nemonico = (string)str_replace(",","",str_replace(" ","",$e->find('td',2)->plaintext));
+            $cz_cod   = date('Ymd');
+
+            //Actualizamos a las cotizaciones con los datos de compra, venta y num oper
+            $sqlup   = "UPDATE cotizacion SET cz_num_oper='$nro_op',cz_num_compra='$compra',cz_num_venta='$venta' WHERE cz_cod='$cz_cod' AND cz_codemp='$nemonico'";
+            $resp    = mysqli_query($link, $sqlup);
+            $row_cnt = mysqli_affected_rows($link);
+
+            if ($row_cnt > 0) {
+                $cup++;
+            }
+        }
+    }
+
+    echo "Actualizacion datos adicionales:".$cup;
+}
+
+
 function getCotizacionGrupoAntiguo(){
 
     //global $ruta;
@@ -108,11 +147,12 @@ function getCotizacionGrupoAntiguo(){
     
     
     echo ":".$c." Empresas actualizadas de $fec_inicio al  $fec_fin";
-    
+
+    //Actualizamos datos adicionales de la cotizacion del dia
+    getDatosGeneralesActiguo($link);    
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat
 getCotizacionGrupoAntiguo();
 //getCotizacionGrupo();
-
 ?>
