@@ -82,7 +82,7 @@ function getDatosGeneralesActiguo($link){
             $venta  = (double)str_replace(",","",str_replace(" ","",$venta));
             $nro_op = (double)str_replace(",","",str_replace(" ","",$nro_op));
 
-            $nemonico = (string)str_replace(",","",str_replace(" ","",$e->find('td',2)->plaintext));
+            $nemonico = (string)str_replace("","",$e->find('td',2)->plaintext);
             $cz_cod   = date('Ymd');
 
             //Actualizamos a las cotizaciones con los datos de compra, venta y num oper
