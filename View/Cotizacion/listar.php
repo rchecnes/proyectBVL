@@ -26,8 +26,8 @@
     $cz_montnegd  = number_format($cz['cz_monto_neg_ori'],2);
     $cz_cierreant = ($cz['cz_cierreant']>1)?number_format($cz['cz_cierreant'],2):number_format($cz['cz_cierreant'],3);
     $cz_num_oper =  number_format($cz['cz_num_oper'],2);
-    $cz_num_compra = number_format($cz['cz_num_compra'],2);
-    $cz_num_venta = number_format($cz['cz_num_venta'],2);
+    $cz_num_compra = ($cz['cz_num_compra']>1)?number_format($cz['cz_num_compra'],2):number_format($cz['cz_num_compra'],3);
+    $cz_num_venta  = ($cz['cz_num_venta']>1)?number_format($cz['cz_num_venta'],2):number_format($cz['cz_num_venta'],3);
 
     ?>
     <tr>

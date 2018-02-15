@@ -79,7 +79,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacion()">
+                <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacion()" disabled="disabled">
                 <input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="getHistorico()">
                 <img src="../Assets/img/load.gif" id="loading" style="display: none">
             </div>
