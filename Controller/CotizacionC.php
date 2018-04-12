@@ -70,7 +70,8 @@ function listarAction(){
 	$fec_inicio = $_GET['fec_inicio'];
 	$fec_fin    = $_GET['fec_fin'];
 	$sector     = $_GET['sector'];
-	$moneda    = $_GET['moneda'];
+	$moneda     = $_GET['moneda'];
+	$origen     = $_GET['origen'];
 
 
 	$sql = "SELECT *, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant
@@ -88,7 +89,14 @@ function listarAction(){
 		$sql .= " AND e.moneda LIKE '%$moneda%'";
 	}
 
-	$sql .= " ORDER BY cz_fecha DESC";
+	if ($origen=='one') {
+		
+		$sql .= " ORDER BY cz.cz_fecha DESC";
+	}elseif ($origen=='two') {
+
+		$sql .= " ORDER BY cz.cz_codemp ASC";
+	}
+	
 
 	//echo $sql;
 	$cotizacion = mysqli_query($link, $sql);
@@ -124,6 +132,28 @@ function buscarEmpresaAction(){
 
 	echo $empresa;
 }
+function buscarEmpresaTodosAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$sector = ($_GET['sector']!='')?" AND cod_sector ='".$_GET['sector']."'":"";
+	$moneda = ($_GET['moneda']!='')?" AND moneda LIKE '%".$_GET['moneda']."%'":"";
+	//$term   = $_GET['term'];
+
+	$sql = "SELECT * FROM empresa WHERE cod_emp!='' $sector $moneda";
+	$resp = mysqli_query($link,$sql);
+
+	//$empresa = "<option value=''>[Ninguno]</option>";
+	$empresa = "<option value=''>Todos</option>";
+
+	while ($row = mysqli_fetch_array($resp)) {
+		$empresa .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['nombre'].' - '.$row['moneda']."</option>";
+
+	}
+
+	echo $empresa;
+}
 
 switch ($_GET['accion']) {
 	case 'index':
@@ -137,6 +167,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'busemp':
 		buscarEmpresaAction();
+		break;
+	case 'busemptodos':
+		buscarEmpresaTodosAction();
 		break;
 	case 'importarmanual':
 		importarManualAction();
