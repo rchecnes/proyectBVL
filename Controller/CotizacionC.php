@@ -37,7 +37,7 @@ function importarManualAction(){
     if ($sector !='') {
     	$sql .= " AND em.cod_sector='$sector'";
     }
-    if ($nemonico_ori !='') {
+    if ($moneda !='') {
     	$sql .= " AND em.moneda='$moneda'";
     }
 

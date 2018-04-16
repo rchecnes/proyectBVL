@@ -194,7 +194,7 @@
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
-            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector option:selected").text(),moneda: $("#moneda").val(), origen:'one'},
+            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector option:selected").val(),moneda: $("#moneda option:selected").val(), origen:'one'},
             success:function(data){
 
                 $("#divHistorico").html(data);
@@ -212,8 +212,8 @@
         var fecha_fin     = $("#fecha_fin").val().split('-');
         var anio_fin      = fecha_fin[0];
         var mes_fin       = fecha_fin[1];
-        var sector        = $("#sector_two").val();
-        var moneda        = $("#moneda_two").val();
+        var sector        = $("#sector_two option:selected").val();
+        var moneda        = $("#moneda_two option:selected").val();
 
         $("#loading").show();
 
@@ -241,7 +241,7 @@
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
-            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector_two option:selected").text(),moneda: $("#moneda_two").val(), origen:'two'},
+            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector_two option:selected").val(),moneda: $("#moneda_two option:selected").val(), origen:'two'},
             success:function(data){
 
                 $("#divHistorico").html(data);
@@ -255,8 +255,8 @@
         var p_Nemonico    = $("#empresa_two").val();
         var fecha_inicio  = $("#fecha_inicio_two").val().split('-');
         var fecha_fin     = $("#fecha_inicio_two").val().split('-');
-        var sector        = $("#sector_two").val();
-        var moneda        = $("#moneda_two").val();
+        var sector        = $("#sector_two option:selected").val();
+        var moneda        = $("#moneda_two option:selected").val();
 
         $("#loading_two").show();
 
