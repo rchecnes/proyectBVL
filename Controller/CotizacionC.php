@@ -23,6 +23,8 @@ function importarManualAction(){
 	$nemonico_ori = $_POST['p_Nemonico'];
 	$fecha_inicio = str_replace("-","",$_POST['fecha_inicio']);
 	$fecha_fin    = str_replace("-","",$_POST['fecha_fin']);
+	$sector       = $_POST['sector'];
+	$moneda       = $_POST['moneda'];
 
 	$sql = "SELECT em.nemonico FROM empresa em
             LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
@@ -31,6 +33,12 @@ function importarManualAction(){
 
     if ($nemonico_ori !='') {
     	$sql .= " AND em.nemonico='$nemonico_ori'";
+    }
+    if ($sector !='') {
+    	$sql .= " AND em.cod_sector='$sector'";
+    }
+    if ($nemonico_ori !='') {
+    	$sql .= " AND em.moneda='$moneda'";
     }
 
     $res = mysqli_query($link, $sql);

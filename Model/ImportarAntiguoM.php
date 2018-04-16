@@ -72,50 +72,53 @@ function getPrepareDataAntiguo($empresa, $html){
 
     $cotiza = array();
 
-    foreach($html->find('tr') as $e){
-    	
-    	if (isset($e->find('td',0)->plaintext)) {
+    if (!empty($html)) {
 
-	        $fecha    = str_replace(" ","",$e->find('td',0)->plaintext);
-	        $apertura = (double)str_replace(" ","",$e->find('td',1)->plaintext);
+        foreach($html->find('tr') as $e){
+        	
+        	if (isset($e->find('td',0)->plaintext)) {
 
-            $fecha_ant = str_replace(" ","",$e->find('td',8)->plaintext);
-	        
-	        if ($fecha !='' && $apertura !='' && $apertura > 0) {
+    	        $fecha    = str_replace(" ","",$e->find('td',0)->plaintext);
+    	        $apertura = (double)str_replace(" ","",$e->find('td',1)->plaintext);
 
-                $fecha_cotiza = "";
-                if ($fecha !='') {
-                    $list = count(explode('/', $fecha));
-                    if ($list == 3) {
-                        list($dia, $mes, $ano) = explode('/', $fecha);
-                        $fecha_cotiza = $ano.'-'.$mes.'-'.$dia;
+                $fecha_ant = str_replace(" ","",$e->find('td',8)->plaintext);
+    	        
+    	        if ($fecha !='' && $apertura !='' && $apertura > 0) {
+
+                    $fecha_cotiza = "";
+                    if ($fecha !='') {
+                        $list = count(explode('/', $fecha));
+                        if ($list == 3) {
+                            list($dia, $mes, $ano) = explode('/', $fecha);
+                            $fecha_cotiza = $ano.'-'.$mes.'-'.$dia;
+                        }
                     }
-                }
-            
-                $fecha_anterior = "";
-                if ($fecha_ant !='') {
-                    $list = count(explode('/', $fecha_ant));
-                    if ($list == 3) {
-                        list($dia, $mes, $ano) = explode('/', $fecha_ant);
-                        $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;
+                
+                    $fecha_anterior = "";
+                    if ($fecha_ant !='') {
+                        $list = count(explode('/', $fecha_ant));
+                        if ($list == 3) {
+                            list($dia, $mes, $ano) = explode('/', $fecha_ant);
+                            $fecha_anterior  = $ano.'-'.$mes.'-'.$dia;
+                        }
                     }
-                }
 
-	            $cotiza[] = array(
-	                    'emp'=> $empresa,
-	                    'f'  => ($fecha_cotiza!='')?$fecha_cotiza:"0000-00-00",
-	                    'a'  => $apertura,
-	                    'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),
-	                    'max'=> (double)str_replace(" ","",$e->find('td',3)->plaintext),
-	                    'min'=> (double)str_replace(" ","",$e->find('td',4)->plaintext),
-	                    'prd'=> (double)str_replace(" ","",$e->find('td',5)->plaintext),
-	                    'cn' => (double)str_replace(",","",$e->find('td',6)->plaintext),
-	                    'mn' => (double)str_replace(",","",$e->find('td',7)->plaintext),
-	                    'fa' => ($fecha_anterior!='')?$fecha_anterior:"0000-00-00",
-	                    'ca' => (double)str_replace(" ","",$e->find('td',9)->plaintext)
-	                    );
-	        }
-	    }
+    	            $cotiza[] = array(
+    	                    'emp'=> $empresa,
+    	                    'f'  => ($fecha_cotiza!='')?$fecha_cotiza:"0000-00-00",
+    	                    'a'  => $apertura,
+    	                    'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),
+    	                    'max'=> (double)str_replace(" ","",$e->find('td',3)->plaintext),
+    	                    'min'=> (double)str_replace(" ","",$e->find('td',4)->plaintext),
+    	                    'prd'=> (double)str_replace(" ","",$e->find('td',5)->plaintext),
+    	                    'cn' => (double)str_replace(",","",$e->find('td',6)->plaintext),
+    	                    'mn' => (double)str_replace(",","",$e->find('td',7)->plaintext),
+    	                    'fa' => ($fecha_anterior!='')?$fecha_anterior:"0000-00-00",
+    	                    'ca' => (double)str_replace(" ","",$e->find('td',9)->plaintext)
+    	                    );
+    	        }
+    	    }
+        }
     }
 
     unset($html);

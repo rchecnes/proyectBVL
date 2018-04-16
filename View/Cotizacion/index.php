@@ -212,12 +212,14 @@
         var fecha_fin     = $("#fecha_fin").val().split('-');
         var anio_fin      = fecha_fin[0];
         var mes_fin       = fecha_fin[1];
+        var sector        = $("#sector_two").val();
+        var moneda        = $("#moneda_two").val();
 
         $("#loading").show();
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val()},
+            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
                 getHistorico();
@@ -253,12 +255,14 @@
         var p_Nemonico    = $("#empresa_two").val();
         var fecha_inicio  = $("#fecha_inicio_two").val().split('-');
         var fecha_fin     = $("#fecha_inicio_two").val().split('-');
+        var sector        = $("#sector_two").val();
+        var moneda        = $("#moneda_two").val();
 
         $("#loading_two").show();
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val()},
+            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
                 getHistoricoTwo();
@@ -286,7 +290,7 @@
         $("#empresa_two").attr('disabled','disabled');
         $.ajax({
             type: 'GET',
-            url: "../Controller/CotizacionC.php?accion=busemp",
+            url: "../Controller/CotizacionC.php?accion=busemptodos",
             data: {sector: $("#sector_two").val(),moneda: $("#moneda_two").val()},
             success: function( data ) {
                 $("#empresa_two").html(data);
