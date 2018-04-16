@@ -27,6 +27,7 @@ $url = str_replace(" ","",$url);
     <ul class="nav navbar-nav">
       <?php if($_SESSION['nom_role']=='ROLE_ADMIN'):?>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/CotizacionC.php?accion=index')?'active':''?>"><a href="../Controller/CotizacionC.php?accion=index">Importar De BVL</a></li>
+        <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/CierreDelDiaC.php?accion=index')?'active':''?>"><a href="../Controller/CierreDelDiaC.php?accion=index">Cierre Del Dia</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/EmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li class="<?=($url=='/AppChecnes/proyectBVL/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>

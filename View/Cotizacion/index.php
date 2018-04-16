@@ -87,7 +87,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacion()" disabled="disabled">
+                        <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacion()">
                         <input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="getHistorico()">
                         <img src="../Assets/img/load.gif" id="loading" style="display: none">
                     </div>
@@ -164,7 +164,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacionTwo()" disabled="disabled">
+                        <input name="button" type="button" class="btn btn-success" id="button" value="Importar Desde BVL" onclick="getCotizacionTwo()">
                         <input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="getHistoricoTwo()">
                         <img src="../Assets/img/load.gif" id="loading_two" style="display: none">
                     </div>
@@ -252,17 +252,13 @@
 
         var p_Nemonico    = $("#empresa_two").val();
         var fecha_inicio  = $("#fecha_inicio_two").val().split('-');
-        var anio_ini      = fecha_inicio[0];
-        var mes_ini       = fecha_inicio[1];
         var fecha_fin     = $("#fecha_inicio_two").val().split('-');
-        var anio_fin      = fecha_fin[0];
-        var mes_fin       = fecha_fin[1];
 
         $("#loading_two").show();
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val()},
+            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val()},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
                 getHistoricoTwo();
