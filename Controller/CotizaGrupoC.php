@@ -76,8 +76,10 @@ function getCotizacionDelDiaActiguo($link){
     $html = file_get_html($url);
 
     $cotiza = array();
+
+    $cd_cod = date('Ymd');
     
-    $sql_ins = "";
+    $sql_ins = $sql_del = "";
 
     foreach($html->find('tr') as $e){
         
@@ -87,8 +89,8 @@ function getCotizacionDelDiaActiguo($link){
 
             if ($nemonico !='') {
 
-                $cd_cod_emp  = getCodEmpresa($link, $nemonico);
-                $cd_cod_fech = date('Ymd');
+                $cd_cod_emp  = $nemonico;
+                
                 $cd_fecha    = date('Y-m-d');
 
                 $cd_cz_ant  = (isset($e->find('td',6)->plaintext)==true && $e->find('td',6)->plaintext!='')?$e->find('td',6)->plaintext:0.00;
@@ -116,23 +118,38 @@ function getCotizacionDelDiaActiguo($link){
                 $cd_ng_mng   = (double)str_replace(",","",str_replace(" ","",$cd_ng_mng));
 
                 //Creamos query insert
-                $sql_ins .= "('$cd_cod_emp','$cd_cod_fech','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
+                $sql_ins .= "('$cd_cod', '$cd_cod_emp','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
+
+                //Creamos sql para eliminar
+                $sql_del .= "'".$cd_cod_emp."',";
 
             }
    
         }
     }
 
-    if($sql_ins!=''){
+    $sql_ins = trim($sql_ins,',');
+    $sql_del = trim($sql_del,',');
 
-        $insert = "INSERT INTO cotizacion_del_dia (cd_cod_emp,cd_cod_fech,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".trim($sql_ins,',').";";
-        $resp    = mysqli_query($link,$insert);
+    if($sql_ins!='' && $sql_del!=''){
+
+        //Eliminamos
+        $delete = "DELETE FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_cod_emp IN(".$sql_del.")";
+        mysqli_query($link, $delete);
+
+        //Insertamos
+        $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_cod_emp,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
+
+        $resp    = mysqli_query($link, $insert);
+        
+        unset($sql_del);
+        unset($delete);
 
         unset($sql_ins);
         unset($insert);
     }
 
-    echo "Se importo correctamente";
+    echo "Se importo correctamente los datos padres";
 }
 
 function getCotizacionGrupoAntiguo(){

@@ -34,7 +34,7 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
 
             $del_x_cod .= "'".$cod."',";
             
-            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior',0,0,0),";
+            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
 
             if ($cant_data == $contador) {
 
@@ -55,8 +55,7 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
         //echo $delete."<br>";
         unset($delete);
 
-        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant,cz_num_oper,
-            cz_num_compra,cz_num_venta) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link,$insert);
         //echo $insert;
         unset($insert);

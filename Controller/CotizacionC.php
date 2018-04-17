@@ -76,9 +76,14 @@ function listarAction(){
 	$origen     = $_GET['origen'];
 
 
-	$sql = "SELECT *, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant
+	/*$sql = "SELECT *, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant
 			FROM cotizacion cz
 			INNER JOIN empresa e ON(cz.cz_codemp=e.nemonico)
+			WHERE cz.cz_fecha BETWEEN '$fec_inicio' AND '$fec_fin'";*/
+	$sql = "SELECT cz.*,e.*, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant, cd.cd_ng_nop, cd.cd_pr_com,cd.cd_pr_ven
+			FROM cotizacion cz
+			INNER JOIN empresa e ON(cz.cz_codemp=e.nemonico)
+			LEFT JOIN cotizacion_del_dia cd ON (cz.cz_cod=cd.cd_cod AND cz.cz_codemp=cd.cd_cod_emp)
 			WHERE cz.cz_fecha BETWEEN '$fec_inicio' AND '$fec_fin'";
 	
 	if ($empresa !='') {
