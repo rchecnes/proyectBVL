@@ -55,6 +55,21 @@ function enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido)
 	}
 }
 
+function getDatosCotiza($link, $fecha, $nemonico){
+
+	$cd_cod   = str_replace('-', '', $fecha);
+	$nemonico = strtoupper($nemonico);
+
+	$sql = "SELECT cd_pr_com, cd_pr_ven FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_cod_emp='$nemonico'";
+	$res = mysqli_query($link, $sql);
+	$w   = mysqli_fetch_array($res);
+
+	$compra = ($w['cd_pr_com']!='')?$w['cd_pr_com']:0;
+	$venta  = ($w['cd_pr_ven']!='')?$w['cd_pr_ven']:0;
+
+	return array($compra, $venta);
+}
+
 function getContenidoCorreo($link, $cod_user){
 
 	$sqlfa = "SELECT * FROM empresa_favorito ef
@@ -72,13 +87,13 @@ function getContenidoCorreo($link, $cod_user){
 		$arr_rec = getRecomendacionFinal($link, $rf['nemonico'], $rf['cz_ci_fin']);
 
 		$array_emp[]         = array(
-										'grupo'=>$rf['nom_grupo'],
-										'nemonico'=>$rf['nemonico'],
-										'precio'=>$rf['cz_ci_fin'],
-										'empresa'=>$rf['nombre'],
-										'fecha'=>$rf['cz_fe_fin'],
-										'orden'=>$arr_rec['rec_ord_email'],
-										'recomendacion'=>$arr_rec['rec_nombre']
+										'grupo'        => $rf['nom_grupo'],
+										'nemonico'     => $rf['nemonico'],
+										'precio'       => $rf['cz_ci_fin'],
+										'empresa'      => $rf['nombre'],
+										'fecha'        => $rf['cz_fe_fin'],
+										'orden'        => $arr_rec['rec_ord_email'],
+										'recomendacion'=> $arr_rec['rec_nombre']
 									);
 		
 	}
@@ -87,8 +102,8 @@ function getContenidoCorreo($link, $cod_user){
 
 	//Creamos la cabecera del correo
 	$html_cab = "<table border='1' cellpadding='0' cellspacing='0'>";
-	$html_cab .= "<tr><th>&nbsp;</th><th colspan='2' align='center'>Empresa</th><th colspan='2' align='center'>Ultima Cotizacion</th><th>&nbsp;</th></tr>";
-	$html_cab .= "<tr><th bgcolor='#e8bd19' align='center'>Grupo</th><th bgcolor='#e8bd19' align='center'>Nemonico</th><th bgcolor='#e8bd19' align='center'>Nombre</th><th bgcolor='#e8bd19' align='center'>Fecha</th><th bgcolor='#e8bd19' align='center'>Precio</th><th bgcolor='#e8bd19' align='center'>Recomendacion</th></tr>";
+	$html_cab .= "<tr><th>&nbsp;</th><th colspan='2' align='center'>Empresa</th><th colspan='4' align='center'>Ultima Cotizacion</th><th>&nbsp;</th></tr>";
+	$html_cab .= "<tr><th bgcolor='#e8bd19' align='center'>Grupo</th><th bgcolor='#e8bd19' align='center'>Nemonico</th><th bgcolor='#e8bd19' align='center'>Nombre</th><th bgcolor='#e8bd19' align='center'>Fecha</th><th bgcolor='#e8bd19' align='center'>Precio</th><th bgcolor='#e8bd19' align='center'>Compra</th><th bgcolor='#e8bd19' align='center'>Venta</th><th bgcolor='#e8bd19' align='center'>Recomendacion</th></tr>";
 
 	//Creamos el contenido del correo
 	$html_det = "";
@@ -101,6 +116,7 @@ function getContenidoCorreo($link, $cod_user){
 		$precio            = $v['precio'];
 		$recomendacion     = $v['recomendacion'];
 
+		list($compra, $venta) = getDatosCotiza($link, $fecha, $v['nemonico']);
 
 	    $html_det .= "<tr>";
 	    	$html_det .= "<td align='left'>$grupo</td>";
@@ -108,6 +124,9 @@ function getContenidoCorreo($link, $cod_user){
 	    	$html_det .= "<td align='left'>$empresa</td>";
 	    	$html_det .= "<td align='center'>$fecha</td>";
 	    	$html_det .= "<td align='right'>".number_format($precio,3,'.',',')."</td>";
+	    	$html_det .= "<td align='right'>".number_format($compra,3,'.',',')."</td>";
+	    	$html_det .= "<td align='right'>".number_format($venta,3,'.',',')."</td>";
+
 	    	$html_det .= "<td align='center'>$recomendacion</td>";
 	    $html_det .= "</tr>";
 

@@ -49,7 +49,12 @@
 	            		<div class="col-lg-3">
 	                        <label>Fecha:</label>
 	                        <div class="form-group">
-	                            <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha Fin" value="<?=date('Y-m-d')?>">
+	                        	<?php
+	                        	$fecha      = date('Y-m-d');
+                            	$fecha_new  = strtotime ( '-0 day' , strtotime ( $fecha ) ) ;
+                            	$fecha_new  = date ( 'Y-m-d' , $fecha_new );
+                            	?>
+	                            <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha Fin" value="<?=$fecha_new?>">
 	                        </div>
 	                    </div>
 	                    <div class="col-lg-3">

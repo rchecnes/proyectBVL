@@ -2,27 +2,27 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th colspan="4" class="align-center">Acciones</th>
-			<th rowspan="2" class="align-center" style="vertical-align: middle;">Moneda</th>
-			<th colspan="5" class="align-center">Cotizaciones</th>
-			<th colspan="2" class="align-center">Propuestas</th>
-			<th colspan="3" class="align-center">Negociación</th>
+			<th colspan="4" class="align-center bg-yellow">Acciones</th>
+			<th rowspan="2" class="align-center bg-yellow" style="vertical-align: middle;">Moneda</th>
+			<th colspan="5" class="align-center bg-yellow">Cotizaciones</th>
+			<th colspan="2" class="align-center bg-yellow">Propuestas</th>
+			<th colspan="3" class="align-center bg-yellow">Negociación</th>
 		</tr>
 		<tr>
-			<th align="center">Empresa</th>
-			<th align="center">Nemonico</th>
-			<th align="center">Sector</th>
-			<th align="center">Segm.</th>
-			<th align="center">Ant.</th>
-			<th align="center">Fecha Ant.</th>
-			<th align="center">Apert.</th>
-			<th align="center">Ultima</th>
-			<th align="center">Var %</th>
-			<th align="center">Compra</th>
-			<th align="center">Venta</th>
-			<th align="center">Nro. Acc.</th>
-			<th align="center">Nro. Oper.</th>
-			<th align="center">Monto. Neg.</th>
+			<th class="align-center bg-gray-dark">Empresa</th>
+			<th class="align-center bg-gray-dark">Nemonico</th>
+			<th class="align-center bg-gray-dark">Sector</th>
+			<th class="align-center bg-gray-dark">Segm.</th>
+			<th class="align-center bg-gray-dark">Ant.</th>
+			<th class="align-center bg-gray-dark">Fecha Ant.</th>
+			<th class="align-center bg-gray-dark">Apert.</th>
+			<th class="align-center bg-gray-dark">Ultima</th>
+			<th class="align-center bg-gray-dark">Var %</th>
+			<th class="align-center bg-gray-dark">Compra</th>
+			<th class="align-center bg-gray-dark">Venta</th>
+			<th class="align-center bg-gray-dark">Nro. Acc.</th>
+			<th class="align-center bg-gray-dark">Nro. Oper.</th>
+			<th class="align-center bg-gray-dark">Monto. Neg.</th>
 		</tr>
 	</thead>
 	
