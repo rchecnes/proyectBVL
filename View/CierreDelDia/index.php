@@ -60,7 +60,7 @@
 	                    <div class="col-lg-3">
 	                    	<label>&nbsp;</label>
 	                    	<div class="form-group">
-	                    		<label><input type="checkbox" name="acciones_hoy" id="acciones_hoy">Solo acciones cotizadas hoy</label>
+	                    		<label><input type="checkbox" checked="checked" name="acciones_hoy" id="acciones_hoy">Solo acciones cotizadas hoy</label>
 	                    	</div>
 	                    </div>
 	                    <div class="col-lg-3">
@@ -76,6 +76,7 @@
 	    </div>
 	    <br>
 		<div id="divHistorico"></div>
+			
 	</div>
 
 </body>

@@ -34,16 +34,16 @@
 			<td><?=$cd['sector']?></td>
 			<td><?=$cd['segmento']?></td>
 			<td><?=$cd['moneda']?></td>
-			<td align="right"><?=number_format($cd['cd_cz_ant'],2)?></td>
-			<td><?=$cd['cz_fant']?></td>
-			<td align="right"><?=number_format($cd['cd_cz_aper'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_cz_ult'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_cz_var'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_pr_com'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_pr_ven'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_ng_nac'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_ng_nop'],2)?></td>
-			<td align="right"><?=number_format($cd['cd_ng_mng'],2,'.',',')?></td>
+			<td align="right"><?=($cd['cd_cz_ant']>0)?number_format($cd['cd_cz_ant'],2):''?></td>
+			<td><?=($cd['cz_fant']!='00/00/0000')?$cd['cz_fant']:''?></td>
+			<td align="right"><?=($cd['cd_cz_aper']>0)?number_format($cd['cd_cz_aper'],2):''?></td>
+			<td align="right"><?=($cd['cd_cz_ult']>0)?number_format($cd['cd_cz_ult'],2):''?></td>
+			<td align="right"><?=($cd['cd_cz_var']>0)?number_format($cd['cd_cz_var'],2):''?></td>
+			<td align="right"><?=($cd['cd_pr_com']>0)?number_format($cd['cd_pr_com'],2):''?></td>
+			<td align="right"><?=($cd['cd_pr_ven']>0)?number_format($cd['cd_pr_ven'],2):''?></td>
+			<td align="right"><?=($cd['cd_ng_nac']>0)?number_format($cd['cd_ng_nac'],2):''?></td>
+			<td align="right"><?=($cd['cd_ng_nop']>0)?number_format($cd['cd_ng_nop'],2):''?></td>
+			<td align="right"><?=($cd['cd_ng_mng']>0)?number_format($cd['cd_ng_mng'],2,'.',','):''?></td>
 		</tr>
 		<?php endwhile; ?>
 	</tbody>

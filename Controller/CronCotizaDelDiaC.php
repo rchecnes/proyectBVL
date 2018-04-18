@@ -95,7 +95,7 @@ function getCotizacionDelDiaActiguo(){
         //Insertamos
         $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_cod_emp,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
         $resp    = mysqli_query($link, $insert);
-        
+
         unset($sql_del);
         unset($delete);
 
