@@ -90,7 +90,7 @@
 		?>
 			<table class="table table-bordered">
 				<tr>
-			        <th colspan="7" class="table-header">
+			        <th colspan="10" class="table-header">
 			        		
 			        			
 			        	<div class="row">
@@ -122,9 +122,11 @@
 			    <tr>
 			        <th class="td-header">Nemónico</th>
 			        <th class="td-header">Nombre</th>
-			        <th class="td-header">Sector</th>
 			        <th align="center" class="td-header">Moneda</th>
 			        <th colspan="2" class="td-header" style="text-align:center">Ult. Cotización</th>
+			        <th class="td-header">Compra</th>
+			        <th class="td-header">Venta</th>
+			        <th class="td-header">Recomendación</th>
 			        <th align="center" class="td-header">Acciones</th>
 			    </tr>
 			    <?php
@@ -138,7 +140,7 @@
 						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'";*/
 				$sql = "SELECT e.cod_emp,e.nombre AS nom_empresa, s.nombre AS nom_sector,e.nemonico,e.moneda,ef.cod_user, ef.cod_grupo,
 						DATE_FORMAT(e.cz_fe_fin,'%d/%m/%Y') AS fe_ult_cotiza,
-						e.cz_ci_fin AS cz_ult_cierre
+						e.cz_ci_fin AS cz_ult_cierre,e.cz_compra,e.cz_venta,e.cz_recomen
 						FROM empresa_favorito ef
 						INNER JOIN empresa e ON (ef.cod_emp=e.cod_emp)
 						INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
@@ -151,10 +153,13 @@
 			    <tr>
 			        <td><?=utf8_encode($em['nemonico'])?></td>
 			        <td><?=$em['nom_empresa']?></td>
-			        <td><?=utf8_encode($em['nom_sector'])?></td>
+			        <!--<td><?=utf8_encode($em['nom_sector'])?></td>-->
 			        <td><?=$em['moneda']?></td>
 			        <td><?=($em['fe_ult_cotiza']!='' && $em['fe_ult_cotiza']!='00/00/0000')?$em['fe_ult_cotiza']:""?></td>
 			        <td align="right"><?=($em['cz_ult_cierre']>0)?number_format($em['cz_ult_cierre'],2,'.',','):""?></td>
+			        <td align="right"><?=($em['cz_compra']>0)?number_format($em['cz_compra'],2,'.',','):""?></td>
+			        <td align="right"><?=($em['cz_venta']>0)?number_format($em['cz_venta'],2,'.',','):""?></td>
+			        <td align="center"><?=$em['cz_recomen']?></td>
 			        			        
 			        <td width="200" align="center">
 			        	<a href="../Controller/FavoritoC.php?accion=delete&cod_emp=<?=$em['cod_emp']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" title="Eliminar">

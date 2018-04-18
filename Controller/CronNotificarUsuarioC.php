@@ -70,6 +70,14 @@ function getDatosCotiza($link, $fecha, $nemonico){
 	return array($compra, $venta);
 }
 
+function updateEmpresa($link, $nemonico, $compra, $venta, $recomendacion){
+
+	$nemonico = strtoupper($nemonico);
+
+	$sql = "UPDATE empresa SET cz_compra='$compra', cz_venta='$venta', cz_recomen='$recomendacion' WHERE nemonico='$nemonico'";
+	$res = mysqli_query($link, $sql);
+}
+
 function getContenidoCorreo($link, $cod_user){
 
 	$sqlfa = "SELECT * FROM empresa_favorito ef
@@ -117,6 +125,9 @@ function getContenidoCorreo($link, $cod_user){
 		$recomendacion     = $v['recomendacion'];
 
 		list($compra, $venta) = getDatosCotiza($link, $fecha, $v['nemonico']);
+
+		//Actualizar tabla empresa el campo: compra, venta y recomendacion
+		updateEmpresa($link, $nemonico, $compra, $venta, $recomendacion);
 
 	    $html_det .= "<tr>";
 	    	$html_det .= "<td align='left'>$grupo</td>";

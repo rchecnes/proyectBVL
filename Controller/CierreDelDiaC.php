@@ -23,7 +23,7 @@ function listarAction(){
 			DATE_FORMAT(cd.cd_cz_fant,'%d/%m/%Y')AS cz_fant
 			FROM empresa e
 			INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
-			LEFT JOIN cotizacion_del_dia cd ON(e.nemonico=cd.cd_cod_emp)
+			INNER JOIN cotizacion_del_dia cd ON(e.nemonico=cd.cd_cod_emp)
 			WHERE s.estado='1'
 			AND cd.cd_fecha='$fecha'
 			AND e.estado='1'";

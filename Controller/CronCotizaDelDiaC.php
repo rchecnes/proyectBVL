@@ -17,7 +17,9 @@ function getCotizacionDelDiaActiguo(){
 
     $link = getConexion();
 
-    $url  = "http://www.bvl.com.pe/includes/cotizaciones_busca.dat";
+    //$url  = "http://www.bvl.com.pe/includes/cotizaciones_busca.dat";//solo cotizados
+    $url   = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
+
     $html = file_get_html($url);
 
     $cotiza = array();
@@ -38,29 +40,37 @@ function getCotizacionDelDiaActiguo(){
                 
                 $cd_fecha    = date('Y-m-d');
 
-                $cd_cz_ant  = (isset($e->find('td',6)->plaintext)==true && $e->find('td',6)->plaintext!='')?$e->find('td',6)->plaintext:0.00;
-                $fant       = (isset($e->find('td',7)->plaintext)==true && $e->find('td',7)->plaintext!='')?$e->find('td',7)->plaintext:'00/00/0000';
-                list($fad, $fam, $faa) = explode('/', $fant);
-                $cd_cz_fant = $faa.'-'.$fam.'-'.$fad;
-                $cd_cz_aper = (isset($e->find('td',8)->plaintext)==true && $e->find('td',8)->plaintext!='')?$e->find('td',8)->plaintext:0.00;
-                $cd_cz_ult  = (isset($e->find('td',9)->plaintext)==true && $e->find('td',9)->plaintext!='')?$e->find('td',9)->plaintext:0.00;
-                $cd_cz_var  = (isset($e->find('td',10)->plaintext)==true && $e->find('td',10)->plaintext!='')?$e->find('td',10)->plaintext:0.00;
-                $cd_pr_com  = (isset($e->find('td',11)->plaintext)==true && $e->find('td',11)->plaintext!='')?$e->find('td',11)->plaintext:0.00;
-                $cd_pr_ven  = (isset($e->find('td',12)->plaintext)==true && $e->find('td',12)->plaintext!='')?$e->find('td',12)->plaintext:0.00;
-                $cd_ng_nac  = (isset($e->find('td',13)->plaintext)==true && $e->find('td',13)->plaintext!='')?$e->find('td',13)->plaintext:0.00;
-                $cd_ng_nop  = (isset($e->find('td',14)->plaintext)==true && $e->find('td',14)->plaintext!='')?$e->find('td',14)->plaintext:0.00;
-                $cd_ng_mng  = (isset($e->find('td',15)->plaintext)==true && $e->find('td',15)->plaintext!='')?$e->find('td',15)->plaintext:0.00;
+                $cd_cz_ant  = (isset($e->find('td',6)->plaintext)==true && $e->find('td',6)->plaintext!='')?$e->find('td',6)->plaintext:'';
+                $fant       = (isset($e->find('td',7)->plaintext)==true && $e->find('td',7)->plaintext!='')?$e->find('td',7)->plaintext:'';
+                
+               
+
+                if(str_replace(' ','',$fant)!='' && strlen($fant)>=8){
+                    list($fad, $fam, $faa) = explode('/', $fant);
+                    $cd_cz_fant = $faa.'-'.$fam.'-'.$fad;
+                }else{
+                    $cd_cz_fant = '';
+                }
+                
+                $cd_cz_aper = (isset($e->find('td',8)->plaintext)==true && $e->find('td',8)->plaintext!='')?$e->find('td',8)->plaintext:'';
+                $cd_cz_ult  = (isset($e->find('td',9)->plaintext)==true && $e->find('td',9)->plaintext!='')?$e->find('td',9)->plaintext:'';
+                $cd_cz_var  = (isset($e->find('td',10)->plaintext)==true && $e->find('td',10)->plaintext!='')?$e->find('td',10)->plaintext:'';
+                $cd_pr_com  = (isset($e->find('td',11)->plaintext)==true && $e->find('td',11)->plaintext!='')?$e->find('td',11)->plaintext:'';
+                $cd_pr_ven  = (isset($e->find('td',12)->plaintext)==true && $e->find('td',12)->plaintext!='')?$e->find('td',12)->plaintext:'';
+                $cd_ng_nac  = (isset($e->find('td',13)->plaintext)==true && $e->find('td',13)->plaintext!='')?$e->find('td',13)->plaintext:'';
+                $cd_ng_nop  = (isset($e->find('td',14)->plaintext)==true && $e->find('td',14)->plaintext!='')?$e->find('td',14)->plaintext:'';
+                $cd_ng_mng  = (isset($e->find('td',15)->plaintext)==true && $e->find('td',15)->plaintext!='')?$e->find('td',15)->plaintext:'';
 
 
-                $cd_cz_ant   = (double)str_replace(",","",str_replace(" ","",$cd_cz_ant));
-                $cd_cz_aper  = (double)str_replace(",","",str_replace(" ","",$cd_cz_aper));
-                $cd_cz_ult   = (double)str_replace(",","",str_replace(" ","",$cd_cz_ult));
-                $cd_cz_var   = (double)str_replace(",","",str_replace(" ","",$cd_cz_var));
-                $cd_pr_com   = (double)str_replace(",","",str_replace(" ","",$cd_pr_com));
-                $cd_pr_ven   = (double)str_replace(",","",str_replace(" ","",$cd_pr_ven));
-                $cd_ng_nac   = (double)str_replace(",","",str_replace(" ","",$cd_ng_nac));
-                $cd_ng_nop   = (double)str_replace(",","",str_replace(" ","",$cd_ng_nop));
-                $cd_ng_mng   = (double)str_replace(",","",str_replace(" ","",$cd_ng_mng));
+                $cd_cz_ant   = str_replace(",","",str_replace(" ","",$cd_cz_ant));
+                $cd_cz_aper  = str_replace(",","",str_replace(" ","",$cd_cz_aper));
+                $cd_cz_ult   = str_replace(",","",str_replace(" ","",$cd_cz_ult));
+                $cd_cz_var   = str_replace(",","",str_replace(" ","",$cd_cz_var));
+                $cd_pr_com   = str_replace(",","",str_replace(" ","",$cd_pr_com));
+                $cd_pr_ven   = str_replace(",","",str_replace(" ","",$cd_pr_ven));
+                $cd_ng_nac   = str_replace(",","",str_replace(" ","",$cd_ng_nac));
+                $cd_ng_nop   = str_replace(",","",str_replace(" ","",$cd_ng_nop));
+                $cd_ng_mng   = str_replace(",","",str_replace(" ","",$cd_ng_mng));
 
                 //Creamos query insert
                 $sql_ins .= "('$cd_cod', '$cd_cod_emp','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
@@ -84,7 +94,6 @@ function getCotizacionDelDiaActiguo(){
 
         //Insertamos
         $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_cod_emp,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
-
         $resp    = mysqli_query($link, $insert);
         
         unset($sql_del);
