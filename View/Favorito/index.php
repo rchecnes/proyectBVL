@@ -156,9 +156,9 @@
 			        <!--<td><?=utf8_encode($em['nom_sector'])?></td>-->
 			        <td><?=$em['moneda']?></td>
 			        <td><?=($em['fe_ult_cotiza']!='' && $em['fe_ult_cotiza']!='00/00/0000')?$em['fe_ult_cotiza']:""?></td>
-			        <td align="right"><?=($em['cz_ult_cierre']>0)?number_format($em['cz_ult_cierre'],2,'.',','):""?></td>
-			        <td align="right"><?=($em['cz_compra']>0)?number_format($em['cz_compra'],2,'.',','):""?></td>
-			        <td align="right"><?=($em['cz_venta']>0)?number_format($em['cz_venta'],2,'.',','):""?></td>
+			        <td align="right"><?=($em['cz_ult_cierre']>0)?number_format($em['cz_ult_cierre'],3,'.',','):""?></td>
+			        <td align="right"><?=($em['cz_compra']>0)?number_format($em['cz_compra'],3,'.',','):""?></td>
+			        <td align="right"><?=($em['cz_venta']>0)?number_format($em['cz_venta'],3,'.',','):""?></td>
 			        <td align="center"><?=$em['cz_recomen']?></td>
 			        			        
 			        <td width="200" align="center">

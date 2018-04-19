@@ -180,6 +180,12 @@
 //http://www.eyecon.ro/bootstrap-datepicker/
  $(document).ready(function(){
 
+    bloquear = function(){
+        $("select, input").attr("disabled","disabled");
+    }
+    desbloquear = function(){
+        $("select, input").removeAttr("disabled");
+    }
    
     getHistorico = function(){
 
@@ -191,6 +197,8 @@
 
         $("#loading").show();
 
+        bloquear();
+
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
@@ -199,6 +207,8 @@
 
                 $("#divHistorico").html(data);
                 $("#loading").hide();
+
+                desbloquear();
             }
         });
     }
@@ -217,11 +227,16 @@
 
         $("#loading").show();
 
+        bloquear();
+
         $.ajax({
             type:'POST',
             data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
+
+                desbloquear();
+
                 getHistorico();
                 $("#loading").hide();                
             }
@@ -238,6 +253,8 @@
 
         $("#loading_two").show();
 
+        bloquear();
+
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
@@ -246,6 +263,8 @@
 
                 $("#divHistorico").html(data);
                 $("#loading_two").hide();
+
+                desbloquear();
             }
         });
     }
@@ -260,13 +279,19 @@
 
         $("#loading_two").show();
 
+        bloquear();
+
         $.ajax({
             type:'POST',
             data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
+
+                desbloquear();
+
                 getHistoricoTwo();
-                $("#loading_two").hide();                
+                $("#loading_two").hide(); 
+
             }
         });
     }

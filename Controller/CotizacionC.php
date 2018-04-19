@@ -43,7 +43,8 @@ function importarManualAction(){
 
     $res = mysqli_query($link, $sql);
 
-    while ($r = mysqli_fetch_array($res)) {
+	$c = 1;
+    while ($r = mysqli_fetch_assoc($res)) {
     	
     	$nemonico = $r['nemonico'];
 
@@ -53,12 +54,18 @@ function importarManualAction(){
 
     	$new_data = getPrepareDataAntiguo($nemonico, $html);
 
+    	if (count($new_data)>1) { //Cuando se quiere importar varios dias
+    		$new_data = ordenarArray($new_data,'f','ASC');
+    	}
+    	
     	if (count($new_data)>0) {
 
 	        $res = savCatizaAntiguo($link, $new_data, $nemonico);
 	    }
 
 	    unset($new_data);
+
+	    $c ++;
     }
     
 }
