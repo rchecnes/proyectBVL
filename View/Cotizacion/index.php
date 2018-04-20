@@ -212,6 +212,7 @@
                 desbloquear();
             }
         });
+        
     }
 
     getCotizacion = function(){
@@ -226,22 +227,25 @@
         var sector        = $("#sector_two option:selected").val();
         var moneda        = $("#moneda_two option:selected").val();
 
-        $("#loading").show();
+        if (confirm("¿Esta seguro de realizar la importación?.\n Al realizar la importaciòn, reescribira si ya hay información el sistema")) {
 
-        bloquear();
+            $("#loading").show();
 
-        $.ajax({
-            type:'POST',
-            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda, acc_cotizado:0},
-            url: '../Controller/CotizacionC.php?accion=importarmanual',
-            success:function(data){
+            bloquear();
 
-                desbloquear();
+            $.ajax({
+                type:'POST',
+                data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda, acc_cotizado:0},
+                url: '../Controller/CotizacionC.php?accion=importarmanual',
+                success:function(data){
 
-                getHistorico();
-                $("#loading").hide();                
-            }
-        });
+                    desbloquear();
+
+                    getHistorico();
+                    $("#loading").hide();                
+                }
+            });
+        }
     }
 
     getHistoricoTwo = function(){
@@ -279,23 +283,26 @@
         var moneda        = $("#moneda_two option:selected").val();
         var acc_cotizado  = ($("#empresa_cotiza_dia").is(":checked")==true)?1:0;
 
-        $("#loading_two").show();
+        if (confirm("¿Esta seguro de realizar la importación?.\n Al realizar la importaciòn, reescribira si ya hay información el sistema")) {
 
-        bloquear();
+            $("#loading_two").show();
 
-        $.ajax({
-            type:'POST',
-            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
-            url: '../Controller/CotizacionC.php?accion=importarmanual',
-            success:function(data){
+            bloquear();
 
-                desbloquear();
+            $.ajax({
+                type:'POST',
+                data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
+                url: '../Controller/CotizacionC.php?accion=importarmanual',
+                success:function(data){
 
-                getHistoricoTwo();
-                $("#loading_two").hide(); 
+                    desbloquear();
 
-            }
-        });
+                    getHistoricoTwo();
+                    $("#loading_two").hide(); 
+
+                }
+            });
+        }
     }
 
     getHistorico();
