@@ -64,21 +64,18 @@ function getCotizacionGrupo(){
 function getCotizacionGrupoAntiguo(){
 
     //global $ruta;
-    $link      = getConexion();
+    $link       = getConexion();
+    $fec_inicio = date('Ymd');
+    $fec_fin    = date('Ymd');
 
     $date      = date('Y-m-d');
     $sqlemp    = "SELECT em.nemonico FROM empresa em
-                LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
-                WHERE se.estado='1'
-                AND em.estado='1'";
-                //AND (em.nemonico LIKE 'I%')
-                //AND em.nemonico IN('CITIBKC1','COCESUC1','COCESUI1','COFACEC1','COFIDCC1','COFIINC1','COLPERC1','COMACEC1','COMPFC1','CONCESI1','CONTINC1','CORAREC1','CORAREI1','CORLINI1','CPAC','CPACASC1','CPACASI1','CRANDEC1','CRECAPC1','CRECERC1','CREDITC1','CRETEXC1','CRETEXI1','CSCO','CSCOTIC1','CSJ','CSPBFINC','CSPBFINP','CSPFILXG','CVERDEC1')
-                //AND (em.nemonico LIKE 'T%' OR em.nemonico LIKE 'U%' OR em.nemonico LIKE 'V%' OR em.nemonico LIKE 'X%' OR em.nemonico LIKE 'Y%')
+                  LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
+                  WHERE se.estado='1'
+                  AND em.estado='1'
+                  AND em.nemonico IN(SELECT s_cd.cd_cod_emp FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fec_inicio' AND s_cd.cd_ng_nop > 0)";
                 
     $respemp   = mysqli_query($link, $sqlemp);
-
-    $fec_inicio   = date('Ymd');
-    $fec_fin      = date('Ymd');
 
     $c = 0;
     while ($e = mysqli_fetch_array($respemp)) {

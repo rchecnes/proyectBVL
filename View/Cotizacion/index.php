@@ -69,8 +69,9 @@
                     <div class="col-lg-6">
                         <?php
                             $fecha_fin    = date('Y-m-d');
-                            $fecha_final  = strtotime ( '-1 year' , strtotime ( $fecha_fin ) ) ;
-                            $fecha_inicio = date ( 'Y-m-d' , $fecha_final );
+                            //$fecha_final  = strtotime ( '-1 month' , strtotime ( $fecha_fin ) ) ;
+                            //$fecha_inicio = date ( 'Y-m-d' , $fecha_final );
+                            $fecha_inicio = date('Y').'-'.date('m').'-01';
                            
                         ?>
                         <label>Fecha Inicio (dd/mm/aaaa):</label>
@@ -155,12 +156,12 @@
                             <input type="date" id="fecha_inicio_two" name="fecha_inicio_two" class="form-control" placeholder="Fecha Inicio" value="<?=$fecha_inicio_two?>">
                         </div>
                     </div>
-                    <!--<div class="col-lg-4">
-                        <label>Fecha Final (dd/mm/aaaa):</label>
+                    <div class="col-lg-4">
+                        <label>&nbsp;</label>
                         <div class="form-group">
-                            <input type="date" id="fecha_fin_two" name="fecha_fin_two" class="form-control" placeholder="Fecha Fin" value="<?=$fecha_inicio_two?>">
+                            <label><input type="checkbox" id="empresa_cotiza_dia" name="empresa_cotiza_dia" checked="checked"> Solo Empresas Que Cotizaron</label>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
@@ -231,7 +232,7 @@
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda},
+            data:{p_Nemonico:p_Nemonico, anio_ini:anio_ini, mes_ini:mes_ini, anio_fin:anio_fin, mes_fin:mes_fin,fecha_inicio:$("#fecha_inicio").val(),fecha_fin:$("#fecha_fin").val(),sector:sector,moneda:moneda, acc_cotizado:0},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
 
@@ -276,6 +277,7 @@
         var fecha_fin     = $("#fecha_inicio_two").val().split('-');
         var sector        = $("#sector_two option:selected").val();
         var moneda        = $("#moneda_two option:selected").val();
+        var acc_cotizado  = ($("#empresa_cotiza_dia").is(":checked")==true)?1:0;
 
         $("#loading_two").show();
 
@@ -283,7 +285,7 @@
 
         $.ajax({
             type:'POST',
-            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda},
+            data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
             url: '../Controller/CotizacionC.php?accion=importarmanual',
             success:function(data){
 

@@ -29,7 +29,7 @@ function listarAction(){
 			AND e.estado='1'";
 
 	if ($acciones_hoy == 1) {
-		$sql .= " AND (cd.cd_ng_nop > 1 OR cd.cd_pr_com > 0 OR cd.cd_pr_ven > 0)";
+		$sql .= " AND (cd.cd_ng_nop > 0 OR cd.cd_pr_com > 0 OR cd.cd_pr_ven > 0)";
 	}
 
 	$sql .= " ORDER BY e.nombre ASC";

@@ -120,14 +120,18 @@
 			        </th>
 			    </tr>
 			    <tr>
-			        <th class="td-header">Nemónico</th>
-			        <th class="td-header">Nombre</th>
-			        <th align="center" class="td-header">Moneda</th>
-			        <th colspan="2" class="td-header" style="text-align:center">Ult. Cotización</th>
-			        <th class="td-header">Compra</th>
-			        <th class="td-header">Venta</th>
-			        <th class="td-header">Recomendación</th>
-			        <th align="center" class="td-header">Acciones</th>
+			    	<th rowspan="2" class="td-header align-midle align-center">Nemónico</th>
+			    	<th rowspan="2" class="td-header align-midle align-center">Nombre</th>
+			    	<th rowspan="2" class="td-header align-midle align-center">Moneda</th>
+			    	<th colspan="5" class="td-header align-center">Última Cotización</th>
+			    	<th rowspan="2" class="td-header align-midle align-center">Acciones</th>
+			    </tr>
+			    <tr>
+			        <th class="td-header align-center">Fecha</th>
+			        <th class="td-header align-center">Precio</th>
+			        <th class="td-header align-center">Compra</th>
+			        <th class="td-header align-center">Venta</th>
+			        <th class="td-header align-center">Recomendación</th>
 			    </tr>
 			    <?php
 

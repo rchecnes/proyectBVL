@@ -25,6 +25,7 @@ function importarManualAction(){
 	$fecha_fin    = str_replace("-","",$_POST['fecha_fin']);
 	$sector       = $_POST['sector'];
 	$moneda       = $_POST['moneda'];
+	$acc_cotizado = $_POST['acc_cotizado'];
 
 	$sql = "SELECT em.nemonico FROM empresa em
             LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
@@ -39,6 +40,9 @@ function importarManualAction(){
     }
     if ($moneda !='') {
     	$sql .= " AND em.moneda='$moneda'";
+    }
+    if ($acc_cotizado ==1) {
+    	$sql .= " AND em.nemonico IN(SELECT s_cd.cd_cod_emp FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fecha_inicio' AND s_cd.cd_ng_nop > 0)";
     }
 
     $res = mysqli_query($link, $sql);

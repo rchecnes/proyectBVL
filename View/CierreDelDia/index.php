@@ -33,6 +33,10 @@
 		        });
 		    }
 
+		    $("#acciones_hoy").on("click", function(){
+		    	getHistorico();
+		    });
+		    
 		    getHistorico();
 
 		});
