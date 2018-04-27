@@ -264,6 +264,7 @@
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
             data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector_two option:selected").val(),moneda: $("#moneda_two option:selected").val(), origen:'two'},
+            dataType: 'html',
             success:function(data){
 
                 $("#divHistorico").html(data);
@@ -292,6 +293,7 @@
             $.ajax({
                 type:'POST',
                 data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
+                dataType: 'json',
                 url: '../Controller/CotizacionC.php?accion=importarmanual',
                 success:function(data){
 
@@ -300,6 +302,7 @@
                     getHistoricoTwo();
                     $("#loading_two").hide(); 
 
+                    alert('Cantidad de empresa actualizada: '+data.cant_imp);
                 }
             });
         }

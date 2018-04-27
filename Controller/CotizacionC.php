@@ -65,12 +65,13 @@ function importarManualAction(){
     	if (count($new_data)>0) {
 
 	        $res = savCatizaAntiguo($link, $new_data, $nemonico);
+	        $c ++;
 	    }
 
 	    unset($new_data);
-
-	    $c ++;
     }
+
+    echo json_encode(array('cant_imp'=>$c));
     
 }
 
