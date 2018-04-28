@@ -196,9 +196,7 @@
         var fecha_fin    = $("#fecha_fin").val().split('-');
         var P_Fin        = fecha_fin[0]+'-'+fecha_fin[1]+'-'+fecha_fin[2];
 
-        $("#loading").show();
-
-        bloquear();
+        $.blockUI();
 
         $.ajax({
             type:'GET',
@@ -207,9 +205,8 @@
             success:function(data){
 
                 $("#divHistorico").html(data);
-                $("#loading").hide();
-
-                desbloquear();
+                
+                $.unblockUI();
             }
         });
         
@@ -229,9 +226,7 @@
 
         if (confirm("¿Esta seguro de realizar la importación?.\n Al realizar la importaciòn, reescribira si ya hay información el sistema")) {
 
-            $("#loading").show();
-
-            bloquear();
+            $.blockUI();
 
             $.ajax({
                 type:'POST',
@@ -239,10 +234,9 @@
                 url: '../Controller/CotizacionC.php?accion=importarmanual',
                 success:function(data){
 
-                    desbloquear();
+                    $.unblockUI();
 
-                    getHistorico();
-                    $("#loading").hide();                
+                    getHistorico();                
                 }
             });
         }
@@ -256,9 +250,7 @@
         var fecha_fin    = $("#fecha_inicio_two").val().split('-');
         var P_Fin        = fecha_fin[0]+'-'+fecha_fin[1]+'-'+fecha_fin[2];
 
-        $("#loading_two").show();
-
-        bloquear();
+        $.blockUI();
 
         $.ajax({
             type:'GET',
@@ -268,9 +260,8 @@
             success:function(data){
 
                 $("#divHistorico").html(data);
-                $("#loading_two").hide();
 
-                desbloquear();
+                $.unblockUI();
             }
         });
     }
@@ -286,9 +277,7 @@
 
         if (confirm("¿Esta seguro de realizar la importación?.\n Al realizar la importaciòn, reescribira si ya hay información el sistema")) {
 
-            $("#loading_two").show();
-
-            bloquear();
+            $.blockUI();
 
             $.ajax({
                 type:'POST',
@@ -297,10 +286,9 @@
                 url: '../Controller/CotizacionC.php?accion=importarmanual',
                 success:function(data){
 
-                    desbloquear();
+                    $.unblockUI();
 
                     getHistoricoTwo();
-                    $("#loading_two").hide(); 
 
                     alert('Cantidad de empresa actualizada: '+data.cant_imp);
                 }

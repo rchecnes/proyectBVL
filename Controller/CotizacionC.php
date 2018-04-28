@@ -45,10 +45,10 @@ function importarManualAction(){
     	$sql .= " AND em.nemonico IN(SELECT s_cd.cd_cod_emp FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fecha_inicio' AND s_cd.cd_ng_nop > 0)";
     }
 
-    $res = mysqli_query($link, $sql);
+    $rescotiza = mysqli_query($link, $sql);
 
-	$c = 1;
-    while ($r = mysqli_fetch_assoc($res)) {
+	$c = 0;
+    while ($r = mysqli_fetch_assoc($rescotiza)) {
     	
     	$nemonico = $r['nemonico'];
 
