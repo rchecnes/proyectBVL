@@ -83,7 +83,8 @@ function getCotizacionGrupoAntiguo(){
         $nemonico = $e['nemonico'];
 
         $url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fec_inicio&fec_fin=$fec_fin&nemonico=$nemonico";
-        $html = file_get_html($url);
+        //$html = file_get_html($url);
+        $html = file_get_contents_curl($url);
 
         $new_data = getPrepareDataAntiguo($nemonico, $html);
 

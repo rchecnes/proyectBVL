@@ -67,6 +67,22 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
     return "ok";
 }
 
+function file_get_contents_curl($url) {
+
+	$ch = curl_init();
+	curl_setopt( $ch, CURLOPT_AUTOREFERER, TRUE );
+	curl_setopt( $ch, CURLOPT_HEADER, 0 );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+	curl_setopt( $ch, CURLOPT_URL, $url );
+	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, TRUE );
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	$data = curl_exec( $ch );
+	$data = str_get_html($data);
+	curl_close( $ch );
+	return ($data!='')?$data:"";
+ }
+ 
 function getPrepareDataAntiguo($empresa, $html){
 
     $cotiza = array();
@@ -77,7 +93,8 @@ function getPrepareDataAntiguo($empresa, $html){
         	
         	if (isset($e->find('td',0)->plaintext)) {
 
-    	        $fecha    = str_replace(" ","",$e->find('td',0)->plaintext);
+                $fecha    = str_replace(" ","",$e->find('td',0)->plaintext);
+                //echo $fecha."<br>";
     	        $apertura = (double)str_replace(" ","",$e->find('td',1)->plaintext);
 
                 $fecha_ant = str_replace(" ","",$e->find('td',8)->plaintext);

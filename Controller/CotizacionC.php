@@ -52,9 +52,17 @@ function importarManualAction(){
     	
     	$nemonico = $r['nemonico'];
 
-    	$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";
+		/*$arrContextOptions=array(
+			"ssl"=>array(
+				 "verify_peer"=>false,
+				 "verify_peer_name"=>false,
+			),
+		); 
+		$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";	 
+	  	$html = file_get_contents($url, false, stream_context_create($arrContextOptions));*/
 
-    	$html = file_get_html($url);
+		$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";	 
+		$html = file_get_contents_curl($url);
 
     	$new_data = getPrepareDataAntiguo($nemonico, $html);
 

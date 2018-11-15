@@ -19,8 +19,8 @@ function getCotizacionDelDiaActiguo(){
 
     //$url  = "http://www.bvl.com.pe/includes/cotizaciones_busca.dat";//solo cotizados
     $url   = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
-
-    $html = file_get_html($url);
+    //$html = file_get_html($url);
+    $html = file_get_contents_curl($url);
 
     $cotiza = array();
 
