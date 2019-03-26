@@ -8,10 +8,10 @@ function indexAction(){
 	$link = getConexion();
 
 	//include('../Control/Combobox/Combobox.php');
-	include('../View/Deposito/index.php');
+	include('../View/DepositoPlazo/index.php');
 
 	//$data = importaEmpresaDepositoPlazo();
-    //var_dump($data);
+    
 }
 
 switch ($_GET['accion']) {
