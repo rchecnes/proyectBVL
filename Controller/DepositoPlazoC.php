@@ -11,12 +11,29 @@ function indexAction(){
 	include('../View/DepositoPlazo/index.php');
 
 	//$data = importaEmpresaDepositoPlazo();
-    
+    //var_dump($data);
+}
+
+function listarAction(){
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	include('../View/DepositoPlazo/listar.php');
+}
+
+function importarEmpresaAction(){
+
 }
 
 switch ($_GET['accion']) {
 	case 'index':
 		indexAction();
+		break;
+	case 'listar':
+		listarAction();
+		break;
+	case 'importarEmpresa':
+		importarEmpresaAction();
 		break;
 	default:
 		# code...

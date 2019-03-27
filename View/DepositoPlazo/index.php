@@ -79,14 +79,16 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <input name="button" type="button" class="btn btn-success" id="button" value="Importar Empresa" onclick="">
-                                    <input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="">
+                                    <input name="button" type="button" class="btn btn-success" id="importar_empresa" value="Importar Empresa" onclick="">
+                                    <input name="button" type="button" class="btn btn-default" id="buscar_historico" value="Buscar Importado" onclick="">
                                     <img src="../Assets/img/load.gif" id="loading" style="display: none">
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
+            </div>
+            <div id="divHistorico">
             </div>
         </div>
         <script type="text/javascript">
@@ -98,7 +100,7 @@
 
                     $.ajax({
                         type:'GET',
-                        url: '../Controller/CotizacionC.php?accion=listar',
+                        url: '../Controller/DepositoPlazoC.php?accion=listar',
                         data:{},
                         success:function(data){
 
@@ -108,6 +110,25 @@
                         }
                     });
 
+                }
+
+                getHistorico();
+
+                importarEmpresa = function(){
+
+                    $.blockUI();
+
+                    $.ajax({
+                        type:'GET',
+                        url: '../Controller/DepositoPlazoC.php?accion=importarEmpresa',
+                        data:{},
+                        success:function(data){
+
+                            getHistorico();
+                            
+                            $.unblockUI();
+                        }
+                    });
                 }
             });
         </script>
