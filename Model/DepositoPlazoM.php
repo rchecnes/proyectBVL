@@ -1,8 +1,8 @@
 <?php
-function importaEmpresaDepositoPlazo(){
+function importaEmpresaDepositoPlazo($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo){
 
 	$jquery_rand = rand(1,1000000000);
-    $url ="https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=2&sWhere=&ipaddr=&userid=&username=&geo=LI&balance=50000&days=660&currency=MN&exclude=off&email=algo%40gmail.com&source=Compara&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
+    $url ="https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=2&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=off&email=$dp_correo&source=Compara&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
     $post_data = "";
 
     $ch = curl_init();

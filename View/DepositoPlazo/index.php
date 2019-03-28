@@ -79,9 +79,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <input name="button" type="button" class="btn btn-success" id="importar_empresa" value="Importar Empresa" onclick="">
-                                    <input name="button" type="button" class="btn btn-default" id="buscar_historico" value="Buscar Importado" onclick="">
-                                    <img src="../Assets/img/load.gif" id="loading" style="display: none">
+                                    <input name="button" type="button" class="btn btn-success" id="importar_empresa" value="Importar Empresa" onclick="importarEmpresa()">
+                                    <!--<input name="button" type="button" class="btn btn-default" id="buscar_historico" value="Buscar Importado" onclick="">-->
+                                    <!--<img src="../Assets/img/load.gif" id="loading" style="display: none">-->
                                 </div>
                             </div>
                         </form>
@@ -94,7 +94,7 @@
         <script type="text/javascript">
             $(document).ready(function(){
 
-                getHistorico = function(){
+                getListadoEmpresa = function(){
             
                     $.blockUI();
 
@@ -112,7 +112,7 @@
 
                 }
 
-                getHistorico();
+                getListadoEmpresa();
 
                 importarEmpresa = function(){
 
@@ -121,10 +121,10 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/DepositoPlazoC.php?accion=importarEmpresa',
-                        data:{},
+                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plaza:$("#dp_plaza").val(),dp_ubicacion:$("#dp_ubicacion").val(),dp_correo:$("#dp_correo").val()},
                         success:function(data){
 
-                            getHistorico();
+                            getListadoEmpresa();
                             
                             $.unblockUI();
                         }
