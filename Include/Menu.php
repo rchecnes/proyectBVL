@@ -35,7 +35,8 @@ $url = str_replace(" ","",$url);
         <li class="<?=($url=='/Controller/ComisionC.php?accion=index')?'active':''?>"><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>
         <li class="<?=($url=='/Controller/SimuladorC.php?accion=index')?'active':''?>"><a href="../Controller/SimuladorC.php?accion=index">Simulador</a></li>
         <li class="<?=($url=='/Controller/PortafolioC.php?accion=index')?'active':''?>"><a href="../Controller/PortafolioC.php?accion=index">Portafolio</a></li>
-        <li class="<?=($url=='/Controller/DepositoPlazoC.php?accion=index')?'active':''?>"><a href="../Controller/DepositoPlazoC.php?accion=index">Depositos</a></li>
+        <li class="<?=($url=='/Controller/DepositoEmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/DepositoEmpresaC.php?accion=index">Depositos - Empresa</a></li>
+        <li class="<?=($url=='/Controller/DepositoCostoC.php?accion=index')?'active':''?>"><a href="../Controller/DepositoCostoC.php?accion=index">Depositos - Tasas y Costos</a></li>
       <?php elseif($_SESSION['nom_role']=='ROLE_ANONIMO'):?>
         <li class="<?=($url=='/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li class="<?=($url=='/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>

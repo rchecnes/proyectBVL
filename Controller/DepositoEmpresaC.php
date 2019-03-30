@@ -6,7 +6,7 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	include('../View/DepositoPlazo/index.php');
+	include('../View/DepositoEmpresa/index.php');
 }
 
 function listarAction(){
@@ -20,14 +20,14 @@ function listarAction(){
 		$nro_reg = mysqli_num_rows($dp_empresa);
 	}
 
-	include('../View/DepositoPlazo/listar.php');
+	include('../View/DepositoEmpresa/listar.php');
 }
 
 function importarEmpresaAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
-	include('../Model/DepositoPlazoM.php');
+	include('../Model/DepositoEmpresaM.php');
 
 	$dp_moneda = $_GET['dp_moneda'];
 	$dp_valor = $_GET['dp_valor'];
@@ -40,8 +40,8 @@ function importarEmpresaAction(){
 	if($data['status']=='success'){
 
 		foreach ($data['data']['aaData'] as $key => $fila) {
-			
-			$sqlin = "INSERT INTO empresa_deposito_plazo(pd_emp_id,pd_nodo,pd_nomb,pd_logo)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[2]."')";
+
+			$sqlin = "INSERT INTO empresa_deposito_plazo(dp_emp_id,dp_nodo,dp_nomb,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
 			mysqli_query($link, $sqlin);
 		}
 	}

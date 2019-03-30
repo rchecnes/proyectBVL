@@ -9,12 +9,12 @@
     while ($emp = mysqli_fetch_array($dp_empresa)) {
     ?>
     <tr>
-        <td><?=$emp['pd_emp_id']?></td>
+        <td><?=$emp['dp_emp_id']?></td>
         <td align="center">
             
-            <input type="image" src="https://cdn-pe.comparabien.com/<?=$emp['pd_logo']?>">
+            <input type="image" src="https://cdn-pe.comparabien.com/<?=$emp['dp_logo']?>">
         </td>
-        <td align="left"><?=$emp['pd_nomb']?></td>
+        <td align="left"><?=$emp['dp_nomb']?></td>
     </tr>
     <?php
     }

@@ -100,7 +100,7 @@
 
                     $.ajax({
                         type:'GET',
-                        url: '../Controller/DepositoPlazoC.php?accion=listar',
+                        url: '../Controller/DepositoCostoC.php?accion=listar',
                         data:{},
                         success:function(data){
 
@@ -120,7 +120,7 @@
 
                     $.ajax({
                         type:'GET',
-                        url: '../Controller/DepositoPlazoC.php?accion=importarEmpresa',
+                        url: '../Controller/DepositoCostoC.php?accion=importarEmpresa',
                         data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plaza:$("#dp_plaza").val(),dp_ubicacion:$("#dp_ubicacion").val(),dp_correo:$("#dp_correo").val()},
                         success:function(data){
 
