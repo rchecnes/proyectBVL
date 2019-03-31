@@ -7,7 +7,7 @@
     <body>
         <?php include('../Include/Menu.php');?>
         <div class="container">
-            <h3 class="title">Déposito Plazo</h3>
+            <h3 class="title">Tasas y Costos</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs" id="tabs">
                 <li class="active"><a data-toggle="tab" href="#importar_empresa_plazo">Historico - Tasas y Costos</a></li>
@@ -94,7 +94,7 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/DepositoCostoC.php?accion=listar',
-                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plaza:$("#dp_plaza").val(),dp_ubicacion:$("#dp_ubicacion").val(),dp_correo:$("#dp_correo").val()},
+                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plaza:$("#dp_plaza").val(),dp_ubicacion:$("#dp_ubicacion").val()},
                         success:function(data){
 
                             $("#divHistorico").html(data);

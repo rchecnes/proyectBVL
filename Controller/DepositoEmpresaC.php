@@ -29,11 +29,11 @@ function importarEmpresaAction(){
 	$link = getConexion();
 	include('../Model/DepositoEmpresaM.php');
 
-	$dp_moneda = $_GET['dp_moneda'];
-	$dp_valor = $_GET['dp_valor'];
-	$dp_plaza = $_GET['dp_plaza'];
+	$dp_moneda    = $_GET['dp_moneda'];
+	$dp_valor     = $_GET['dp_valor'];
+	$dp_plaza     = $_GET['dp_plaza'];
 	$dp_ubicacion = $_GET['dp_ubicacion'];
-	$dp_correo = $_GET['dp_correo'];
+	$dp_correo    = $_GET['dp_correo'];
 
 	$data = importaEmpresaDepositoPlazo($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo);
 
@@ -41,7 +41,7 @@ function importarEmpresaAction(){
 
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
-			$sqlin = "INSERT INTO empresa_deposito_plazo(dp_emp_id,dp_nodo,dp_nomb,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
+			$sqlin = "INSERT INTO empresa_deposito_plazo(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
 			mysqli_query($link, $sqlin);
 		}
 	}

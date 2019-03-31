@@ -13,8 +13,26 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
+	$dp_moneda = $_GET['dp_moneda'];
+	$dp_valor = $_GET['dp_valor'];
+	$dp_plaza = $_GET['dp_plaza'];
+	$dp_ubicacion = $_GET['dp_ubicacion'];
+
 	$sql = "SELECT * FROM historico_deposito_plazo dh
-			INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id) WHERE de.dp_stat='1' AND dh.dh_stat='1'";
+			INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id)
+			WHERE dh.dh_stat='1' AND de.dp_stat='1'";
+	if($dp_plaza!=''){
+		$sql .= " AND dh.dh_plazo_d >= $dp_plaza AND dh.dh_plazo_h >= $dp_plaza";
+	}
+	if($dp_moneda!=''){
+		$sql .= " AND de.dp_moneda='$dp_moneda'";
+	}
+	if($dp_ubicacion!=''){
+		$sql .= " AND de.dp_ubig='$dp_ubicacion'";
+	}
+
+	$sql .= " ORDER BY dh.dh_tea DESC";
+
 	$dp_historico = mysqli_query($link, $sql);
 	$nro_reg = 0;
 	if ($dp_historico){
