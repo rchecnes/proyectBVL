@@ -20,7 +20,8 @@
                                     <div class="form-group">
                                         <label>Moneda:</label>
                                         <select id="dp_moneda" name="dp_moneda" class="form-control">
-                                            <option value="MN">SOLES</option>
+                                            <option value="">Todos</option>
+                                            <option value="MN" selected="selected">SOLES</option>
                                             <option value="ME">DOLARES</option>
                                         </select>
                                     </div>
@@ -33,7 +34,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Plaza:</label>
+                                        <label>Plazo:</label>
                                         <input type="number" id="dp_plaza" id="dp_plaza" class="form-control" min="0" value="360">
                                     </div>
                                 </div>
