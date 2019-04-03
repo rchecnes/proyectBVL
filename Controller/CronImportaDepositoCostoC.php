@@ -1,6 +1,6 @@
 <?php
-//$ruta = 'public_html/analisisdevalor.com';
-$ruta = '..';
+$ruta = 'public_html/analisisdevalor.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 

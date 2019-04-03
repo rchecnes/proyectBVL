@@ -1,3 +1,4 @@
+<br>
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
 <table class="table table-bordered">
     <tr>

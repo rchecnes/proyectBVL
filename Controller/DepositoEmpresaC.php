@@ -13,7 +13,7 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa_deposito_plazo WHERE dp_stat='1'";
+	$sql = "SELECT * FROM empresa_deposito_plazo WHERE dp_stat='1' ORDER BY dp_nomb_emp ASC";
 	$dp_empresa = mysqli_query($link, $sql);
 	$nro_reg = 0;
 	if ($dp_empresa){
