@@ -44,7 +44,7 @@
                                     <div class="form-group">
                                         <label>Ubicación:</label>
                                         <select id="dp_ubicacion" name="dp_ubicacion" class="form-control">
-                                            <option value="LI" seleceted="selected">Lima y Callao</option>                              
+                                            <option value="LI" selected="selected">Lima y Callao</option>                              
                                             <option value="AM">Amazonas</option>                              
                                             <option value="AN">Ancash</option>                              
                                             <option value="AP">Apurímac</option>                              
