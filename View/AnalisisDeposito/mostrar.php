@@ -1,1 +1,1 @@
-<h1>Hombres trabajando! <?=rand(1,1000)?></h1>
+<h1>Hombres trabajando! <?=rand(1,1000)?>sssss</h1>

@@ -10,26 +10,36 @@
             <h3 class="title">Anásis - Depósito Plazo</h3>
             <div class="tabbable">
                 <form methos="POST" id="form_deposito" name="form_deposito">
-                    <div class="row">                                
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Moneda:</label>
+                                <select id="dp_moneda" name="dp_moneda" class="form-control">
+                                    <option value="">TODOS</option>
+                                    <option value="MN">SOLES</option>
+                                    <option value="ME">DOLARES</option>
+                                </select>
+                            </div>
+                        </div>                              
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Depósito:</label>
-                                <input type="number" id="deposito" id="deposito" class="form-control" min="0" value="1000">
+                                <input type="number" id="dp_valor" name="dp_valor" class="form-control" min="0" value="10000">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Plazo:</label>
-                                <input type="number" id="plazo" id="plazo" class="form-control" min="0" value="360">
+                                <input type="number" id="dp_plazo" id="dp_plazo" class="form-control" min="0" value="">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Empresas:</label>
-                                <select id="empresa" name="empresa" class="form-control">
-                                    <option value="3">3 Primeras</option>                              
-                                    <option value="5" selected="selected">5 Primeras</option>                              
-                                    <option value="7">7 Primeras</option>
+                                <select id="dp_empresa" name="dp_empresa" class="form-control">
+                                    <option value="3">3 Primeras FSD</option>                              
+                                    <option value="5" selected="selected">5 Primeras FSD</option>                              
+                                    <option value="7">7 Primeras FSD</option>
                                 </select>
                             </div>
                         </div>
@@ -54,7 +64,7 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/AnalisisDepositoC.php?accion=mostrar',
-                        data:{deposito:$("#deposito").val(),plazo:$("#plazo").val(),empresa:$("#empresa").val()},
+                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plazo:$("#dp_plazo").val(),dp_empresa:$("#dp_empresa").val()},
                         success:function(data){
 
                             $("#info_html_grafico").html(data);
