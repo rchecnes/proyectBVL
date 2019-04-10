@@ -17,47 +17,43 @@ function mostrarAction(){
 	$dp_plazo = $_GET['dp_plazo'];
 	$dp_empresa = $_GET['dp_empresa'];
 	
+	//CONDICION
+	$sqlwhere = " WHERE dh.dh_stat='1'";
+	$sqlwhere .= " AND de.dp_stat='1'";
+	$sqlwhere .= " AND dh.dh_fsd='S'";
+	if($dp_plazo!=''){
+		$sqlwhere .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
+	}
+	if($dp_moneda!=''){
+		$sqlwhere .= " AND de.dp_moneda='$dp_moneda'";
+	}
+	if($dp_valor!=''){
+		$sqlwhere .= " AND $dp_valor>=dh.dh_sal_prom_d AND $dp_valor<=dh.dh_sal_prom_h";
+	}
+
 	//Los x primeros empresas
-	$sqlx = "SELECT * FROM historico_deposito_plazo dh 
-	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND de.dp_fecha_imcs=dh.dh_fecha) 
-	WHERE dh.dh_stat='1' 
-	AND de.dp_stat='1'
-	AND dh.dh_fsd='S'";
+	$sqlxx = "SELECT *,MAX(dh.dh_tea)AS max_tea FROM historico_deposito_plazo dh 
+	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND de.dp_fecha_imcs=dh.dh_fecha)";
+	$sqlxx .= $sqlwhere." GROUP BY dh.dh_emp_id";
+	$sqlxx .= " ORDER BY max_tea DESC";
+	$sqlxx .= " LIMIT 0,$dp_empresa";
+	$resx = mysqli_query($link, $sqlxx);
 
-	if($dp_plazo!=''){
-		$sqlx .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
+	$dh_emp_id = "";
+	while($x = mysqli_fetch_array($resx)){
+		$dh_emp_id .= $x['dh_emp_id'].",";
 	}
-	if($dp_moneda!=''){
-		$sqlx .= " AND de.dp_moneda='$dp_moneda'";
-	}
-	if($dp_valor!=''){
-		$sqlx .= " AND $dp_valor>=dh.dh_sal_prom_d AND $dp_valor<=dh.dh_sal_prom_h";
-	}
-	$sqlx .= " GROUP BY dh.dh_emp_id";
-	$sqlx .= " ORDER BY dh.dh_tea DESC";
-	$sqlx .= " LIMIT 1,$dp_empresa";
-
+	$dh_emp_id = trim($dh_emp_id,',');
 	
-
-	/*$sqlx = "SELECT * FROM historico_deposito_plazo dh 
-	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND de.dp_fecha_imcs=dh.dh_fecha) 
-	WHERE dh.dh_stat='1' 
-	AND de.dp_stat='1'
-	AND dh.dh_fsd='S'";
-
-	if($dp_plazo!=''){
-		$sqlx .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
+	//Ahora obtenemos informacion de x empresa filtradas anteriormente
+	$sqlhx = "SELECT * FROM historico_deposito_plazo dh 
+	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND de.dp_fecha_imcs=dh.dh_fecha)";
+	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
+	$sqlhx .= " ORDER BY dh.dh_emp_id ASC";
+	$reshx = mysqli_query($link, $sqlhx);
+	while($h = mysqli_fetch_array($reshx)){
+		echo $h['dh_emp_id']."<br>";
 	}
-	if($dp_moneda!=''){
-		$sqlx .= " AND de.dp_moneda='$dp_moneda'";
-	}
-	if($dp_valor!=''){
-		$sqlx .= " AND $dp_valor>=dh.dh_sal_prom_d AND $dp_valor<=dh.dh_sal_prom_h";
-	}
-
-	$sqlx .= " ORDER BY dh.dh_tea DESC";*/
-
-	echo $sqlx;
 
 	include('../View/AnalisisDeposito/mostrar.php');
 }
