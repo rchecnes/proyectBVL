@@ -61,7 +61,24 @@ function mostrarAction(){
 	$cod_emp = "";
 	while($h = mysqli_fetch_array($reshx)){
 
-		$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
+		$dh_pz_d = trim($h['dh_plazo_d']);
+		$dh_pz_dd = substr($dh_pz_d,strlen($dh_pz_d)-1,strlen($dh_pz_d));
+		
+		$plazo_tem = 0;
+		if($dh_pz_dd == 0){
+			$plazo_tem = $h['dh_plazo_d'];
+		}else{
+			$plazo_tem = $h['dh_plazo_h'];
+		}
+
+		//Nuevamente validamos los impares
+		if(substr($plazo_tem,strlen($plazo_tem)-1,strlen($plazo_tem)) == 0){
+			$dh_plazo = $plazo_tem;
+		}else{
+			$dh_plazo = ($plazo_tem!='9999999999')?$plazo_tem - $dh_pz_dd:$plazo_tem;
+		}
+
+		$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo,'dh_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp']);
 		
 		//echo $h['dh_emp_id']."<br>";
 		/*if($contador == 1){
@@ -88,7 +105,13 @@ function mostrarAction(){
 		$cod_emp = $h['dh_emp_id'];
 		$contador ++;*/
 	}
-	var_dump($emp_tasa);
+	
+	//Armamos La Grafica
+	$series = array();
+	foreach($emp_tasa as $key => $value){
+		//var_dump($key)."<br>";
+	}
+
 	include('../View/AnalisisDeposito/mostrar.php');
 }
 

@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
     <?php include('../Include/Header.php'); ?>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     </head>
     
     <body>
