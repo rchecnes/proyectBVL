@@ -53,24 +53,42 @@ function mostrarAction(){
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
 	$sqlhx .= " ORDER BY dh.dh_emp_id ASC";
 	$reshx = mysqli_query($link, $sqlhx);
+	$cant_hx = mysqli_num_rows($reshx);
 	
 	$emp_tasa = array();
-	$contador = 0;
+	$detalle = array();
+	$contador = 1;
 	$cod_emp = "";
 	while($h = mysqli_fetch_array($reshx)){
-		if($contador == 0){
+
+		$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
+		
+		//echo $h['dh_emp_id']."<br>";
+		/*if($contador == 1){
 			$cod_emp = $h['dh_emp_id'];
 		}
+		
+		if($h['dh_emp_id'] != $cod_emp){
+	
+			//$emp_tasa[$h['dh_emp_id']] = $detalle;
+			//$detalle = array();
+			$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
 
-		/*if($h['dh_emp_id'] != $cod_emp){
-			$emp_tasa[$h['dh_emp_id']] = 
 		}else{
 
-		}*/
+			$detalle = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
+			$emp_tasa[$h['dh_emp_id']][]=$detalle;
+			//if($contador == $cant_hx){
+
+			//	$emp_tasa[$h['dh_emp_id']] = $detalle;
+			//}
+			
+		}
 
 		$cod_emp = $h['dh_emp_id'];
+		$contador ++;*/
 	}
-
+	var_dump($emp_tasa);
 	include('../View/AnalisisDeposito/mostrar.php');
 }
 
