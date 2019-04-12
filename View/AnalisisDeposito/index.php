@@ -9,7 +9,7 @@
     <body>
         <?php include('../Include/Menu.php');?>
         <div class="container">
-            <h3 class="title">Anásis - Depósito Plazo</h3>
+            <h3 class="title">Análisis - Depósito Plazo</h3>
             <div class="tabbable">
                 <form methos="POST" id="form_deposito" name="form_deposito">
                     <div class="row">

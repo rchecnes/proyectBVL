@@ -5,18 +5,26 @@
 
 <script>
     Highcharts.chart('container', {
-
+        chart: {
+            type: 'line'
+        },
         title: {
-            text: 'Solar Employment Growth by Sector, 2010-2016'
+            text: 'Análisis - Depósito Plazo'
         },
 
         subtitle: {
-            text: 'Source: thesolarfoundation.com'
+            text: ''//Source: thesolarfoundation.com
         },
 
         yAxis: {
             title: {
                 text: 'Number of Employees'
+            }
+        },
+        xAxis: {
+            categories: <?=$json_categorie?>,
+            title: {
+                text: "fff"
             }
         },
         legend: {
@@ -30,11 +38,12 @@
                 label: {
                     connectorAllowed: false
                 },
-                pointStart: 2010
+                pointStart: false,
+                enableMouseTracking: true
             }
         },
 
-        series: [{
+        series: <?=$json_serie?>/*[{
             name: 'Installation',
             data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
         }, {
@@ -49,7 +58,7 @@
         }, {
             name: 'Other',
             data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-        }],
+        }]*/,
 
         responsive: {
             rules: [{

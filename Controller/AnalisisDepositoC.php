@@ -107,10 +107,23 @@ function mostrarAction(){
 	}
 	
 	//Armamos La Grafica
-	$series = array();
-	foreach($emp_tasa as $key => $value){
-		//var_dump($key)."<br>";
+	$serie = array();
+	$categorie = array();
+	foreach($emp_tasa as $key => $emp){
+
+		$detalle = array();
+
+		foreach($emp as $d => $val){
+			//echo $key."-".$val['dh_tea']."<br>";
+			$detalle[] = (double)$val['dh_tea'];
+			$categorie[] = (int)$val['dh_plazo'];
+		}
+		
+		$serie[] = array("name"=>rand(10,20),"data"=>$detalle);
+		
 	}
+	$json_serie = json_encode($serie);
+	$json_categorie = json_encode($categorie);
 
 	include('../View/AnalisisDeposito/mostrar.php');
 }
