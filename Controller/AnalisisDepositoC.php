@@ -51,14 +51,15 @@ function mostrarAction(){
 	$sqlhx = "SELECT * FROM historico_deposito_plazo dh 
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha='$dh_fecha')";//de.dp_fecha_imcs
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
-	$sqlhx .= " ORDER BY dh.dh_emp_id ASC";
+	$sqlhx .= " ORDER BY dh.dh_emp_id, dh.dh_plazo_d ASC";
 	$reshx = mysqli_query($link, $sqlhx);
 	$cant_hx = mysqli_num_rows($reshx);
-	
+	//echo "Cantidad Des:".$cant_hx."<br><br>";
+
 	$emp_tasa = array();
-	$detalle = array();
+	$detalle  = array();
 	$contador = 1;
-	$cod_emp = "";
+	$cod_emp  = "";
 	while($h = mysqli_fetch_array($reshx)){
 
 		$dh_pz_d = trim($h['dh_plazo_d']);
@@ -78,36 +79,37 @@ function mostrarAction(){
 			$dh_plazo = ($plazo_tem!='9999999999')?$plazo_tem - $dh_pz_dd:$plazo_tem;
 		}
 
-		$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo,'dh_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp']);
+		//echo $h['dh_plazo_d']."--".$h['dh_plazo_h']."=>".$dh_plazo."<br>";
+
+		//$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo,'dh_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp']);
+		
 		
 		//echo $h['dh_emp_id']."<br>";
-		/*if($contador == 1){
+		if($contador == 1){
 			$cod_emp = $h['dh_emp_id'];
 		}
 		
 		if($h['dh_emp_id'] != $cod_emp){
 	
-			//$emp_tasa[$h['dh_emp_id']] = $detalle;
-			//$detalle = array();
-			$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
-
+			$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'detalle'=>$detalle);
+			$detalle 		= array();
+			$detalle[] 		= array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo);
 		}else{
 
-			$detalle = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>2);
-			$emp_tasa[$h['dh_emp_id']][]=$detalle;
-			//if($contador == $cant_hx){
+			$detalle[] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo);
 
-			//	$emp_tasa[$h['dh_emp_id']] = $detalle;
-			//}
-			
+			if($contador == $cant_hx){
+
+				$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'detalle'=>$detalle);
+			}		
 		}
 
 		$cod_emp = $h['dh_emp_id'];
-		$contador ++;*/
+		$contador ++;
 	}
-	
+
 	//Armamos La Grafica
-	$serie = array();
+	/*$serie = array();
 	$categorie = array();
 	foreach($emp_tasa as $key => $emp){
 
@@ -120,6 +122,28 @@ function mostrarAction(){
 		}
 		
 		$serie[] = array("name"=>rand(10,20),"data"=>$detalle);
+		
+	}
+	$json_serie = json_encode($serie);
+	$json_categorie = json_encode($categorie);
+	*/
+
+	$serie = array();
+	$categorie = array();
+	foreach($emp_tasa as $key => $emp){
+
+		$detalle = array();
+
+		foreach($emp['detalle'] as $d => $val){
+
+			$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
+			if(!in_array($val['dh_plazo'], $categorie, true)){
+				$categorie[] = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
+			}
+			
+		}
+		
+		$serie[] = array("name"=>$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'],"data"=>$detalle);
 		
 	}
 	$json_serie = json_encode($serie);

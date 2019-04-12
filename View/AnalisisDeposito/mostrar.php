@@ -6,7 +6,18 @@
 <script>
     Highcharts.chart('container', {
         chart: {
-            type: 'line'
+            height: 350,
+            type: 'line',
+            //marginBottom: 5
+            // Edit chart spacing
+            spacingBottom: 15,
+            spacingTop: 10,
+            spacingLeft: 10,
+            spacingRight: 10,
+
+            // Explicitly tell the width and height of a chart
+            width: null,
+            height: null
         },
         title: {
             text: 'Análisis - Depósito Plazo'
@@ -18,28 +29,38 @@
 
         yAxis: {
             title: {
-                text: 'Number of Employees'
-            }
+                text: 'Tasa (TEA)'
+            },
+            offset:0.5
         },
         xAxis: {
             categories: <?=$json_categorie?>,
             title: {
-                text: "fff"
+                text: ""
             }
         },
         legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
+            //layout: 'vertical',
+            align: 'center',
+            verticalAlign: 'bottom',
+            //x: 0,
+            //y: 0
+
         },
 
         plotOptions: {
             series: {
                 label: {
-                    connectorAllowed: false
+                    connectorAllowed: true
                 },
                 pointStart: false,
                 enableMouseTracking: true
+            },
+            line: {
+                dataLabels: {
+                    enabled: false
+                },
+                enableMouseTracking: false
             }
         },
 
@@ -59,7 +80,9 @@
             name: 'Other',
             data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
         }]*/,
-
+        credits: {
+            enabled: false
+        },
         responsive: {
             rules: [{
                 condition: {
