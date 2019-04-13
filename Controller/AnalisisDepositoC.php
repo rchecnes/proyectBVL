@@ -53,7 +53,7 @@ function mostrarAction(){
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha='$dh_fecha')";//de.dp_fecha_imcs
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
 	$sqlhx .= " ORDER BY dh.dh_emp_id ASC, dh.dh_tea ASC";
-	echo $sqlhx."<br>";
+	//echo $sqlhx."<br>";
 	$reshx = mysqli_query($link, $sqlhx);
 	$cant_hx = mysqli_num_rows($reshx);
 	//echo "Cantidad Des:".$cant_hx."<br><br>";
@@ -126,17 +126,19 @@ function mostrarAction(){
 	foreach($emp_tasa as $key => $emp){
 
 		$detalle = array();
+		
 
 		foreach($emp['detalle'] as $d => $val){
 
-			//$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
+			$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
 
-			//$val_plazo = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
-			//if(!in_array($val_plazo, $categorie, true)){
-			//	$categorie[] = $val_plazo;
-			//}
-			$new_tea = "";
-			$cont_null = 1;
+			$val_plazo = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
+			if(!in_array($val_plazo, $categorie, true)){
+				$categorie[] = $val_plazo;
+			}
+
+			/*$new_tea = "";
+			$val_add_palzo = array();
 			foreach($categorie_plazo as $c){
 				
 				if($c==$val['dh_plazo']){
@@ -144,15 +146,16 @@ function mostrarAction(){
 					//echo $emp['dh_emp_id']."-Plazo Cab:".$val['dh_plazo']."=Plazo det:".$c."<br>";
 				}else{
 					$new_tea = null;
-					$cont_null ++;
+					
 				}
-				//if($new_tea!=null || $cont_null==1){
-					echo $emp['dh_emp_id']."-Plazo Cab:".$val['dh_plazo']."=Plazo det:".$new_tea."<br>";
-				//}
 				
-			}
-			
-			//$detalle[] = $new_tea;
+				if(!in_array($c,$val_add_palzo, true)){
+					$val_add_palzo[] = $c;
+					$detalle[] = $new_tea;
+					echo $emp['dh_emp_id']."-Plazo Cab:".$c."=Plazo det:".$new_tea."<br>";
+				}
+				
+			}*/
 			
 		}
 		
