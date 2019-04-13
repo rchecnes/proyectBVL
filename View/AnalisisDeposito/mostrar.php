@@ -1,12 +1,39 @@
 
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table class="table table-bordered">
+    <?php
+    echo '<tr>';
+        echo '<td>&nbsp;</td>';
+    foreach($categorie as $cat){
+        echo '<td>'.$cat.'</td>';
+    }
+    echo '</tr>';
+    foreach($emp_tasa as $key => $emp){
+        echo '<tr>';
+            echo '<td>'.$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'].'</td>';
+        foreach($emp['detalle'] as $d => $val){
+
+            //$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
+            //if(!in_array($val['dh_plazo'], $categorie, true)){
+                //$categorie[] = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
+            //}
+            echo '<td>'.$val['dh_tea'].'</td>';
+        }
+
+        //$serie[] = array("name"=>$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'],"data"=>$detalle);
+        echo '</tr>';
+    }
+    ?>
+    </table>
+</div>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-    <div id="container" style="height: 300px; margin: 0px auto; border: 1px solid #ddd"></div>
+    <div id="container" style="margin: 0px auto; border: 1px solid #ddd"></div>
 </div>
 
 <script>
     Highcharts.chart('container', {
         chart: {
-            height: 350,
+            height: <?=($dp_empresa<=3)?$dp_empresa*100:$dp_empresa*80?>,
             type: 'line',
             //marginBottom: 5
             // Edit chart spacing
@@ -17,7 +44,7 @@
 
             // Explicitly tell the width and height of a chart
             width: null,
-            height: null
+            //height: null
         },
         title: {
             text: 'Análisis - Depósito Plazo'
@@ -31,7 +58,7 @@
             title: {
                 text: 'Tasa (TEA)'
             },
-            offset:0.5
+            offset:2
         },
         xAxis: {
             categories: <?=$json_categorie?>,

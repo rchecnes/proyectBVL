@@ -9,6 +9,7 @@ function indexAction(){
 	include('../View/AnalisisDeposito/index.php');
 }
 
+
 function mostrarAction(){
     include('../Config/Conexion.php');
 	$link = getConexion();
@@ -51,13 +52,15 @@ function mostrarAction(){
 	$sqlhx = "SELECT * FROM historico_deposito_plazo dh 
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha='$dh_fecha')";//de.dp_fecha_imcs
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
-	$sqlhx .= " ORDER BY dh.dh_emp_id, dh.dh_plazo_d ASC";
+	$sqlhx .= " ORDER BY dh.dh_emp_id ASC, dh.dh_tea ASC";
+	echo $sqlhx."<br>";
 	$reshx = mysqli_query($link, $sqlhx);
 	$cant_hx = mysqli_num_rows($reshx);
 	//echo "Cantidad Des:".$cant_hx."<br><br>";
 
 	$emp_tasa = array();
 	$detalle  = array();
+	$categorie_plazo= array();
 	$contador = 1;
 	$cod_emp  = "";
 	while($h = mysqli_fetch_array($reshx)){
@@ -104,30 +107,20 @@ function mostrarAction(){
 			}		
 		}
 
+		//Inicio - Plazo unico
+		if(!in_array($dh_plazo, $categorie_plazo, true)){
+			$categorie_plazo[] = $dh_plazo;
+			//array_push($plazo,$dh_plazo);
+		}
+		//Fin - plazo unico
+
 		$cod_emp = $h['dh_emp_id'];
 		$contador ++;
 	}
-
-	//Armamos La Grafica
-	/*$serie = array();
-	$categorie = array();
-	foreach($emp_tasa as $key => $emp){
-
-		$detalle = array();
-
-		foreach($emp as $d => $val){
-			//echo $key."-".$val['dh_tea']."<br>";
-			$detalle[] = (double)$val['dh_tea'];
-			$categorie[] = (int)$val['dh_plazo'];
-		}
-		
-		$serie[] = array("name"=>rand(10,20),"data"=>$detalle);
-		
-	}
-	$json_serie = json_encode($serie);
-	$json_categorie = json_encode($categorie);
-	*/
-
+	
+	//Ordenamos el arreglo plazo de menor a mayor
+	sort($categorie_plazo);
+	echo json_encode($categorie_plazo);
 	$serie = array();
 	$categorie = array();
 	foreach($emp_tasa as $key => $emp){
@@ -136,10 +129,30 @@ function mostrarAction(){
 
 		foreach($emp['detalle'] as $d => $val){
 
-			$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
-			if(!in_array($val['dh_plazo'], $categorie, true)){
-				$categorie[] = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
+			//$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
+
+			//$val_plazo = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
+			//if(!in_array($val_plazo, $categorie, true)){
+			//	$categorie[] = $val_plazo;
+			//}
+			$new_tea = "";
+			$cont_null = 1;
+			foreach($categorie_plazo as $c){
+				
+				if($c==$val['dh_plazo']){
+					$new_tea = (double)$val['dh_tea'];
+					//echo $emp['dh_emp_id']."-Plazo Cab:".$val['dh_plazo']."=Plazo det:".$c."<br>";
+				}else{
+					$new_tea = null;
+					$cont_null ++;
+				}
+				//if($new_tea!=null || $cont_null==1){
+					echo $emp['dh_emp_id']."-Plazo Cab:".$val['dh_plazo']."=Plazo det:".$new_tea."<br>";
+				//}
+				
 			}
+			
+			//$detalle[] = $new_tea;
 			
 		}
 		

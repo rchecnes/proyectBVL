@@ -39,9 +39,11 @@
                             <div class="form-group">
                                 <label>Empresas:</label>
                                 <select id="dp_empresa" name="dp_empresa" class="form-control">
-                                    <option value="3">3 Primeras FSD</option>                              
-                                    <option value="5" selected="selected">5 Primeras FSD</option>                              
-                                    <option value="7">7 Primeras FSD</option>
+                                    <option value="3">3 Primeras</option> 
+                                    <option value="4">4 Primeras</option>                            
+                                    <option value="5">5 Primeras</option>                              
+                                    <option value="6" selected="selected">6 Primeras</option>
+                                    <option value="7">7 Primeras</option>
                                 </select>
                             </div>
                         </div>
@@ -55,6 +57,8 @@
             </div>
             <div class="row" id="info_html_grafico">
             </div>
+            <br>
+            <br>
         </div>
         <script type="text/javascript">
             $(document).ready(function(){
