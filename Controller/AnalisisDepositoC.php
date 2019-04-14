@@ -9,6 +9,14 @@ function indexAction(){
 	include('../View/AnalisisDeposito/index.php');
 }
 
+function searchForId($id, $array) {
+	foreach ($array as $key => $val) {
+		if ($val['dh_plazo'] === $id) {
+			return $key;
+		}
+	}
+	return null;
+ }
 
 function mostrarAction(){
     include('../Config/Conexion.php');
@@ -60,7 +68,7 @@ function mostrarAction(){
 
 	$emp_tasa = array();
 	$detalle  = array();
-	$categorie_plazo= array();
+	$categorie= array();
 	$contador = 1;
 	$cod_emp  = "";
 	while($h = mysqli_fetch_array($reshx)){
@@ -82,10 +90,6 @@ function mostrarAction(){
 			$dh_plazo = ($plazo_tem!='9999999999')?$plazo_tem - $dh_pz_dd:$plazo_tem;
 		}
 
-		//echo $h['dh_plazo_d']."--".$h['dh_plazo_h']."=>".$dh_plazo."<br>";
-
-		//$emp_tasa[$h['dh_emp_id']][] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo,'dh_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp']);
-		
 		
 		//echo $h['dh_emp_id']."<br>";
 		if($contador == 1){
@@ -94,22 +98,22 @@ function mostrarAction(){
 		
 		if($h['dh_emp_id'] != $cod_emp){
 	
-			$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'detalle'=>$detalle);
+			$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'dp_moneda'=>$h['dp_moneda'],'detalle'=>$detalle);
 			$detalle 		= array();
-			$detalle[] 		= array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo);
+			$detalle[] 		= array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>(String)$dh_plazo);
 		}else{
 
-			$detalle[] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>$dh_plazo);
+			$detalle[] = array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>(String)$dh_plazo);
 
 			if($contador == $cant_hx){
 
-				$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'detalle'=>$detalle);
+				$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'dp_moneda'=>$h['dp_moneda'],'detalle'=>$detalle);
 			}		
 		}
 
 		//Inicio - Plazo unico
-		if(!in_array($dh_plazo, $categorie_plazo, true)){
-			$categorie_plazo[] = $dh_plazo;
+		if(!in_array($dh_plazo, $categorie, true)){
+			$categorie[] = (String)$dh_plazo;
 			//array_push($plazo,$dh_plazo);
 		}
 		//Fin - plazo unico
@@ -117,53 +121,36 @@ function mostrarAction(){
 		$cod_emp = $h['dh_emp_id'];
 		$contador ++;
 	}
-	
+	//var_dump($emp_tasa[0]);
+
 	//Ordenamos el arreglo plazo de menor a mayor
-	sort($categorie_plazo);
-	echo json_encode($categorie_plazo);
+	sort($categorie);
+	//echo json_encode($categorie);
 	$serie = array();
-	$categorie = array();
 	foreach($emp_tasa as $key => $emp){
 
 		$detalle = array();
-		
 
-		foreach($emp['detalle'] as $d => $val){
+		foreach($categorie as $c){
 
-			$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
+			$key = (String)array_search($c, array_column($emp['detalle'], 'dh_plazo'));
+			//$key = searchForId($c,$emp['detalle']);
+			$new_tea = ($key>=0)?$emp['detalle'][$key]['dh_tea']:null;
 
-			$val_plazo = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
-			if(!in_array($val_plazo, $categorie, true)){
-				$categorie[] = $val_plazo;
-			}
-
-			/*$new_tea = "";
-			$val_add_palzo = array();
-			foreach($categorie_plazo as $c){
-				
-				if($c==$val['dh_plazo']){
-					$new_tea = (double)$val['dh_tea'];
-					//echo $emp['dh_emp_id']."-Plazo Cab:".$val['dh_plazo']."=Plazo det:".$c."<br>";
-				}else{
-					$new_tea = null;
-					
-				}
-				
-				if(!in_array($c,$val_add_palzo, true)){
-					$val_add_palzo[] = $c;
-					$detalle[] = $new_tea;
-					echo $emp['dh_emp_id']."-Plazo Cab:".$c."=Plazo det:".$new_tea."<br>";
-				}
-				
-			}*/
-			
+			//echo "<br>".$emp['dh_emp_id']."-Plazo Cab:".$c."-KEY:".$key."=>".$new_tea;
+			$detalle[] = ($new_tea!=null)?(double)$new_tea:$new_tea;
 		}
 		
-		$serie[] = array("name"=>$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'],"data"=>$detalle);
-		
+		$mon = ($dp_moneda=='')?"(".$emp['dp_moneda'].")":"";
+		$serie[] = array("name"=>$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].$mon,"data"=>$detalle);
+	}
+
+	$new_categorie = array();
+	foreach($categorie as $c){
+		$new_categorie[] = ($c=='9999999999')?"A más":$c;
 	}
 	$json_serie = json_encode($serie);
-	$json_categorie = json_encode($categorie);
+	$json_categorie = json_encode($new_categorie);
 
 	include('../View/AnalisisDeposito/mostrar.php');
 }

@@ -2,25 +2,27 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <table class="table table-bordered">
     <?php
+
     echo '<tr>';
-        echo '<td>&nbsp;</td>';
-    foreach($categorie as $cat){
-        echo '<td>'.$cat.'</td>';
+        echo '<th>&nbsp;</th>';
+    foreach($new_categorie as $cat){
+        echo '<th align="center">'.$cat.'</th>';
     }
     echo '</tr>';
     foreach($emp_tasa as $key => $emp){
         echo '<tr>';
-            echo '<td>'.$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'].'</td>';
-        foreach($emp['detalle'] as $d => $val){
+            $mon = ($dp_moneda=='')?"(".$emp['dp_moneda'].")":"";
+            echo '<td>'.$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].$mon.'</td>';
 
-            //$detalle[] = (double)number_format($val['dh_tea'],2,'.','');
-            //if(!in_array($val['dh_plazo'], $categorie, true)){
-                //$categorie[] = ($val['dh_plazo']=="9999999999")?"A más":(String)$val['dh_plazo'];
-            //}
-            echo '<td>'.$val['dh_tea'].'</td>';
-        }
+            foreach($categorie as $c){
 
-        //$serie[] = array("name"=>$emp['dh_emp_id']."-".$emp['dp_nomb_emp']." - ".$emp['dp_nomb_prod'],"data"=>$detalle);
+                $key = (String)array_search($c, array_column($emp['detalle'], 'dh_plazo'));
+
+                $new_tea = ($key>=0)?$emp['detalle'][$key]['dh_tea']:null;
+
+                echo '<td align="center">'.$new_tea.'</td>';
+            }
+
         echo '</tr>';
     }
     ?>
@@ -64,7 +66,8 @@
             categories: <?=$json_categorie?>,
             title: {
                 text: ""
-            }
+            },
+            min: 0
         },
         legend: {
             //layout: 'vertical',
