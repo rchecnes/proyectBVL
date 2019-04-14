@@ -43,7 +43,7 @@ function mostrarAction(){
 	}
 
 	//Los x primeros empresas
-	$sqlxx = "SELECT *,MAX(dh.dh_tea)AS max_tea FROM historico_deposito_plazo dh 
+	$sqlxx = "SELECT dh.dh_emp_id,MAX(dh.dh_tea)AS max_tea FROM historico_deposito_plazo dh 
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha='$dh_fecha')";//de.dp_fecha_imcs
 	$sqlxx .= $sqlwhere." GROUP BY dh.dh_emp_id";
 	$sqlxx .= " ORDER BY max_tea DESC";
