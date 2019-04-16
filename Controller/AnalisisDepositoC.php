@@ -48,7 +48,6 @@ function mostrarAction(){
 	$sqlxx .= $sqlwhere." GROUP BY dh.dh_emp_id";
 	$sqlxx .= " ORDER BY max_tea DESC, min_tea DESC";
 	$sqlxx .= " LIMIT 0,$dp_empresa";
-	echo $sqlxx."<br>";
 	$resx = mysqli_query($link, $sqlxx);
 
 	$dh_emp_id = "";
@@ -62,7 +61,6 @@ function mostrarAction(){
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha=de.dp_fecha_imcs)";//de.dp_fecha_imcs
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
 	$sqlhx .= " ORDER BY dh.dh_emp_id ASC, dh.dh_tea ASC";
-	echo $sqlhx."<br>";
 	$reshx = mysqli_query($link, $sqlhx);
 	$cant_hx = mysqli_num_rows($reshx);
 	//echo "Cantidad Des:".$cant_hx."<br><br>";
