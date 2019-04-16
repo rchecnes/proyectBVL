@@ -12,7 +12,7 @@
     foreach($emp_tasa as $key => $emp){
         echo '<tr>';
             $mon = ($dp_moneda=='')?"(".$emp['dp_moneda'].")":"";
-            echo '<td>'.$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].$mon.'</td>';
+            echo '<td>'.$emp['dp_nomb_emp'].' - '.$emp['dp_nomb_prod'].$mon.'</td>';
 
             foreach($categorie as $c){
 
