@@ -12,15 +12,24 @@
     foreach($emp_tasa as $key => $emp){
         echo '<tr>';
             $mon = ($dp_moneda=='')?"(".$emp['dp_moneda'].")":"";
-            echo '<td>'.$emp['dp_nomb_emp'].' - '.$emp['dp_nomb_prod'].$mon.'</td>';
+            echo '<td title="'.$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].'" alt="'.$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].'">'.$emp['dp_nomb_emp'].$mon.'</td>';
 
+            $new_tea = null;
+            $css_cel = "";
+		
             foreach($categorie as $c){
 
                 $key = (String)array_search($c, array_column($emp['detalle'], 'dh_plazo'));
 
-                $new_tea = ($key>=0)?$emp['detalle'][$key]['dh_tea']:null;
+                //$new_tea = ($key>=0)?$emp['detalle'][$key]['dh_tea']:null;
+                if($key !=''){
+                    $new_tea = $emp['detalle'][$key]['dh_tea'];
+                    $css_cel = "";
+                }else{
+                    $css_cel = ($new_tea!=null)?"background: #f1eded;color: #000;":"";
+                }
 
-                echo '<td align="center">'.$new_tea.'</td>';
+                echo '<td align="center" style="'.$css_cel.'">'.$new_tea.'</td>';
             }
 
         echo '</tr>';

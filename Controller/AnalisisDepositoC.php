@@ -61,6 +61,7 @@ function mostrarAction(){
 	INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha=de.dp_fecha_imcs)";//de.dp_fecha_imcs
 	$sqlhx .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
 	$sqlhx .= " ORDER BY dh.dh_emp_id ASC, dh.dh_tea ASC";
+	//echo $sqlhx;
 	$reshx = mysqli_query($link, $sqlhx);
 	$cant_hx = mysqli_num_rows($reshx);
 	//echo "Cantidad Des:".$cant_hx."<br><br>";
@@ -69,7 +70,7 @@ function mostrarAction(){
 	$detalle  = array();
 	$categorie= array();
 	$contador = 1;
-	$cod_emp  = "";
+	$cod_emp  = $dp_nomb_prod = $dp_nomb_emp = $dp_moneda = "";
 	while($h = mysqli_fetch_array($reshx)){
 
 		$dh_pz_d = trim($h['dh_plazo_d']);
@@ -93,11 +94,14 @@ function mostrarAction(){
 		//echo $h['dh_emp_id']."<br>";
 		if($contador == 1){
 			$cod_emp = $h['dh_emp_id'];
+			$dp_nomb_prod = $h['dp_nomb_prod'];
+			$dp_nomb_emp = $h['dp_nomb_emp'];
+			$dp_moneda = $h['dp_moneda'];
 		}
 		
 		if($h['dh_emp_id'] != $cod_emp){
 	
-			$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'dp_moneda'=>$h['dp_moneda'],'detalle'=>$detalle);
+			$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$dp_nomb_prod,'dp_nomb_emp'=>$dp_nomb_emp,'dp_moneda'=>$dp_moneda,'detalle'=>$detalle);
 			$detalle 		= array();
 			$detalle[] 		= array('dh_tea'=>$h['dh_tea'],'dh_plazo'=>(String)$dh_plazo);
 		}else{
@@ -106,7 +110,7 @@ function mostrarAction(){
 
 			if($contador == $cant_hx){
 
-				$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$h['dp_nomb_prod'],'dp_nomb_emp'=>$h['dp_nomb_emp'],'dp_moneda'=>$h['dp_moneda'],'detalle'=>$detalle);
+				$emp_tasa[] = array('dh_emp_id'=>$cod_emp,'dp_nomb_prod'=>$dp_nomb_prod,'dp_nomb_emp'=>$dp_nomb_emp,'dp_moneda'=>$dp_moneda,'detalle'=>$detalle);
 			}		
 		}
 
@@ -118,30 +122,42 @@ function mostrarAction(){
 		//Fin - plazo unico
 
 		$cod_emp = $h['dh_emp_id'];
+		$dp_nomb_prod = $h['dp_nomb_prod'];
+		$dp_nomb_emp = $h['dp_nomb_emp'];
+		$dp_moneda = $h['dp_moneda'];
+
 		$contador ++;
 	}
 	//var_dump($emp_tasa[0]);
 
 	//Ordenamos el arreglo plazo de menor a mayor
 	sort($categorie);
+	//var_dump($categorie);
 	//echo json_encode($categorie);
 	$serie = array();
 	foreach($emp_tasa as $key => $emp){
 
 		$detalle = array();
 
+		$new_tea = null;
 		foreach($categorie as $c){
 
 			$key = (String)array_search($c, array_column($emp['detalle'], 'dh_plazo'));
 			//$key = searchForId($c,$emp['detalle']);
-			$new_tea = ($key>=0)?$emp['detalle'][$key]['dh_tea']:null;
+			//echo var_dump($key);
+			if($key!=''){
+				$new_tea = $emp['detalle'][$key]['dh_tea'];
+			}		
 
 			//echo "<br>".$emp['dh_emp_id']."-Plazo Cab:".$c."-KEY:".$key."=>".$new_tea;
+			//echo "<br>".$emp['dh_emp_id']."-Plazo Cab:".$c."-TEAT:".$new_tea;
 			$detalle[] = ($new_tea!=null)?(double)$new_tea:$new_tea;
+
+			//$new_tea_temp = $new_tea;
 		}
 		
 		$mon = ($dp_moneda=='')?"(".$emp['dp_moneda'].")":"";
-		$serie[] = array("name"=>$emp['dh_emp_id'].' - '.$emp['dp_nomb_prod'].$mon,"data"=>$detalle);
+		$serie[] = array("name"=>$emp['dp_nomb_emp'].$mon,"data"=>$detalle);
 	}
 
 	$new_categorie = array();
