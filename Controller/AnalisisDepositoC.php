@@ -90,7 +90,6 @@ function mostrarAction(){
 			$dh_plazo = ($plazo_tem!='9999999999')?$plazo_tem - $dh_pz_dd:$plazo_tem;
 		}
 
-		
 		//echo $h['dh_emp_id']."<br>";
 		if($contador == 1){
 			$cod_emp = $h['dh_emp_id'];
