@@ -102,18 +102,22 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Valor del depósito(Vacio = Todos):</label>
-                                        <input type="number" id="dp_valor_2" id="dp_valor_2" class="form-control" min="0" value="1000" placeholder="TODOS">
+                                        <label>Plazo Desde(Vacio = Todos):</label>
+                                        <input type="number" id="dp_plazo_d_2" id="dp_plazo_d_2" class="form-control" min="0" value="360" placeholder="TODOS">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Plazo(Vacio = Todos):</label>
-                                        <input type="number" id="dp_plazo_2" id="dp_plazo_2" class="form-control" min="0" value="360" placeholder="TODOS">
+                                        <label>Plazo Hasta(Vacio = Todos):</label>
+                                        <input type="number" id="dp_plazo_h_2" id="dp_plazo_h_2" class="form-control" min="0" value="1080" placeholder="TODOS">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Valor del depósito(Vacio = Todos):</label>
+                                        <input type="number" id="dp_valor_2" id="dp_valor_2" class="form-control" min="0" value="1000" placeholder="TODOS">
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Ubicación:</label>
@@ -206,7 +210,7 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/DepositoCostoC.php?accion=listar',
-                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo:$("#dp_plazo_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val()},
+                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo_d:$("#dp_plazo_d_2").val(),dp_plazo_h:$("#dp_plazo_h_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val()},
                         success:function(data){
 
                             $("#divHistorico").html(data);

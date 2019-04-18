@@ -15,7 +15,8 @@ function listarAction(){
 
 	$dp_moneda = $_GET['dp_moneda'];
 	$dp_valor = $_GET['dp_valor'];
-	$dp_plazo = $_GET['dp_plazo'];
+	$dp_plazo_d = $_GET['dp_plazo_d'];
+	$dp_plazo_h = $_GET['dp_plazo_h'];
 	$dp_ubicacion = $_GET['dp_ubicacion'];
 
 	$sql = "SELECT * FROM historico_deposito_plazo dh
