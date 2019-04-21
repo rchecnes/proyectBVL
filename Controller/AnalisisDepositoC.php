@@ -23,7 +23,8 @@ function mostrarAction(){
 	$link = getConexion();
 	$dp_moneda = $_GET['dp_moneda'];
 	$dp_valor = $_GET['dp_valor'];
-	$dp_plazo = $_GET['dp_plazo'];
+	$dp_plazo_d = $_GET['dp_plazo_d'];
+	$dp_plazo_h = $_GET['dp_plazo_h'];
 	$dp_empresa = $_GET['dp_empresa'];
 
 	$dh_fecha = "2019-03-30";
@@ -32,8 +33,12 @@ function mostrarAction(){
 	$sqlwhere = " WHERE dh.dh_stat='1'";
 	$sqlwhere .= " AND de.dp_stat='1'";
 	$sqlwhere .= " AND dh.dh_fsd='S'";
-	if($dp_plazo!=''){
-		$sqlwhere .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
+	if($dp_plazo_d!=''){
+		//$sqlwhere .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
+		$sqlwhere .= " AND dh.dh_plazo_d>=$dp_plazo_d";
+	}
+	if($dp_plazo_h!=''){
+		$sqlwhere .= " AND dh.dh_plazo_h<=$dp_plazo_h";
 	}
 	if($dp_moneda!=''){
 		$sqlwhere .= " AND de.dp_moneda='$dp_moneda'";

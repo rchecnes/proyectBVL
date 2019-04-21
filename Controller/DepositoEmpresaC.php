@@ -6,6 +6,10 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
+	//Buscamos la ultima fecha de actualizacion
+	$sqlfa = "SELECT dh_last_update FROM historico_deposito_plazo WHERE dh_stat=1 GROUP BY dh_last_update ORDER BY dh_last_update DESC";
+	$resfa = mysqli_query($link, $sqlfa);
+
 	include('../View/DepositoEmpresa/index.php');
 }
 

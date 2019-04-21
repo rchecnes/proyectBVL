@@ -22,17 +22,23 @@
                                     <option value="ME">DOLARES</option>
                                 </select>
                             </div>
-                        </div>                              
+                        </div> 
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Depósito:</label>
-                                <input type="number" id="dp_valor" name="dp_valor" class="form-control" min="0" value="10000">
+                                <label>Plazo Desde:</label>
+                                <input type="number" id="dp_plazo_d" id="dp_plazo_d" class="form-control" min="0" value="">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Plazo:</label>
-                                <input type="number" id="dp_plazo" id="dp_plazo" class="form-control" min="0" value="">
+                                <label>Plazo Hasta:</label>
+                                <input type="number" id="dp_plazo_h" id="dp_plazo_h" class="form-control" min="0" value="">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Depósito:</label>
+                                <input type="number" id="dp_valor" name="dp_valor" class="form-control" min="0" value="10000">
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -70,7 +76,7 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/AnalisisDepositoC.php?accion=mostrar',
-                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plazo:$("#dp_plazo").val(),dp_empresa:$("#dp_empresa").val()},
+                        data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plazo_d:$("#dp_plazo_d").val(),dp_plazo_h:$("#dp_plazo_h").val(),dp_empresa:$("#dp_empresa").val()},
                         success:function(data){
 
                             $("#info_html_grafico").html(data);

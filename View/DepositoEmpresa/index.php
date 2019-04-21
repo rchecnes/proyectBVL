@@ -149,6 +149,18 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Última Actualización:</label>
+                                        <select id="dp_last_update" name="dp_last_update" class="form-control">
+                                            <?php
+                                            while($d = mysqli_fetch_array($resfa)){
+                                                echo '<option value="'.$d['dh_last_update'].'">'.$d['dh_last_update'].'</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -210,7 +222,7 @@
                     $.ajax({
                         type:'GET',
                         url: '../Controller/DepositoCostoC.php?accion=listar',
-                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo_d:$("#dp_plazo_d_2").val(),dp_plazo_h:$("#dp_plazo_h_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val()},
+                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo_d:$("#dp_plazo_d_2").val(),dp_plazo_h:$("#dp_plazo_h_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val(),dp_last_update:$("#dp_last_update").val()},
                         success:function(data){
 
                             $("#divHistorico").html(data);
