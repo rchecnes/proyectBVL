@@ -63,7 +63,7 @@
 		      }
 		    });
 
-		    guardarData = function(data){
+		    /*guardarData = function(data){
 		        $.ajax({
 		            type: 'POST',
 		            url: '../Controller/EmpresaC.php?accion=savimported',
@@ -73,28 +73,32 @@
 		                window.location.assign("../Controller/EmpresaC.php?accion=index");
 		            }
 		        });
-		    }
+			}*/
 
 		    inportarEmpresa = function(){
 
-		        var url = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
+		        //var url = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
 
 		        $("#loading").show();
 
 		        $.ajax({
 		            type:'GET',
-		            url: url,
+		            url: '../Controller/EmpresaC.php?accion=importarmanual',
+					dataType: 'json',
 		            success:function(data){
 
-		                $("#empresas_import").html(data).hide();
-		                var empresas = prepararData(data);	                
-		                guardarData(empresas);
+						$("#loading").hide();
+		                //$("#empresas_import").html(data).hide();
+		                //var empresas = prepararData(data);	                
+		                //guardarData(empresas);
+						window.location.assign("../Controller/EmpresaC.php?accion=index");
 		                //getHistorico();
+						
 		            }
 		        });
 		    }
 
-			prepararData = function(data){
+			/*prepararData = function(data){
 			        
 		        var dataFila = [];
 
@@ -130,7 +134,7 @@
 		        });
 
 		        return dataFila;
-		    }
+		    }*/
          });
 	</script>
 </body>
