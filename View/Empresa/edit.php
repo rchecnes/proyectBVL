@@ -13,10 +13,16 @@
 		<h3><?=$titulo?></h3>
 		<br>
 		<form class="form-horizontal" method="POST" action="../Controller/EmpresaC.php?accion=update" id="form_empresa">
+		<div class="form-group">
+		    <label class="col-sm-2 control-label">Codigo BVL:</label>
+		    <div class="col-sm-10">
+				<input type="hidden" class="form-control" id="codigo" name="codigo" value="<?=$em['cod_emp']?>">
+		      <input type="text" class="form-control" id="cod_emp_bvl" name="cod_emp_bvl" value="<?=$em['cod_emp_bvl']?>">
+		    </div>
+		  </div>
 		  <div class="form-group">
 		    <label class="col-sm-2 control-label">Nombre:</label>
 		    <div class="col-sm-10">
-		      <input type="hidden" class="form-control" id="codigo" name="codigo" value="<?=$em['cod_emp']?>">
 		      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?=$em['nom_empresa']?>">
 		    </div>
 		  </div>
@@ -81,6 +87,13 @@
 	            validating: 'glyphicon glyphicon-refresh'
 	        },
 	        fields: {
+				cod_emp_bvl: {
+	                validators: {
+	                        notEmpty: {
+	                        message: 'Campo requerido'
+	                    }
+	                }
+	            },
 	            nombre: {
 	                validators: {
 	                        notEmpty: {

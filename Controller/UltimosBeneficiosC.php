@@ -4,7 +4,7 @@ require_once('TiempoC.php');
 function indexAction(){
 
 	include('../Control/Combobox/Combobox.php');
-	include('../View/CierreDelDia/index.php');
+	include('../View/UltimosBeneficios/index.php');
 }
 
 function listarAction(){
@@ -41,6 +41,9 @@ function listarAction(){
 	include('../View/CierreDelDia/listar.php');
 }
 
+function importarManual(){
+	
+}
 
 switch ($_GET['accion']) {
 	case 'index':
@@ -48,6 +51,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'listar':
 		listarAction();
+		break;
+	case 'importarmanual':
+		importarManual();
 		break;
 	default:
 		# code...

@@ -11,7 +11,8 @@
 		<h3 class="title">LISTA DE EMPRESAS</h3>
 		<p class="align-right">
 			<a href="../Controller/EmpresaC.php?accion=new" class="btn btn-default" role="button">Nueva Empresa</a>
-			<button type="button" class="btn btn-success" onclick="inportarEmpresa()">Importar Empresa</button>
+			<button type="button" class="btn btn-success" onclick="inportarEmpresa('new')">Importar Nuevas Empresas</button>
+			<button type="button" class="btn btn-success" onclick="inportarEmpresa('update')">Actualizar Informacion</button>
 			<img src="../Assets/img/load.gif" id="loading" style="display: none">
 		</p>
 		<div id="empresas_import"></div>
@@ -22,6 +23,7 @@
 				<th colspan="2">&nbsp;</th>
 			</tr>
 		    <tr>
+				<th>Codigo BVL</th>
 		        <th>Nemónico</th>
 		        <th>Nombre</th>		        
 		        <th>Sector</th>
@@ -35,6 +37,7 @@
 		    while ($em = mysqli_fetch_array($empresas)) {
 		    ?>
 		    <tr>
+				<td><?=$em['cod_emp_bvl']?></td>
 		        <td><?=$em['nemonico']?></td>
 		        <td><?=$em['nom_empresa']?></td>		        
 		        <td><?=$em['nom_sector']?></td>
@@ -63,19 +66,7 @@
 		      }
 		    });
 
-		    /*guardarData = function(data){
-		        $.ajax({
-		            type: 'POST',
-		            url: '../Controller/EmpresaC.php?accion=savimported',
-		            data: {info:JSON.stringify(data)},
-		            success: function(data){
-		                $("#loading").hide();
-		                window.location.assign("../Controller/EmpresaC.php?accion=index");
-		            }
-		        });
-			}*/
-
-		    inportarEmpresa = function(){
+		    inportarEmpresa = function(tipo){
 
 		        //var url = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
 
@@ -83,17 +74,13 @@
 
 		        $.ajax({
 		            type:'GET',
-		            url: '../Controller/EmpresaC.php?accion=importarmanual',
+		            url: '../Controller/EmpresaC.php?accion=importarmanual&tipo='+tipo,
 					dataType: 'json',
 		            success:function(data){
 
 						$("#loading").hide();
-		                //$("#empresas_import").html(data).hide();
-		                //var empresas = prepararData(data);	                
-		                //guardarData(empresas);
-						window.location.assign("../Controller/EmpresaC.php?accion=index");
-		                //getHistorico();
-						
+
+						window.location.assign("../Controller/EmpresaC.php?accion=index");	
 		            }
 		        });
 		    }

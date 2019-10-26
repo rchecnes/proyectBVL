@@ -13,6 +13,12 @@
 		<h3><?=$titulo?></h3>
 		<br>
 		<form class="form-horizontal" method="POST" action="../Controller/EmpresaC.php?accion=create" id="form_empresa">
+		<div class="form-group">
+		    <label class="col-sm-2 control-label">Codigo BVL:</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" id="cod_emp_bvl" name="cod_emp_bvl" value="">
+		    </div>
+		  </div>
 		  <div class="form-group">
 		    <label class="col-sm-2 control-label">Nombre:</label>
 		    <div class="col-sm-10">
@@ -79,7 +85,15 @@
 	            invalid: 'glyphicon glyphicon-remove',
 	            validating: 'glyphicon glyphicon-refresh'
 	        },
+			
 	        fields: {
+				cod_emp_bvl: {
+	                validators: {
+	                        notEmpty: {
+	                        message: 'Campo requerido'
+	                    }
+	                }
+	            },
 	            nombre: {
 	                validators: {
 	                        notEmpty: {

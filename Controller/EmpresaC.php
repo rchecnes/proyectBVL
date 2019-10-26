@@ -54,9 +54,11 @@ function createAction(){
 	$sector   = $_POST['sector'];
 	$segmento = $_POST['segmento'];
 	$moneda   = $_POST['moneda'];
+	$cod_emp_bvl   = $_POST['cod_emp_bvl'];
+	
 	$estado   = (isset($_POST['estado']))?1:0;
 
-	$sql  = "INSERT INTO empresa(cod_emp,nombre,nemonico,cod_sector,segmento,moneda, estado) VALUES('$codigo','$nombre','$nemonico','$sector','$segmento','$moneda','$estado')";
+	$sql  = "INSERT INTO empresa(cod_emp,nombre,nemonico,cod_sector,segmento,moneda, estado, cod_emp_bvl) VALUES('$codigo','$nombre','$nemonico','$sector','$segmento','$moneda','$estado','$cod_emp_bvl')";
 	$resp = mysqli_query($link, $sql) or die(mysqli_error($link));
 
 	//echo $insert;
@@ -94,8 +96,9 @@ function updateAction(){
 	$segmento = $_POST['segmento'];
 	$moneda   = $_POST['moneda'];
 	$estado   = (isset($_POST['estado']))?1:0;
+	$cod_emp_bvl   = $_POST['cod_emp_bvl'];
 
-	$sql  = "UPDATE empresa SET nombre='$nombre', nemonico='$nemonico', cod_sector='$sector', segmento='$segmento', moneda='$moneda',estado='$estado' WHERE cod_emp='$codigo'";
+	$sql  = "UPDATE empresa SET nombre='$nombre', nemonico='$nemonico', cod_sector='$sector', segmento='$segmento', moneda='$moneda',estado='$estado', cod_emp_bvl='$cod_emp_bvl' WHERE cod_emp='$codigo'";
 	$resp = mysqli_query($link, $sql);
 
 	//echo $insert;
@@ -272,31 +275,86 @@ function savImportedAction($data){
 	return $resp;
 }
 
+function updateImportedAction($data){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+	$dataBVL = $data;
+
+	$del = "";
+	$sql = "";
+
+	foreach ($dataBVL as $key => $f) {
+
+		$nemonico = strtoupper($f['nem']);
+
+		if($nemonico!='' && $f['cod']!=''){
+			
+			$cod_emp_bvl = $f['cod'];
+
+			$sqlval = "SELECT cod_emp_bvl FROM empresa WHERE UPPER(nemonico)='$nemonico'";
+			$resval = mysqli_query($link, $sqlval);
+			$rowval = mysqli_fetch_array($resval);
+
+			if($rowval['cod_emp_bvl']==''){
+
+				$update = "UPDATE empresa SET cod_emp_bvl='$cod_emp_bvl' WHERE UPPER(nemonico)='$nemonico'";
+				$resp   = mysqli_query($link,$update);
+
+			}
+			
+		}
+		
+	}
+
+	return true;
+}
+
 function importarManualAction(){
 
 	include('../Util/simple_html_dom_php5.6.php');
 	$url = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
-    //$html = file_get_html($url);
+
 	$html = file_get_contents_curl($url);
 	
-	$data = array($data);
+	$tipo = $_GET['tipo'];
+
+	$data = array();
 
 	if (!empty($html)) {
 
         foreach($html->find('tr') as $e){
-        	
+			
+			$Cod_Empresa = '';
+			foreach($e->find('td') as $td){
+				$href = $td->find('a',0)->href;
+				$pos_inicio = strpos($href,'Cod_Empresa=')+12;
+				$pos_final = strpos($href,'&Nemonico');
+				$Cod_Empresa = substr($href, $pos_inicio, ($pos_final-$pos_inicio));
+				if($Cod_Empresa!=''){break;}
+			}
+
 			if (isset($e->find('td',1)->plaintext)) {
-				//echo $e->find('td',1)->plaintext."<br>";
-				$data[] = array('emp'=>$e->find('td',1)->plaintext,
+
+				$data[] = array(
+								'cod'=>$Cod_Empresa,
+								'emp'=>$e->find('td',1)->plaintext,
 								'nem'=>$e->find('td',2)->plaintext,
 								'sec'=>$e->find('td',3)->plaintext,
 								'seg'=>$e->find('td',4)->plaintext,
 								'mon'=>$e->find('td',5)->plaintext);
 			}
+			
 		}
 	}
-	//print_r($data);
-	$val = savImportedAction($data);
+
+	$val = true;
+	if($tipo == 'new'){
+		$val = savImportedAction($data);
+	}
+	if($tipo == 'update'){
+		$val = updateImportedAction($data);
+	}
 
 	echo json_encode(array('res'=>$val));
 }
