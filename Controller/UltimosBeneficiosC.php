@@ -82,39 +82,50 @@ function importarManualAction(){
 
 			$div_0 = $html->find("div[class='divBloque']",0);
 			$table_1 = $div_0->find('table',1);
+			//$tr_0 = $table_1->find('tr',0);
 			
-			foreach($table_1->find("tr") as $tr){
-				
-				if (isset($tr->find('td',0)->plaintext)) {
+			if(isset($table_1->find('tr',0)->plaintext)){
 
-					$ub_der_mon = '';
-					$ub_der_imp = 0;
-					$ub_der_por = '';
-					$ub_der_tip = '';
+				foreach($table_1->find("tr") as $tr){
+					
+					if (isset($tr->find('td',0)->plaintext)) {
 
-					$derecho = $tr->find("td",0)->plaintext;
-					if(strpos($derecho, 'S/.') !== false ){$ub_der_mon = 'S/.';}
-					if(strpos($derecho, 'US$') !== false){$ub_der_mon = 'US$';}
+						$ub_der_mon = '';
+						$ub_der_imp = 0;
+						$ub_der_por = '';
+						$ub_der_tip = '';
 
-					if(strpos($derecho, 'Efe.') !== false ){$ub_der_tip = 'Efe.';}
-					if(strpos($derecho, 'Accs.') !== false){$ub_der_tip = 'Accs.';}
+						$derecho = $tr->find("td",0)->plaintext;
+						if(strpos($derecho, 'S/.') !== false ){$ub_der_mon = 'S/.';}
+						if(strpos($derecho, 'US$') !== false){$ub_der_mon = 'US$';}
 
-					if(strpos($derecho, '%') !== false ){$ub_der_por = '%';}
+						if(strpos($derecho, 'Efe.') !== false ){$ub_der_tip = 'Efe.';}
+						if(strpos($derecho, 'Accs.') !== false){$ub_der_tip = 'Accs.';}
 
-					$ub_der_imp = str_replace($ub_der_mon,'',$derecho);
-					$ub_der_imp = str_replace($ub_der_tip,'',$ub_der_imp);
-					$ub_der_imp = str_replace($ub_der_por,'',$ub_der_imp);
-					$ub_der_imp = trim($ub_der_imp);
+						if(strpos($derecho, '%') !== false ){$ub_der_por = '%';}
 
-					$ub_fech_acu = getFechaBD($tr->find("td",1)->plaintext);
-					$ub_fech_cor = getFechaBD($tr->find("td",2)->plaintext);
-					$ub_fech_reg = getFechaBD($tr->find("td",3)->plaintext);
-					$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
+						$ub_der_imp = str_replace($ub_der_mon,'',$derecho);
+						$ub_der_imp = str_replace($ub_der_tip,'',$ub_der_imp);
+						$ub_der_imp = str_replace($ub_der_por,'',$ub_der_imp);
+						$ub_der_imp = trim($ub_der_imp);
 
-					//Insertar a BD
-					$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
-					VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo')";
-					$resin = mysqli_query($link, $sqlin);
+						$ub_fech_acu = getFechaBD($tr->find("td",1)->plaintext);
+						$ub_fech_cor = getFechaBD($tr->find("td",2)->plaintext);
+						$ub_fech_reg = getFechaBD($tr->find("td",3)->plaintext);
+						$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
+
+						//Consultamos si ya se registro
+						$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
+						$resval = mysqli_query($link, $sqlval);
+						$rowval = mysqli_fetch_array($resval);
+
+						if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
+							//Insertar a BD
+							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
+							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo')";
+							$resin = mysqli_query($link, $sqlin);
+						}
+					}
 				}
 			}
 		}
