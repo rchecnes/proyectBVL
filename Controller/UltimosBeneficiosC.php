@@ -1,8 +1,7 @@
 <?php
-require_once('TiempoC.php');
-
 function indexAction(){
 
+	require_once('TiempoC.php');
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
@@ -56,18 +55,13 @@ function getFechaBD($date){
 	return $ano.'-'.$mes.'-'.$dia;
 }
 
-function importarManualAction(){
+function importarBeneficio($ruta, $condicion){
 
-	include('../Util/simple_html_dom_php5.6.php');
-	include('../Config/Conexion.php');
+	include($ruta.'/Util/simple_html_dom_php5.6.php');
+	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$nemonico = $_GET['nemonico'];
-
-	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!=''";
-	if($nemonico !=''){
-		$sql .= " AND nemonico='$nemonico'";
-	}
+	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	while($row = mysqli_fetch_array($res)){
@@ -77,13 +71,14 @@ function importarManualAction(){
 
 		$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
 		$html = file_get_contents_curl($url);
-
+		//echo $url."<br>";
+		//echo $new_nemonico."<br>";
 		if (!empty($html)) {
 
 			$div_0 = $html->find("div[class='divBloque']",0);
-			$table_1 = $div_0->find('table',1);
+			$table_1 = ($div_0->find('table',1)!=null)?$div_0->find('table',1):$div_0->find('table',0);
 			//$tr_0 = $table_1->find('tr',0);
-			
+			//echo $div_0."<br>";
 			if(isset($table_1->find('tr',0)->plaintext)){
 
 				foreach($table_1->find("tr") as $tr){
@@ -124,15 +119,48 @@ function importarManualAction(){
 							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
 							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo')";
 							$resin = mysqli_query($link, $sqlin);
+							unset($sqlin);
+							unset($resin);
 						}
+						unset($sqlval);
 					}
 				}
 			}
+			unset($div_0);
+			unset($table_1);
 		}
+		unset($html);
 	}
 }
 
-switch ($_GET['accion']) {
+function importarManualAction(){
+
+	$nemonico = $_GET['nemonico'];
+	$ruta = "..";
+
+	$condicion = "";
+	if($nemonico !=''){
+		$condicion .= " AND nemonico='$nemonico'";
+	}
+
+	importarBeneficio($ruta, $condicion);
+}
+
+function importarAutomaticolAction(){
+
+	$ruta = "public_html/analisisdevalor.com";
+	$condicion = "";
+	
+	importarBeneficio($ruta, $condicion);
+}
+
+//Este parametro se obtiene desde la vista y crons
+$accion = (isset($_GET['accion']))?$_GET['accion']:'';
+if($accion == ''){
+	$accion = (isset($argv[1]))?$argv[1]:'';
+}
+
+switch ($accion) {
 	case 'index':
 		indexAction();
 		break;
@@ -141,6 +169,9 @@ switch ($_GET['accion']) {
 		break;
 	case 'importarmanual':
 		importarManualAction();
+		break;
+	case 'importarautomatico':
+		importarAutomaticolAction();
 		break;
 	default:
 		# code...
