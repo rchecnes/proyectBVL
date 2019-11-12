@@ -62,7 +62,7 @@
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND cod_emp_bvl!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => 'Todos',
-										'defect' => 'RELAPAC1',
+										'defect' => '',
 										'edit'   => '',
 										'enable' => 'enable'
 									);
