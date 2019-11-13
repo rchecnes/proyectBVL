@@ -38,6 +38,8 @@ $url = str_replace(" ","",$url);
         <li class="<?=($url=='/Controller/DepositoEmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/DepositoEmpresaC.php?accion=index">Deposito - Plazo</a></li>
         <li class="<?=($url=='/Controller/AnalisisDepositoC.php?accion=index')?'active':''?>"><a href="../Controller/AnalisisDepositoC.php?accion=index">Análisis - Depositos</a></li>
         <li class="<?=($url=='/Controller/UltimosBeneficiosC.php?accion=index')?'active':''?>"><a href="../Controller/UltimosBeneficiosC.php?accion=index">Últimos Benficios</a></li>
+        <li class="<?=($url=='/Controller/IndiceFinancieroC.php?accion=index')?'active':''?>"><a href="../Controller/IndiceFinancieroC.php?accion=index">Indice Financiero</a></li>
+        <li class="<?=($url=='/Controller/EstadoFinancieroC.php?accion=index')?'active':''?>"><a href="../Controller/EstadoFinancieroC.php?accion=index">EstadoFinanciero</a></li>
       <?php elseif($_SESSION['nom_role']=='ROLE_ANONIMO'):?>
         <li class="<?=($url=='/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li class="<?=($url=='/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
