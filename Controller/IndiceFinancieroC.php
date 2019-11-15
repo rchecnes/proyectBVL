@@ -80,15 +80,31 @@ function importarIndiceFinanciero($ruta, $condicion){
 
 			$div_0 = $html->find("div[class='divBloque']",0);
 			$table_1 = ($div_0->find('table',1)!=null)?$div_0->find('table',1):$div_0->find('table',0);
-			//$tr_0 = $table_1->find('tr',0);
-			echo $table_1."<br>";
-			/*if(isset($table_1->find('tr',0)->plaintext)){
 
+			if(isset($table_1->find('tr',0)->plaintext)){
+
+				$anio = array();
 				foreach($table_1->find("tr") as $tr){
-					
-					if (isset($tr->find('td',0)->plaintext)) {
 
-						$ub_der_mon = '';
+					if (isset($tr->find('th',0)->plaintext)) {
+						foreach($tr->find('th') as $th){
+							$th_new = strtoupper(str_replace(' ','',$th->plaintext));
+							//if($th_new != 'INDICESFINANCIEROS'){ $anio[] = $th_new;}
+							$anio[] = $th_new;
+						}
+					}
+					//print_r($anio);
+					if (isset($tr->find('td',0)->plaintext) && $tr->find('td',0)->plaintext !='' && $tr->find('td',0)->plaintext !='&nbsp;') {
+
+						$c_td = 0;
+						foreach($tr->find('td') as $td){
+
+							echo $anio[$c_td]."->".$td->plaintext."<br>";
+							$c_td ++;
+						}
+					
+						
+						/*$ub_der_mon = '';
 						$ub_der_imp = 0;
 						$ub_der_por = '';
 						$ub_der_tip = '';
@@ -125,12 +141,12 @@ function importarIndiceFinanciero($ruta, $condicion){
 							unset($sqlin);
 							unset($resin);
 						}
-						unset($sqlval);
+						unset($sqlval);*/
 					}
 				}
 			}
 			unset($div_0);
-			unset($table_1);*/
+			unset($table_1);
 		}
 		unset($html);
 	}
