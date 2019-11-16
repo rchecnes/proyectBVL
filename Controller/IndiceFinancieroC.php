@@ -16,24 +16,29 @@ function listarAction(){
 
 	$nemonico = $_GET['nemonico'];
 
-	$sql = "SELECT * FROM cab_indice_financiero";
+	$sql = "SELECT c.*,e.nombre FROM cab_indice_financiero c 
+			INNER JOIN empresa e ON(c.inf_nemonico=e.nemonico)
+			WHERE c.inf_stat ='10'";
 
 	if ($nemonico != '') {
-		$sql .= " AND inf_nemonico='$nemonico'";
+		$sql .= " AND c.inf_nemonico='$nemonico'";
 	}
 
-	$sql .= " ORDER BY inf_nemonico ASC";
+	$sql .= " ORDER BY c.inf_nemonico ASC, c.inf_codigo ASC";
 	$res = mysqli_query($link, $sql);
 	$nro_reg = mysqli_num_rows($res);
 
 	//Obtenemos solos años
-	$sqla = "SELECT * FROM det_indice_financiero GROUP BY inf_anio ORDER BY inf_anio ASC";
+	$sqla = "SELECT inf_anio FROM det_indice_financiero WHERE inf_codigo<>''";
+	if ($nemonico != '') { $sqla .= " AND inf_nemonico='$nemonico'";}
+	$sqla .= " GROUP BY inf_anio ORDER BY inf_anio ASC";
 	$resa = mysqli_query($link, $sqla);
+
 	$array_anio = array();
 	while($rowa = mysqli_fetch_array($resa)){
-		$array_anio[] = $rowa['inf_anio'];
+		$array_anio[$rowa['inf_anio']] = $rowa['inf_anio'];
 	}
-
+	//print_r($array_anio);
 	include('../View/IndiceFinanciero/listar.php');
 }
 
@@ -75,12 +80,9 @@ function importarIndiceFinanciero($ruta, $condicion){
         $new_nemonico = $row['nemonico'];
         $imp_ind_fin = $row['imp_ind_fin'];
 
-        //$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
         $url = "https://www.bvl.com.pe/inf_financiera$new_codigo"."_"."$imp_ind_fin.html";
         $html = file_get_contents_curl($url);
-        //echo $url;
-		//echo $html."<br>";
-		//echo $new_nemonico."<br>";
+       
 		if (!empty($html)) {
 
 			$div_0 = $html->find("div[class='divBloque']",0);
@@ -98,12 +100,13 @@ function importarIndiceFinanciero($ruta, $condicion){
 							$anio[] = $th_new;
 						}
 					}
-					//print_r($anio);
+
 					if (isset($tr->find('td',0)->plaintext) && $tr->find('td',0)->plaintext !='' && $tr->find('td',0)->plaintext !='&nbsp;') {
 						
 						//Insertamos cabecera el texto
-						$inf_nombre = $tr->find('td',0)->plaintext;
+						$inf_nombre = trim($tr->find('td',0)->plaintext);
 						$inf_fech_crea = date('Y-m-d');
+						$inf_hora_crea = date('H:i:s');
 
 						//Consultamos si ya se registro
 						$sqlvalc = "SELECT inf_codigo FROM cab_indice_financiero WHERE inf_nemonico='$new_nemonico' AND inf_nombre='$inf_nombre' LIMIT 1";
@@ -112,7 +115,7 @@ function importarIndiceFinanciero($ruta, $condicion){
 
 						if($rowvalc['inf_codigo'] == ''){
 
-							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nemonico, inf_nombre, inf_stat, inf_fech_crea)VALUES('$inf_codigo','$new_nemonico','$inf_nombre','10','$inf_fech_crea')";
+							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nemonico, inf_nombre, inf_fech_crea, inf_hora_crea, inf_stat)VALUES('$inf_codigo','$new_nemonico','$inf_nombre','$inf_fech_crea','$inf_hora_crea','10')";
 							$resinc = mysqli_query($link, $sqlinc);
 							unset($sqlinc);
 						}
@@ -123,7 +126,9 @@ function importarIndiceFinanciero($ruta, $condicion){
 							if($c_td > 0){
 
 								$anio_reg = $anio[$c_td];
-								$anio_val = $td->plaintext;
+								$anio_val = trim($td->plaintext);
+								$anio_val = str_replace(' ','',$td->plaintext);
+								$anio_val = str_replace(',','',$td->plaintext);
 
 								//Consultamos si para ese año ya se registro
 								$sqlvald = "SELECT inf_codigo FROM det_indice_financiero WHERE inf_nemonico='$new_nemonico' AND inf_codigo='$inf_codigo' AND  inf_anio='$anio_reg' LIMIT 1";

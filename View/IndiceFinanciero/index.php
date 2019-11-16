@@ -48,7 +48,7 @@
 	<div class="container">
 		<div class="tabbable">
 	        <ul class="nav nav-tabs" id="tabs">
-	          <li class="active"><a data-toggle="tab" href="#cierre_del_dia"><h4>Indice Financiero</h4></a></li>
+	          <li class="active"><a data-toggle="tab" href="#cierre_del_dia"><h4>Indices Financieros</h4></a></li>
 	        </ul>
 	        <div class="tab-content">
 	            <div id="cierre_del_dia" class="tab-pane fade in active">
@@ -62,7 +62,7 @@
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_ind_fin!='' AND cod_emp_bvl!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => 'Todos',
-										'defect' => '',
+										'defect' => 'GRAMONC1',
 										'edit'   => '',
 										'enable' => 'enable'
 									);

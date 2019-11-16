@@ -2,34 +2,47 @@
 <table class="table table-bordered">
     <tr>
         <th>Nemonico</th>
+        <th>Nombre Empresa</th>
         <th>Indices Financieros</th>
         <?php 
-        
+        foreach($array_anio as $anio){
+            echo '<th align="center">'.$anio.'</th>';
+        }
         ?>
     </tr>
     <?php
-    while ($ub = mysqli_fetch_array($res)) {
+    while ($inf = mysqli_fetch_array($res)) {
 
-        $inf_nemonico  = $ub['inf_nemonico'];
-        $inf_nombre  = $ub['inf_nombre'];
-        $ub_der_imp  = $ub['ub_der_imp'];
-        $ub_der_por  = $ub['ub_der_por'];
-        $ub_der_tip  = $ub['ub_der_tip'];
-        $ub_fech_acu  = $ub['ub_fech_acu'];
-        $ub_fech_cor  = $ub['ub_fech_cor'];
-        $ub_fech_reg  = $ub['ub_fech_reg'];
-        $ub_fech_ent  = $ub['ub_fech_ent'];
+        $inf_codigo  = $inf['inf_codigo'];
+        $inf_nemonico  = $inf['inf_nemonico'];
+        $inf_nombre  = $inf['inf_nombre'];
+        $emp_nombre  = $inf['nombre'];
+        
     
-        //$derecho = $ub_der_mon.' '.$ub_der_imp.' '.$ub_der_por.' '.$ub_der_tip;
-        $derecho = $ub['ub_der_comp'];
+        
+        $sqla = "SELECT * FROM det_indice_financiero WHERE inf_codigo='$inf_codigo' AND inf_nemonico='$inf_nemonico' ORDER BY inf_anio ASC";
+        $resa = mysqli_query($link, $sqla);
+        $det_arr_anio = array();
+        while($rowa = mysqli_fetch_array($resa)){
+            $det_arr_anio[$rowa['inf_anio']] = array('inf_anio'=>$rowa['inf_anio'],'inf_valor'=>$rowa['inf_valor']);
+        }
     ?>
     <tr>
         <td><?=$inf_nemonico?></td>
+        <td><?=$emp_nombre?></td>
         <td><?=$inf_nombre?></td>
-        <td><?=$ub_fech_acu?></td>
-        <td><?=$ub_fech_cor?></td>
-        <td><?=$ub_fech_reg?></td>
-        <td><?=$ub_fech_ent?></td>
+        <?php
+        foreach($array_anio as $anio){
+
+            if($anio == $det_arr_anio[$anio]['inf_anio']){
+                $inf_val_new = ($det_arr_anio[$anio]['inf_valor'] > 0)?number_format($det_arr_anio[$anio]['inf_valor'],4,'.',''):'-.-';
+                echo '<td align="right">'.$inf_val_new.'</td>';
+            }else{
+                echo '<td>&nbsp;</td>';
+            }
+            
+        }
+        ?>
         
     </tr>
     <?php

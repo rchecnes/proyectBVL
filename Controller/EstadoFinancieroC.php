@@ -55,7 +55,7 @@ function getFechaBD($date){
 	return $ano.'-'.$mes.'-'.$dia;
 }
 
-function importarBeneficio($ruta, $condicion){
+function importarEstadoFinanciero($ruta, $condicion){
 
 	include($ruta.'/Util/simple_html_dom_php5.6.php');
 	include($ruta.'/Config/Conexion.php');
@@ -143,7 +143,7 @@ function importarManualAction(){
 		$condicion .= " AND nemonico='$nemonico'";
 	}
 
-	importarBeneficio($ruta, $condicion);
+	importarEstadoFinanciero($ruta, $condicion);
 }
 
 function importarAutomaticolAction(){
@@ -151,7 +151,7 @@ function importarAutomaticolAction(){
 	$ruta = "public_html/analisisdevalor.com";
 	$condicion = "";
 	
-	importarBeneficio($ruta, $condicion);
+	importarEstadoFinanciero($ruta, $condicion);
 }
 
 //Este parametro se obtiene desde la vista y crons
