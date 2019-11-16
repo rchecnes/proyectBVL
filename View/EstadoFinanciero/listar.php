@@ -1,39 +1,41 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
+<style>
+.cab{
+    background-color: #a7a9ac;
+    color:#FFF;
+}
+</style>
 <table class="table table-bordered">
     <tr>
-        <th>Empresa</th>
-        <th>Derechos</th>
-        <th>Fecha de Acuerdo</th>
-        <th>Fecha de Corte</th>
-        <th>Fecha de Registro</th>
-        <th>Fecha de Entrega</th>
+        <th colspan="5" style="background:#b11b21;color:#FFF;text-align: center;"><?=$nombre_empresa?></th>
     </tr>
+    <tr>
+        <th colspan="5" style="background:#434343;color:#FFF;text-align: center;">ESTADO DE SITUACION FINANCIERA / STATEMENT OF FINANCIAL POSITION</th>
+    </tr>
+    
     <?php
     while ($ub = mysqli_fetch_array($res)) {
 
-        $nombre  = $ub['nombre'];
-        $ub_der_mon  = $ub['ub_der_mon'];
-        $ub_der_imp  = $ub['ub_der_imp'];
-        $ub_der_por  = $ub['ub_der_por'];
-        $ub_der_tip  = $ub['ub_der_tip'];
-        $ub_fech_acu  = $ub['ub_fech_acu'];
-        $ub_fech_cor  = $ub['ub_fech_cor'];
-        $ub_fech_reg  = $ub['ub_fech_reg'];
-        $ub_fech_ent  = $ub['ub_fech_ent'];
+        $cef_cod  = $ub['cef_cod'];
+        $cef_cod_bvl  = $ub['cef_cod_bvl'];
+        $cef_nomb  = $ub['cef_nomb'];
+        $def_nemonico  = $ub['def_nemonico'];
+        $def_val_de  = $ub['def_val_de'];
+        $def_val_ha  = $ub['def_val_ha'];
+        $cef_cab_det  = $ub['cef_cab_det'];
+
+        echo "<tr>";
+        if($cef_cab_det == 'CAB'){
+            $def_val_de_new = ($def_val_de!=0)?number_format($def_val_de,0,'',','):'';
+            $def_val_ha_new = ($def_val_ha!=0)?number_format($def_val_ha,0,'',','):'';
+            echo "<th class='cab'>$cef_cod_bvl</th><th colspan='2' class='cab'>$cef_nomb</th><th class='cab' align='right'>$def_val_de_new</th><th class='cab' align='right'>$def_val_ha_new</th>";
+        }else{
+            $def_val_de_new = ($def_val_de!='')?number_format($def_val_de,0,'',','):'';
+            $def_val_ha_new = ($def_val_ha!='')?number_format($def_val_ha,0,'',','):'';
+            echo "<td>$cef_cod_bvl</td><td>&nbsp;</td><td>$cef_nomb</td><td align='right'>$def_val_de_new</td><td align='right'>$def_val_ha_new</td>";
+        }
+        echo "</tr>";
     
-        //$derecho = $ub_der_mon.' '.$ub_der_imp.' '.$ub_der_por.' '.$ub_der_tip;
-        $derecho = $ub['ub_der_comp'];
-    ?>
-    <tr>
-        <td><?=$nombre?></td>
-        <td><?=$derecho?></td>
-        <td><?=$ub_fech_acu?></td>
-        <td><?=$ub_fech_cor?></td>
-        <td><?=$ub_fech_reg?></td>
-        <td><?=$ub_fech_ent?></td>
-        
-    </tr>
-    <?php
     }
     ?>
 </table>

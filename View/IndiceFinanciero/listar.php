@@ -1,12 +1,22 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
+<style>
+.cab{
+    background-color: #616161;
+    color:#FFF;
+}
+.cab-ind{
+    background-color: #b11b21;
+    color:#FFF;
+}
+</style>
 <table class="table table-bordered">
     <tr>
-        <th>Nemonico</th>
-        <th>Nombre Empresa</th>
-        <th>Indices Financieros</th>
+        <th class="cab">Nemonico</th>
+        <th class="cab">Nombre Empresa</th>
+        <th class="cab-ind">Indices Financieros</th>
         <?php 
         foreach($array_anio as $anio){
-            echo '<th align="center">'.$anio.'</th>';
+            echo '<th align="center" class="cab-ind">'.$anio.'</th>';
         }
         ?>
     </tr>

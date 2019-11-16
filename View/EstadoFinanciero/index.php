@@ -61,8 +61,8 @@
 										'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
-										'empty'  => 'Todos',
-										'defect' => '',
+										'empty'  => false,
+										'defect' => 'GRAMONC1',
 										'edit'   => '',
 										'enable' => 'enable'
 									);
