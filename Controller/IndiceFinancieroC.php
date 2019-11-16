@@ -16,18 +16,23 @@ function listarAction(){
 
 	$nemonico = $_GET['nemonico'];
 
-	$sql = "SELECT * FROM ultimos_beneficios ub
-			INNER JOIN empresa em ON(ub.ub_nemonico=em.nemonico)";
+	$sql = "SELECT * FROM cab_indice_financiero";
 
 	if ($nemonico != '') {
-		$sql .= " AND em.nemonico='$nemonico'";
+		$sql .= " AND inf_nemonico='$nemonico'";
 	}
 
-	$sql .= " ORDER BY ub.ub_fech_acu DESC";
-
+	$sql .= " ORDER BY inf_nemonico ASC";
 	$res = mysqli_query($link, $sql);
-
 	$nro_reg = mysqli_num_rows($res);
+
+	//Obtenemos solos años
+	$sqla = "SELECT * FROM det_indice_financiero GROUP BY inf_anio ORDER BY inf_anio ASC";
+	$resa = mysqli_query($link, $sqla);
+	$array_anio = array();
+	while($rowa = mysqli_fetch_array($resa)){
+		$array_anio[] = $rowa['inf_anio'];
+	}
 
 	include('../View/IndiceFinanciero/listar.php');
 }
@@ -84,64 +89,61 @@ function importarIndiceFinanciero($ruta, $condicion){
 			if(isset($table_1->find('tr',0)->plaintext)){
 
 				$anio = array();
+				$inf_codigo = 10000;
 				foreach($table_1->find("tr") as $tr){
 
 					if (isset($tr->find('th',0)->plaintext)) {
 						foreach($tr->find('th') as $th){
 							$th_new = strtoupper(str_replace(' ','',$th->plaintext));
-							//if($th_new != 'INDICESFINANCIEROS'){ $anio[] = $th_new;}
 							$anio[] = $th_new;
 						}
 					}
 					//print_r($anio);
 					if (isset($tr->find('td',0)->plaintext) && $tr->find('td',0)->plaintext !='' && $tr->find('td',0)->plaintext !='&nbsp;') {
+						
+						//Insertamos cabecera el texto
+						$inf_nombre = $tr->find('td',0)->plaintext;
+						$inf_fech_crea = date('Y-m-d');
+
+						//Consultamos si ya se registro
+						$sqlvalc = "SELECT inf_codigo FROM cab_indice_financiero WHERE inf_nemonico='$new_nemonico' AND inf_nombre='$inf_nombre' LIMIT 1";
+						$resvalc = mysqli_query($link, $sqlvalc);
+						$rowvalc = mysqli_fetch_array($resvalc);
+
+						if($rowvalc['inf_codigo'] == ''){
+
+							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nemonico, inf_nombre, inf_stat, inf_fech_crea)VALUES('$inf_codigo','$new_nemonico','$inf_nombre','10','$inf_fech_crea')";
+							$resinc = mysqli_query($link, $sqlinc);
+							unset($sqlinc);
+						}
 
 						$c_td = 0;
 						foreach($tr->find('td') as $td){
+							
+							if($c_td > 0){
 
-							echo $anio[$c_td]."->".$td->plaintext."<br>";
+								$anio_reg = $anio[$c_td];
+								$anio_val = $td->plaintext;
+
+								//Consultamos si para ese año ya se registro
+								$sqlvald = "SELECT inf_codigo FROM det_indice_financiero WHERE inf_nemonico='$new_nemonico' AND inf_codigo='$inf_codigo' AND  inf_anio='$anio_reg' LIMIT 1";
+								$resvald = mysqli_query($link, $sqlvald);
+								$rowvald = mysqli_fetch_array($resvald);
+
+								if($rowvald['inf_codigo'] == ''){
+
+									$sqlind = "INSERT INTO det_indice_financiero(inf_codigo, inf_nemonico, inf_anio, inf_valor)VALUES('$inf_codigo','$new_nemonico','$anio_reg','$anio_val')";
+									$resind = mysqli_query($link, $sqlind);
+									unset($sqlind);
+								}
+								unset($sqlvald);
+								unset($resvald);
+							}							
+
 							$c_td ++;
 						}
-					
-						
-						/*$ub_der_mon = '';
-						$ub_der_imp = 0;
-						$ub_der_por = '';
-						$ub_der_tip = '';
 
-						$derecho = $tr->find("td",0)->plaintext;
-						if(strpos($derecho, 'S/.') !== false ){$ub_der_mon = 'S/.';}
-						if(strpos($derecho, 'US$') !== false){$ub_der_mon = 'US$';}
-
-						if(strpos($derecho, 'Efe.') !== false ){$ub_der_tip = 'Efe.';}
-						if(strpos($derecho, 'Accs.') !== false){$ub_der_tip = 'Accs.';}
-
-						if(strpos($derecho, '%') !== false ){$ub_der_por = '%';}
-
-						$ub_der_imp = str_replace($ub_der_mon,'',$derecho);
-						$ub_der_imp = str_replace($ub_der_tip,'',$ub_der_imp);
-						$ub_der_imp = str_replace($ub_der_por,'',$ub_der_imp);
-						$ub_der_imp = trim($ub_der_imp);
-
-						$ub_fech_acu = getFechaBD($tr->find("td",1)->plaintext);
-						$ub_fech_cor = getFechaBD($tr->find("td",2)->plaintext);
-						$ub_fech_reg = getFechaBD($tr->find("td",3)->plaintext);
-						$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
-
-						//Consultamos si ya se registro
-						$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
-						$resval = mysqli_query($link, $sqlval);
-						$rowval = mysqli_fetch_array($resval);
-
-						if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
-							//Insertar a BD
-							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
-							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo')";
-							$resin = mysqli_query($link, $sqlin);
-							unset($sqlin);
-							unset($resin);
-						}
-						unset($sqlval);*/
+						$inf_codigo ++;					
 					}
 				}
 			}

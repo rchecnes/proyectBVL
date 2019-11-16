@@ -1,18 +1,17 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
 <table class="table table-bordered">
     <tr>
-        <th>Empresa</th>
-        <th>Derechos</th>
-        <th>Fecha de Acuerdo</th>
-        <th>Fecha de Corte</th>
-        <th>Fecha de Registro</th>
-        <th>Fecha de Entrega</th>
+        <th>Nemonico</th>
+        <th>Indices Financieros</th>
+        <?php 
+        
+        ?>
     </tr>
     <?php
     while ($ub = mysqli_fetch_array($res)) {
 
-        $nombre  = $ub['nombre'];
-        $ub_der_mon  = $ub['ub_der_mon'];
+        $inf_nemonico  = $ub['inf_nemonico'];
+        $inf_nombre  = $ub['inf_nombre'];
         $ub_der_imp  = $ub['ub_der_imp'];
         $ub_der_por  = $ub['ub_der_por'];
         $ub_der_tip  = $ub['ub_der_tip'];
@@ -25,8 +24,8 @@
         $derecho = $ub['ub_der_comp'];
     ?>
     <tr>
-        <td><?=$nombre?></td>
-        <td><?=$derecho?></td>
+        <td><?=$inf_nemonico?></td>
+        <td><?=$inf_nombre?></td>
         <td><?=$ub_fech_acu?></td>
         <td><?=$ub_fech_cor?></td>
         <td><?=$ub_fech_reg?></td>
