@@ -87,7 +87,7 @@ function importarEstadoFinanciero($ruta, $condicion){
 		$cef_hora_crea = date('H:i:s');
 
 		//$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
-		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$def_peri&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_tipo&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0";
+		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$def_peri&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_tipo&Tipo1=T&Tipo2=C&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
 		
 		if (!empty($html)) {
