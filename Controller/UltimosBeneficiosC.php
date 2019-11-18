@@ -9,6 +9,18 @@ function indexAction(){
 	include('../View/UltimosBeneficios/index.php');
 }
 
+function editAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	include('../Control/Combobox/Combobox.php');
+	include('../View/UltimosBeneficios/edit.php');
+
+	//ub_cod_emp_bvl
+}
+
 function listarAction(){
 
 	include('../Config/Conexion.php');
@@ -164,9 +176,15 @@ switch ($accion) {
 	case 'index':
 		indexAction();
 		break;
-	case 'listar':
-		listarAction();
+	case 'new':
+		editAction();
 		break;
+	case 'edit':
+		editAction();
+		break;
+	case 'listar':
+			listarAction();
+			break;
 	case 'importarmanual':
 		importarManualAction();
 		break;

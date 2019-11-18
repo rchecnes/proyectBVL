@@ -42,6 +42,7 @@
 			}
 
 			buscarImportado();
+
 		});
 
 	</script>
@@ -76,6 +77,7 @@
 	                    	<div class="form-group">
 								<input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="buscarImportado()">
 		                        <input name="button" type="button" class="btn btn-success" id="button" value="Importar Informacion" onclick="importarInformacion()">
+								<a href="../Controller/UltimosBeneficiosC.php?accion=new" class="btn btn-danger" role="button">Nuevo Registro</a>
 		                        <img src="../Assets/img/load.gif" id="loading" style="display: none">
 		                    </div>
 	                    </div>
