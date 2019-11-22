@@ -19,6 +19,12 @@ function editAction(){
 	include('../View/UltimosBeneficios/edit.php');
 
 	//ub_cod_emp_bvl
+	$accion = $_GET['accion'];
+	if($accion == 'new'){
+		
+	}else{
+		
+	}
 }
 
 function listarAction(){

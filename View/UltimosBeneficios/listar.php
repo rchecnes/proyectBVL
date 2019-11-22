@@ -7,6 +7,7 @@
         <th>Fecha de Corte</th>
         <th>Fecha de Registro</th>
         <th>Fecha de Entrega</th>
+        <th>Acciones</th>
     </tr>
     <?php
     while ($ub = mysqli_fetch_array($res)) {
@@ -31,7 +32,10 @@
         <td><?=$ub_fech_cor?></td>
         <td><?=$ub_fech_reg?></td>
         <td><?=$ub_fech_ent?></td>
-        
+        <td>
+            <a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;
+		    <a href="../Controller/EmpresaC.php?accion=delete&codigo=<?=$em['cod_emp']?>" class="color-red" role="button"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
+        </td>
     </tr>
     <?php
     }
