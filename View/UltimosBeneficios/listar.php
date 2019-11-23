@@ -33,8 +33,8 @@
         <td><?=$ub_fech_reg?></td>
         <td><?=$ub_fech_ent?></td>
         <td>
-            <a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;
-		    <a href="../Controller/EmpresaC.php?accion=delete&codigo=<?=$em['cod_emp']?>" class="color-red" role="button"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
+            <a href="../Controller/UltimosBeneficiosC.php?accion=edit&ub_cod=<?=$ub['ub_cod']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;
+		    <a href="../Controller/UltimosBeneficiosC.php?accion=delete&ub_cod=<?=$ub['ub_cod']?>" class="color-red" role="button"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
         </td>
     </tr>
     <?php

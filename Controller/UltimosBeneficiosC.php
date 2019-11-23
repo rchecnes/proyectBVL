@@ -9,6 +9,29 @@ function indexAction(){
 	include('../View/UltimosBeneficios/index.php');
 }
 
+function newAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	include('../Control/Combobox/Combobox.php');
+
+	$accion = "create";
+
+	$titulo = "Nuevo Beneficio";
+	$ub_cod = "";
+	$ub_der_comp = "";
+	$ub_der_mon = "";
+	$ub_der_imp = "";
+	$ub_der_por = "";
+	$ub_der_tip = "";
+	$ub_nemonico = "";
+	$ub_fech_acu = $ub_fech_cor = $ub_fech_reg = $ub_fech_ent = date('Y-m-d');
+
+	include('../View/UltimosBeneficios/edit.php');
+}
+
 function editAction(){
 
 	require_once('TiempoC.php');
@@ -16,15 +39,36 @@ function editAction(){
 	$link = getConexion();
 
 	include('../Control/Combobox/Combobox.php');
-	include('../View/UltimosBeneficios/edit.php');
 
-	//ub_cod_emp_bvl
-	$accion = $_GET['accion'];
-	if($accion == 'new'){
-		
-	}else{
-		
-	}
+	$accion = "update";
+
+	$ub_cod = $_GET['ub_cod'];
+	$titulo = "Editar Beneficio";
+	//Consultamos registro
+	$sql = "SELECT * FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$res = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($res);
+
+	$ub_der_comp = $row['ub_der_comp'];
+	$ub_der_mon = $row['ub_der_mon'];
+	$ub_der_imp = $row['ub_der_imp'];
+	$ub_der_por = $row['ub_der_por'];
+	$ub_der_tip = $row['ub_der_tip'];
+	$ub_nemonico = $row['ub_nemonico'];
+	$ub_fech_acu = $row['ub_fech_acu'];
+	$ub_fech_cor = $row['ub_fech_cor'];
+	$ub_fech_reg = $row['ub_fech_reg'];
+	$ub_fech_ent = $row['ub_fech_ent'];
+
+	include('../View/UltimosBeneficios/edit.php');
+}
+
+function createAction(){
+
+}
+
+function updateAction(){
+	
 }
 
 function listarAction(){
@@ -182,15 +226,21 @@ switch ($accion) {
 	case 'index':
 		indexAction();
 		break;
+	case 'listar':
+		listarAction();
+		break;
 	case 'new':
-		editAction();
+		newAction();
 		break;
 	case 'edit':
 		editAction();
 		break;
-	case 'listar':
-			listarAction();
-			break;
+	case 'create':
+		createAction();
+		break;
+	case 'update':
+		updateAction();
+		break;	
 	case 'importarmanual':
 		importarManualAction();
 		break;
