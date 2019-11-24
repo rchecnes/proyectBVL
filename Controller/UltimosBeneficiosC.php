@@ -65,10 +65,83 @@ function editAction(){
 
 function createAction(){
 
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_nemonico = $_POST['ub_nemonico'];
+	$ub_der_comp = $_POST['ub_der_comp'];
+	$ub_der_mon = $_POST['ub_der_mon'];
+	$ub_der_imp = $_POST['ub_der_imp'];
+	$ub_der_por = $_POST['ub_der_por'];
+	$ub_der_tip = $_POST['ub_der_tip'];
+
+	$ub_fech_acu = $_POST['ub_fech_acu'];
+	$ub_fech_cor = $_POST['ub_fech_cor'];
+	$ub_fech_reg = $_POST['ub_fech_reg'];
+	$ub_fech_ent = $_POST['ub_fech_ent'];
+
+	//Obtenemos el codigo empresa
+	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
+	$resemp = mysqli_query($link, $sqlemp);
+	$rowemp = mysqli_fetch_array($resemp);
+	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
+
+	//Consultamos si ya se registro
+	$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$ub_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
+	$resval = mysqli_query($link, $sqlval);
+	$rowval = mysqli_fetch_array($resval);
+
+	if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
+		//Insertar a BD
+		$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
+		VALUES('$ub_nemonico','$ub_der_comp','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$ub_cod_emp_bvl')";
+		$resin = mysqli_query($link, $sqlin);
+	}
+
+	mysqli_close($link);
+	header("location:../Controller/UltimosBeneficiosC.php?accion=index");
 }
 
 function updateAction(){
-	
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_cod = $_POST['ub_cod'];
+	$ub_nemonico = $_POST['ub_nemonico'];
+	$ub_der_comp = $_POST['ub_der_comp'];
+	$ub_der_mon = $_POST['ub_der_mon'];
+	$ub_der_imp = $_POST['ub_der_imp'];
+	$ub_der_por = $_POST['ub_der_por'];
+	$ub_der_tip = $_POST['ub_der_tip'];
+
+	$ub_fech_acu = $_POST['ub_fech_acu'];
+	$ub_fech_cor = $_POST['ub_fech_cor'];
+	$ub_fech_reg = $_POST['ub_fech_reg'];
+	$ub_fech_ent = $_POST['ub_fech_ent'];
+
+	$sqlup = "UPDATE ultimos_beneficios SET ub_der_comp='$ub_der_comp',ub_der_mon='$ub_der_mon',ub_der_imp='$ub_der_imp',ub_der_por='$ub_der_por',ub_der_tip='$ub_der_tip',ub_fech_acu='$ub_fech_acu',ub_fech_cor='$ub_fech_cor',ub_fech_reg='$ub_fech_reg',ub_fech_ent='$ub_fech_ent' WHERE ub_cod='$ub_cod'";
+	$resup = mysqli_query($link, $sqlup);
+
+	mysqli_close($link);
+	header("location:../Controller/UltimosBeneficiosC.php?accion=index");
+}
+
+function deleteAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_cod = $_GET['ub_cod'];
+
+	$sql = "DELETE FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$res = mysqli_query($link, $sql);
+
+	mysqli_close($link);
+	header("location:../Controller/UltimosBeneficiosC.php?accion=index");
 }
 
 function listarAction(){
@@ -240,6 +313,9 @@ switch ($accion) {
 		break;
 	case 'update':
 		updateAction();
+		break;
+	case 'delete':
+		deleteAction();
 		break;	
 	case 'importarmanual':
 		importarManualAction();

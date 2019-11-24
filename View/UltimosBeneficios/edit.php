@@ -13,7 +13,7 @@
 		<div class="panel panel-success">
 			<div class="panel-heading"><?=$titulo?></div>
 			<div class="panel-body">
-				<form class="form-horizontal" method="POST" action="../Controller/UltimosBeneficios.php?accion=<?=$accion?>">
+				<form class="form-horizontal" method="POST" action="../Controller/UltimosBeneficiosC.php?accion=<?=$accion?>">
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Ultimos Beneficios:</label>
