@@ -19,17 +19,32 @@
 							<label>Empresa:</label>
 							<?php   
 								$params = array(
-									'select' => array('id'=>'ub_nemonico', 'name'=>'ub_nemonico', 'class'=>'form-control'),
-									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND cod_emp_bvl!=''",
+									'select' => array('id'=>'inf_nemonico', 'name'=>'inf_nemonico', 'class'=>'form-control'),
+									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND imp_ind_fin!='' AND cod_emp_bvl!=''",
 									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 									'empty'  => false,
 									'defect' => '',
-									'edit'   => $ub_nemonico,
+									'edit'   => $inf_nemonico,
 									'enable' => 'enable'
 								);
 								Combobox($link, $params);
 							?>
 							<input type="hidden" id="ub_cod" name="ub_cod" class="form-control" value="<?=$ub_cod?>" required>
+						</div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+							<label>Empresa:</label>
+							<?php   
+								$params = array(
+									'select' => array('id'=>'inf_nombre', 'name'=>'inf_nombre', 'class'=>'form-control'),
+									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND imp_ind_fin!='' AND cod_emp_bvl!=''",
+									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+									'empty'  => false,
+									'defect' => '',
+									'edit'   => $inf_nemonico,
+									'enable' => 'enable'
+								);
+								Combobox($link, $params);
+							?>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Texto Completo):</label>

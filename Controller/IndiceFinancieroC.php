@@ -9,6 +9,141 @@ function indexAction(){
 	include('../View/IndiceFinanciero/index.php');
 }
 
+function newAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	include('../Control/Combobox/Combobox.php');
+
+	$accion = "create";
+
+	$titulo = "Nuevo Indice Financiero";
+	$ub_cod = "";
+	$ub_der_comp = "";
+	$ub_der_mon = "";
+	$ub_der_imp = "";
+	$ub_der_por = "";
+	$ub_der_tip = "";
+	$ub_nemonico = "";
+	$ub_fech_acu = $ub_fech_cor = $ub_fech_reg = $ub_fech_ent = date('Y-m-d');
+
+	include('../View/IndiceFinanciero/edit.php');
+}
+
+function editAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	include('../Control/Combobox/Combobox.php');
+
+	$accion = "update";
+
+	$ub_cod = $_GET['ub_cod'];
+	$titulo = "Editar Beneficio";
+	//Consultamos registro
+	$sql = "SELECT * FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$res = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($res);
+
+	$ub_der_comp = $row['ub_der_comp'];
+	$ub_der_mon = $row['ub_der_mon'];
+	$ub_der_imp = $row['ub_der_imp'];
+	$ub_der_por = $row['ub_der_por'];
+	$ub_der_tip = $row['ub_der_tip'];
+	$ub_nemonico = $row['ub_nemonico'];
+	$ub_fech_acu = $row['ub_fech_acu'];
+	$ub_fech_cor = $row['ub_fech_cor'];
+	$ub_fech_reg = $row['ub_fech_reg'];
+	$ub_fech_ent = $row['ub_fech_ent'];
+
+	include('../View/IndiceFinanciero/edit.php');
+}
+
+function createAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_nemonico = $_POST['ub_nemonico'];
+	$ub_der_comp = $_POST['ub_der_comp'];
+	$ub_der_mon = $_POST['ub_der_mon'];
+	$ub_der_imp = $_POST['ub_der_imp'];
+	$ub_der_por = $_POST['ub_der_por'];
+	$ub_der_tip = $_POST['ub_der_tip'];
+
+	$ub_fech_acu = $_POST['ub_fech_acu'];
+	$ub_fech_cor = $_POST['ub_fech_cor'];
+	$ub_fech_reg = $_POST['ub_fech_reg'];
+	$ub_fech_ent = $_POST['ub_fech_ent'];
+
+	//Obtenemos el codigo empresa
+	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
+	$resemp = mysqli_query($link, $sqlemp);
+	$rowemp = mysqli_fetch_array($resemp);
+	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
+
+	//Consultamos si ya se registro
+	$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$ub_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
+	$resval = mysqli_query($link, $sqlval);
+	$rowval = mysqli_fetch_array($resval);
+
+	if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
+		//Insertar a BD
+		$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
+		VALUES('$ub_nemonico','$ub_der_comp','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$ub_cod_emp_bvl')";
+		$resin = mysqli_query($link, $sqlin);
+	}
+
+	mysqli_close($link);
+	header("location:../Controller/IndiceFinancieroC.php?accion=index");
+}
+
+function updateAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_cod = $_POST['ub_cod'];
+	$ub_nemonico = $_POST['ub_nemonico'];
+	$ub_der_comp = $_POST['ub_der_comp'];
+	$ub_der_mon = $_POST['ub_der_mon'];
+	$ub_der_imp = $_POST['ub_der_imp'];
+	$ub_der_por = $_POST['ub_der_por'];
+	$ub_der_tip = $_POST['ub_der_tip'];
+
+	$ub_fech_acu = $_POST['ub_fech_acu'];
+	$ub_fech_cor = $_POST['ub_fech_cor'];
+	$ub_fech_reg = $_POST['ub_fech_reg'];
+	$ub_fech_ent = $_POST['ub_fech_ent'];
+
+	$sqlup = "UPDATE ultimos_beneficios SET ub_der_comp='$ub_der_comp',ub_der_mon='$ub_der_mon',ub_der_imp='$ub_der_imp',ub_der_por='$ub_der_por',ub_der_tip='$ub_der_tip',ub_fech_acu='$ub_fech_acu',ub_fech_cor='$ub_fech_cor',ub_fech_reg='$ub_fech_reg',ub_fech_ent='$ub_fech_ent' WHERE ub_cod='$ub_cod'";
+	$resup = mysqli_query($link, $sqlup);
+
+	mysqli_close($link);
+	header("location:../Controller/IndiceFinancieroC.php?accion=index");
+}
+
+function deleteAction(){
+
+	require_once('TiempoC.php');
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$ub_cod = $_GET['ub_cod'];
+
+	$sql = "DELETE FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$res = mysqli_query($link, $sql);
+
+	mysqli_close($link);
+	header("location:../Controller/IndiceFinancieroC.php?accion=index");
+}
+
 function listarAction(){
 
 	include('../Config/Conexion.php');
@@ -91,7 +226,7 @@ function importarIndiceFinanciero($ruta, $condicion){
 			if(isset($table_1->find('tr',0)->plaintext)){
 
 				$anio = array();
-				$inf_codigo = 10000;
+				//$inf_codigo = 10000;
 				foreach($table_1->find("tr") as $tr){
 
 					if (isset($tr->find('th',0)->plaintext)) {
@@ -109,13 +244,20 @@ function importarIndiceFinanciero($ruta, $condicion){
 						$inf_hora_crea = date('H:i:s');
 
 						//Consultamos si ya se registro
-						$sqlvalc = "SELECT inf_codigo FROM cab_indice_financiero WHERE inf_nemonico='$new_nemonico' AND inf_nombre='$inf_nombre' LIMIT 1";
+						$sqlvalc = "SELECT inf_codigo FROM cab_indice_financiero WHERE inf_nombre='$inf_nombre' LIMIT 1";
 						$resvalc = mysqli_query($link, $sqlvalc);
 						$rowvalc = mysqli_fetch_array($resvalc);
+						$inf_codigo = $rowvalc['inf_codigo'];
 
-						if($rowvalc['inf_codigo'] == ''){
+						if($inf_codigo == ''){
 
-							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nemonico, inf_nombre, inf_fech_crea, inf_hora_crea, inf_stat)VALUES('$inf_codigo','$new_nemonico','$inf_nombre','$inf_fech_crea','$inf_hora_crea','10')";
+							//Autogeneramos el inf_codigo
+							$sqlmax = "SELECT MAX(inf_codigo)AS inf_codigo FROM cab_indice_financiero";
+							$resmax = mysqli_query($link, $sqlmax);
+							$rowmax = mysqli_fetch_array($resmax);
+							$inf_codigo = ($rowmax['inf_codigo']!='')?(int)$rowmax['inf_codigo']+1:'';
+
+							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nombre, inf_fech_crea, inf_hora_crea, inf_stat)VALUES('$inf_codigo','$inf_nombre','$inf_fech_crea','$inf_hora_crea','10')";
 							$resinc = mysqli_query($link, $sqlinc);
 							unset($sqlinc);
 						}
@@ -148,7 +290,7 @@ function importarIndiceFinanciero($ruta, $condicion){
 							$c_td ++;
 						}
 
-						$inf_codigo ++;					
+						//$inf_codigo ++;					
 					}
 				}
 			}
@@ -193,6 +335,21 @@ switch ($accion) {
 	case 'listar':
 		listarAction();
 		break;
+	case 'new':
+		newAction();
+		break;
+	case 'edit':
+		editAction();
+		break;
+	case 'create':
+		createAction();
+		break;
+	case 'update':
+		updateAction();
+		break;
+	case 'delete':
+		deleteAction();
+		break;	
 	case 'importarmanual':
 		importarManualAction();
 		break;

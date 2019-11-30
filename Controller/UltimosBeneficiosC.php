@@ -5,6 +5,8 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
+	$cod_user = $_SESSION['cod_user'];
+
 	include('../Control/Combobox/Combobox.php');
 	include('../View/UltimosBeneficios/index.php');
 }
@@ -150,16 +152,27 @@ function listarAction(){
 	$link = getConexion();
 
 	$nemonico = $_GET['nemonico'];
+	$ub_der_tip = $_GET['ub_der_tip'];
+	$ub_der_mon = $_GET['ub_der_mon'];
+	$ub_fech_ent_de = $_GET['ub_fech_ent_de'];
+	$ub_fech_ent_ha = $_GET['ub_fech_ent_ha'];
+	$cod_ector = $_GET['cod_ector'];
+	$cod_grupo = $_GET['cod_grupo'];
+
 
 	$sql = "SELECT * FROM ultimos_beneficios ub
-			INNER JOIN empresa em ON(ub.ub_nemonico=em.nemonico)";
+			INNER JOIN empresa em ON(ub.ub_nemonico=em.nemonico)
+			LEFT JOIN empresa_favorito fa ON(em.cod_emp=fa.cod_emp)
+			WHERE ub.ub_cod>0";
 
-	if ($nemonico != '') {
-		$sql .= " AND em.nemonico='$nemonico'";
-	}
+	if ($nemonico != '') { $sql .= " AND em.nemonico='$nemonico'";}
+	if ($ub_der_tip != '') { $sql .= " AND ub.ub_der_tip='$ub_der_tip'";}
+	if ($ub_der_mon != '') { $sql .= " AND ub.ub_der_mon='$ub_der_mon'";}
+	if ($ub_fech_ent_de != '' && $ub_fech_ent_ha!='') { $sql .= " AND ub.ub_fech_ent BETWEEN '$ub_fech_ent_de' AND '$ub_fech_ent_ha'";}
+	if ($cod_ector != '') { $sql .= " AND em.cod_sector='$cod_ector'";}
+	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
 	$sql .= " ORDER BY ub.ub_fech_acu DESC";
-
 	$res = mysqli_query($link, $sql);
 
 	$nro_reg = mysqli_num_rows($res);
