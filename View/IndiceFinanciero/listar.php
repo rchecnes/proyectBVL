@@ -34,7 +34,7 @@
         $resa = mysqli_query($link, $sqla);
         $det_arr_anio = array();
         while($rowa = mysqli_fetch_array($resa)){
-            $det_arr_anio[$rowa['inf_anio']] = array('inf_anio'=>$rowa['inf_anio'],'inf_valor'=>$rowa['inf_valor']);
+            $det_arr_anio[$rowa['inf_anio']] = array('inf_detcod'=>$rowa['inf_detcod'],'inf_anio'=>$rowa['inf_anio'],'inf_valor'=>$rowa['inf_valor']);
         }
     ?>
     <tr>
@@ -46,7 +46,10 @@
 
             if($anio == $det_arr_anio[$anio]['inf_anio']){
                 $inf_val_new = ($det_arr_anio[$anio]['inf_valor'] > 0)?number_format($det_arr_anio[$anio]['inf_valor'],4,'.',''):'-.-';
-                echo '<td align="right">'.$inf_val_new.'</td>';
+                $icons = "";
+                $icons = '<a href="../Controller/IndiceFinancieroC.php?accion=edit&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'"  role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>&nbsp;';
+		        $icons .= '<a href="../Controller/IndiceFinancieroC.php?accion=delete&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'" class="color-red" role="button" onclick="return confirm(\'Esta seguro de eliminar el registro seleccionado?\')"><i class="fa fa-trash-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>';
+                echo '<td align="right">'.$inf_val_new.' '.$icons.'</td>';
             }else{
                 echo '<td>&nbsp;</td>';
             }

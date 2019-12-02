@@ -13,13 +13,13 @@
 		<div class="panel panel-success">
 			<div class="panel-heading"><?=$titulo?></div>
 			<div class="panel-body">
-				<form class="form-horizontal" method="POST" action="../Controller/UltimosBeneficiosC.php?accion=<?=$accion?>">
+				<form class="form-horizontal" method="POST" action="../Controller/IndiceFinancieroC.php?accion=<?=$accion?>">
 					<div class="row">
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 							<label>Empresa:</label>
 							<?php   
 								$params = array(
-									'select' => array('id'=>'inf_nemonico', 'name'=>'inf_nemonico', 'class'=>'form-control'),
+									'select' => array('id'=>'inf_nemonico', 'name'=>'inf_nemonico', 'class'=>'form-control','required'=>'required'),
 									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND imp_ind_fin!='' AND cod_emp_bvl!=''",
 									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 									'empty'  => false,
@@ -29,64 +29,49 @@
 								);
 								Combobox($link, $params);
 							?>
-							<input type="hidden" id="ub_cod" name="ub_cod" class="form-control" value="<?=$ub_cod?>" required>
+							<input type="hidden" id="inf_detcod" name="inf_detcod" class="form-control" value="<?=$inf_detcod?>">
 						</div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Empresa:</label>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+							<label>Indice Financiero:</label>
 							<?php   
 								$params = array(
-									'select' => array('id'=>'inf_nombre', 'name'=>'inf_nombre', 'class'=>'form-control'),
-									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND imp_ind_fin!='' AND cod_emp_bvl!=''",
-									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+									'select' => array('id'=>'inf_codigo', 'name'=>'inf_codigo', 'class'=>'form-control','required'=>'required'),
+									'sql'    => "SELECT * FROM cab_indice_financiero WHERE inf_stat='10'",
+									'attrib' => array('value'=>'inf_codigo','desc'=>'inf_codigo,inf_nombre', 'concat'=>' - ','descextra'=>''),
 									'empty'  => false,
 									'defect' => '',
-									'edit'   => $inf_nemonico,
+									'edit'   => $inf_codigo,
 									'enable' => 'enable'
 								);
 								Combobox($link, $params);
 							?>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Derecho  (Texto Completo):</label>
-							<input type="text" id="ub_der_comp" name="ub_der_comp" class="form-control" value="<?=$ub_der_comp?>" required>					
+						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+							<label>Año:</label>
+							<select id="inf_anio" name="inf_anio" class="form-control" required>
+							<?php
+								for($a=2010;$a<=2050;$a++){
+									
+									if($accion=='update'){
+										$selected = ($a == $inf_anio)?"selected='selected'":"";
+									}else{
+										$selected_1 = ($a==date('Y'))?"selected='selected'":"";
+									}
+									echo '<option value="'.$a.'" '.$selected.'>'.$a.'</option>';
+								}
+							?>
+							</select>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Derecho  (Moneda):</label>
-							<input type="text" id="ub_der_mon" name="ub_der_mon" class="form-control" value="<?=$ub_der_mon?>">
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Derecho  (Importe):</label>
-							<input type="text" id="ub_der_imp" name="ub_der_imp" class="form-control" value="<?=$ub_der_imp?>" required>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Derecho  (Porcentaje):</label>
-							<input type="text" id="ub_der_por" name="ub_der_por" class="form-control" value="<?=$ub_der_por?>">
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Derecho  (Tipo):</label>
-							<input type="text" id="ub_der_tip" name="ub_der_tip" class="form-control" value="<?=$ub_der_tip?>">
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Fecha Acuerdo:</label>
-							<input type="text" id="ub_fech_acu" name="ub_fech_acu" class="form-control datepicker" readonly="readonly" value="<?=$ub_fech_acu?>" required>
-						</div>		  
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Fecha De Corte:</label>
-							<input type="text" id="ub_fech_cor" name="ub_fech_cor" class="form-control datepicker" readonly="readonly" value="<?=$ub_fech_cor?>" required>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Fecha De Registro:</label>
-							<input type="text" id="ub_fech_reg" name="ub_fech_reg" class="form-control datepicker" readonly="readonly" value="<?=$ub_fech_reg?>" required>
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Fecha De Entrega:</label>
-							<input type="text" id="ub_fech_ent" name="ub_fech_ent" class="form-control datepicker" readonly="readonly" value="<?=$ub_fech_ent?>" required>
+						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+							<label>Valor:</label>
+							<input type="text" id="inf_valor" name="inf_valor" class="form-control" value="<?=$inf_valor?>" required>
+							
 						</div>
 					</div><br>
 					<div class="row">
 						<div class="col-lg-12">
 							<button type="submit" class="btn btn-success">Guardar</button>
-							<a href="../Controller/UltimosBeneficiosC.php?accion=index" class="btn btn-default" role="button">Cancelar</a>
+							<a href="../Controller/IndiceFinancieroC.php?accion=index" class="btn btn-default" role="button">Cancelar</a>
 						</div>
 					</div>
 				</form>
@@ -97,10 +82,10 @@
 	</div>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$(".datepicker").datepicker({
+		/*$(".datepicker").datepicker({
 			autoclose:true,
 			format:'yyyy-mm-dd'
-		});
+		});*/
     });
 	</script>
 </body>

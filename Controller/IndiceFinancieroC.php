@@ -20,14 +20,10 @@ function newAction(){
 	$accion = "create";
 
 	$titulo = "Nuevo Indice Financiero";
-	$ub_cod = "";
-	$ub_der_comp = "";
-	$ub_der_mon = "";
-	$ub_der_imp = "";
-	$ub_der_por = "";
-	$ub_der_tip = "";
-	$ub_nemonico = "";
-	$ub_fech_acu = $ub_fech_cor = $ub_fech_reg = $ub_fech_ent = date('Y-m-d');
+	$inf_detcod = "";
+	$inf_codigo = "";
+	$inf_nemonico = "";
+	$inf_anio = "";
 
 	include('../View/IndiceFinanciero/edit.php');
 }
@@ -42,23 +38,18 @@ function editAction(){
 
 	$accion = "update";
 
-	$ub_cod = $_GET['ub_cod'];
-	$titulo = "Editar Beneficio";
+	$inf_detcod = $_GET['inf_detcod'];
+	$titulo = "Editar Indice Financiero";
 	//Consultamos registro
-	$sql = "SELECT * FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$sql = "SELECT * FROM det_indice_financiero WHERE inf_detcod='$inf_detcod'";
 	$res = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($res);
 
-	$ub_der_comp = $row['ub_der_comp'];
-	$ub_der_mon = $row['ub_der_mon'];
-	$ub_der_imp = $row['ub_der_imp'];
-	$ub_der_por = $row['ub_der_por'];
-	$ub_der_tip = $row['ub_der_tip'];
-	$ub_nemonico = $row['ub_nemonico'];
-	$ub_fech_acu = $row['ub_fech_acu'];
-	$ub_fech_cor = $row['ub_fech_cor'];
-	$ub_fech_reg = $row['ub_fech_reg'];
-	$ub_fech_ent = $row['ub_fech_ent'];
+	$inf_detcod = $row['inf_detcod'];
+	$inf_codigo = $row['inf_codigo'];
+	$inf_nemonico = $row['inf_nemonico'];
+	$inf_anio = $row['inf_anio'];
+	$inf_valor = $row['inf_valor'];
 
 	include('../View/IndiceFinanciero/edit.php');
 }
@@ -69,17 +60,10 @@ function createAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$ub_nemonico = $_POST['ub_nemonico'];
-	$ub_der_comp = $_POST['ub_der_comp'];
-	$ub_der_mon = $_POST['ub_der_mon'];
-	$ub_der_imp = $_POST['ub_der_imp'];
-	$ub_der_por = $_POST['ub_der_por'];
-	$ub_der_tip = $_POST['ub_der_tip'];
-
-	$ub_fech_acu = $_POST['ub_fech_acu'];
-	$ub_fech_cor = $_POST['ub_fech_cor'];
-	$ub_fech_reg = $_POST['ub_fech_reg'];
-	$ub_fech_ent = $_POST['ub_fech_ent'];
+	$inf_nemonico = $_POST['inf_nemonico'];
+	$inf_codigo = $_POST['inf_codigo'];
+	$inf_anio = $_POST['inf_anio'];
+	$inf_valor = $_POST['inf_valor'];
 
 	//Obtenemos el codigo empresa
 	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
@@ -87,17 +71,11 @@ function createAction(){
 	$rowemp = mysqli_fetch_array($resemp);
 	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
 
-	//Consultamos si ya se registro
-	$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$ub_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
-	$resval = mysqli_query($link, $sqlval);
-	$rowval = mysqli_fetch_array($resval);
-
-	if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
-		//Insertar a BD
-		$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
-		VALUES('$ub_nemonico','$ub_der_comp','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$ub_cod_emp_bvl')";
-		$resin = mysqli_query($link, $sqlin);
-	}
+	//Insertar a BD
+	$sqlin = "INSERT INTO det_indice_financiero(inf_codigo,inf_nemonico,inf_anio,inf_valor)
+	VALUES('$inf_codigo','$inf_nemonico','$inf_anio','$inf_valor')";
+	//echo $sqlin;
+	$resin = mysqli_query($link, $sqlin);
 
 	mysqli_close($link);
 	header("location:../Controller/IndiceFinancieroC.php?accion=index");
@@ -109,20 +87,13 @@ function updateAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$ub_cod = $_POST['ub_cod'];
-	$ub_nemonico = $_POST['ub_nemonico'];
-	$ub_der_comp = $_POST['ub_der_comp'];
-	$ub_der_mon = $_POST['ub_der_mon'];
-	$ub_der_imp = $_POST['ub_der_imp'];
-	$ub_der_por = $_POST['ub_der_por'];
-	$ub_der_tip = $_POST['ub_der_tip'];
+	$inf_detcod = $_POST['inf_detcod'];
+	$inf_nemonico = $_POST['inf_nemonico'];
+	$inf_codigo = $_POST['inf_codigo'];
+	$inf_anio = $_POST['inf_anio'];
+	$inf_valor = $_POST['inf_valor'];
 
-	$ub_fech_acu = $_POST['ub_fech_acu'];
-	$ub_fech_cor = $_POST['ub_fech_cor'];
-	$ub_fech_reg = $_POST['ub_fech_reg'];
-	$ub_fech_ent = $_POST['ub_fech_ent'];
-
-	$sqlup = "UPDATE ultimos_beneficios SET ub_der_comp='$ub_der_comp',ub_der_mon='$ub_der_mon',ub_der_imp='$ub_der_imp',ub_der_por='$ub_der_por',ub_der_tip='$ub_der_tip',ub_fech_acu='$ub_fech_acu',ub_fech_cor='$ub_fech_cor',ub_fech_reg='$ub_fech_reg',ub_fech_ent='$ub_fech_ent' WHERE ub_cod='$ub_cod'";
+	$sqlup = "UPDATE det_indice_financiero SET inf_nemonico='$inf_nemonico',inf_codigo='$inf_codigo',inf_anio='$inf_anio',inf_valor='$inf_valor' WHERE inf_detcod='$inf_detcod'";
 	$resup = mysqli_query($link, $sqlup);
 
 	mysqli_close($link);
@@ -135,9 +106,9 @@ function deleteAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$ub_cod = $_GET['ub_cod'];
+	$inf_detcod = $_GET['inf_detcod'];
 
-	$sql = "DELETE FROM ultimos_beneficios WHERE ub_cod='$ub_cod'";
+	$sql = "DELETE FROM det_indice_financiero WHERE inf_detcod='$inf_detcod'";
 	$res = mysqli_query($link, $sql);
 
 	mysqli_close($link);
@@ -151,15 +122,16 @@ function listarAction(){
 
 	$nemonico = $_GET['nemonico'];
 
-	$sql = "SELECT c.*,e.nombre FROM cab_indice_financiero c 
-			INNER JOIN empresa e ON(c.inf_nemonico=e.nemonico)
+	$sql = "SELECT c.*,d.*,e.nombre FROM det_indice_financiero d
+			INNER JOIN cab_indice_financiero c ON(d.inf_codigo=c.inf_codigo)  
+			INNER JOIN empresa e ON(e.nemonico COLLATE utf8_general_ci=d.inf_nemonico COLLATE utf8_general_ci)
 			WHERE c.inf_stat ='10'";
 
 	if ($nemonico != '') {
-		$sql .= " AND c.inf_nemonico='$nemonico'";
+		$sql .= " AND d.inf_nemonico='$nemonico'";
 	}
 
-	$sql .= " ORDER BY c.inf_nemonico ASC, c.inf_codigo ASC";
+	$sql .= " GROUP BY c.inf_codigo,d.inf_nemonico ORDER BY d.inf_nemonico ASC, c.inf_codigo ASC";
 	$res = mysqli_query($link, $sql);
 	$nro_reg = mysqli_num_rows($res);
 
@@ -255,7 +227,7 @@ function importarIndiceFinanciero($ruta, $condicion){
 							$sqlmax = "SELECT MAX(inf_codigo)AS inf_codigo FROM cab_indice_financiero";
 							$resmax = mysqli_query($link, $sqlmax);
 							$rowmax = mysqli_fetch_array($resmax);
-							$inf_codigo = ($rowmax['inf_codigo']!='')?(int)$rowmax['inf_codigo']+1:'';
+							$inf_codigo = ($rowmax['inf_codigo']!='')?(int)$rowmax['inf_codigo']+1:'10000';
 
 							$sqlinc = "INSERT INTO cab_indice_financiero(inf_codigo, inf_nombre, inf_fech_crea, inf_hora_crea, inf_stat)VALUES('$inf_codigo','$inf_nombre','$inf_fech_crea','$inf_hora_crea','10')";
 							$resinc = mysqli_query($link, $sqlinc);
