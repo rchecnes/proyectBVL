@@ -4,6 +4,7 @@ function indexAction(){
 	require_once('TiempoC.php');
 	include('../Config/Conexion.php');
 	$link = getConexion();
+	$cod_user = $_SESSION['cod_user'];
 
 	include('../Control/Combobox/Combobox.php');
 	include('../View/IndiceFinanciero/index.php');
@@ -120,16 +121,21 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$nemonico = $_GET['nemonico'];
+	$inf_nemonico = $_GET['inf_nemonico'];
+	$inf_codigo = $_GET['inf_codigo'];
+	$cod_ector = $_GET['cod_ector'];
+	$cod_grupo = $_GET['cod_grupo'];
 
 	$sql = "SELECT c.*,d.*,e.nombre FROM det_indice_financiero d
 			INNER JOIN cab_indice_financiero c ON(d.inf_codigo=c.inf_codigo)  
 			INNER JOIN empresa e ON(e.nemonico COLLATE utf8_general_ci=d.inf_nemonico COLLATE utf8_general_ci)
+			LEFT JOIN empresa_favorito fa ON(e.cod_emp=fa.cod_emp)
 			WHERE c.inf_stat ='10'";
 
-	if ($nemonico != '') {
-		$sql .= " AND d.inf_nemonico='$nemonico'";
-	}
+	if ($inf_nemonico != '') { $sql .= " AND d.inf_nemonico='$inf_nemonico'";}
+	if ($inf_codigo != '') { $sql .= " AND d.inf_codigo='$inf_codigo'";}
+	if ($cod_sector != '') { $sql .= " AND e.cod_sector='$cod_sector'";}
+	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
 	$sql .= " GROUP BY c.inf_codigo,d.inf_nemonico ORDER BY d.inf_nemonico ASC, c.inf_codigo ASC";
 	$res = mysqli_query($link, $sql);

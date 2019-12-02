@@ -32,7 +32,7 @@
 				$.ajax({
 					type:'GET',
 					url: '../Controller/IndiceFinancieroC.php?accion=listar',
-					data:{nemonico:$("#empresa").val()},
+					data:$("#form_indice_financiero").serialize(),
 					success:function(data){
 
 						$("#divHistorico").html(data);
@@ -59,12 +59,12 @@
 	            <div id="cierre_del_dia" class="tab-pane fade in active">
 					<form method="POST" id="form_indice_financiero">
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-lg-3">
 								<div class="form-group">
 									<label>Empresa:</label>
 									<?php   
 										$params = array(
-											'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
+											'select' => array('id'=>'inf_nemonico', 'name'=>'inf_nemonico', 'class'=>'form-control'),
 											'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_ind_fin!='' AND cod_emp_bvl!=''",
 											'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 											'empty'  => 'Todos',
@@ -77,7 +77,56 @@
 									?>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+								<label>Indice Financiero:</label>
+								<?php   
+									$params = array(
+										'select' => array('id'=>'inf_codigo', 'name'=>'inf_codigo', 'class'=>'form-control'),
+										'sql'    => "SELECT * FROM cab_indice_financiero WHERE inf_stat='10'",
+										'attrib' => array('value'=>'inf_codigo','desc'=>'inf_codigo,inf_nombre', 'concat'=>' - ','descextra'=>''),
+										'empty'  => 'Todos',
+										'empty_value'  => '',
+										'defect' => '',
+										'edit'   => $inf_codigo,
+										'enable' => 'enable'
+									);
+									Combobox($link, $params);
+								?>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+								<label>Sector:</label>
+								<?php   
+								$params = array(
+									'select' => array('id'=>'cod_ector', 'name'=>'cod_ector', 'class'=>'form-control'),
+									'sql'    => 'SELECT * FROM sector WHERE estado=1',
+									'attrib' => array('value'=>'cod_sector','desc'=>'nombre', 'concat'=>'','descextra'=>''),
+									'empty'  => 'Todos',
+									'defect' => '',
+									'edit'   => '',
+									'enable' => 'enable'
+								);
+
+								Combobox($link, $params);
+								?>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+								<label>Grupo:</label>
+								<?php
+								$params = array(
+									'select' => array('id'=>'cod_grupo', 'name'=>'cod_grupo', 'class'=>'form-control'),
+									'sql'    => "SELECT * FROM user_grupo WHERE est_grupo=1 AND cod_user='$cod_user'",
+									'attrib' => array('value'=>'cod_grupo','desc'=>'nom_grupo', 'concat'=>' - ','descextra'=>''),
+									'empty'  => 'Todos',
+									'defect' => '',
+									'edit'   => '',
+									'enable' => 'enable'
+								);
+								Combobox($link, $params);
+								?>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
 								<label>&nbsp;</label>
 								<div class="form-group">
 									<input name="button" type="submit" class="btn btn-default" id="button" value="Buscar Importado">
