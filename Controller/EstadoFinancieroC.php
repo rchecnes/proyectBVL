@@ -63,7 +63,7 @@ function getFechaBD($date){
 	return $ano.'-'.$mes.'-'.$dia;
 }
 
-function importarEstadoFinanciero($ruta, $condicion){
+function importarEstadoFinanciero($ruta, $condicion, $modo){
 
 	include($ruta.'/Util/simple_html_dom_php5.6.php');
 	include($ruta.'/Config/Conexion.php');
@@ -72,9 +72,28 @@ function importarEstadoFinanciero($ruta, $condicion){
 	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
-	$cef_anio = "2019";
-	$def_peri = "3";
-	$cef_tipo = "BAL";
+	$tri_auto = 1;
+	$mes_auto = (int)date('m');
+	if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$tri_auto = 1;}
+	if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$tri_auto = 2;}
+	if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$tri_auto = 3;}
+	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 4;}
+
+	if($modo == 'manual'){
+		$cef_anio = $_GET['cef_anio'];
+		$cef_peri = $_GET['cef_peri'];
+		$cef_tipo = $_GET['cef_tipo'];
+		$cef_trim = $_GET['cef_trim'];
+	}else{
+		$cef_anio = date('Y');
+		$cef_peri = 'T';
+		$cef_tipo = 'C';
+		$cef_trim = $mes_auto;
+	}
+
+	if($cef_peri == 'A'){$cef_trim = 'A';}
+
+	$cef_form = "BAL";
 	$cef_stat ='10';
 	
 	while($row = mysqli_fetch_array($res)){
@@ -87,7 +106,7 @@ function importarEstadoFinanciero($ruta, $condicion){
 		$cef_hora_crea = date('H:i:s');
 
 		//$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
-		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$def_peri&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_tipo&Tipo1=T&Tipo2=C&Dsc_Correlativo=0000&Secuencia=0";
+		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$cef_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_form&Tipo1=$cef_peri&Tipo2=$cef_tipo&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
 		
 		if (!empty($html)) {
@@ -133,20 +152,20 @@ function importarEstadoFinanciero($ruta, $condicion){
 							$cef_cod = ($rownc['cef_cod']!='')?$rownc['cef_cod']+1:'1000';
 
 							//Insertamos cabecera
-							$sqlinc = "INSERT INTO cab_estado_financiero(cef_cod,cef_cod_bvl,cef_nomb,cef_fech_crea,cef_hora_crea,cef_anio,cef_tipo,cef_cab_det,cef_stat)VALUES
-							('$cef_cod','$cef_cod_bvl','$cef_nomb','$cef_fech_crea','$cef_hora_crea','$cef_anio','$cef_tipo','$cef_cab_det','$cef_stat')";
+							$sqlinc = "INSERT INTO cab_estado_financiero(cef_cod,cef_cod_bvl,cef_nomb,cef_anio,cef_tipo,cef_cab_det,cef_trim,cef_peri,cef_form,cef_stat,cef_fech_crea,cef_hora_crea)VALUES
+							('$cef_cod','$cef_cod_bvl','$cef_nomb','$cef_anio','$cef_tipo','$cef_cab_det','$cef_trim','$cef_peri','$cef_form','$cef_stat','$cef_fech_crea','$cef_hora_crea')";
 							$resinc = mysqli_query($link, $sqlinc);
 						}
 
 						//Insertamos detalle
-						$sqlvd = "SELECT cef_cod, cef_cod_bvl FROM det_estado_financiero WHERE cef_cod='$cef_cod' AND cef_cod_bvl='$cef_cod_bvl' AND def_nemonico='$new_nemonico' LIMIT 1";
+						$sqlvd = "SELECT cef_cod, cef_cod_bvl FROM det_estado_financiero WHERE cef_cod='$cef_cod' AND cef_cod_bvl='$cef_cod_bvl' AND def_nemonico='$new_nemonico' AND def_peri='$cef_peri' AND def_trim='$cef_trim' AND def_anio='$cef_anio' AND def_tipo='$cef_tipo' LIMIT 1";
 						$resvd = mysqli_query($link, $sqlvd);
 						$rowvd = mysqli_fetch_array($resvd);
 						$cef_cod_det = $rowvd['cef_cod'];
 
 						if($cef_cod_det == ''){
-							$sqlinc = "INSERT INTO det_estado_financiero(cef_cod,cef_cod_bvl,def_nemonico,def_val_de, def_val_ha,def_peri,def_fech_crea,def_hora_crea,def_cab_det)VALUES
-							('$cef_cod','$cef_cod_bvl','$new_nemonico','$def_val_de','$def_val_ha','$def_peri','$cef_fech_crea','$cef_hora_crea','$cef_cab_det')";
+							$sqlinc = "INSERT INTO det_estado_financiero(cef_cod,cef_cod_bvl,def_nemonico,def_cab_det,def_val_de, def_val_ha,def_peri,def_trim,def_anio,def_tipo,def_form,def_fech_crea,def_hora_crea)VALUES
+							('$cef_cod','$cef_cod_bvl','$new_nemonico','$cef_cab_det','$def_val_de','$def_val_ha','$cef_peri','$cef_trim','$cef_anio','$cef_tipo','$cef_form','$cef_fech_crea','$cef_hora_crea')";
 							$resinc = mysqli_query($link, $sqlinc);
 						}
 
@@ -162,15 +181,15 @@ function importarEstadoFinanciero($ruta, $condicion){
 
 function importarManualAction(){
 
-	$nemonico = $_GET['nemonico'];
+	$cef_nemonico = $_GET['cef_nemonico'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($nemonico !=''){
-		$condicion .= " AND nemonico='$nemonico'";
+	if($cef_nemonico !=''){
+		$condicion .= " AND nemonico='$cef_nemonico'";
 	}
 
-	importarEstadoFinanciero($ruta, $condicion);
+	importarEstadoFinanciero($ruta, $condicion, 'manual');
 }
 
 function importarAutomaticolAction(){
@@ -178,7 +197,7 @@ function importarAutomaticolAction(){
 	$ruta = "public_html/analisisdevalor.com";
 	$condicion = "";
 	
-	importarEstadoFinanciero($ruta, $condicion);
+	importarEstadoFinanciero($ruta, $condicion, 'automatico');
 }
 
 //Este parametro se obtiene desde la vista y crons

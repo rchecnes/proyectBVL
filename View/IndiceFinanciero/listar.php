@@ -49,7 +49,7 @@
                 $icons = "";
                 $icons = '<a href="../Controller/IndiceFinancieroC.php?accion=edit&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'"  role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>&nbsp;';
 		        $icons .= '<a href="../Controller/IndiceFinancieroC.php?accion=delete&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'" class="color-red" role="button" onclick="return confirm(\'Esta seguro de eliminar el registro seleccionado?\')"><i class="fa fa-trash-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>';
-                echo '<td align="right">'.$inf_val_new.' '.$icons.'</td>';
+                echo '<td align="right">'.$inf_val_new.'<br>'.$icons.'</td>';
             }else{
                 echo '<td>&nbsp;</td>';
             }
