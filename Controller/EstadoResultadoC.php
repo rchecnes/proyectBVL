@@ -14,35 +14,35 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cef_nemonico = $_GET['cef_nemonico'];
-	$cef_anio = $_GET['cef_anio'];
-	$cef_peri = $_GET['cef_peri'];
-	$cef_tipo = $_GET['cef_tipo'];
-	$cef_trim = $_GET['cef_trim'];
+	$der_nemonico = $_GET['cef_nemonico'];
+	$der_anio = $_GET['cef_anio'];
+	$der_peri = $_GET['cef_peri'];
+	$der_tipo = $_GET['cef_tipo'];
+	$der_trim = $_GET['cef_trim'];
 
-	$sql = "SELECT * FROM cab_estado_financiero c
-			INNER JOIN det_estado_financiero d ON(c.cef_cod=d.cef_cod AND c.cef_cod_bvl=d.cef_cod_bvl)
-			WHERE c.cef_stat='10'";
+	$sql = "SELECT * FROM cab_estado_resultado c
+			INNER JOIN det_estado_resultado d ON(c.cer_cod=d.der_cod AND c.cer_cod_bvl=d.der_cod_bvl)
+			WHERE c.cer_stat='10'";
 
-	if ($cef_nemonico != '') { $sql .= " AND d.def_nemonico='$cef_nemonico'";}
-	if ($cef_anio != '') { $sql .= " AND d.def_anio='$cef_anio'";}
-	if ($cef_peri != '') { $sql .= " AND d.def_peri='$cef_peri'";}
-	if ($cef_tipo != '') { $sql .= " AND d.def_tipo='$cef_tipo'";}
-	if ($cef_trim != '') { $sql .= " AND d.def_trim='$cef_trim'";}
+	if ($der_nemonico != '') { $sql .= " AND d.der_nemonico='$der_nemonico'";}
+	if ($der_anio != '') { $sql .= " AND d.der_anio='$der_anio'";}
+	if ($der_peri != '') { $sql .= " AND d.der_peri='$der_peri'";}
+	if ($der_tipo != '') { $sql .= " AND d.der_tipo='$der_tipo'";}
+	if ($der_trim != '') { $sql .= " AND d.der_trim='$der_trim'";}
 
-	$sql .= " ORDER BY c.cef_cod, def_nemonico ASC";
+	$sql .= " ORDER BY c.cer_cod, d.der_nemonico ASC";
+	//echo $sql;
 	$res = mysqli_query($link, $sql);
-
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT * FROM empresa WHERE nemonico='$nemonico'";
+	$sqlem = "SELECT * FROM empresa WHERE nemonico='$der_nemonico'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
 	$nombre_empresa = $rowem['nombre'];
 
 
-	include('../View/EstadoFinanciero/listar.php');
+	include('../View/EstadoResultado/listar.php');
 }
 
 function file_get_contents_curl($url){
@@ -68,7 +68,7 @@ function getFechaBD($date){
 	return $ano.'-'.$mes.'-'.$dia;
 }
 
-function importarEstadoFinanciero($ruta, $condicion, $modo){
+function importarEstadoResultado($ruta, $condicion, $modo){
 
 	include($ruta.'/Util/simple_html_dom_php5.6.php');
 	include($ruta.'/Config/Conexion.php');
@@ -85,21 +85,21 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 4;}
 
 	if($modo == 'manual'){
-		$cef_anio = $_GET['cef_anio'];
-		$cef_peri = $_GET['cef_peri'];
-		$cef_tipo = $_GET['cef_tipo'];
-		$cef_trim = $_GET['cef_trim'];
+		$der_anio = $_GET['cef_anio'];
+		$der_peri = $_GET['cef_peri'];
+		$der_tipo = $_GET['cef_tipo'];
+		$der_trim = $_GET['cef_trim'];
 	}else{
-		$cef_anio = date('Y');
-		$cef_peri = 'T';
-		$cef_tipo = 'C';
-		$cef_trim = $mes_auto;
+		$der_anio = date('Y');
+		$der_peri = 'T';
+		$der_tipo = 'C';
+		$der_trim = $mes_auto;
 	}
 
-	if($cef_peri == 'A'){$cef_trim = 'A';}
+	if($der_peri == 'A'){$der_trim = 'A';}
 
-	$cef_form = "BAL";
-	$cef_stat ='10';
+	$der_form = "GYP";
+	$cer_stat ='10';
 	
 	while($row = mysqli_fetch_array($res)){
 		
@@ -107,17 +107,17 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 		$new_nemonico = $row['nemonico'];
 		$imp_sit_fin = $row['imp_sit_fin'];
 		$razon_social = "";
-		$cef_fech_crea = date('Y-m-d');
-		$cef_hora_crea = date('H:i:s');
+		$cer_fech_crea = date('Y-m-d');
+		$cer_hora_crea = date('H:i:s');
 
-		//$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
-		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$cef_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_form&Tipo1=$cef_peri&Tipo2=$cef_tipo&Dsc_Correlativo=0000&Secuencia=0";
+		//$url  = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=2019&Trimestre=3&Rpj=023106&RazoSoci=GRANA%20Y%20MONTERO%20SAA&TipoEEFF=GYP&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0";
+		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$der_anio&Trimestre=$der_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$der_form&Tipo1=$der_peri&Tipo2=$der_tipo&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
-		
+
 		if (!empty($html)) {
 
 			$table_1 = $html->find('table',3);
-			//echo $table_1;
+
 			if(isset($table_1) && $table_1 !='' && $table_1 !=null && isset($table_1->find('tr',0)->plaintext) && $table_1->find('tr',0)->plaintext !=''){
 
 				$cont_tr = 1;
@@ -126,51 +126,64 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 					//Detalles
 					if ($cont_tr>3 && (isset($tr->find('td',0)->plaintext) || isset($tr->find('th',0)->plaintext))) {
 						//echo trim($tr->find('td',0)->plaintext)."<br>";
-						$cef_cod_bvl = $cef_nomb = "";
-						$cef_cab_det = 'DET';
+						$cer_cod_bvl = $cer_nomb = "";
+						$cer_cab_det = 'DET';
 						if(isset($tr->find('th',0)->plaintext)){ 
-							$cef_cod_bvl = trim($tr->find('th',0)->plaintext);
-							$cef_nomb = trim($tr->find('th',1)->plaintext);
-							$cef_cab_det = 'CAB';
-							$def_val_de = trim($tr->find('th',3)->plaintext);$def_val_de = str_replace(',','',$def_val_de);
-							$def_val_ha = trim($tr->find('th',4)->plaintext);$def_val_ha = str_replace(',','',$def_val_ha);
+							$cer_cod_bvl = trim($tr->find('th',0)->plaintext);
+							$cer_nomb = trim($tr->find('th',1)->plaintext);
+							$cer_cab_det = 'CAB';
+							$der_val_tr1 = trim($tr->find('td',3)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
+							$der_val_tr2 = trim($tr->find('td',4)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
+							$der_val_tr3 = trim($tr->find('td',5)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
+							$der_val_tr4 = trim($tr->find('td',6)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
 						}
 						if(isset($tr->find('td',0)->plaintext)){ 
-							$cef_cod_bvl = trim($tr->find('td',0)->plaintext);
-							$cef_nomb = trim($tr->find('td',2)->plaintext);
-							$cef_cab_det = 'DET';
-							$def_val_de = trim($tr->find('td',4)->plaintext);$def_val_de = str_replace(',','',$def_val_de);
-							$def_val_ha = trim($tr->find('td',5)->plaintext);$def_val_ha = str_replace(',','',$def_val_ha);
+							$cer_cod_bvl = trim($tr->find('td',0)->plaintext);
+							$cer_nomb = (trim($tr->find('td',1)->plaintext)!='')?trim($tr->find('td',1)->plaintext):trim($tr->find('td',2)->plaintext);
+							$cer_cab_det = (trim($tr->find('td',1)->plaintext)!='')?'DETG':'DET';
+							if($cer_cab_det == 'DET'){
+								$der_val_tr1 = trim($tr->find('td',4)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
+								$der_val_tr2 = trim($tr->find('td',5)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
+								$der_val_tr3 = trim($tr->find('td',6)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
+								$der_val_tr4 = trim($tr->find('td',7)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
+							}else{
+								$der_val_tr1 = trim($tr->find('td',3)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
+								$der_val_tr2 = trim($tr->find('td',4)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
+								$der_val_tr3 = trim($tr->find('td',5)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
+								$der_val_tr4 = trim($tr->find('td',6)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
+							}
+							
 						}
-						
+
 						//Validamos si ya se registro la linea
-						$sqlvc = "SELECT cef_cod, cef_cod_bvl FROM cab_estado_financiero WHERE cef_cod_bvl='$cef_cod_bvl' LIMIT 1";
+						$sqlvc = "SELECT cer_cod, cer_cod_bvl FROM cab_estado_resultado WHERE cer_cod_bvl='$cer_cod_bvl' LIMIT 1";
 						$resvc = mysqli_query($link, $sqlvc);
 						$rowvc = mysqli_fetch_array($resvc);
-						$cef_cod = $rowvc['cef_cod'];
+						$cer_cod = $rowvc['cer_cod'];
 
-						if($cef_cod==''){
+						if($cer_cod==''){
 							//Obtenemos el nuevo codigo
-							$sqlnc = "SELECT MAX(cef_cod)AS cef_cod FROM cab_estado_financiero";
+							$sqlnc = "SELECT MAX(cer_cod)AS cer_cod FROM cab_estado_resultado";
 							$resnc = mysqli_query($link, $sqlnc);
 							$rownc = mysqli_fetch_array($resnc);
-							$cef_cod = ($rownc['cef_cod']!='')?$rownc['cef_cod']+1:'1000';
+							$cer_cod = ($rownc['cer_cod']!='')?$rownc['cer_cod']+1:'1000';
 
 							//Insertamos cabecera
-							$sqlinc = "INSERT INTO cab_estado_financiero(cef_cod,cef_cod_bvl,cef_nomb,cef_cab_det,cef_stat,cef_fech_crea,cef_hora_crea)VALUES
-							('$cef_cod','$cef_cod_bvl','$cef_nomb','$cef_cab_det','$cef_stat','$cef_fech_crea','$cef_hora_crea')";
+							$sqlinc = "INSERT INTO cab_estado_resultado(cer_cod,cer_cod_bvl,cer_nomb,cer_cab_det,cer_stat,cer_fech_crea,cer_hora_crea)VALUES
+							('$cer_cod','$cer_cod_bvl','$cer_nomb','$cer_cab_det','$cer_stat','$cer_fech_crea','$cer_hora_crea')";
 							$resinc = mysqli_query($link, $sqlinc);
 						}
 
 						//Insertamos detalle
-						$sqlvd = "SELECT cef_cod, cef_cod_bvl FROM det_estado_financiero WHERE cef_cod='$cef_cod' AND cef_cod_bvl='$cef_cod_bvl' AND def_nemonico='$new_nemonico' AND def_peri='$cef_peri' AND def_trim='$cef_trim' AND def_anio='$cef_anio' AND def_tipo='$cef_tipo' AND def_form='$cef_form' LIMIT 1";
+						$sqlvd = "SELECT der_cod, der_cod_bvl FROM det_estado_resultado WHERE der_cod='$cer_cod' AND der_cod_bvl='$cer_cod_bvl' AND der_nemonico='$new_nemonico' AND der_peri='$der_peri' AND der_trim='$der_trim' AND der_anio='$der_anio' AND der_tipo='$der_tipo' AND der_form='$der_form' LIMIT 1";
 						$resvd = mysqli_query($link, $sqlvd);
 						$rowvd = mysqli_fetch_array($resvd);
-						$cef_cod_det = $rowvd['cef_cod'];
+						$der_cod_det = $rowvd['der_cod'];
 
-						if($cef_cod_det == ''){
-							$sqlinc = "INSERT INTO det_estado_financiero(cef_cod,cef_cod_bvl,def_nemonico,def_cab_det,def_val_de, def_val_ha,def_peri,def_trim,def_anio,def_tipo,def_form,def_fech_crea,def_hora_crea)VALUES
-							('$cef_cod','$cef_cod_bvl','$new_nemonico','$cef_cab_det','$def_val_de','$def_val_ha','$cef_peri','$cef_trim','$cef_anio','$cef_tipo','$cef_form','$cef_fech_crea','$cef_hora_crea')";
+						if($der_cod_det == ''){
+							$sqlinc = "INSERT INTO det_estado_resultado(der_cod,der_cod_bvl,der_nemonico,der_cab_det,der_val_tr1,der_val_tr2,der_val_tr3,der_val_tr4,der_peri,der_trim,der_anio,der_tipo,der_form,der_fech_crea,der_hora_crea)VALUES
+							('$cer_cod','$cer_cod_bvl','$new_nemonico','$cer_cab_det','$der_val_tr1','$der_val_tr2','$der_val_tr3','$der_val_tr4','$der_peri','$der_trim','$der_anio','$der_tipo','$der_form','$cer_fech_crea','$cer_hora_crea')";
+							echo $sqlinc;
 							$resinc = mysqli_query($link, $sqlinc) or die(mysqli_error($link));
 						}
 
@@ -186,15 +199,15 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 
 function importarManualAction(){
 
-	$cef_nemonico = $_GET['cef_nemonico'];
+	$cer_nemonico = $_GET['cef_nemonico'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($cef_nemonico !=''){
-		$condicion .= " AND nemonico='$cef_nemonico'";
+	if($cer_nemonico !=''){
+		$condicion .= " AND nemonico='$cer_nemonico'";
 	}
 
-	importarEstadoFinanciero($ruta, $condicion, 'manual');
+	importarEstadoResultado($ruta, $condicion, 'manual');
 }
 
 function importarAutomaticolAction(){
@@ -202,7 +215,7 @@ function importarAutomaticolAction(){
 	$ruta = "public_html/analisisdevalor.com";
 	$condicion = "";
 	
-	importarEstadoFinanciero($ruta, $condicion, 'automatico');
+	importarEstadoResultado($ruta, $condicion, 'automatico');
 }
 
 //Este parametro se obtiene desde la vista y crons

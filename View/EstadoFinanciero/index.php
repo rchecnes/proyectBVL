@@ -67,7 +67,7 @@
 
 				$.ajax({
 					type:'GET',
-					url: '../Controller/EstadoFinancieroC.php?accion=importarmanual',
+					url: '../Controller/EstadoResultadoC.php?accion=importarmanual',
 					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
 					success:function(data){
 						$("#loading").hide();
@@ -88,7 +88,7 @@
 
 				$.ajax({
 					type:'GET',
-					url: '../Controller/EstadoFinancieroC.php?accion=listar',
+					url: '../Controller/EstadoResultadoC.php?accion=listar',
 					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
 					success:function(data){
 
@@ -97,6 +97,12 @@
 					}
 				});
 			}
+
+			$("ul#tabs li a").click(function(){
+				//alert($(this).attr('href'));
+				if($(this).attr('href') == '#tab_estado_financiero'){buscarImportadoEstadoFinanciero();}
+				else if($(this).attr('href') == '#tab_estado_resultado'){buscarImportadoEstadoResultado();}
+			});
 		});
 
 	</script>
