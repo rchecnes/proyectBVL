@@ -14,11 +14,11 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$der_nemonico = $_GET['cef_nemonico'];
-	$der_anio = $_GET['cef_anio'];
-	$der_peri = $_GET['cef_peri'];
-	$der_tipo = $_GET['cef_tipo'];
-	$der_trim = $_GET['cef_trim'];
+	$der_nemonico = $_GET['cer_nemonico'];
+	$der_anio = $_GET['cer_anio'];
+	$der_peri = $_GET['cer_peri'];
+	$der_tipo = $_GET['cer_tipo'];
+	$der_trim = $_GET['cer_trim'];
 
 	$sql = "SELECT * FROM cab_estado_resultado c
 			INNER JOIN det_estado_resultado d ON(c.cer_cod=d.der_cod AND c.cer_cod_bvl=d.der_cod_bvl)
@@ -85,10 +85,10 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 4;}
 
 	if($modo == 'manual'){
-		$der_anio = $_GET['cef_anio'];
-		$der_peri = $_GET['cef_peri'];
-		$der_tipo = $_GET['cef_tipo'];
-		$der_trim = $_GET['cef_trim'];
+		$der_anio = $_GET['cer_anio'];
+		$der_peri = $_GET['cer_peri'];
+		$der_tipo = $_GET['cer_tipo'];
+		$der_trim = $_GET['cer_trim'];
 	}else{
 		$der_anio = date('Y');
 		$der_peri = 'T';
@@ -132,27 +132,37 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 							$cer_cod_bvl = trim($tr->find('th',0)->plaintext);
 							$cer_nomb = trim($tr->find('th',1)->plaintext);
 							$cer_cab_det = 'CAB';
-							$der_val_tr1 = trim($tr->find('td',3)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
-							$der_val_tr2 = trim($tr->find('td',4)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
-							$der_val_tr3 = trim($tr->find('td',5)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
-							$der_val_tr4 = trim($tr->find('td',6)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
+							$der_val_tr1 = trim($tr->find('th',3)->plaintext);$der_val_tr1 = str_replace(',','',$der_val_tr1);$der_val_tr1 = str_replace('&nbsp;','',$der_val_tr1);
+							$der_val_tr2 = trim($tr->find('th',4)->plaintext);$der_val_tr2 = str_replace(',','',$der_val_tr2);$der_val_tr2 = str_replace('&nbsp;','',$der_val_tr2);
+							$der_val_tr3 = trim($tr->find('th',5)->plaintext);$der_val_tr3 = str_replace(',','',$der_val_tr3);$der_val_tr3 = str_replace('&nbsp;','',$der_val_tr3);
+							$der_val_tr4 = trim($tr->find('th',6)->plaintext);$der_val_tr4 = str_replace(',','',$der_val_tr4);$der_val_tr4 = str_replace('&nbsp;','',$der_val_tr4);
+							$der_val1_vac = ($der_val_tr1!='')?0:1;
+							$der_val2_vac = ($der_val_tr2!='')?0:1;
+							$der_val3_vac = ($der_val_tr3!='')?0:1;
+							$der_val4_vac = ($der_val_tr4!='')?0:1;
 						}
 						if(isset($tr->find('td',0)->plaintext)){ 
 							$cer_cod_bvl = trim($tr->find('td',0)->plaintext);
-							$cer_nomb = (trim($tr->find('td',1)->plaintext)!='')?trim($tr->find('td',1)->plaintext):trim($tr->find('td',2)->plaintext);
-							$cer_cab_det = (trim($tr->find('td',1)->plaintext)!='')?'DETG':'DET';
+							$cer_td_01 = trim(str_replace('&nbsp;','',$tr->find('td',1)->plaintext));
+							$cer_td_02 = trim(str_replace('&nbsp;','',$tr->find('td',2)->plaintext));
+							$cer_nomb = ($cer_td_01 != '')?$cer_td_01:$cer_td_02;
+							$cer_cab_det = ($cer_td_01 !='')?'DETG':'DET';
+
 							if($cer_cab_det == 'DET'){
-								$der_val_tr1 = trim($tr->find('td',4)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
-								$der_val_tr2 = trim($tr->find('td',5)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
-								$der_val_tr3 = trim($tr->find('td',6)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
-								$der_val_tr4 = trim($tr->find('td',7)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
+								$der_val_tr1 = trim($tr->find('td',4)->plaintext);$der_val_tr1 = str_replace(',','',$der_val_tr1);$der_val_tr1 = str_replace('&nbsp;','',$der_val_tr1);
+								$der_val_tr2 = trim($tr->find('td',5)->plaintext);$der_val_tr2 = str_replace(',','',$der_val_tr2);$der_val_tr2 = str_replace('&nbsp;','',$der_val_tr2);
+								$der_val_tr3 = trim($tr->find('td',6)->plaintext);$der_val_tr3 = str_replace(',','',$der_val_tr3);$der_val_tr3 = str_replace('&nbsp;','',$der_val_tr3);
+								$der_val_tr4 = trim($tr->find('td',7)->plaintext);$der_val_tr4 = str_replace(',','',$der_val_tr4);$der_val_tr4 = str_replace('&nbsp;','',$der_val_tr4);
 							}else{
-								$der_val_tr1 = trim($tr->find('td',3)->plaintext);$der_val_tr1 = str_replace(',','',trim($der_val_tr1));
-								$der_val_tr2 = trim($tr->find('td',4)->plaintext);$der_val_tr2 = str_replace(',','',trim($der_val_tr2));
-								$der_val_tr3 = trim($tr->find('td',5)->plaintext);$der_val_tr3 = str_replace(',','',trim($der_val_tr3));
-								$der_val_tr4 = trim($tr->find('td',6)->plaintext);$der_val_tr4 = str_replace(',','',trim($der_val_tr4));
+								$der_val_tr1 = trim($tr->find('td',3)->plaintext);$der_val_tr1 = str_replace(',','',$der_val_tr1);$der_val_tr1 = str_replace('&nbsp;','',$der_val_tr1);
+								$der_val_tr2 = trim($tr->find('td',4)->plaintext);$der_val_tr2 = str_replace(',','',$der_val_tr2);$der_val_tr2 = str_replace('&nbsp;','',$der_val_tr2);
+								$der_val_tr3 = trim($tr->find('td',5)->plaintext);$der_val_tr3 = str_replace(',','',$der_val_tr3);$der_val_tr3 = str_replace('&nbsp;','',$der_val_tr3);
+								$der_val_tr4 = trim($tr->find('td',6)->plaintext);$der_val_tr4 = str_replace(',','',$der_val_tr4);$der_val_tr4 = str_replace('&nbsp;','',$der_val_tr4);
 							}
-							
+							$der_val1_vac = ($der_val_tr1!='')?0:1;
+							$der_val2_vac = ($der_val_tr2!='')?0:1;
+							$der_val3_vac = ($der_val_tr3!='')?0:1;
+							$der_val4_vac = ($der_val_tr4!='')?0:1;						
 						}
 
 						//Validamos si ya se registro la linea
@@ -181,9 +191,8 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 						$der_cod_det = $rowvd['der_cod'];
 
 						if($der_cod_det == ''){
-							$sqlinc = "INSERT INTO det_estado_resultado(der_cod,der_cod_bvl,der_nemonico,der_cab_det,der_val_tr1,der_val_tr2,der_val_tr3,der_val_tr4,der_peri,der_trim,der_anio,der_tipo,der_form,der_fech_crea,der_hora_crea)VALUES
-							('$cer_cod','$cer_cod_bvl','$new_nemonico','$cer_cab_det','$der_val_tr1','$der_val_tr2','$der_val_tr3','$der_val_tr4','$der_peri','$der_trim','$der_anio','$der_tipo','$der_form','$cer_fech_crea','$cer_hora_crea')";
-							echo $sqlinc;
+							$sqlinc = "INSERT INTO det_estado_resultado(der_cod,der_cod_bvl,der_nemonico,der_cab_det,der_val_tr1,der_val_tr2,der_val_tr3,der_val_tr4,der_peri,der_trim,der_anio,der_tipo,der_form,der_fech_crea,der_hora_crea,der_val1_vac,der_val2_vac,der_val3_vac,der_val4_vac)VALUES
+							('$cer_cod','$cer_cod_bvl','$new_nemonico','$cer_cab_det','$der_val_tr1','$der_val_tr2','$der_val_tr3','$der_val_tr4','$der_peri','$der_trim','$der_anio','$der_tipo','$der_form','$cer_fech_crea','$cer_hora_crea','$der_val1_vac','$der_val2_vac','$der_val3_vac','$der_val4_vac')";
 							$resinc = mysqli_query($link, $sqlinc) or die(mysqli_error($link));
 						}
 
@@ -199,7 +208,7 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 
 function importarManualAction(){
 
-	$cer_nemonico = $_GET['cef_nemonico'];
+	$cer_nemonico = $_GET['cer_nemonico'];
 	$ruta = "..";
 
 	$condicion = "";

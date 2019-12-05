@@ -57,20 +57,20 @@
 
 			importarInformacionEstadoResultado = function(){
 
-				$("#loading").show();
+				$("#loading_cer").show();
 
-				var cef_nemonico = $("#cef_nemonico").val();
-				var cef_tipo = $("#cef_tipo").val();
-				var cef_anio = $("#cef_anio").val();
-				var cef_trim = $("#cef_trim").val();
-				var cef_peri = $("#cef_peri").val();
+				var cer_nemonico = $("#cer_nemonico").val();
+				var cer_tipo = $("#cer_tipo").val();
+				var cer_anio = $("#cer_anio").val();
+				var cer_trim = $("#cer_trim").val();
+				var cer_peri = $("#cer_peri").val();
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=importarmanual',
-					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
+					data:{cer_nemonico:cer_nemonico,cer_tipo:cer_tipo,cer_anio:cer_anio,cer_trim:cer_trim,cer_peri:cer_peri},
 					success:function(data){
-						$("#loading").hide();
+						$("#loading_cer").hide();
 						buscarImportadoEstadoResultado();
 					}
 				});
@@ -78,22 +78,22 @@
 
 			buscarImportadoEstadoResultado = function(){
 
-				$("#loading").show();
+				$("#loading_cer").show();
 
-				var cef_nemonico = $("#cef_nemonico").val();
-				var cef_tipo = $("#cef_tipo").val();
-				var cef_anio = $("#cef_anio").val();
-				var cef_trim = $("#cef_trim").val();
-				var cef_peri = $("#cef_peri").val();
+				var cer_nemonico = $("#cer_nemonico").val();
+				var cer_tipo = $("#cer_tipo").val();
+				var cer_anio = $("#cer_anio").val();
+				var cer_trim = $("#cer_trim").val();
+				var cer_peri = $("#cer_peri").val();
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=listar',
-					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
+					data:{cer_nemonico:cer_nemonico,cer_tipo:cer_tipo,cer_anio:cer_anio,cer_trim:cer_trim,cer_peri:cer_peri},
 					success:function(data){
 
 						$("#divHistorico").html(data);
-						$("#loading").hide();
+						$("#loading_cer").hide();
 					}
 				});
 			}
@@ -193,7 +193,7 @@
 								<label>Empresa:</label>
 								<?php   
 									$params = array(
-										'select' => array('id'=>'cef_nemonico', 'name'=>'cef_nemonico', 'class'=>'form-control'),
+										'select' => array('id'=>'cer_nemonico', 'name'=>'cer_nemonico', 'class'=>'form-control'),
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
@@ -209,7 +209,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Tipo:</label>
-								<select id="cef_tipo" name="cef_tipo" class="form-control">
+								<select id="cer_tipo" name="cer_tipo" class="form-control">
 									<option value="I">Individual</option>
 									<option value="C" selected="selected">Consolidada</option>
 								</select>
@@ -218,7 +218,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Año:</label>
-								<select id="cef_anio" name="cef_anio" class="form-control">
+								<select id="cer_anio" name="cer_anio" class="form-control">
 								<?php
 								for($a=2000;$a<=2050;$a++){
 									$selected = ($a == date('Y'))?'selected="selected"':'';
@@ -231,7 +231,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Periodo:</label>
-								<select id="cef_peri" name="cef_peri" class="form-control">
+								<select id="cer_peri" name="cer_peri" class="form-control">
 									<option value="T" selected="selected">Trimestral No Auditada</option>
 									<option value="A" disabled>Auditada Anual</option>
 								</select>
@@ -240,7 +240,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Trimestre:</label>
-								<select id="cef_trim" name="cef_trim" class="form-control">
+								<select id="cer_trim" name="cer_trim" class="form-control">
 									<option value="1">Primer Trimestre</option>
 									<option value="2">Segundo Trimestre</option>
 									<option value="3" selected="selected">Tercer Trimestre</option>
@@ -254,7 +254,7 @@
 							<div class="form-group">
 								<input name="button" type="button" class="btn btn-default" id="button" value="Buscar Importado" onclick="buscarImportadoEstadoResultado()">
 								<input name="button" type="button" class="btn btn-success" id="button" value="Importar Informacion" onclick="importarInformacionEstadoResultado()">
-								<img src="../Assets/img/load.gif" id="loading" style="display: none">
+								<img src="../Assets/img/load.gif" id="loading_cer" style="display: none">
 							</div>
 						</div>
 					</div>
