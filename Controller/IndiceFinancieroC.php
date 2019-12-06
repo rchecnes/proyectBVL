@@ -143,7 +143,7 @@ function listarAction(){
 
 	//Obtenemos solos años
 	$sqla = "SELECT inf_anio FROM det_indice_financiero WHERE inf_codigo<>''";
-	if ($nemonico != '') { $sqla .= " AND inf_nemonico='$nemonico'";}
+	if ($inf_nemonico != '') { $sqla .= " AND inf_nemonico='$inf_nemonico'";}
 	$sqla .= " GROUP BY inf_anio ORDER BY inf_anio ASC";
 	$resa = mysqli_query($link, $sqla);
 
