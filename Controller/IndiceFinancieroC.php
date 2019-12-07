@@ -151,6 +151,7 @@ function listarAction(){
 	while($rowa = mysqli_fetch_array($resa)){
 		$array_anio[$rowa['inf_anio']] = $rowa['inf_anio'];
 	}
+
 	//print_r($array_anio);
 	include('../View/IndiceFinanciero/listar.php');
 }

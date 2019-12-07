@@ -4,13 +4,20 @@
     background-color: #a7a9ac;
     color:#FFF;
 }
+.cab_gen{
+    background:#434343;
+    color:#FFF;
+    text-align: center;
+}
 </style>
 <table class="table table-bordered">
     <tr>
         <th colspan="5" style="background:#b11b21;color:#FFF;text-align: center;"><?=$nombre_empresa?></th>
     </tr>
     <tr>
-        <th colspan="5" style="background:#434343;color:#FFF;text-align: center;">ESTADO DE SITUACION FINANCIERA / STATEMENT OF FINANCIAL POSITION</th>
+        <th colspan="3" class="cab_gen">ESTADO DE SITUACION FINANCIERA / STATEMENT OF FINANCIAL POSITION</th>
+        <th class="cab_gen"><?=$cab_fe_ini?></th>
+        <th class="cab_gen"><?=$cab_fe_fin?></th>
     </tr>
     
     <?php

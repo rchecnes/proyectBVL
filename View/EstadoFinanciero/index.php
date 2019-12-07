@@ -171,6 +171,7 @@
 									<option value="1">Primer Trimestre</option>
 									<option value="2">Segundo Trimestre</option>
 									<option value="3" selected="selected">Tercer Trimestre</option>
+									<option value="4">Cuarto Trimestre</option>
 								</select>
 							</div>
 						</div>
@@ -244,6 +245,7 @@
 									<option value="1">Primer Trimestre</option>
 									<option value="2">Segundo Trimestre</option>
 									<option value="3" selected="selected">Tercer Trimestre</option>
+									<option value="4">Cuarto Trimestre</option>
 								</select>
 							</div>
 						</div>

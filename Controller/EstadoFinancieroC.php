@@ -36,11 +36,17 @@ function listarAction(){
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT * FROM empresa WHERE nemonico='$nemonico'";
+	$sqlem = "SELECT * FROM empresa WHERE nemonico='$cef_nemonico'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
 	$nombre_empresa = $rowem['nombre'];
 
+	$cab_fe_ini = '';
+	if($cef_trim == 4){$cab_fe_ini = '31/12/'.($cef_anio);}
+	if($cef_trim == 3){$cab_fe_ini = '30/09/'.($cef_anio);}
+	if($cef_trim == 2){$cab_fe_ini = '30/06/'.($cef_anio);}
+	if($cef_trim == 1){$cab_fe_ini = '31/03/'.($cef_anio);}
+	$cab_fe_fin = '31/12/'.($cef_anio-1);
 
 	include('../View/EstadoFinanciero/listar.php');
 }
