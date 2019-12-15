@@ -109,7 +109,7 @@
 	<div class="container">
 		<div class="tabbable">
 	        <ul class="nav nav-tabs" id="tabs">
-	          <li class="active"><a data-toggle="tab" href="#tab_estado_financiero"><h4>Estado Financiero</h4></a></li>
+	          <li class="active"><a data-toggle="tab" href="#tab_estado_financiero"><h4>Balance General</h4></a></li>
 			  <li><a data-toggle="tab" href="#tab_estado_resultado"><h4>Estado De Resultado</h4></a></li>
 	        </ul>
 	        <div class="tab-content">
@@ -160,7 +160,7 @@
 								<label>Periodo:</label>
 								<select id="cef_peri" name="cef_peri" class="form-control">
 									<option value="T" selected="selected">Trimestral No Auditada</option>
-									<option value="A" disabled>Auditada Anual</option>
+									<option value="A">Auditada Anual</option>
 								</select>
 							</div>
 						</div>
@@ -234,7 +234,7 @@
 								<label>Periodo:</label>
 								<select id="cer_peri" name="cer_peri" class="form-control">
 									<option value="T" selected="selected">Trimestral No Auditada</option>
-									<option value="A" disabled>Auditada Anual</option>
+									<option value="A">Auditada Anual</option>
 								</select>
 							</div>
 						</div>

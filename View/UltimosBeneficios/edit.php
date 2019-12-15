@@ -33,11 +33,15 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Texto Completo):</label>
-							<input type="text" id="ub_der_comp" name="ub_der_comp" class="form-control" value="<?=$ub_der_comp?>" required>					
+							<input type="text" id="ub_der_comp" name="ub_der_comp" class="form-control" value="<?=$ub_der_comp?>" disabled required>					
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Moneda):</label>
-							<input type="text" id="ub_der_mon" name="ub_der_mon" class="form-control" value="<?=$ub_der_mon?>">
+							<select class="form-control" id="ub_der_mon" name="ub_der_mon">
+								<option value="">Ninguno</option>
+								<option value="S/." <?=($ub_der_mon == 'S/.')?"selected='selected'":""?>>S/.</option>
+								<option value="US$" <?=($ub_der_mon == 'US$')?"selected='selected'":""?>>US$</option>
+							</select>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Importe):</label>
@@ -49,7 +53,10 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Tipo):</label>
-							<input type="text" id="ub_der_tip" name="ub_der_tip" class="form-control" value="<?=$ub_der_tip?>">
+							<select class="form-control" id="ub_der_tip" name="ub_der_tip">
+								<option value="S/." <?=($ub_der_tip == 'Efe.')?"selected='selected'":""?>>Efe.</option>
+								<option value="US$" <?=($ub_der_tip == 'Accs.')?"selected='selected'":""?>>Accs.</option>
+							</select>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Fecha Acuerdo:</label>

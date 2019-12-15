@@ -39,18 +39,23 @@ function editAction(){
 
 	$accion = "update";
 
-	$inf_detcod = $_GET['inf_detcod'];
+	$inf_nemonico = $_GET['inf_nemonico'];
+	$inf_anio = $_GET['inf_anio'];
 	$titulo = "Editar Indice Financiero";
 	//Consultamos registro
-	$sql = "SELECT * FROM det_indice_financiero WHERE inf_detcod='$inf_detcod'";
+	$sql = "SELECT * FROM cab_indice_financiero c
+	INNER JOIN det_indice_financiero d ON(c.inf_codigo=d.inf_codigo) WHERE d.inf_nemonico='$inf_nemonico' AND d.inf_anio='$inf_anio'";
 	$res = mysqli_query($link, $sql);
-	$row = mysqli_fetch_array($res);
+	$inf_array = array();
+	while($row = mysqli_fetch_array($res)){
+		$inf_array[$row['inf_codigo']] = array('inf_valor'=>$row['inf_valor']);
+	}
 
-	$inf_detcod = $row['inf_detcod'];
+	/*$inf_detcod = $row['inf_detcod'];
 	$inf_codigo = $row['inf_codigo'];
 	$inf_nemonico = $row['inf_nemonico'];
 	$inf_anio = $row['inf_anio'];
-	$inf_valor = $row['inf_valor'];
+	$inf_valor = $row['inf_valor'];*/
 
 	include('../View/IndiceFinanciero/edit.php');
 }
@@ -62,9 +67,8 @@ function createAction(){
 	$link = getConexion();
 
 	$inf_nemonico = $_POST['inf_nemonico'];
-	$inf_codigo = $_POST['inf_codigo'];
 	$inf_anio = $_POST['inf_anio'];
-	$inf_valor = $_POST['inf_valor'];
+	$inf_contador = $_POST['inf_contador'];
 
 	//Obtenemos el codigo empresa
 	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
@@ -72,11 +76,18 @@ function createAction(){
 	$rowemp = mysqli_fetch_array($resemp);
 	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
 
-	//Insertar a BD
-	$sqlin = "INSERT INTO det_indice_financiero(inf_codigo,inf_nemonico,inf_anio,inf_valor)
-	VALUES('$inf_codigo','$inf_nemonico','$inf_anio','$inf_valor')";
-	//echo $sqlin;
-	$resin = mysqli_query($link, $sqlin);
+	for($i = 1;$i<=$inf_contador;$i++){
+
+		if(isset($_POST['inf_valor_'.$i]) && $_POST['inf_valor_'.$i]!='' && $_POST['inf_valor_'.$i]>0){
+
+			$inf_codigo = $_POST['inf_codigo_'.$i];
+			$inf_valor = $_POST['inf_valor_'.$i];
+
+			//Insertar a BD
+			$sqlin = "INSERT INTO det_indice_financiero(inf_codigo,inf_nemonico,inf_anio,inf_valor)VALUES('$inf_codigo','$inf_nemonico','$inf_anio','$inf_valor')";
+			$resin = mysqli_query($link, $sqlin);
+		}
+	}
 
 	mysqli_close($link);
 	header("location:../Controller/IndiceFinancieroC.php?accion=index");
@@ -88,14 +99,36 @@ function updateAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$inf_detcod = $_POST['inf_detcod'];
+	//$inf_detcod = $_POST['inf_detcod'];
 	$inf_nemonico = $_POST['inf_nemonico'];
-	$inf_codigo = $_POST['inf_codigo'];
+	//$inf_codigo = $_POST['inf_codigo'];
 	$inf_anio = $_POST['inf_anio'];
-	$inf_valor = $_POST['inf_valor'];
+	$inf_contador = $_POST['inf_contador'];
 
-	$sqlup = "UPDATE det_indice_financiero SET inf_nemonico='$inf_nemonico',inf_codigo='$inf_codigo',inf_anio='$inf_anio',inf_valor='$inf_valor' WHERE inf_detcod='$inf_detcod'";
-	$resup = mysqli_query($link, $sqlup);
+	for($i = 1;$i<=$inf_contador;$i++){
+
+		if(isset($_POST['inf_valor_'.$i])){
+
+			$inf_codigo = $_POST['inf_codigo_'.$i];
+			$inf_valor = $_POST['inf_valor_'.$i];
+
+			//Consultamos si ya se registro el indice
+			$sqlv = "SELECT * FROM det_indice_financiero WHERE inf_codigo='$inf_codigo' AND inf_nemonico='$inf_nemonico' AND inf_anio='$inf_anio' LIMIT 1";
+			$resv = mysqli_query($link, $sqlv);
+			$rowv = mysqli_fetch_array($resv);
+
+			if($rowv['inf_codigo'] == ''){
+				if($_POST['inf_valor_'.$i]!=''){
+					$sqlin = "INSERT INTO det_indice_financiero(inf_codigo,inf_nemonico,inf_anio,inf_valor)VALUES('$inf_codigo','$inf_nemonico','$inf_anio','$inf_valor')";
+					$resin = mysqli_query($link, $sqlin);
+				}
+			}else{
+
+				$sqlup = "UPDATE det_indice_financiero SET inf_valor='$inf_valor' WHERE inf_nemonico='$inf_nemonico' AND inf_codigo='$inf_codigo' AND inf_anio='$inf_anio'";
+				$resup = mysqli_query($link, $sqlup);
+			}
+		}
+	}
 
 	mysqli_close($link);
 	header("location:../Controller/IndiceFinancieroC.php?accion=index");
@@ -107,9 +140,10 @@ function deleteAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$inf_detcod = $_GET['inf_detcod'];
+	$inf_nemonico = $_GET['inf_nemonico'];
+	$inf_anio = $_GET['inf_anio'];
 
-	$sql = "DELETE FROM det_indice_financiero WHERE inf_detcod='$inf_detcod'";
+	$sql = "DELETE FROM det_indice_financiero WHERE inf_nemonico='$inf_nemonico' AND inf_anio='$inf_anio'";
 	$res = mysqli_query($link, $sql);
 
 	mysqli_close($link);

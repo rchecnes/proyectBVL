@@ -16,7 +16,10 @@
         <th class="cab-ind">Indices Financieros</th>
         <?php 
         foreach($array_anio as $anio){
-            echo '<th align="center" class="cab-ind">'.$anio.'</th>';
+            $icons = "";
+            $icons = '<a href="../Controller/IndiceFinancieroC.php?accion=edit&inf_nemonico='.$inf_nemonico.'&inf_anio='.$anio.'"  role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" style="font-size:20px;color:white"></i></a>&nbsp;';
+		    $icons .= '<a href="../Controller/IndiceFinancieroC.php?accion=delete&inf_nemonico='.$inf_nemonico.'&inf_anio='.$anio.'" role="button" onclick="return confirm(\'Esta seguro de eliminar el registro seleccionado?\')"><i class="fa fa-trash-o fa-2x" aria-hidden="true" style="font-size:20px;color:white"></i></a>';
+            echo '<th align="center" class="cab-ind">'.$anio."<br>".$icons.'</th>';
         }
         ?>
     </tr>
@@ -46,10 +49,7 @@
 
             if($anio == $det_arr_anio[$anio]['inf_anio']){
                 $inf_val_new = ($det_arr_anio[$anio]['inf_valor'] > 0)?number_format($det_arr_anio[$anio]['inf_valor'],4,'.',''):'-.-';
-                $icons = "";
-                $icons = '<a href="../Controller/IndiceFinancieroC.php?accion=edit&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'"  role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>&nbsp;';
-		        $icons .= '<a href="../Controller/IndiceFinancieroC.php?accion=delete&inf_detcod='.$det_arr_anio[$anio]['inf_detcod'].'" class="color-red" role="button" onclick="return confirm(\'Esta seguro de eliminar el registro seleccionado?\')"><i class="fa fa-trash-o fa-2x" aria-hidden="true" style="font-size:20px"></i></a>';
-                echo '<td align="right">'.$inf_val_new.'<br>'.$icons.'</td>';
+                echo '<td align="right">'.$inf_val_new.'</td>';
             }else{
                 echo '<td>&nbsp;</td>';
             }

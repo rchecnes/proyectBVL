@@ -7,6 +7,10 @@ function indexAction(){
 
 	$cod_user = $_SESSION['cod_user'];
 
+	$fecha_actual = date("Y-m-d");
+	//sumo 1 día
+	$fecha_actual =  date("Y-m-d",strtotime($fecha_actual."- 12 month"));
+
 	include('../Control/Combobox/Combobox.php');
 	include('../View/UltimosBeneficios/index.php');
 }
@@ -72,16 +76,18 @@ function createAction(){
 	$link = getConexion();
 
 	$ub_nemonico = $_POST['ub_nemonico'];
-	$ub_der_comp = $_POST['ub_der_comp'];
 	$ub_der_mon = $_POST['ub_der_mon'];
 	$ub_der_imp = $_POST['ub_der_imp'];
 	$ub_der_por = $_POST['ub_der_por'];
 	$ub_der_tip = $_POST['ub_der_tip'];
 
+	$ub_der_comp = ($ub_der_mon=='')?$ub_der_imp.''.$ub_der_por.' '.$ub_der_tip:$ub_der_mon.' '.$ub_der_imp.' '.$ub_der_tip;
+
 	$ub_fech_acu = $_POST['ub_fech_acu'];
 	$ub_fech_cor = $_POST['ub_fech_cor'];
 	$ub_fech_reg = $_POST['ub_fech_reg'];
 	$ub_fech_ent = $_POST['ub_fech_ent'];
+
 
 	//Obtenemos el codigo empresa
 	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
@@ -118,6 +124,8 @@ function updateAction(){
 	$ub_der_imp = $_POST['ub_der_imp'];
 	$ub_der_por = $_POST['ub_der_por'];
 	$ub_der_tip = $_POST['ub_der_tip'];
+	
+	$ub_der_comp = ($ub_der_mon=='')?$ub_der_imp.''.$ub_der_por.' '.$ub_der_tip:$ub_der_mon.' '.$ub_der_imp.' '.$ub_der_tip;
 
 	$ub_fech_acu = $_POST['ub_fech_acu'];
 	$ub_fech_cor = $_POST['ub_fech_cor'];
@@ -159,8 +167,11 @@ function listarAction(){
 	$cod_ector = $_GET['cod_ector'];
 	$cod_grupo = $_GET['cod_grupo'];
 
-
-	$sql = "SELECT * FROM ultimos_beneficios ub
+	$sql = "SELECT *, DATE_FORMAT(ub_fech_acu,'%d/%m/%Y')AS ub_fech_acu, 
+				DATE_FORMAT(ub_fech_cor,'%d/%m/%Y')AS ub_fech_cor,
+				DATE_FORMAT(ub_fech_reg,'%d/%m/%Y')AS ub_fech_reg,
+				DATE_FORMAT(ub_fech_ent,'%d/%m/%Y')AS ub_fech_ent
+				 FROM ultimos_beneficios ub
 			INNER JOIN empresa em ON(ub.ub_nemonico=em.nemonico)
 			LEFT JOIN empresa_favorito fa ON(em.cod_emp=fa.cod_emp)
 			WHERE ub.ub_cod>0";
@@ -172,7 +183,7 @@ function listarAction(){
 	if ($cod_ector != '') { $sql .= " AND em.cod_sector='$cod_ector'";}
 	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
-	$sql .= " ORDER BY ub.ub_fech_acu DESC";
+	$sql .= " ORDER BY ub.ub_fech_ent DESC";
 	$res = mysqli_query($link, $sql);
 
 	$nro_reg = mysqli_num_rows($res);

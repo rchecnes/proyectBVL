@@ -107,7 +107,7 @@
 								<label>Fecha De Entrega (Desde - Hasta):</label>
 								<div class="row">
 									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-										<input type="text" id="ub_fech_ent_de" name="ub_fech_ent_de" class="form-control datepicker" readonly="readonly" value="<?=date('Y-m').'-01'?>" >	
+										<input type="text" id="ub_fech_ent_de" name="ub_fech_ent_de" class="form-control datepicker" readonly="readonly" value="<?=$fecha_actual?>" >	
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
 										<input type="text" id="ub_fech_ent_ha" name="ub_fech_ent_ha" class="form-control datepicker" readonly="readonly" value="<?=date('Y-m-d')?>">
