@@ -19,6 +19,7 @@ function listarAction(){
 	$cef_peri = $_GET['cef_peri'];
 	$cef_tipo = $_GET['cef_tipo'];
 	$cef_trim = $_GET['cef_trim'];
+	if($cef_peri == 'A'){$cef_trim = 'A';}
 
 	$sql = "SELECT * FROM cab_estado_financiero c
 			INNER JOIN det_estado_financiero d ON(c.cef_cod=d.cef_cod AND c.cef_cod_bvl=d.cef_cod_bvl)
@@ -46,6 +47,7 @@ function listarAction(){
 	if($cef_trim == 3){$cab_fe_ini = '30/09/'.($cef_anio);}
 	if($cef_trim == 2){$cab_fe_ini = '30/06/'.($cef_anio);}
 	if($cef_trim == 1){$cab_fe_ini = '31/03/'.($cef_anio);}
+	if($cef_trim == 'A'){$cab_fe_ini = '31/12/'.($cef_anio);}
 	$cab_fe_fin = '31/12/'.($cef_anio-1);
 
 	include('../View/EstadoFinanciero/listar.php');
@@ -119,11 +121,10 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 		//$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
 		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$cef_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_form&Tipo1=$cef_peri&Tipo2=$cef_tipo&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
-		
+
 		if (!empty($html)) {
 
 			$table_1 = $html->find('table',3);
-			//echo $table_1;
 			if(isset($table_1) && $table_1 !='' && $table_1 !=null && isset($table_1->find('tr',0)->plaintext) && $table_1->find('tr',0)->plaintext !=''){
 
 				$cont_tr = 1;
@@ -131,7 +132,7 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 					
 					//Detalles
 					if ($cont_tr>3 && (isset($tr->find('td',0)->plaintext) || isset($tr->find('th',0)->plaintext))) {
-						//echo trim($tr->find('td',0)->plaintext)."<br>";
+
 						$cef_cod_bvl = $cef_nomb = "";
 						$cef_cab_det = 'DET';
 						if(isset($tr->find('th',0)->plaintext)){ 
