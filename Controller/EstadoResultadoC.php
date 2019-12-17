@@ -19,6 +19,7 @@ function listarAction(){
 	$der_peri = $_GET['cer_peri'];
 	$der_tipo = $_GET['cer_tipo'];
 	$der_trim = $_GET['cer_trim'];
+	if($der_peri == 'A'){$der_trim = 'A';}
 
 	$sql = "SELECT * FROM cab_estado_resultado c
 			INNER JOIN det_estado_resultado d ON(c.cer_cod=d.der_cod AND c.cer_cod_bvl=d.der_cod_bvl)
@@ -41,6 +42,18 @@ function listarAction(){
 	$rowem = mysqli_fetch_array($resem);
 	$nombre_empresa = $rowem['nombre'];
 
+	$tot_info_1 = $tot_info_2= $tot_info_3 = $tot_info_4='';
+	if($der_trim == 4 || $der_trim == 3 || $der_trim == 2 || $der_trim == 1){
+
+		$tot_info_1 = "Por el Trimestre Específico del 1 de Julio de 2019 al 30 de Setiembre de 2019";
+		$tot_info_2 = "Por el Trimestre Específico del 1 de Julio de 2018 al 30 de Setiembre de 2018";
+		$tot_info_3 = "Por el Periodo acumulado del 1 de Enero de 2019 al 30 de Setiembre de 2019";
+		$tot_info_4 = "Por el Periodo acumulado del 1 de Enero de 2018 al 30 de Setiembre de 2018";
+	}
+	if($der_trim == A){
+		$tot_info_1 = '31/12/'.$der_anio;
+		$tot_info_2 = '31/12/'.($der_anio-1);
+	}
 
 	include('../View/EstadoResultado/listar.php');
 }
