@@ -97,7 +97,7 @@
 								<label>Sector:</label>
 								<?php   
 								$params = array(
-									'select' => array('id'=>'cod_ector', 'name'=>'cod_ector', 'class'=>'form-control'),
+									'select' => array('id'=>'cod_sector', 'name'=>'cod_sector', 'class'=>'form-control'),
 									'sql'    => 'SELECT * FROM sector WHERE estado=1',
 									'attrib' => array('value'=>'cod_sector','desc'=>'nombre', 'concat'=>'','descextra'=>''),
 									'empty'  => 'Todos',

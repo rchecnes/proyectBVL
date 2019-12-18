@@ -96,7 +96,7 @@ function createAction(){
 	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
 
 	//Consultamos si ya se registro
-	$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$ub_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
+	$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$ub_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'  AND ub_der_mon='$ub_der_mon' AND ub_der_tip='$ub_der_tip'";
 	$resval = mysqli_query($link, $sqlval);
 	$rowval = mysqli_fetch_array($resval);
 
@@ -126,7 +126,7 @@ function updateAction(){
 	$ub_der_tip = $_POST['ub_der_tip'];
 	
 	$ub_der_comp = ($ub_der_mon=='')?$ub_der_imp.''.$ub_der_por.' '.$ub_der_tip:$ub_der_mon.' '.$ub_der_imp.' '.$ub_der_tip;
-
+	
 	$ub_fech_acu = $_POST['ub_fech_acu'];
 	$ub_fech_cor = $_POST['ub_fech_cor'];
 	$ub_fech_reg = $_POST['ub_fech_reg'];
@@ -230,7 +230,7 @@ function importarBeneficio($ruta, $condicion){
 
 		$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
 		$html = file_get_contents_curl($url);
-		//echo $url."<br>";
+
 		//echo $new_nemonico."<br>";
 		if (!empty($html)) {
 
@@ -269,9 +269,10 @@ function importarBeneficio($ruta, $condicion){
 						$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
 
 						//Consultamos si ya se registro
-						$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent'";
+						$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent' AND ub_der_mon='$ub_der_mon' AND ub_der_tip='$ub_der_tip'";
 						$resval = mysqli_query($link, $sqlval);
 						$rowval = mysqli_fetch_array($resval);
+						//echo $sqlval."<br>";
 
 						if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
 							//Insertar a BD

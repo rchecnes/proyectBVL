@@ -157,7 +157,7 @@ function listarAction(){
 
 	$inf_nemonico = $_GET['inf_nemonico'];
 	$inf_codigo = $_GET['inf_codigo'];
-	$cod_ector = $_GET['cod_ector'];
+	$cod_sector = $_GET['cod_sector'];
 	$cod_grupo = $_GET['cod_grupo'];
 
 	$sql = "SELECT c.*,d.*,e.nombre FROM det_indice_financiero d

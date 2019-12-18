@@ -54,8 +54,8 @@
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 							<label>Derecho  (Tipo):</label>
 							<select class="form-control" id="ub_der_tip" name="ub_der_tip">
-								<option value="S/." <?=($ub_der_tip == 'Efe.')?"selected='selected'":""?>>Efe.</option>
-								<option value="US$" <?=($ub_der_tip == 'Accs.')?"selected='selected'":""?>>Accs.</option>
+								<option value="Efe." <?=($ub_der_tip == 'Efe.')?"selected='selected'":""?>>Efe.</option>
+								<option value="Accs." <?=($ub_der_tip == 'Accs.')?"selected='selected'":""?>>Accs.</option>
 							</select>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">

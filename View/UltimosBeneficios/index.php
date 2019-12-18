@@ -22,7 +22,7 @@
 		        $.ajax({
 		            type:'GET',
 		            url: '../Controller/UltimosBeneficiosC.php?accion=importarmanual',
-		            data:{nemonico:$("#empresa").val()},
+		            data:{nemonico:$("#nemonico").val()},
 		            success:function(data){
 		                $("#loading").hide();
 						buscarImportado();

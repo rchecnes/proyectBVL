@@ -46,10 +46,10 @@
         echo "<tr>";
         if($cer_cab_det == 'CAB'){
 
-            $der_val_tr1_new = ($der_val1_vac != 1)?number_format($der_val_tr1,0,'',','):'';
-            $der_val_tr2_new = ($der_val2_vac != 1)?number_format($der_val_tr2,0,'',','):'';
-            $der_val_tr3_new = ($der_val3_vac != 1)?number_format($der_val_tr3,0,'',','):'';
-            $der_val_tr4_new = ($der_val4_vac != 1)?number_format($der_val_tr4,0,'',','):'';
+            $der_val_tr1_new = ($der_val1_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr1:number_format($der_val_tr1,0,'',','):'';
+            $der_val_tr2_new = ($der_val2_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr2:number_format($der_val_tr2,0,'',','):'';
+            $der_val_tr3_new = ($der_val3_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr3:number_format($der_val_tr3,0,'',','):'';
+            $der_val_tr4_new = ($der_val4_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr4:number_format($der_val_tr4,0,'',','):'';
 
             echo "<th class='cab_det'>$cer_cod_bvl</th>";
             echo "<th colspan='2' class='cab_det'>$cer_nomb</th>";
@@ -63,10 +63,10 @@
 
         }else{
             
-            $der_val_tr1_new = ($der_val1_vac != 1)?number_format($der_val_tr1,0,'.',','):'';
-            $der_val_tr2_new = ($der_val2_vac != 1)?number_format($der_val_tr2,0,'.',','):'';
-            $der_val_tr3_new = ($der_val3_vac != 1)?number_format($der_val_tr3,0,'.',','):'';
-            $der_val_tr4_new = ($der_val4_vac != 1)?number_format($der_val_tr4,0,'.',','):'';
+            $der_val_tr1_new = ($der_val1_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr1:number_format($der_val_tr1,0,'.',','):'';
+            $der_val_tr2_new = ($der_val2_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr2:number_format($der_val_tr2,0,'.',','):'';
+            $der_val_tr3_new = ($der_val3_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr3:number_format($der_val_tr3,0,'.',','):'';
+            $der_val_tr4_new = ($der_val4_vac != 1)?(strpos($cer_cod_bvl, '2D09') !== false)?$der_val_tr4:number_format($der_val_tr4,0,'.',','):'';
             
             if($cer_cab_det == 'DET'){
                 echo "<td>$cer_cod_bvl</td>";
