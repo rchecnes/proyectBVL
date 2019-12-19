@@ -39,7 +39,12 @@
         }else{
             $def_val_de_new = ($def_val_de!='')?number_format($def_val_de,0,'',','):'';
             $def_val_ha_new = ($def_val_ha!='')?number_format($def_val_ha,0,'',','):'';
-            echo "<td>$cef_cod_bvl</td><td>&nbsp;</td><td>$cef_nomb</td><td align='right'>$def_val_de_new</td><td align='right'>$def_val_ha_new</td>";
+            
+            if($cef_cab_det == 'DET'){
+                echo "<td>$cef_cod_bvl</td><td>&nbsp;</td><td>$cef_nomb</td><td align='right'>$def_val_de_new</td><td align='right'>$def_val_ha_new</td>";
+            }else{
+                echo "<td>$cef_cod_bvl</td><td>$cef_nomb</td><td align='right'>$def_val_de_new</td><td align='right'>$def_val_ha_new</td>";
+            }
         }
         echo "</tr>";
     

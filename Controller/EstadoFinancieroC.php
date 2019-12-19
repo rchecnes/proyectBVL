@@ -143,12 +143,27 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 							$def_val_ha = trim($tr->find('th',4)->plaintext);$def_val_ha = str_replace(',','',$def_val_ha);
 						}
 						if(isset($tr->find('td',0)->plaintext)){ 
+							//$cef_cod_bvl = trim($tr->find('td',0)->plaintext);
+							//$cef_nomb = trim($tr->find('td',2)->plaintext);
+							//$cef_cab_det = 'DET';
+
 							$cef_cod_bvl = trim($tr->find('td',0)->plaintext);
-							$cef_nomb = trim($tr->find('td',2)->plaintext);
-							$cef_cab_det = 'DET';
-							$def_val_de = trim($tr->find('td',4)->plaintext);$def_val_de = str_replace(',','',$def_val_de);
-							$def_val_ha = trim($tr->find('td',5)->plaintext);$def_val_ha = str_replace(',','',$def_val_ha);
+							$cef_td_01 = trim(str_replace('&nbsp;','',$tr->find('td',1)->plaintext));
+							$cef_td_02 = trim(str_replace('&nbsp;','',$tr->find('td',2)->plaintext));
+							$cef_nomb = ($cef_td_01 != '')?$cef_td_01:$cef_td_02;
+							$cef_cab_det = ($cef_td_01 !='')?'DETG':'DET';
+
+							if($cef_cab_det == 'DETG'){
+
+								$def_val_de = trim($tr->find('td',3)->plaintext);$def_val_de = str_replace(',','',str_replace('&nbsp;','',$def_val_de));
+								$def_val_ha = trim($tr->find('td',4)->plaintext);$def_val_ha = str_replace(',','',str_replace('&nbsp;','',$def_val_ha));
+							}else{
+								
+								$def_val_de = trim($tr->find('td',4)->plaintext);$def_val_de = str_replace(',','',$def_val_de);
+								$def_val_ha = trim($tr->find('td',5)->plaintext);$def_val_ha = str_replace(',','',$def_val_ha);
+							}
 						}
+						//echo $cef_cod_bvl."-".$def_val_de."-".$def_val_ha."-".$cef_cab_det."<br>";
 						
 						//Validamos si ya se registro la linea
 						$sqlvc = "SELECT cef_cod, cef_cod_bvl FROM cab_estado_financiero WHERE cef_cod_bvl='$cef_cod_bvl' LIMIT 1";
