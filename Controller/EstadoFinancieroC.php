@@ -227,6 +227,16 @@ function importarAutomaticolAction(){
 	importarEstadoFinanciero($ruta, $condicion, 'automatico');
 }
 
+function analisiAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$cefa_nemonico = $_GET['cefa_nemonico'];
+
+	include('../View/EstadoFinanciero/analisis.php');
+}
+
 //Este parametro se obtiene desde la vista y crons
 $accion = (isset($_GET['accion']))?$_GET['accion']:'';
 if($accion == ''){
@@ -245,6 +255,9 @@ switch ($accion) {
 		break;
 	case 'importarautomatico':
 		importarAutomaticolAction();
+		break;
+	case 'analisis':
+		analisiAction();
 		break;
 	default:
 		# code...

@@ -98,10 +98,50 @@
 				});
 			}
 
+			analisisEstadoFinanciero = function(){
+
+				$("#loading_cefa").show();
+
+				var cafa_nemonico = $("#cafa_nemonico").val();
+				var cafa_anio = $("#cafa_anio").val();
+
+				$.ajax({
+					type:'GET',
+					url: '../Controller/EstadoFinancieroC.php?accion=analisis',
+					data:{cafa_nemonico:cafa_nemonico, cafa_anio:cafa_anio},
+					success:function(data){
+
+						$("#divHistorico").html(data);
+						$("#loading_cefa").hide();
+					}
+				});
+			}
+
+			analisisEstadoResultado = function(){
+				
+				$("#loading_cera").show();
+
+				var cara_nemonico = $("#cara_nemonico").val();
+				var cara_anio = $("#cara_anio").val();
+
+				$.ajax({
+					type:'GET',
+					url: '../Controller/EstadoResultadoC.php?accion=analisis',
+					data:{cara_nemonico:cara_nemonico, cara_anio:cara_anio},
+					success:function(data){
+
+						$("#divHistorico").html(data);
+						$("#loading_cera").hide();
+					}
+				});
+			}
+
 			$("ul#tabs li a").click(function(){
 				//alert($(this).attr('href'));
 				if($(this).attr('href') == '#tab_estado_financiero'){buscarImportadoEstadoFinanciero();}
 				else if($(this).attr('href') == '#tab_estado_resultado'){buscarImportadoEstadoResultado();}
+				else if($(this).attr('href') == '#tab_analisis_estado_financiero'){analisisEstadoFinanciero();}
+				else if($(this).attr('href') == '#tab_analisis_estado_resultado'){analisisEstadoResultado();}
 			});
 		});
 
@@ -111,6 +151,8 @@
 	        <ul class="nav nav-tabs" id="tabs">
 	          <li class="active"><a data-toggle="tab" href="#tab_estado_financiero"><h4>Balance General</h4></a></li>
 			  <li><a data-toggle="tab" href="#tab_estado_resultado"><h4>Estado De Resultado</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_financiero"><h4>Analisis Balance General</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_resultado"><h4>Analisis Estado Resultado</h4></a></li>
 	        </ul>
 	        <div class="tab-content">
 	            <div id="tab_estado_financiero" class="tab-pane fade in active">
@@ -261,6 +303,80 @@
 						</div>
 					</div>
 	            </div>
+				<div id="tab_analisis_estado_financiero" class="tab-pane fade in">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label>Nemonico:</label>
+								<?php   
+									$params = array(
+										'select' => array('id'=>'cafa_nemonico', 'name'=>'cafa_nemonico', 'class'=>'form-control'),
+										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
+										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+										'empty'  => false,
+										'defect' => 'GRAMONC1',
+										'edit'   => '',
+										'enable' => 'enable'
+									);
+
+									Combobox($link, $params);
+								?>
+							</div>
+						</div>
+						<div class="col-lg-8">
+							<div class="form-group">
+								<label>Año:</label>
+								<input type="range" class="custom-range" min="2010" max="<?=date('Y')?>" step="0.5" id="cafa_anio" name="cafa_anio">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<label>&nbsp;</label>
+							<div class="form-group">
+								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstadoFinanciero()">
+								<img src="../Assets/img/load.gif" id="loading_cefa" style="display: none">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab_analisis_estado_resultado" class="tab-pane fade in">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label>Nemonico:</label>
+								<?php   
+									$params = array(
+										'select' => array('id'=>'cera_nemonico', 'name'=>'cera_nemonico', 'class'=>'form-control'),
+										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
+										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+										'empty'  => false,
+										'defect' => 'GRAMONC1',
+										'edit'   => '',
+										'enable' => 'enable'
+									);
+
+									Combobox($link, $params);
+								?>
+							</div>
+						</div>
+						<div class="col-lg-8">
+							<div class="form-group">
+								<label>Año:</label>
+								<input type="range" class="custom-range" min="2010" max="<?=date('Y')?>" step="0.5" id="cara_anio" name="cara_anio">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<label>&nbsp;</label>
+							<div class="form-group">
+								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstadoResultado()">
+								<img src="../Assets/img/load.gif" id="loading_cera" style="display: none">
+							</div>
+						</div>
+					</div>
+				</div>
 	        </div>
 	    </div>
 	    <br>
