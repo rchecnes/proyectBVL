@@ -103,7 +103,8 @@
 				$("#loading_cefa").show();
 
 				var cafa_nemonico = $("#cafa_nemonico").val();
-				var cafa_anio = $("#cafa_anio").val();
+				//var cafa_anio = $("#cafa_anio").val();
+				//var cafa_anio = $("#cafa_anio").bootstrapSlider('getValue');
 
 				$.ajax({
 					type:'GET',
@@ -144,6 +145,11 @@
 				else if($(this).attr('href') == '#tab_analisis_estado_resultado'){analisisEstadoResultado();}
 			});
 		});
+
+		//var mySlider = $("input.slider").bootstrapSlider();
+
+		$("#cafa_anio").slider({ id: "slider12a", min: 0, max: 10, value: 5 });
+		var sliderA = new Slider("#cafa_anio", { id: "slider12a", min: 0, max: 10, value: 5 });
 
 	</script>
 	<div class="container">
@@ -325,8 +331,10 @@
 						</div>
 						<div class="col-lg-8">
 							<div class="form-group">
-								<label>Año:</label>
-								<input type="range" class="custom-range" min="2010" max="<?=date('Y')?>" step="0.5" id="cafa_anio" name="cafa_anio">
+								<label>Año:</label><br>
+								<input type="text" class="slider" min="2010" max="<?=date('Y')?>" step="1" id="cafa_anio" name="cafa_anio">
+								
+
 							</div>
 						</div>
 					</div>

@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="../Assets/css/jquery-ui.min.css">
 <link rel="stylesheet" type="text/css" href="../Assets/css/bootstrap-datepicker3.min.css">
 <link rel="stylesheet" type="text/css" href="../Assets/font-awesome-4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../Assets/bootstrap-slider/css/bootstrap-slider.min.css" />
 <link rel="stylesheet" type="text/css" href="../Assets/css/style.css">
 <!--Fin CSS-->
 
@@ -22,5 +23,6 @@
 <script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
 <script type="text/javascript" src="../Assets/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="../Assets/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="../Assets/bootstrap-slider/js/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="../Assets/js/jquery.blockUI.js"></script>
 <!--FIN JS-->
