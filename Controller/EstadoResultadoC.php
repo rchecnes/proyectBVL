@@ -45,8 +45,14 @@ function listarAction(){
 	$tot_info_1 = $tot_info_2= $tot_info_3 = $tot_info_4='';
 	if($der_trim == 4 || $der_trim == 3 || $der_trim == 2 || $der_trim == 1){
 
-		$tot_info_1 = "Por el Trimestre Específico del 1 de Julio de 2019 al 30 de Setiembre de 2019";
-		$tot_info_2 = "Por el Trimestre Específico del 1 de Julio de 2018 al 30 de Setiembre de 2018";
+		$trimestre = "";
+		if($der_trim == 1){$trimestre="Primer";}
+		if($der_trim == 2){$trimestre="Segundo";}
+		if($der_trim == 3){$trimestre="Tercero";}
+		if($der_trim == 4){$trimestre="Cuarto";}
+
+		$tot_info_1 = "$trimestre Trimestre $der_anio";
+		$tot_info_2 = "$trimestre Trimestre ".($der_anio-1);
 		$tot_info_3 = "Por el Periodo acumulado del 1 de Enero de 2019 al 30 de Setiembre de 2019";
 		$tot_info_4 = "Por el Periodo acumulado del 1 de Enero de 2018 al 30 de Setiembre de 2018";
 	}
