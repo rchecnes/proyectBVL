@@ -5,6 +5,11 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
+	//Datos por defecto analisis
+	$anio_min = 2000;
+	$anio_max = date('Y')-1;
+	$anio_def = $anio_max - 10;
+
 	include('../Control/Combobox/Combobox.php');
 	include('../View/EstadoFinanciero/index.php');
 }
@@ -227,13 +232,97 @@ function importarAutomaticolAction(){
 	importarEstadoFinanciero($ruta, $condicion, 'automatico');
 }
 
-function analisiAction(){
+function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tipo){
+
+	$sql1 = "SELECT der_val_tr1 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl='$cod_bvl' AND der_anio='$anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
+	$res1 = mysqli_query($link, $sql1);
+	$row1 = mysqli_fetch_array($res1);
+
+	$new_anio = $anio + 1;
+	$sql2 = "SELECT der_val_tr2 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl='$cod_bvl' AND der_anio='$new_anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
+	$res2 = mysqli_query($link, $sql2);
+	$row2 = mysqli_fetch_array($res2);
+
+	$impo_ret = ($row2['der_val_tr2'] !='' && $row2['der_val_tr2'] != 0)?$row2['der_val_tr2']:$row1['der_val_tr1'];
+
+	return ($impo_ret != '' && $impo_ret != 0)?$impo_ret:0;
+}
+
+function getImpoEstadoFinAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tipo){
+
+	$sql1 = "SELECT def_val_de FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl='$cod_bvl' AND def_anio='$anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$res1 = mysqli_query($link, $sql1);
+	$row1 = mysqli_fetch_array($res1);
+
+	$new_anio = $anio + 1;
+	$sql2 = "SELECT def_val_ha FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl='$cod_bvl' AND def_anio='$new_anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$res2 = mysqli_query($link, $sql2);
+	$row2 = mysqli_fetch_array($res2);
+
+	$impo_ret = ($row2['def_val_ha'] !='' && $row2['def_val_ha'] != 0)?$row2['def_val_ha']:$row1['def_val_de'];
+
+	return ($impo_ret != '' && $impo_ret != 0)?$impo_ret:0;
+}
+
+function analisisAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
 	$cefa_nemonico = $_GET['cefa_nemonico'];
+	$cefa_anio = $_GET['cefa_anio'];
+	$cant_coslpan = (date('Y')-1)-$cefa_anio;
 
+	$anio_arr = array();
+	for($a=$cefa_anio; $a<=date('Y')-1; $a++){$anio_arr[] = $a;}
+	
+	//Array General Cuadro
+	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $util_pas_arr = $util_pat_arr = $util_act_arr = array();
+
+	foreach($anio_arr as $anio){
+		//Ventas
+		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A','C');
+		$ventas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_ventas);
+
+		//Utilidad Bruta
+		$impo_util_bru = getImpoEstadoResAnual($link, $cefa_nemonico, '2D02ST', $anio, 'A','C');
+		$util_bru_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_bru);
+
+		//Utilidad Operativa
+		$impo_util_ope = getImpoEstadoResAnual($link, $cefa_nemonico, '2D03ST', $anio, 'A','C');
+		$util_ope_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_ope);
+
+		//Utilidad Neta
+		$impo_util_net = getImpoEstadoResAnual($link, $cefa_nemonico, '2D07ST', $anio, 'A','C');
+		$util_net_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_net);
+
+		//Total Pasivo
+		$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T', $anio, 'A','C');
+		$util_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
+
+		//Total Patrimonio
+		$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST', $anio, 'A','C');
+		$util_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
+
+		//Total Activo
+		$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T', $anio, 'A','C');
+		$util_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
+
+		//Ratios financieros
+		//Endeudamiento
+
+		//Margen Bruto
+		//Margen Operativo
+		//Margen Neto
+
+		//Rotación del Activo
+
+		//ROA
+		//ROE
+
+	}
+
+	//var_dump($ventas_arr);
 	include('../View/EstadoFinanciero/analisis.php');
 }
 
@@ -257,7 +346,7 @@ switch ($accion) {
 		importarAutomaticolAction();
 		break;
 	case 'analisis':
-		analisiAction();
+		analisisAction();
 		break;
 	default:
 		# code...

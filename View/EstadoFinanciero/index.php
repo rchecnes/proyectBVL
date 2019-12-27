@@ -102,14 +102,13 @@
 
 				$("#loading_cefa").show();
 
-				var cafa_nemonico = $("#cafa_nemonico").val();
-				//var cafa_anio = $("#cafa_anio").val();
-				//var cafa_anio = $("#cafa_anio").bootstrapSlider('getValue');
+				var cefa_nemonico = $("#cefa_nemonico").val();
+				var cefa_anio = $("#cefa_anio").bootstrapSlider('getValue');
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoFinancieroC.php?accion=analisis',
-					data:{cafa_nemonico:cafa_nemonico, cafa_anio:cafa_anio},
+					data:{cefa_nemonico:cefa_nemonico, cefa_anio:cefa_anio},
 					success:function(data){
 
 						$("#divHistorico").html(data);
@@ -144,12 +143,17 @@
 				else if($(this).attr('href') == '#tab_analisis_estado_financiero'){analisisEstadoFinanciero();}
 				else if($(this).attr('href') == '#tab_analisis_estado_resultado'){analisisEstadoResultado();}
 			});
+
+			//Slider
+			$("input.slider").bootstrapSlider({
+				tooltip: 'always'
+			});
 		});
 
-		//var mySlider = $("input.slider").bootstrapSlider();
+		
 
-		$("#cafa_anio").slider({ id: "slider12a", min: 0, max: 10, value: 5 });
-		var sliderA = new Slider("#cafa_anio", { id: "slider12a", min: 0, max: 10, value: 5 });
+		//$("#cafa_anio").slider({ id: "slider12a", min: 0, max: 10, value: 5 });
+		//var sliderA = new Slider("#cafa_anio", { id: "slider12a", min: 0, max: 10, value: 5 });
 
 	</script>
 	<div class="container">
@@ -316,7 +320,7 @@
 								<label>Nemonico:</label>
 								<?php   
 									$params = array(
-										'select' => array('id'=>'cafa_nemonico', 'name'=>'cafa_nemonico', 'class'=>'form-control'),
+										'select' => array('id'=>'cefa_nemonico', 'name'=>'cefa_nemonico', 'class'=>'form-control'),
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
@@ -332,9 +336,9 @@
 						<div class="col-lg-8">
 							<div class="form-group">
 								<label>Año:</label><br>
-								<input type="text" class="slider" min="2010" max="<?=date('Y')?>" step="1" id="cafa_anio" name="cafa_anio">
-								
-
+								<?=$anio_min?>&nbsp;&nbsp;&nbsp;
+								<input id="cefa_anio" name="cefa_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
+								&nbsp;&nbsp;&nbsp;<?=$anio_max?>
 							</div>
 						</div>
 					</div>
@@ -370,8 +374,10 @@
 						</div>
 						<div class="col-lg-8">
 							<div class="form-group">
-								<label>Año:</label>
-								<input type="range" class="custom-range" min="2010" max="<?=date('Y')?>" step="0.5" id="cara_anio" name="cara_anio">
+							<label>Año:</label><br>
+								<?=$anio_min?>&nbsp;&nbsp;&nbsp;
+								<input id="cara_anio" name="cara_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
+								&nbsp;&nbsp;&nbsp;<?=$anio_max?>
 							</div>
 						</div>
 					</div>
