@@ -278,63 +278,78 @@ function analisisAction(){
 	
 	//Array General Cuadro
 	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $tot_pas_arr = $tot_pat_arr = $tot_act_arr = $end_arr = $mar_bru_arr = $mar_ope_arr = $mar_net_arr = $rot_act_arr = $roa_arr = $roe_arr = array();
+	$ventas_grfco = $util_bru_grfco = $util_ope_grfco = $util_net_grfco = $tot_pas_grfco = $tot_pat_grfco = $tot_act_grfco = $end_grfco = $mar_bru_grfco = $mar_ope_grfco = $mar_net_grfco = $rot_act_grfco = $roa_grfco = $roe_grfco = array();
 
 	foreach($anio_arr as $anio){
 		//Ventas
 		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A','C');
 		$ventas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_ventas);
+		$ventas_grfco[] = (double)number_format($impo_ventas,0,'','');
 
 		//Utilidad Bruta
 		$impo_util_bru = getImpoEstadoResAnual($link, $cefa_nemonico, '2D02ST', $anio, 'A','C');
 		$util_bru_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_bru);
+		$util_bru_grfco[] = (double)number_format($impo_util_bru,0,'','');
 
 		//Utilidad Operativa
 		$impo_util_ope = getImpoEstadoResAnual($link, $cefa_nemonico, '2D03ST', $anio, 'A','C');
 		$util_ope_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_ope);
+		$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
 
 		//Utilidad Neta
 		$impo_util_net = getImpoEstadoResAnual($link, $cefa_nemonico, '2D07ST', $anio, 'A','C');
 		$util_net_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_net);
+		$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
 
 		//Total Pasivo
 		$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T', $anio, 'A','C');
 		$tot_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
+		$tot_pas_grfco[] = (double)number_format($impo_pasi,0,'','');
 
 		//Total Patrimonio
 		$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST', $anio, 'A','C');
 		$tot_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
+		$tot_pat_grfco[] = (double)number_format($impo_pat,0,'','');
 
 		//Total Activo
 		$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T', $anio, 'A','C');
 		$tot_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
+		$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
 
 		//Endeudamiento
 		$impo_end = ($impo_act!=0)?($impo_pasi/$impo_act)*100:0;
 		$end_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_end);
+		$end_grfco[] = (double)number_format($impo_end,0,'','');
 
 		//Margen Bruto
 		$impo_mgbt = ($impo_ventas!=0)?($impo_util_bru/$impo_ventas)*100:0;
 		$mar_bru_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgbt);
+		$mar_bru_grfco[] = (double)number_format($impo_mgbt,0,'','');
 
 		//Margen Operativo
 		$impo_mgop = ($impo_ventas !=0)? ($impo_util_ope/$impo_ventas)*100:0;
 		$mar_ope_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgop);
+		$mar_ope_grfco[] = (double)number_format($impo_mgop,0,'','');
 
 		//Margen Neto
 		$impo_mgnt = ($impo_ventas!=0)?($impo_util_net/$impo_ventas)*100:0;
 		$mar_net_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgnt);
+		$mar_net_grfco[] = (double)number_format($impo_mgnt,0,'','');
 
 		//Rotación del Activo
-		$impo_rtac = ($impo_act != 0)?($impo_ventas/$impo_act)*100:0;
+		$impo_rtac = ($impo_act != 0)?($impo_ventas/$impo_act):0;
 		$rot_act_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_rtac);
+		$rot_act_grfco[] = (double)number_format($impo_rtac,0,'','');
 
 		//ROA
 		$impo_roa = ($impo_act != 0)?($impo_util_ope/$impo_act)*100:0;
 		$roa_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_roa);
+		$roa_grfco[] = (double)number_format($impo_roa,2,'','');
 
 		//ROE
 		$impo_roe = ($impo_pat != 0)?($impo_util_net/$impo_pat)*100:0;
 		$roe_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_roe);
+		$roe_grfco[] = (double)number_format($impo_roe,0,'','');
 	}
 
 	//var_dump($ventas_arr);

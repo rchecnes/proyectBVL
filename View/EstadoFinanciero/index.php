@@ -5,6 +5,15 @@
     <?php include('../Include/Header.php'); ?>
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>
+	#div_detalle table td, #div_detalle table th{
+		font-size:12px;
+		padding: 4px;
+		padding-top:2px;
+		padding-bottom:2px;
+		vertical-align: middle;
+	}
+	</style>
     </head>
 </head>
 <body>
@@ -49,7 +58,7 @@
 					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
 					success:function(data){
 
-						$("#divHistorico").html(data);
+						$("#div_detalle").html(data);
 						$("#loading").hide();
 					}
 				});
@@ -94,13 +103,13 @@
 					data:{cer_nemonico:cer_nemonico,cer_tipo:cer_tipo,cer_anio:cer_anio,cer_trim:cer_trim,cer_peri:cer_peri},
 					success:function(data){
 
-						$("#divHistorico").html(data);
+						$("#div_detalle").html(data);
 						$("#loading_cer").hide();
 					}
 				});
 			}
 
-			analisisEstadoFinanciero = function(){
+			analisisEstado1 = function(){
 
 				$("#loading_cefa").show();
 
@@ -113,13 +122,13 @@
 					data:{cefa_nemonico:cefa_nemonico, cefa_anio:cefa_anio},
 					success:function(data){
 
-						$("#divHistorico").html(data);
+						$("#div_detalle").html(data);
 						$("#loading_cefa").hide();
 					}
 				});
 			}
 
-			analisisEstadoResultado = function(){
+			analisisEstado2 = function(){
 				
 				$("#loading_cera").show();
 
@@ -132,7 +141,7 @@
 					data:{cara_nemonico:cara_nemonico, cara_anio:cara_anio},
 					success:function(data){
 
-						$("#divHistorico").html(data);
+						$("#div_detalle").html(data);
 						$("#loading_cera").hide();
 					}
 				});
@@ -142,8 +151,8 @@
 				//alert($(this).attr('href'));
 				if($(this).attr('href') == '#tab_estado_financiero'){buscarImportadoEstadoFinanciero();}
 				else if($(this).attr('href') == '#tab_estado_resultado'){buscarImportadoEstadoResultado();}
-				else if($(this).attr('href') == '#tab_analisis_estado_financiero'){analisisEstadoFinanciero();}
-				else if($(this).attr('href') == '#tab_analisis_estado_resultado'){analisisEstadoResultado();}
+				else if($(this).attr('href') == '#tab_analisis_estado_1'){analisisEstado1();}
+				else if($(this).attr('href') == '#tab_analisis_estado_2'){analisisEstado2();}
 			});
 
 			//Slider
@@ -163,8 +172,8 @@
 	        <ul class="nav nav-tabs" id="tabs">
 	          <li class="active"><a data-toggle="tab" href="#tab_estado_financiero"><h4>Balance General</h4></a></li>
 			  <li><a data-toggle="tab" href="#tab_estado_resultado"><h4>Estado De Resultado</h4></a></li>
-			  <li><a data-toggle="tab" href="#tab_analisis_estado_financiero"><h4>Analisis Balance General</h4></a></li>
-			  <li><a data-toggle="tab" href="#tab_analisis_estado_resultado"><h4>Analisis Estado Resultado</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_1"><h4>Analisis Fundamentalista</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_2"><h4>Analisis EEFF - IFS</h4></a></li>
 	        </ul>
 	        <div class="tab-content">
 	            <div id="tab_estado_financiero" class="tab-pane fade in active">
@@ -315,7 +324,7 @@
 						</div>
 					</div>
 	            </div>
-				<div id="tab_analisis_estado_financiero" class="tab-pane fade in">
+				<div id="tab_analisis_estado_1" class="tab-pane fade in">
 					<div class="row">
 						<div class="col-lg-4">
 							<div class="form-group">
@@ -338,9 +347,9 @@
 						<div class="col-lg-8">
 							<div class="form-group">
 								<label>Año:</label><br>
-								<?=$anio_min?>&nbsp;&nbsp;&nbsp;
+								<?=$anio_min?>&nbsp;&nbsp;
 								<input id="cefa_anio" name="cefa_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
-								&nbsp;&nbsp;&nbsp;<?=$anio_max?>
+								&nbsp;&nbsp;<?=$anio_max?>
 							</div>
 						</div>
 					</div>
@@ -348,20 +357,20 @@
 						<div class="col-lg-6">
 							<label>&nbsp;</label>
 							<div class="form-group">
-								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstadoFinanciero()">
+								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstado1()">
 								<img src="../Assets/img/load.gif" id="loading_cefa" style="display: none">
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="tab_analisis_estado_resultado" class="tab-pane fade in">
+				<div id="tab_analisis_estado_2" class="tab-pane fade in">
 					<div class="row">
 						<div class="col-lg-4">
 							<div class="form-group">
 								<label>Nemonico:</label>
 								<?php   
 									$params = array(
-										'select' => array('id'=>'cera_nemonico', 'name'=>'cera_nemonico', 'class'=>'form-control'),
+										'select' => array('id'=>'cara_nemonico', 'name'=>'cara_nemonico', 'class'=>'form-control'),
 										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
@@ -377,9 +386,9 @@
 						<div class="col-lg-8">
 							<div class="form-group">
 							<label>Año:</label><br>
-								<?=$anio_min?>&nbsp;&nbsp;&nbsp;
+								<?=$anio_min?>&nbsp;&nbsp;
 								<input id="cara_anio" name="cara_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
-								&nbsp;&nbsp;&nbsp;<?=$anio_max?>
+								&nbsp;&nbsp;<?=$anio_max?>
 							</div>
 						</div>
 					</div>
@@ -387,7 +396,7 @@
 						<div class="col-lg-6">
 							<label>&nbsp;</label>
 							<div class="form-group">
-								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstadoResultado()">
+								<input name="button" type="button" class="btn btn-success" value="Buscar" onclick="analisisEstado2()">
 								<img src="../Assets/img/load.gif" id="loading_cera" style="display: none">
 							</div>
 						</div>
@@ -396,8 +405,11 @@
 	        </div>
 	    </div>
 	    <br>
-		<div id="divHistorico"></div>
-			
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div id="div_detalle"></div>
+			</div>
+		</div>			
 	</div>
 
 </body>
