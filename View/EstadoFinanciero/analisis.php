@@ -9,8 +9,8 @@
     <tr>
         <th>Ventas</th>
         <?php foreach($ventas_arr as $venta){ echo '<td align="right">'.number_format($venta['impo'],0,'',',').'</td>';} ?>
-        <td width="300">
-            <div id="grfco_venta"></div>
+        <td style="padding: 0px;">
+            <div id="grfco_venta" style="height: 40px!important;width:150px"></div>
         </td>
     </tr>
     <tr>
@@ -83,38 +83,43 @@
 </table>
 <script>
 Highcharts.chart('grfco_venta', {
-
+    chart: {
+        type: 'line',
+    },
     legend: {
+        enabled: false
+    },
+    exporting: {
+        enabled: false
+    },
+    tooltip: {
         enabled: false
     },
     title: {
         text: ''
     },
-
     subtitle: {
         text: ''
     },
-
     yAxis: {
-        title: {
-            text: ''
-        },
+        visible: false,
+    },
+    xAxis: {
         visible: false,
     },
     plotOptions: {
         series: {
-            label: {
-                connectorAllowed: false,
+            marker: {
                 enabled: true,
-                visible: false
-            },
-            pointStart: 0
+                //fillColor: '#FFFFFF',
+                //lineWidth: 0,
+                radius: 3
+                //lineColor: null // inherit from series
+            }
         }
     },
-
-    series: [{
-        hideInLegend: true, 
-        name: 'Installation',
+    series: [{ 
+        name: '',
         data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
     }],
     credits: {
