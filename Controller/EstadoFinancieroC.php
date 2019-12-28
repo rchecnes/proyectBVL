@@ -277,7 +277,7 @@ function analisisAction(){
 	for($a=$cefa_anio; $a<=date('Y')-1; $a++){$anio_arr[] = $a;}
 	
 	//Array General Cuadro
-	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $util_pas_arr = $util_pat_arr = $util_act_arr = array();
+	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $tot_pas_arr = $tot_pat_arr = $tot_act_arr = $end_arr = $mar_bru_arr = $mar_ope_arr = $mar_net_arr = $rot_act_arr = $roa_arr = $roe_arr = array();
 
 	foreach($anio_arr as $anio){
 		//Ventas
@@ -298,28 +298,43 @@ function analisisAction(){
 
 		//Total Pasivo
 		$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T', $anio, 'A','C');
-		$util_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
+		$tot_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
 
 		//Total Patrimonio
 		$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST', $anio, 'A','C');
-		$util_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
+		$tot_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
 
 		//Total Activo
 		$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T', $anio, 'A','C');
-		$util_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
+		$tot_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
 
-		//Ratios financieros
 		//Endeudamiento
+		$impo_end = ($impo_act!=0)?($impo_pasi/$impo_act)*100:0;
+		$end_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_end);
 
 		//Margen Bruto
+		$impo_mgbt = ($impo_ventas!=0)?($impo_util_bru/$impo_ventas)*100:0;
+		$mar_bru_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgbt);
+
 		//Margen Operativo
+		$impo_mgop = ($impo_ventas !=0)? ($impo_util_ope/$impo_ventas)*100:0;
+		$mar_ope_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgop);
+
 		//Margen Neto
+		$impo_mgnt = ($impo_ventas!=0)?($impo_util_net/$impo_ventas)*100:0;
+		$mar_net_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_mgnt);
 
 		//Rotación del Activo
+		$impo_rtac = ($impo_act != 0)?($impo_ventas/$impo_act)*100:0;
+		$rot_act_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_rtac);
 
 		//ROA
-		//ROE
+		$impo_roa = ($impo_act != 0)?($impo_util_ope/$impo_act)*100:0;
+		$roa_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_roa);
 
+		//ROE
+		$impo_roe = ($impo_pat != 0)?($impo_util_net/$impo_pat)*100:0;
+		$roe_arr[$anio] =  array('anio'=>$anio,'impo'=>$impo_roe);
 	}
 
 	//var_dump($ventas_arr);
