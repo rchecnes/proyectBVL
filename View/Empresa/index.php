@@ -22,6 +22,10 @@
 				<th colspan="2" width="140">Cotización</th>
 				<th colspan="2">&nbsp;</th>
 			</tr>
+			<?php
+			$date_ha = date("Y-m-d",strtotime(date('Y-m-d')."- 1 days"));
+			$date_de = date("Y-m-d",strtotime($date_ha."- 1 year"));
+			?>
 		    <tr>
 				<th>Codigo BVL</th>
 		        <th>Nemónico</th>
@@ -30,11 +34,20 @@
 		        <th>Mon.</th>
 		        <th width="90">Fecha</th>
 		        <th width="50">Cierre</th>
+				<th width="50" align="center">Frecuencia <?=$date_de.'<br>a<br>'.$date_ha?></th>
 		        <th>Estado</th>
 		        <th>Acciones</th>
 		    </tr>
 		    <?php
-		    while ($em = mysqli_fetch_array($empresas)) {
+			while ($em = mysqli_fetch_array($empresas)) {
+
+				$nemonico = $em['nemonico'];
+				//Frecuencia
+				$sql_fre = "SELECT COUNT(cz.cz_cod)AS cantidad FROM cotizacion cz
+				WHERE cz_codemp='$nemonico' AND cz.cz_fecha BETWEEN '$date_de' AND '$date_ha'";
+				$res_fre = mysqli_query($link, $sql_fre);
+				$row_fre = mysqli_fetch_array($res_fre);
+				$frecuencia = ($row_fre['cantidad']/252)*100;
 		    ?>
 		    <tr>
 				<td><?=$em['cod_emp_bvl']?></td>
@@ -44,6 +57,7 @@
 		        <td><?=$em['moneda']?></td>
 		        <td align="center"><?=$em['cz_fe_fin']?></td>
 		        <td align="right"><?=$em['cz_ci_fin']?></td>
+				<td align="right"><?=number_format($frecuencia,2).'%'?></td>
 		        <td><?=($em['estado']=='1')?'Habilitado':'Deshabilitado'?></td>
 		        <td width="50" align="center">
 		        	<a href="../Controller/EmpresaC.php?accion=edit&codigo=<?=$em['cod_emp']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;
