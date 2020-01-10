@@ -133,12 +133,12 @@
 				$("#loading_cera").show();
 
 				var cara_nemonico = $("#cara_nemonico").val();
-				var cara_anio = $("#cara_anio").val();
+				var cara_tri = $("#cara_tri").val();
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=analisis',
-					data:{cara_nemonico:cara_nemonico, cara_anio:cara_anio},
+					data:{cara_nemonico:cara_nemonico, cara_tri:cara_tri},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -385,10 +385,13 @@
 						</div>
 						<div class="col-lg-8">
 							<div class="form-group">
-							<label>Año:</label><br>
-								<?=$anio_min?>&nbsp;&nbsp;
-								<input id="cara_anio" name="cara_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
-								&nbsp;&nbsp;<?=$anio_max?>
+							<label>Trimestre:</label><br>
+								<?php
+								for($t=0; $t<count($trim_arr); $t++){
+									$selected = ($trim_arr[$t] == $tri_def)?"checked='checked'":"";
+									echo '<label><input type="radio" id="cara_tri" name="cara_tri" value="'.$trim_arr[$t].'"'.$selected.'>'.$trim_arr[$t].'</label>&nbsp;&nbsp;';
+								}
+								?>
 							</div>
 						</div>
 					</div>

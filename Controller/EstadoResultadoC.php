@@ -278,23 +278,72 @@ function getImpoEstadoFinAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tip
 	return ($impo_ret != '' && $impo_ret != 0)?$impo_ret:0;
 }
 
+function getTrimestres($cant_tri, $def){
+
+	$mes = is_null($mes) ? date('m') : $mes;
+	$trim_act = floor(($mes-1) / 3)+1;
+	//return $trim;
+
+	$tri_min=$tri_max=$tri_def='';
+	$trim_arr = array();
+
+	for($i=1; $i<=$trim_act; $i++){
+		$trim_arr[] = date('Y').'-'.$i;
+	}
+
+	$cont_e = 0;
+	for($a=1; $a<=$cant_tri; $a++){
+
+		$cont_e ++;
+
+		for($e=4; $e>=1; $e--){
+			if(count($trim_arr) < $cant_tri){
+				$trim_arr[] = (date('Y')-$cont_e).'-'.$e;
+			}
+		}
+		if(count($trim_arr) == $cant_tri){
+			break;
+		}	
+	}
+
+	//mayor a menor
+	rsort($trim_arr);
+
+	for($t=0; $t<count($trim_arr); $t++){
+		if($t == $def-1){
+			$tri_def = $trim_arr[$t];
+		}
+	}
+
+	//mayor a menor
+	sort($trim_arr);
+
+	return array($tri_def, $trim_arr);
+}
+
 function analisisAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
 	$cefa_nemonico = $_GET['cara_nemonico'];
-	$cefa_anio = $_GET['cara_anio'];
-	$cant_coslpan = (date('Y')-1)-$cefa_anio;
+	$cera_tri = $_GET['cera_tri'];
+	$cant_coslpan = 0;//(date('Y')-1)-$cefa_anio;
 
-	$anio_arr = array();
-	for($a=$cefa_anio; $a<=date('Y')-1; $a++){$anio_arr[] = $a;}
+	list($tri_def_b, $trim_arr_b) = getTrimestres(16,12);
+	
+	$tri_arr = array();
+	rsort($trim_arr_b);
+	for($t=0; $t<count($trim_arr_b); $t++){
+		$tri_arr[] = $t;
+	}
+	sort($trim_arr);
 	
 	//Array General Cuadro
 	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $tot_pas_arr = $tot_pat_arr = $tot_act_arr = $end_arr = $mar_bru_arr = $mar_ope_arr = $mar_net_arr = $rot_act_arr = $roa_arr = $roe_arr = array();
 	$ventas_grfco = $util_bru_grfco = $util_ope_grfco = $util_net_grfco = $tot_pas_grfco = $tot_pat_grfco = $tot_act_grfco = $end_grfco = $mar_bru_grfco = $mar_ope_grfco = $mar_net_grfco = $rot_act_grfco = $roa_grfco = $roe_grfco = array();
 
-	foreach($anio_arr as $anio){
+	foreach($tri_arr as $anio){
 		//Ventas
 		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A','C');
 		$ventas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_ventas);

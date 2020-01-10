@@ -4,7 +4,7 @@
 <table class="table table-bordered">
     <tr>
         <th style="text-align:right">AÑO</th>
-        <?php foreach($anio_arr as $anio){ echo '<th style="text-align:center">'.$anio.'</th>';} ?>
+        <?php foreach($tri_arr as $tri){ echo '<th style="text-align:center">'.$tri.'</th>';} ?>
     </tr>
     <tr>
         <th style="width: 170px;!important">Ventas</th>

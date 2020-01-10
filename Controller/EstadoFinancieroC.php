@@ -5,11 +5,18 @@ function indexAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	//Datos por defecto analisis
+	//Datos por defecto analisis - Fundamentalista
 	$anio_min = 2000;
 	$anio_max = date('Y')-1;
 	$anio_def = $anio_max - 10;
 
+	//Datos por defecto analisis - EEFF
+	//$tri_min = 2000;
+	//$tri_max = date('Y').'-'.getTrimestre(date('m'));
+	//$tri_def = $anio_max - 10;
+
+	list($tri_def, $trim_arr) = getTrimestres(16,12);
+	//var_dump($trim_arr);
 	include('../Control/Combobox/Combobox.php');
 	include('../View/EstadoFinanciero/index.php');
 }
@@ -56,6 +63,49 @@ function listarAction(){
 	$cab_fe_fin = '31/12/'.($cef_anio-1);
 
 	include('../View/EstadoFinanciero/listar.php');
+}
+
+function getTrimestres($cant_tri, $def){
+
+	$mes = is_null($mes) ? date('m') : $mes;
+	$trim_act = floor(($mes-1) / 3)+1;
+	//return $trim;
+
+	$tri_min=$tri_max=$tri_def='';
+	$trim_arr = array();
+
+	for($i=1; $i<=$trim_act; $i++){
+		$trim_arr[] = date('Y').'-'.$i;
+	}
+
+	$cont_e = 0;
+	for($a=1; $a<=$cant_tri; $a++){
+
+		$cont_e ++;
+
+		for($e=4; $e>=1; $e--){
+			if(count($trim_arr) < $cant_tri){
+				$trim_arr[] = (date('Y')-$cont_e).'-'.$e;
+			}
+		}
+		if(count($trim_arr) == $cant_tri){
+			break;
+		}	
+	}
+
+	//mayor a menor
+	rsort($trim_arr);
+
+	for($t=0; $t<count($trim_arr); $t++){
+		if($t == $def-1){
+			$tri_def = $trim_arr[$t];
+		}
+	}
+
+	//mayor a menor
+	sort($trim_arr);
+
+	return array($tri_def, $trim_arr);
 }
 
 function file_get_contents_curl($url){
