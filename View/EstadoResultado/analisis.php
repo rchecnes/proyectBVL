@@ -27,7 +27,12 @@
         <td id="grfco_util_net"></td>
     </tr>
     <tr>
-        <th colspan="<?=$cant_coslpan+1?>">&nbsp;</th>
+        <th colspan="<?=$cant_coslpan+2?>">&nbsp;</th>
+    </tr>
+    <tr>
+        <th>Total Activo</th>
+        <?php foreach($tot_act_arr as $act){ echo '<td align="right">'.number_format($act['impo'],0,'',',').'</td>';} ?>
+        <td id="grfco_tot_act"></td>
     </tr>
     <tr>
         <th>Total Pasivo</th>
@@ -40,20 +45,7 @@
         <td id="grfco_tot_pat"></td>
     </tr>
     <tr>
-        <th>Total Activo</th>
-        <?php foreach($tot_act_arr as $act){ echo '<td align="right">'.number_format($act['impo'],0,'',',').'</td>';} ?>
-        <td id="grfco_tot_act"></td>
-    </tr>
-    <tr>
-        <th colspan="<?=$cant_coslpan+1?>"><u>Ratios Financieros</u></th>
-    </tr>
-    <tr>
-        <th>Endeudamiento</th>
-        <?php foreach($end_arr as $end){ echo '<td align="right">'.number_format($end['impo'],0,'.',',').'%</td>';} ?>
-        <td id="grfco_end"></td>
-    </tr>
-    <tr>
-        <th colspan="<?=$cant_coslpan+1?>">&nbsp;</th>
+        <th colspan="<?=$cant_coslpan+2?>">&nbsp;</th>
     </tr>
     <tr>
         <th>Margen Bruto</th>
@@ -71,7 +63,7 @@
         <td id="grfco_mar_net"></td>
     </tr>
     <tr>
-        <th colspan="<?=$cant_coslpan+1?>">&nbsp;</th>
+        <th colspan="<?=$cant_coslpan+2?>">&nbsp;</th>
     </tr>
     <tr>
         <th>Rotación del Activo</th>
@@ -79,7 +71,15 @@
         <td id="grfco_rot_act"></td>
     </tr>
     <tr>
-        <th colspan="<?=$cant_coslpan+1?>">&nbsp;</th>
+        <th colspan="<?=$cant_coslpan+2?>">&nbsp;<!--<u>Ratios Financieros</u>--></th>
+    </tr>
+    <tr>
+        <th>Endeudamiento</th>
+        <?php foreach($end_arr as $end){ echo '<td align="right">'.number_format($end['impo'],0,'.',',').'%</td>';} ?>
+        <td id="grfco_end"></td>
+    </tr>
+    <tr>
+        <th colspan="<?=$cant_coslpan+2?>">&nbsp;</th>
     </tr>
     <tr>
         <th>ROA</th>

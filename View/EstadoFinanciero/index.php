@@ -133,8 +133,8 @@
 				$("#loading_cera").show();
 
 				var cara_nemonico = $("#cara_nemonico").val();
-				var cara_tri = $("#cara_tri").val();
-
+				var cara_tri = $("input:radio[name='cara_tri']:checked").val();
+				//input:radio[name=edad]:checked
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=analisis',

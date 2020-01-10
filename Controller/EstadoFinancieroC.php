@@ -321,7 +321,7 @@ function analisisAction(){
 
 	$cefa_nemonico = $_GET['cefa_nemonico'];
 	$cefa_anio = $_GET['cefa_anio'];
-	$cant_coslpan = (date('Y')-1)-$cefa_anio;
+	$cant_coslpan = 0;//(date('Y')-1)-$cefa_anio;
 
 	$anio_arr = array();
 	for($a=$cefa_anio; $a<=date('Y')-1; $a++){$anio_arr[] = $a;}
@@ -331,6 +331,9 @@ function analisisAction(){
 	$ventas_grfco = $util_bru_grfco = $util_ope_grfco = $util_net_grfco = $tot_pas_grfco = $tot_pat_grfco = $tot_act_grfco = $end_grfco = $mar_bru_grfco = $mar_ope_grfco = $mar_net_grfco = $rot_act_grfco = $roa_grfco = $roe_grfco = array();
 
 	foreach($anio_arr as $anio){
+
+		$cant_coslpan ++;
+		
 		//Ventas
 		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A','C');
 		$ventas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_ventas);
