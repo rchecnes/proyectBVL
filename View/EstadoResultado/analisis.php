@@ -3,7 +3,7 @@
 ?>
 <table class="table table-bordered">
     <tr>
-        <th style="text-align:right">AÑO</th>
+        <th style="text-align:right">AÑO - TRIMESTRE</th>
         <?php foreach($tri_arr as $tri){ echo '<th style="text-align:center">'.$tri.'</th>';} ?>
     </tr>
     <tr>
@@ -49,17 +49,17 @@
     </tr>
     <tr>
         <th>Margen Bruto</th>
-        <?php foreach($mar_bru_arr as $mgbt){ echo '<td align="right">'.number_format($mgbt['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($mar_bru_arr as $mgbt){ echo '<td align="right">'; if($mgbt['vacio']=='NO'){echo number_format($mgbt['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_mar_bru"></td>
     </tr>
     <tr>
         <th>Margen Operativo</th>
-        <?php foreach($mar_ope_arr as $mgop){ echo '<td align="right">'.number_format($mgop['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($mar_ope_arr as $mgop){ echo '<td align="right">'; if($mgop['vacio']=='NO'){echo number_format($mgop['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_mar_ope"></td>
     </tr>
     <tr>
         <th>Margen Neto</th>
-        <?php foreach($mar_net_arr as $mgnt){ echo '<td align="right">'.number_format($mgnt['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($mar_net_arr as $mgnt){ echo '<td align="right">'; if($mgnt['vacio']=='NO'){echo number_format($mgnt['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_mar_net"></td>
     </tr>
     <tr>
@@ -67,7 +67,7 @@
     </tr>
     <tr>
         <th>Rotación del Activo</th>
-        <?php foreach($rot_act_arr as $roact){ echo '<td align="right">'.number_format($roact['impo'],2,'.',',').'</td>';} ?>
+        <?php foreach($rot_act_arr as $roact){ echo '<td align="right">'; if($roact['vacio']=='NO'){echo number_format($roact['impo'],2,'.',',');}else{} echo '</td>';} ?>
         <td id="grfco_rot_act"></td>
     </tr>
     <tr>
