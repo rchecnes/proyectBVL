@@ -11,12 +11,8 @@ function indexAction(){
 	$anio_def = $anio_max - 10;
 
 	//Datos por defecto analisis - EEFF
-	//$tri_min = 2000;
-	//$tri_max = date('Y').'-'.getTrimestre(date('m'));
-	//$tri_def = $anio_max - 10;
-
 	list($tri_def, $trim_arr) = getTrimestres(16,12);
-	//var_dump($trim_arr);
+	
 	include('../Control/Combobox/Combobox.php');
 	include('../View/EstadoFinanciero/index.php');
 }

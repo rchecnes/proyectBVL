@@ -324,6 +324,26 @@ function getTrimestres($cant_tri, $def){
 	return array($tri_def, $trim_arr);
 }
 
+function orderArrayMultiDim ($toOrderArray, $field, $inverse = false) {  
+    $position = array();  
+    $newRow = array();  
+    foreach ($toOrderArray as $key => $row) {  
+            $position[$key]  = $row[$field];  
+            $newRow[$key] = $row;  
+    }  
+    if ($inverse) {  
+        arsort($position);  
+    }  
+    else {  
+        asort($position);  
+    }  
+    $returnArray = array();  
+    foreach ($position as $key => $pos) {       
+        $returnArray[] = $newRow[$key];  
+    }  
+    return $returnArray;  
+}
+
 function analisisAction(){
 
 	include('../Config/Conexion.php');
@@ -350,7 +370,6 @@ function analisisAction(){
 	//Array General Cuadro
 	$ventas_arr = $util_bru_arr = $util_ope_arr = $util_net_arr = $tot_pas_arr = $tot_pat_arr = $tot_act_arr = $end_arr = $mar_bru_arr = $mar_ope_arr = $mar_net_arr = $rot_act_arr = $roa_arr = $roe_arr = array();
 	$ventas_grfco = $util_bru_grfco = $util_ope_grfco = $util_net_grfco = $tot_pas_grfco = $tot_pat_grfco = $tot_act_grfco = $end_grfco = $mar_bru_grfco = $mar_ope_grfco = $mar_net_grfco = $rot_act_grfco = $roa_grfco = $roe_grfco = array();
-	$suma_impo_ventas = $suma_impo_util_bru = $suma_impo_util_ope = 0;
 
 	$cont_tri = 0;
 	foreach($tri_arr as $tri){
@@ -377,16 +396,33 @@ function analisisAction(){
 		$util_ope_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_ope);
 		$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
 
-		$new_ventas_arr = $ventas_arr;
-		
-		$suma_impo_ventas += $impo_ventas;
-		$suma_impo_util_bru += $impo_util_bru;
-		$suma_impo_util_ope += $impo_util_ope;
-
 		//Utilidad Neta
 		$impo_util_net = getImpoEstadoResAnual($link, $cafa_nemonico, '2D07ST', $anio, $trim, 'T','C');
 		$util_net_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_net);
 		$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
+
+		$suma_impo_ventas = $suma_impo_util_ope = $suma_impo_util_net = 0;
+		if($cont_tri >= 4){
+			$new_ventas_arr = orderArrayMultiDim ($ventas_arr, 'tri', $inverse = true);
+			$new_util_ope_arr = orderArrayMultiDim ($util_ope_arr, 'tri', $inverse = true);
+			$new_util_net_arr = orderArrayMultiDim ($util_net_arr, 'tri', $inverse = true);
+
+			$con_ventas_arr = 0;
+			foreach ($new_ventas_arr as $key => $value) {
+				$con_ventas_arr ++;
+				if($con_ventas_arr <= 4){$suma_impo_ventas += $value['impo'];}else{break;}
+			}
+			$con_util_ope_arr = 0;
+			foreach ($new_util_ope_arr as $key => $value) {
+				$con_util_ope_arr ++;
+				if($con_util_ope_arr <= 4){$suma_impo_util_ope += $value['impo'];}else{break;}
+			}
+			$con_util_net_arr = 0;
+			foreach ($new_util_net_arr as $key => $value) {
+				$con_util_net_arr ++;
+				if($con_util_net_arr <= 4){$suma_impo_util_net += $value['impo'];}else{break;}
+			}
+		}
 
 		//Total Pasivo
 		$impo_pasi = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D040T', $anio, $trim, 'T','C');
@@ -404,17 +440,17 @@ function analisisAction(){
 		$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
 
 		//Margen Bruto
-		$impo_mgbt = ($impo_ventas!=0)?($impo_util_bru/$impo_ventas)*100:0;
+		$impo_mgbt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_bru/$impo_ventas)*100:0;
 		$mar_bru_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgbt, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$mar_bru_grfco[] = (double)number_format($impo_mgbt,0,'','');
 
 		//Margen Operativo
-		$impo_mgop = ($impo_ventas !=0)? ($impo_util_ope/$impo_ventas)*100:0;
+		$impo_mgop = ($impo_ventas !=0 && $cont_tri > 3)? ($impo_util_ope/$impo_ventas)*100:0;
 		$mar_ope_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgop, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$mar_ope_grfco[] = (double)number_format($impo_mgop,0,'','');
 
 		//Margen Neto
-		$impo_mgnt = ($impo_ventas!=0)?($impo_util_net/$impo_ventas)*100:0;
+		$impo_mgnt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_net/$impo_ventas)*100:0;
 		$mar_net_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgnt, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$mar_net_grfco[] = (double)number_format($impo_mgnt,0,'','');
 
@@ -424,17 +460,17 @@ function analisisAction(){
 		$rot_act_grfco[] = (double)number_format($impo_rtac,0,'','');
 
 		//Endeudamiento
-		$impo_end = ($impo_act!=0)?($impo_pasi/$impo_act)*100:0;
+		$impo_end = ($impo_act!=0 && $cont_tri > 3)?($impo_pasi/$impo_act)*100:0;
 		$end_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_end, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$end_grfco[] = (double)number_format($impo_end,0,'','');
 
 		//ROA
-		$impo_roa = ($impo_act != 0)?($impo_util_ope/$impo_act)*100:0;
+		$impo_roa = ($impo_act != 0 && $cont_tri > 3)?($suma_impo_util_ope/$impo_act)*100:0;
 		$roa_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roa, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$roa_grfco[] = (double)number_format($impo_roa,2,'','');
 
 		//ROE
-		$impo_roe = ($impo_pat != 0)?($impo_util_net/$impo_pat)*100:0;
+		$impo_roe = ($impo_pat != 0 && $cont_tri > 3)?($suma_impo_util_net/$impo_pat)*100:0;
 		$roe_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roe, 'vacio'=>($cont_tri<=3)?'SI':'NO');
 		$roe_grfco[] = (double)number_format($impo_roe,0,'','');
 	}

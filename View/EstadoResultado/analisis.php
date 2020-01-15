@@ -75,7 +75,7 @@
     </tr>
     <tr>
         <th>Endeudamiento</th>
-        <?php foreach($end_arr as $end){ echo '<td align="right">'.number_format($end['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($end_arr as $end){ echo '<td align="right">'; if($end['vacio']=='NO'){echo number_format($end['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_end"></td>
     </tr>
     <tr>
@@ -83,12 +83,12 @@
     </tr>
     <tr>
         <th>ROA</th>
-        <?php foreach($roa_arr as $roa){ echo '<td align="right">'.number_format($roa['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($roa_arr as $roa){ echo '<td align="right">'; if($roa['vacio']=='NO'){echo number_format($roa['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_roa"></td>
     </tr>
     <tr>
         <th>ROE</th>
-        <?php foreach($roe_arr as $roe){ echo '<td align="right">'.number_format($roe['impo'],0,'.',',').'%</td>';} ?>
+        <?php foreach($roe_arr as $roe){ echo '<td align="right">'; if($roe['vacio']=='NO'){echo number_format($roe['impo'],0,'.',',').'%';}else{} echo '</td>';} ?>
         <td id="grfco_roe"></td>
     </tr>
 </table>
