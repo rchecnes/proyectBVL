@@ -11,7 +11,7 @@ function indexAction(){
 	$anio_def = $anio_max - 10;
 
 	//Datos por defecto analisis - EEFF
-	list($tri_def, $trim_arr) = getTrimestres(16,12);
+	list($tri_def, $trim_arr) = getTrimestres(14,14);
 	
 	include('../Control/Combobox/Combobox.php');
 	include('../View/EstadoFinanciero/index.php');
@@ -317,6 +317,7 @@ function analisisAction(){
 
 	$cefa_nemonico = $_GET['cefa_nemonico'];
 	$cefa_anio = $_GET['cefa_anio'];
+	$cefa_tipo = $_GET['cefa_tipo'];
 	$cant_coslpan = 0;//(date('Y')-1)-$cefa_anio;
 
 	$anio_arr = array();
@@ -331,37 +332,37 @@ function analisisAction(){
 		$cant_coslpan ++;
 		
 		//Ventas
-		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A','C');
+		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST', $anio, 'A',$cefa_tipo);
 		$ventas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_ventas);
 		$ventas_grfco[] = (double)number_format($impo_ventas,0,'','');
 
 		//Utilidad Bruta
-		$impo_util_bru = getImpoEstadoResAnual($link, $cefa_nemonico, '2D02ST', $anio, 'A','C');
+		$impo_util_bru = getImpoEstadoResAnual($link, $cefa_nemonico, '2D02ST', $anio, 'A',$cefa_tipo);
 		$util_bru_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_bru);
 		$util_bru_grfco[] = (double)number_format($impo_util_bru,0,'','');
 
 		//Utilidad Operativa
-		$impo_util_ope = getImpoEstadoResAnual($link, $cefa_nemonico, '2D03ST', $anio, 'A','C');
+		$impo_util_ope = getImpoEstadoResAnual($link, $cefa_nemonico, '2D03ST', $anio, 'A',$cefa_tipo);
 		$util_ope_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_ope);
 		$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
 
 		//Utilidad Neta
-		$impo_util_net = getImpoEstadoResAnual($link, $cefa_nemonico, '2D07ST', $anio, 'A','C');
+		$impo_util_net = getImpoEstadoResAnual($link, $cefa_nemonico, '2D07ST', $anio, 'A',$cefa_tipo);
 		$util_net_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_net);
 		$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
 
 		//Total Pasivo
-		$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T', $anio, 'A','C');
+		$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T', $anio, 'A',$cefa_tipo);
 		$tot_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
 		$tot_pas_grfco[] = (double)number_format($impo_pasi,0,'','');
 
 		//Total Patrimonio
-		$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST', $anio, 'A','C');
+		$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST', $anio, 'A',$cefa_tipo);
 		$tot_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
 		$tot_pat_grfco[] = (double)number_format($impo_pat,0,'','');
 
 		//Total Activo
-		$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T', $anio, 'A','C');
+		$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T', $anio, 'A',$cefa_tipo);
 		$tot_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
 		$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
 

@@ -115,11 +115,12 @@
 
 				var cefa_nemonico = $("#cefa_nemonico").val();
 				var cefa_anio = $("#cefa_anio").bootstrapSlider('getValue');
+				var cefa_tipo = $("#cefa_tipo").val();
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoFinancieroC.php?accion=analisis',
-					data:{cefa_nemonico:cefa_nemonico, cefa_anio:cefa_anio},
+					data:{cefa_nemonico:cefa_nemonico, cefa_anio:cefa_anio, cefa_tipo:cefa_tipo},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -134,11 +135,12 @@
 
 				var cara_nemonico = $("#cara_nemonico").val();
 				var cara_tri = $("input:radio[name='cara_tri']:checked").val();
+				var cara_tipo = $("#cara_tipo").val();
 				//input:radio[name=edad]:checked
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=analisis',
-					data:{cara_nemonico:cara_nemonico, cara_tri:cara_tri},
+					data:{cara_nemonico:cara_nemonico, cara_tri:cara_tri, cara_tipo:cara_tipo},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -172,8 +174,8 @@
 	        <ul class="nav nav-tabs" id="tabs">
 	          <li class="active"><a data-toggle="tab" href="#tab_estado_financiero"><h4>Balance General</h4></a></li>
 			  <li><a data-toggle="tab" href="#tab_estado_resultado"><h4>Estado De Resultado</h4></a></li>
-			  <li><a data-toggle="tab" href="#tab_analisis_estado_1"><h4>Analisis Fundamentalista</h4></a></li>
-			  <li><a data-toggle="tab" href="#tab_analisis_estado_2"><h4>Analisis EEFF - IFS</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_1"><h4>Analisis Anual</h4></a></li>
+			  <li><a data-toggle="tab" href="#tab_analisis_estado_2"><h4>Analisis Trimestral</h4></a></li>
 	        </ul>
 	        <div class="tab-content">
 	            <div id="tab_estado_financiero" class="tab-pane fade in active">
@@ -326,7 +328,7 @@
 	            </div>
 				<div id="tab_analisis_estado_1" class="tab-pane fade in">
 					<div class="row">
-						<div class="col-lg-4">
+						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Nemonico:</label>
 								<?php   
@@ -344,11 +346,20 @@
 								?>
 							</div>
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label>Tipo:</label>
+								<select id="cefa_tipo" name="cefa_tipo" class="form-control">
+									<option value="I">Individual</option>
+									<option value="C" selected="selected">Consolidada</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6">
 							<div class="form-group">
 								<label>Año:</label><br>
 								<?=$anio_min?>&nbsp;&nbsp;
-								<input id="cefa_anio" name="cefa_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:86%"/>
+								<input id="cefa_anio" name="cefa_anio" class="slider" type="text" data-slider-min="<?=$anio_min?>" data-slider-max="<?=$anio_max?>" data-slider-value="<?=$anio_def?>" data-slider-step="1" style="width:82%"/>
 								&nbsp;&nbsp;<?=$anio_max?>
 							</div>
 						</div>
@@ -365,7 +376,7 @@
 				</div>
 				<div id="tab_analisis_estado_2" class="tab-pane fade in">
 					<div class="row">
-						<div class="col-lg-4">
+						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Nemonico:</label>
 								<?php   
@@ -383,7 +394,16 @@
 								?>
 							</div>
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label>Tipo:</label>
+								<select id="cara_tipo" name="cara_tipo" class="form-control">
+									<option value="I">Individual</option>
+									<option value="C" selected="selected">Consolidada</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6">
 							<div class="form-group">
 							<label>Trimestre:</label><br>
 								<?php
