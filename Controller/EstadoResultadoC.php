@@ -248,13 +248,19 @@ function importarAutomaticolAction(){
 
 function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $trimestre, $periodo, $tipo){
 
-	$sql1 = "SELECT der_val_tr1 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl='$cod_bvl' AND der_anio='$anio' AND der_trim='$trimestre' AND der_peri='$periodo' AND der_tipo='$tipo'";
-	//echo $sql1;
+	$new_cod_bvl = '';
+	$exp_cod_bvl = explode('@',$cod_bvl);
+	for($c=0;$c<count($exp_cod_bvl);$c++){
+		if($exp_cod_bvl[$c] != ''){$new_cod_bvl.="'".$exp_cod_bvl[$c]."',";}
+	}
+	$new_cod_bvl = trim($new_cod_bvl,',');
+
+	$sql1 = "SELECT der_val_tr1 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$anio' AND der_trim='$trimestre' AND der_peri='$periodo' AND der_tipo='$tipo'";
 	$res1 = mysqli_query($link, $sql1);
 	$row1 = mysqli_fetch_array($res1);
 
 	$new_anio = $anio + 1;
-	$sql2 = "SELECT der_val_tr2 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl='$cod_bvl' AND der_anio='$new_anio' AND der_trim='$trimestre' AND der_peri='$periodo' AND der_tipo='$tipo'";
+	$sql2 = "SELECT der_val_tr2 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$new_anio' AND der_trim='$trimestre' AND der_peri='$periodo' AND der_tipo='$tipo'";
 	$res2 = mysqli_query($link, $sql2);
 	$row2 = mysqli_fetch_array($res2);
 
@@ -267,12 +273,19 @@ function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $trimestre, $p
 
 function getImpoEstadoFinAnual($link, $nemonico, $cod_bvl, $anio, $trimestre, $periodo, $tipo){
 
-	$sql1 = "SELECT def_val_de FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl='$cod_bvl' AND def_anio='$anio' AND def_trim='$trimestre' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$new_cod_bvl = '';
+	$exp_cod_bvl = explode('@',$cod_bvl);
+	for($c=0;$c<count($exp_cod_bvl);$c++){
+		if($exp_cod_bvl[$c] != ''){$new_cod_bvl.="'".$exp_cod_bvl[$c]."',";}
+	}
+	$new_cod_bvl = trim($new_cod_bvl,',');
+
+	$sql1 = "SELECT def_val_de FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$anio' AND def_trim='$trimestre' AND def_peri='$periodo' AND def_tipo='$tipo'";
 	$res1 = mysqli_query($link, $sql1);
 	$row1 = mysqli_fetch_array($res1);
 
 	$new_anio = $anio + 1;
-	$sql2 = "SELECT def_val_ha FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl='$cod_bvl' AND def_anio='$new_anio'  AND def_trim='$trimestre' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$sql2 = "SELECT def_val_ha FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$new_anio'  AND def_trim='$trimestre' AND def_peri='$periodo' AND def_tipo='$tipo'";
 	$res2 = mysqli_query($link, $sql2);
 	$row2 = mysqli_fetch_array($res2);
 
@@ -353,7 +366,7 @@ function analisisAction(){
 	$cara_tri = $_GET['cara_tri'];
 	$cara_tipo = $_GET['cara_tipo'];
 	$cant_coslpan = 0;//(date('Y')-1)-$cefa_anio;
-	echo $cara_tri.'<br>';
+	//echo $cara_tri.'<br>';
 
 	list($tri_def_b, $tri_arr_b) = getTrimestres(17,12);
 	
@@ -389,113 +402,144 @@ function analisisAction(){
 	$cont_tri = 0;
 	$new_tri_arr = array();
 	foreach($tri_arr as $tri){
-		
-		$cont_tri ++;
 
 		$exp_tri = explode('-',$tri);
 		$anio = $exp_tri[0];
 		$trim = $exp_tri[1];
 
-		
-		if($cont_tri <= 3){
-			$new_tri_arr[$tri] = array('tri'=>$tri, 'hide'=>'SI');
-		}else{
-			$new_tri_arr[$tri] = array('tri'=>$tri, 'hide'=>'NO');
-			$cant_coslpan ++;
-		}
-
 		//Ventas
-		$impo_ventas = getImpoEstadoResAnual($link, $cafa_nemonico, '2D01ST', $anio, $trim, 'T',$cara_tipo);
-		$ventas_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_ventas, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$ventas_grfco[] = (double)number_format($impo_ventas,0,'','');	
+		$impo_ventas = getImpoEstadoResAnual($link, $cafa_nemonico, '2D01ST@2F01ST@2E0201@2A01ST', $anio, $trim, 'T',$cara_tipo);
 
-		//Utilidad Bruta
-		$impo_util_bru = getImpoEstadoResAnual($link, $cafa_nemonico, '2D02ST', $anio, $trim, 'T',$cara_tipo);
-		$util_bru_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_bru, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$util_bru_grfco[] = (double)number_format($impo_util_bru,0,'','');
+		if($impo_ventas > 0){
+			
+			$cont_tri ++;
 
-		//Utilidad Operativa
-		$impo_util_ope = getImpoEstadoResAnual($link, $cafa_nemonico, '2D03ST', $anio, $trim, 'T',$cara_tipo);
-		$util_ope_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_ope, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
-
-		//Utilidad Neta
-		$impo_util_net = getImpoEstadoResAnual($link, $cafa_nemonico, '2D07ST', $anio, $trim, 'T',$cara_tipo);
-		$util_net_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_net, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
-
-		$suma_impo_ventas = $suma_impo_util_ope = $suma_impo_util_net = 0;
-		if($cont_tri >= 4){
-			$new_ventas_arr = orderArrayMultiDim ($ventas_arr, 'tri', $inverse = true);
-			$new_util_ope_arr = orderArrayMultiDim ($util_ope_arr, 'tri', $inverse = true);
-			$new_util_net_arr = orderArrayMultiDim ($util_net_arr, 'tri', $inverse = true);
-
-			$con_ventas_arr = 0;
-			foreach ($new_ventas_arr as $key => $value) {
-				$con_ventas_arr ++;
-				if($con_ventas_arr <= 4){$suma_impo_ventas += $value['impo'];}else{break;}
+			if($cont_tri <= 3){
+				$new_tri_arr[$tri] = array('tri'=>$tri, 'hide'=>'SI');
+			}else{
+				$new_tri_arr[$tri] = array('tri'=>$tri, 'hide'=>'NO');
+				$cant_coslpan ++;
 			}
-			$con_util_ope_arr = 0;
-			foreach ($new_util_ope_arr as $key => $value) {
-				$con_util_ope_arr ++;
-				if($con_util_ope_arr <= 4){$suma_impo_util_ope += $value['impo'];}else{break;}
+			//$new_tri_arr[$tri] = array('tri'=>$tri, 'hide'=>'NO');
+			//Ventas
+			$ventas_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_ventas, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$ventas_grfco[] = (double)number_format($impo_ventas,0,'','');
 			}
-			$con_util_net_arr = 0;
-			foreach ($new_util_net_arr as $key => $value) {
-				$con_util_net_arr ++;
-				if($con_util_net_arr <= 4){$suma_impo_util_net += $value['impo'];}else{break;}
+
+			//Utilidad Bruta
+			$impo_util_bru = getImpoEstadoResAnual($link, $cafa_nemonico, '2D02ST@2F2401@2E0901', $anio, $trim, 'T',$cara_tipo);
+			$util_bru_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_bru, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$util_bru_grfco[] = (double)number_format($impo_util_bru,0,'','');
+			}
+
+			//Utilidad Operativa
+			$impo_util_ope = getImpoEstadoResAnual($link, $cafa_nemonico, '2D03ST@2F2801@2E1501@2A03ST', $anio, $trim, 'T',$cara_tipo);
+			$util_ope_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_ope, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
+			}
+			//Utilidad Neta
+			$impo_util_net = getImpoEstadoResAnual($link, $cafa_nemonico, '2D07ST@2F1901@2E1509@2A07ST', $anio, $trim, 'T',$cara_tipo);
+			$util_net_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_util_net, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
+			}
+
+			$suma_impo_ventas = $suma_impo_util_ope = $suma_impo_util_net = 0;
+			if($cont_tri >= 4){
+				$new_ventas_arr = orderArrayMultiDim ($ventas_arr, 'tri', $inverse = true);
+				$new_util_ope_arr = orderArrayMultiDim ($util_ope_arr, 'tri', $inverse = true);
+				$new_util_net_arr = orderArrayMultiDim ($util_net_arr, 'tri', $inverse = true);
+
+				$con_ventas_arr = 0;
+				foreach ($new_ventas_arr as $key => $value) {
+					$con_ventas_arr ++;
+					if($con_ventas_arr <= 4){$suma_impo_ventas += $value['impo'];}else{break;}
+				}
+				$con_util_ope_arr = 0;
+				foreach ($new_util_ope_arr as $key => $value) {
+					$con_util_ope_arr ++;
+					if($con_util_ope_arr <= 4){$suma_impo_util_ope += $value['impo'];}else{break;}
+				}
+				$con_util_net_arr = 0;
+				foreach ($new_util_net_arr as $key => $value) {
+					$con_util_net_arr ++;
+					if($con_util_net_arr <= 4){$suma_impo_util_net += $value['impo'];}else{break;}
+				}
+			}
+
+			//Total Pasivo
+			$impo_pasi = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D040T@1F3101@1E0501@1A040T', $anio, $trim, 'T',$cara_tipo);
+			$tot_pas_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_pasi, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$tot_pas_grfco[] = (double)number_format($impo_pasi,0,'','');
+			}
+
+			//Total Patrimonio
+			$impo_pat = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D07ST@1F3306@1E0901@1A07ST', $anio, $trim, 'T',$cara_tipo);
+			$tot_pat_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_pat, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$tot_pat_grfco[] = (double)number_format($impo_pat,0,'','');
+			}
+
+			//Total Activo
+			$impo_act = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D020T@1F2001@1E02ST@1A020T', $anio, $trim, 'T',$cara_tipo);
+			$tot_act_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_act, 'hide'=>($cont_tri <= 3)?'SI':'NO');
+			if($cont_tri > 3){
+				$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
+			}
+
+			//Margen Bruto
+			$impo_mgbt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_bru/$impo_ventas)*100:0;
+			$mar_bru_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgbt, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$mar_bru_grfco[] = (double)number_format($impo_mgbt,0,'','');
+			}
+
+			//Margen Operativo
+			$impo_mgop = ($impo_ventas !=0 && $cont_tri > 3)? ($impo_util_ope/$impo_ventas)*100:0;
+			$mar_ope_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgop, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$mar_ope_grfco[] = (double)number_format($impo_mgop,0,'','');
+			}
+
+			//Margen Neto
+			$impo_mgnt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_net/$impo_ventas)*100:0;
+			$mar_net_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgnt, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$mar_net_grfco[] = (double)number_format($impo_mgnt,0,'','');
+			}
+
+			//Rotación del Activo
+			$impo_rtac = ($impo_act != 0 && $cont_tri > 3)?($suma_impo_ventas/$impo_act):0;
+			$rot_act_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_rtac, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$rot_act_grfco[] = (double)number_format($impo_rtac,2,'','');
+			}
+
+			//Endeudamiento
+			$impo_end = ($impo_act!=0 && $cont_tri > 3)?($impo_pasi/$impo_act)*100:0;
+			$end_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_end, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$end_grfco[] = (double)number_format($impo_end,0,'','');
+			}
+
+			//ROA
+			$impo_roa = ($impo_act != 0 && $cont_tri > 3)?($suma_impo_util_ope/$impo_act)*100:0;
+			$roa_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roa, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$roa_grfco[] = (double)number_format($impo_roa,0,'','');
+			}
+
+			//ROE
+			$impo_roe = ($impo_pat != 0 && $cont_tri > 3)?($suma_impo_util_net/$impo_pat)*100:0;
+			$roe_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roe, 'hide'=>($cont_tri<=3)?'SI':'NO');
+			if($cont_tri > 3){
+				$roe_grfco[] = (double)number_format($impo_roe,0,'','');
 			}
 		}
-
-		//Total Pasivo
-		$impo_pasi = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D040T', $anio, $trim, 'T',$cara_tipo);
-		$tot_pas_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_pasi, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$tot_pas_grfco[] = (double)number_format($impo_pasi,0,'','');
-
-		//Total Patrimonio
-		$impo_pat = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D07ST', $anio, $trim, 'T',$cara_tipo);
-		$tot_pat_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_pat, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$tot_pat_grfco[] = (double)number_format($impo_pat,0,'','');
-
-		//Total Activo
-		$impo_act = getImpoEstadoFinAnual($link, $cafa_nemonico, '1D020T', $anio, $trim, 'T',$cara_tipo);
-		$tot_act_arr[$tri] = array('tri'=>$tri,'impo'=>$impo_act, 'hide'=>($cont_tri <= 3)?'SI':'NO');
-		$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
-
-		//Margen Bruto
-		$impo_mgbt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_bru/$impo_ventas)*100:0;
-		$mar_bru_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgbt, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$mar_bru_grfco[] = (double)number_format($impo_mgbt,0,'','');
-
-		//Margen Operativo
-		$impo_mgop = ($impo_ventas !=0 && $cont_tri > 3)? ($impo_util_ope/$impo_ventas)*100:0;
-		$mar_ope_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgop, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$mar_ope_grfco[] = (double)number_format($impo_mgop,0,'','');
-
-		//Margen Neto
-		$impo_mgnt = ($impo_ventas!=0 && $cont_tri > 3)?($impo_util_net/$impo_ventas)*100:0;
-		$mar_net_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_mgnt, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$mar_net_grfco[] = (double)number_format($impo_mgnt,0,'','');
-
-		//Rotación del Activo
-		$impo_rtac = ($impo_act != 0 && $cont_tri > 3)?($suma_impo_ventas/$impo_act):0;
-		$rot_act_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_rtac, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$rot_act_grfco[] = (double)number_format($impo_rtac,0,'','');
-
-		//Endeudamiento
-		$impo_end = ($impo_act!=0 && $cont_tri > 3)?($impo_pasi/$impo_act)*100:0;
-		$end_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_end, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$end_grfco[] = (double)number_format($impo_end,0,'','');
-
-		//ROA
-		$impo_roa = ($impo_act != 0 && $cont_tri > 3)?($suma_impo_util_ope/$impo_act)*100:0;
-		$roa_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roa, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$roa_grfco[] = (double)number_format($impo_roa,2,'','');
-
-		//ROE
-		$impo_roe = ($impo_pat != 0 && $cont_tri > 3)?($suma_impo_util_net/$impo_pat)*100:0;
-		$roe_arr[$tri] =  array('tri'=>$tri,'impo'=>$impo_roe, 'hide'=>($cont_tri<=3)?'SI':'NO');
-		$roe_grfco[] = (double)number_format($impo_roe,0,'','');
 	}
 
 	include('../View/EstadoResultado/analisis.php');
