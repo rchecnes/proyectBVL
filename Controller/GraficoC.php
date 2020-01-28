@@ -48,9 +48,9 @@ function getPromedioPrecio(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$nemonico     = " AND cz_nemo='".$_GET['nemonico']."'";
 
-	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $nemonico";
 
 	$resp = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($resp);
@@ -61,7 +61,7 @@ function getPromedioPrecio(){
 	$med = ($max + $min)/2;
 
 	//Obtener el ultimo precio de la empresa
-	$sqlpre = "SELECT cz_ci_fin FROM empresa WHERE nemonico='".$_GET['empresa']."'";
+	$sqlpre = "SELECT cz_ci_fin FROM nemonico WHERE nemonico='".$_GET['nemonico']."'";
 	$respre = mysqli_query($link, $sqlpre);
 	$rpre   = mysqli_fetch_array($respre);
 
@@ -77,8 +77,8 @@ function grafico1Action(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$nemonico     = $_GET['empresa'];//Empresa
-	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$nemonico     = $_GET['nemonico'];//Empresa
+	$empresa      = " AND cz_nemo='".$_GET['nemonico']."'";
 	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
 
 	$max     = (float)$_GET['max'];
@@ -126,18 +126,18 @@ function grafico1Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_codemp='$nemonico'";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 			
 		}
 		//echo $sqlc;
@@ -213,7 +213,7 @@ function calcularRecomendacion($link, $fecha_final, $nemonico, $prec_unit, $mes)
     //Fin  restar fecha
 
 
-	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_nemo='$nemonico'";
 	$resp = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($resp);
 	
@@ -400,7 +400,7 @@ function grafico2Action(){
 
 	$fecha_final  = $_GET['fecha_final'];
 	$fecha_inicio = $_GET['fecha_inicio'];
-	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$nemonico     = " AND cz_nemo='".$_GET['nemonico']."'";
 	$rango        = ($_GET['rango']!='')?$_GET['rango']:1;
 
 	$max     = (float)$_GET['max'];
@@ -459,18 +459,18 @@ function grafico2Action(){
 		if ($i == 0) {
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 
 		}else{
 
 			//Get Dias col cierre
-			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $empresa";
+			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 			
 		}
 
@@ -563,7 +563,7 @@ function grafico3Action(){
 	//$visible6m  = $_GET['visible6m'];
 	//$visible3m  = $_GET['visible3m'];
 
-	$empresa      = " AND cz_codemp='".$_GET['empresa']."'";
+	$nemonico = " AND cz_nemo='".$_GET['nemonico']."'";
 
 
 	//Cotizacion
@@ -571,11 +571,11 @@ function grafico3Action(){
 				IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,
 				DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha,
 				cz_fecha
-				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa ORDER BY cz_fecha ASC";
+				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $nemonico ORDER BY cz_fecha ASC";
 	$respcot = mysqli_query($link, $sqlcot);
 
 	//Max en un año
-	$sqlmax12  = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $empresa";
+	$sqlmax12  = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $nemonico";
 	$respmax12 = mysqli_query($link, $sqlmax12);
 	$rmax12    = mysqli_fetch_array($respmax12);
 	$max12     = $rmax12['max'];
@@ -583,7 +583,7 @@ function grafico3Action(){
 
 	//Obtenemos el maximo y minimo 6M
 	$fecha_6m = getFechaMedio($fecha_inicio,$fecha_final);
-	$sql6max    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_6m' AND '$fecha_final' $empresa";
+	$sql6max    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_6m' AND '$fecha_final' $nemonico";
 	$resp6max   = mysqli_query($link, $sql6max);
 	$r6nmax     = mysqli_fetch_array($resp6max);
 	$max6m      = $r6nmax['max'];
@@ -591,7 +591,7 @@ function grafico3Action(){
 
 	//Obtenemos el maximo y minimo 3M
 	$fecha_3m = getFechaMedio($fecha_6m,$fecha_final);
-	$sql3m    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_3m' AND '$fecha_final' $empresa";
+	$sql3m    = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max, MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_3m' AND '$fecha_final' $nemonico";
 	$resp3m   = mysqli_query($link, $sql3m);
 	$r3m      = mysqli_fetch_array($resp3m);
 	$max3m    = $r3m['max'];
@@ -667,23 +667,26 @@ function listfavoritoAction(){
 
 	$cod_grupo = $_GET['cod_grupo'];
 
-	$sql = "SELECT DISTINCT(e.nemonico), e.nemonico,e.nombre FROM empresa_favorito ef
-			INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
-			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
-			WHERE e.estado=1
-			AND ef.est_fab
+	$sql = "SELECT DISTINCT(ne.nemonico), ne.nemonico,em.emp_nomb FROM empresa_favorito ef 
+			INNER JOIN nemonico ne ON(ef.ne_cod=ne.ne_cod) 
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) 
+			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo) 
+			WHERE ne.estado=1 
+			AND ef.est_fab=1
 			AND ef.cod_user='$cod_user'";
 	if ($cod_grupo !='') {
 		$sql .= " AND ef.cod_grupo='$cod_grupo'";
 	}
-	
+
 	$resp = mysqli_query($link,$sql);
 
 	$html = '';
 	while ($r=mysqli_fetch_array($resp)) {
-		$html .= '<option value="'.$r['nemonico'].'">'.$r['nemonico'].' - '.$r['nombre'].'</option>';
+		$html .= '<option value="'.$r['nemonico'].'">'.$r['nemonico'].' - '.$r['emp_nomb'].'</option>';
 	}
-
+	if($html == ''){
+		$html .= '<option value="">[SIN RESULTADO]</option>';
+	}
 	echo $html;
 }
 

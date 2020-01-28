@@ -69,11 +69,9 @@ function getCotizacionGrupoAntiguo(){
     $fec_fin    = date('Ymd');
 
     $date      = date('Y-m-d');
-    $sqlemp    = "SELECT em.nemonico FROM empresa em
-                  LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
-                  WHERE se.estado='1'
-                  AND em.estado='1'
-                  AND em.nemonico IN(SELECT s_cd.cd_cod_emp FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fec_inicio' AND s_cd.cd_ng_nop > 0)";
+    $sqlemp    = "SELECT ne.nemonico FROM nemonico ne
+                  WHERE ne.estado='1'
+                  AND ne.nemonico IN(SELECT s_cd.cd_nemo FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fec_inicio' AND s_cd.cd_ng_nop > 0)";
                 
     $respemp   = mysqli_query($link, $sqlemp);
 

@@ -1,7 +1,7 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
 <table class="table table-bordered">
     <tr>
-        <th>Empresa</th>
+        <th>Nemonico</th>
         <th>Fecha</th>
         <th>Apertuta</th>
         <th>Cierre</th>
@@ -32,7 +32,7 @@
 
     ?>
     <tr>
-        <td><?=$cz['cz_codemp']?></td>
+        <td><?=$cz['cz_nemo']?></td>
         <td width="100"><?=($cz['fecha_forma'] !='00/00/0000')?$cz['fecha_forma']:""?></td>
         <td align="right"><?=($cz_apertura >0)?$cz_apertura:""?></td>
         <td align="right"><?=($cz_cierre >0)?$cz_cierre:""?></td>

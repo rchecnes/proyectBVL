@@ -16,23 +16,25 @@ function listarAction(){
 	$acciones_hoy = $_GET['acciones_hoy'];
 
 	$sql = "SELECT
-			e.nombre AS empresa,
-			e.nemonico,s.nombre AS sector,
-			e.segmento,e.moneda,
+			em.emp_nomb AS empresa,
+			ne.nemonico,
+			se.nombre AS sector,
+			ne.segmento,
+			ne.moneda,
 			cd.*,
 			DATE_FORMAT(cd.cd_cz_fant,'%d/%m/%Y')AS cz_fant
-			FROM empresa e
-			INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
-			INNER JOIN cotizacion_del_dia cd ON(e.nemonico=cd.cd_cod_emp)
-			WHERE s.estado='1'
-			AND cd.cd_fecha='$fecha'
-			AND e.estado='1'";
+			FROM nemonico ne
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			LEFT JOIN sector se ON(em.sec_cod=se.cod_sector)
+			INNER JOIN cotizacion_del_dia cd ON(ne.nemonico=cd.cd_nemo)
+			WHERE cd.cd_fecha='$fecha'
+			AND ne.estado='1'";
 
 	if ($acciones_hoy == 1) {
 		$sql .= " AND (cd.cd_ng_nop > 0 OR cd.cd_pr_com > 0 OR cd.cd_pr_ven > 0)";
 	}
 
-	$sql .= " ORDER BY e.nombre ASC";
+	$sql .= " ORDER BY ne.nombre ASC";
 
 	$res = mysqli_query($link, $sql);
 

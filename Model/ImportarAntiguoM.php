@@ -13,9 +13,9 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
 
         $contador ++;
 
-        $empresa = $f['emp'];
+        $cz_nemo = $f['nem'];
 
-        if ($empresa !='') {
+        if ($cz_nemo !='') {
         
             list($ano, $mes, $dia) = explode('-', $f['f']);
             
@@ -34,11 +34,11 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
 
             $del_x_cod .= "'".$cod."',";
             
-            $sql .= "('$cod','$empresa','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
+            $sql .= "('$cod','$cz_nemo','$fecha','$apertura','$cierre','$maxima','$minima','$promedio','$cant_negociado','$monto_negociado','$fecha_anterior','$cierre_anterior'),";
 
             if ($cant_data == $contador) {
 
-                $upd_x_emp = "UPDATE empresa em SET em.cz_fe_fin='$fecha',em.cz_ci_fin='$cierre',em.cz_cn_fin='$cant_negociado',em.cz_mn_fin='$monto_negociado' WHERE em.nemonico='$empresa'";
+                $upd_x_emp = "UPDATE nemonico ne SET ne.cz_fe_fin='$fecha',ne.cz_ci_fin='$cierre',ne.cz_cn_fin='$cant_negociado',ne.cz_mn_fin='$monto_negociado' WHERE ne.nemonico='$cz_nemo'";
 
                 $respup    = mysqli_query($link, $upd_x_emp);
             }
@@ -50,12 +50,12 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
 
     if ($del_x_cod !='' && $sql !='') {
 
-        $delete = "DELETE FROM cotizacion WHERE cz_cod IN(".trim($del_x_cod,',').") AND cz_codemp IN('$nemonico')";
+        $delete = "DELETE FROM cotizacion WHERE cz_cod IN(".trim($del_x_cod,',').") AND cz_nemo IN('$nemonico')";
         $respdel = mysqli_query($link,$delete);
         //echo $delete."<br>";
         unset($delete);
 
-        $insert = "INSERT INTO cotizacion (cz_cod,cz_codemp,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO cotizacion (cz_cod,cz_nemo,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link,$insert);
         //echo $insert;
         unset($insert);
@@ -120,7 +120,7 @@ function getPrepareDataAntiguo($empresa, $html){
                     }
 
     	            $cotiza[] = array(
-    	                    'emp'=> $empresa,
+    	                    'nem'=> $empresa,
     	                    'f'  => ($fecha_cotiza!='')?$fecha_cotiza:"0000-00-00",
     	                    'a'  => $apertura,
     	                    'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),

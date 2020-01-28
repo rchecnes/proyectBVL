@@ -13,23 +13,12 @@
 		<h3><?=$titulo?></h3>
 		<br>
 		<form class="form-horizontal" method="POST" action="../Controller/EmpresaC.php?accion=update" id="form_empresa">
-		<div class="form-group">
-		    <label class="col-sm-2 control-label">Codigo BVL:</label>
-		    <div class="col-sm-10">
-				<input type="hidden" class="form-control" id="codigo" name="codigo" value="<?=$em['cod_emp']?>">
-		      <input type="text" class="form-control" id="cod_emp_bvl" name="cod_emp_bvl" value="<?=$em['cod_emp_bvl']?>">
-		    </div>
-		  </div>
+		
 		  <div class="form-group">
 		    <label class="col-sm-2 control-label">Nombre:</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="<?=$em['nom_empresa']?>">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">Nemónico:</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="nemonico" name="nemonico" placeholder="nemonico" value="<?=$em['nemonico']?>">
+		      <input type="text" class="form-control" id="emp_nomb" name="emp_nomb" placeholder="Nombre" value="<?=$em['emp_nomb']?>">
+			  <input type="hidden" class="form-control" id="emp_cod" name="emp_cod" value="<?=$em['emp_cod']?>">
 		    </div>
 		  </div>
 		  <div class="form-group">
@@ -37,12 +26,12 @@
 		    <div class="col-sm-10">
 		      <?php
 		      $params = array(
-                    'select' => array('id'=>'sector', 'name'=>'sector', 'class'=>'form-control'),
+                    'select' => array('id'=>'sec_cod', 'name'=>'sec_cod', 'class'=>'form-control'),
                     'sql'    => 'SELECT * FROM sector WHERE estado=1',
                     'attrib' => array('value'=>'cod_sector','desc'=>'nombre', 'concat'=>'','descextra'=>''),
                     'empty'  => 'Todos',
                     'defect' => '',
-                    'edit'   => $em['cod_sector'],
+                    'edit'   => $em['sec_cod'],
                     'enable' => 'enable'
                 );
 		      	Combobox($link, $params);
@@ -50,24 +39,9 @@
 		    </div>
 		  </div>
 		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">segmento:</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="segmento" name="segmento" placeholder="segmento" value="<?=$em['segmento']?>">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">moneda:</label>
-		    <div class="col-sm-10">
-			    <select id="moneda" name="moneda" class="form-control">
-	                <option value="US$" <?=($em['moneda']=='US$')?'selected':''?>>US$</option>
-	                <option value="S/"<?=($em['moneda']=='S/')?'selected':''?>>S/</option>
-	            </select>
-	        </div>
-		  </div>
-		  <div class="form-group">
 		    <label for="inputPassword" class="col-sm-2 control-label">Habilitado:</label>
 		    <div class="col-sm-10">
-		      <input type="checkbox" class="form-control" id="estado" name="estado" <?=($em['estado']==1)?"checked":""?> >
+		      <input type="checkbox" class="form-control" id="emp_stdo" name="emp_stdo" <?=($em['emp_stdo']==1)?"checked":""?> >
 		    </div>
 		  </div>
 		  <p>

@@ -46,16 +46,18 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
             <div class="form-group">
-                <label>Empresa:</label>
+                <label>Nemonico:</label>
                 <?php
                   $andwhere = ($cod_grupo !='')?" AND ug.cod_grupo='$cod_grupo'":"";
                   $params = array(
-                        'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
-                        'sql'    => "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef 
-                                    INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
-                                    INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
-                                    WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
-                        'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
+                        'select' => array('id'=>'nemonico', 'name'=>'nemonico', 'class'=>'form-control'),
+                        'sql'    => "SELECT DISTINCT(ne.ne_cod), ne.nemonico,em.emp_nomb FROM empresa_favorito nf 
+                                    INNER JOIN nemonico ne ON(nf.ne_cod=ne.ne_cod)
+                                    LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+                                    INNER JOIN user_grupo ug ON(nf.cod_grupo=ug.cod_grupo)
+                                    WHERE ne.estado=1 AND nf.est_fab=1
+                                    AND nf.cod_user='$cod_user' $andwhere",
+                        'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb', 'concat'=>' - ','descextra'=>''),
                         'empty'  => false,
                         'defect' => ($simu_cod_emp!='')?$simu_cod_emp:'ENGEPEC1',
                         'edit'   => '',
@@ -185,7 +187,7 @@
                 type:'GET',
                 dataType: 'json',
                 url: '../Controller/GraficoC.php?accion=promedio',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),nemonico:$("#nemonico").val()},
 
                 success:function(data){
 
@@ -212,7 +214,7 @@
             var mes          = $(".mostrar_graf.active").val();
             var fecha_inicio = $("#fecha_inicio").val();
             var fecha_final  = $("#fecha_final").val();
-            var empresa      = $("#empresa").val();
+            var nemonico      = $("#nemonico").val();
             var max          = $("#max").val();
             var min          = $("#min").val();
             var long         = $("#long").val();
@@ -224,13 +226,13 @@
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico1',
-                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa, prec_unit:prec_unit, mes:mes, max:max, min:min, long:long},
+                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, nemonico:nemonico, prec_unit:prec_unit, mes:mes, max:max, min:min, long:long},
 
                 success:function(data){
 
                     $("#resultadomontoporprecio").html(data);
                     $("#loading").hide();
-                    getRecomendacion(empresa, prec_unit);
+                    getRecomendacion(nemonico, prec_unit);
                 }
             });
         }else{
@@ -238,13 +240,13 @@
         }
     }
 
-    getRecomendacion = function(empresa, prec_unit){
+    getRecomendacion = function(nemonico, prec_unit){
 
         $("#loading").show();
         $.ajax({
             type:'GET',
             url: '../Controller/GraficoC.php?accion=crearcuadrorec',
-            data:{empresa:empresa,prec_unit:prec_unit},
+            data:{nemonico:nemonico,prec_unit:prec_unit},
 
             success:function(data){
                 $("#recomendacion").html(data);
@@ -261,7 +263,7 @@
 
             var fecha_inicio = $("#fecha_inicio").val();
             var fecha_final = $("#fecha_final").val();
-            var empresa = $("#empresa").val();
+            var nemonico = $("#nemonico").val();
             
             $("#loading").show();
 
@@ -269,7 +271,7 @@
                 type:'GET',
                 dataType: 'json',
                 url: '../Controller/GraficoC.php?accion=promedio',
-                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa},
+                data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, nemonico:nemonico},
 
                 success:function(data){
 
@@ -297,7 +299,7 @@
 
                 var fecha_inicio = $("#fecha_inicio").val();
                 var fecha_final  = $("#fecha_final").val();
-                var empresa      = $("#empresa").val();
+                var nemonico      = $("#nemonico").val();
                 var max          = $("#ap_max").val();
                 var min          = $("#ap_min").val();
                 var long         = $("#ap_long").val();
@@ -309,7 +311,7 @@
                 $.ajax({
                     type:'GET',
                     url: '../Controller/GraficoC.php?accion=grafico2',
-                    data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, empresa:empresa, max:max, min:min, long:long, med:med, precio:precio, rango:rango},
+                    data:{fecha_inicio:fecha_inicio, fecha_final:fecha_final, nemonico:nemonico, max:max, min:min, long:long, med:med, precio:precio, rango:rango},
 
                     success:function(data){
 
@@ -335,7 +337,7 @@
             $.ajax({
                 type:'GET',
                 url: '../Controller/GraficoC.php?accion=grafico3',
-                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),empresa:$("#empresa").val(), rango:$("#rango").val()},
+                data:{fecha_inicio:$("#fecha_inicio").val(),fecha_final:$("#fecha_final").val(),nemonico:$("#nemonico").val(), rango:$("#rango").val()},
 
                 success:function(data){
 
@@ -428,14 +430,14 @@
             resultadocotizacion();
         }
     }
-    $("#empresa").on("change", function(){
+    $("#nemonico").on("change", function(){
         buscarClikEmpresa()        
     });
 
 
     $("#cod_grupo").change(function(){
 
-        $("#empresa").attr('disabled','disabled');
+        $("#nemonico").attr('disabled','disabled');
         $.ajax({
             type:'GET',
             url: '../Controller/GraficoC.php?accion=listfavorito',
@@ -443,10 +445,10 @@
 
             success:function(data){
 
-                $("#empresa").html(data);
-                $("#empresa").removeAttr('disabled');
+                $("#nemonico").html(data);
+                $("#nemonico").removeAttr('disabled');
 
-                if ($("#empresa").val()!='') {
+                if ($("#nemonico").val()!='') {
                     buscarClikEmpresa();
                 }
             }

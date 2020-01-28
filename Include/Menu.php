@@ -30,6 +30,7 @@ $url = str_replace(" ","",$url);
         <li class="<?=($url=='/Controller/CotizacionC.php?accion=index')?'active':''?>"><a href="../Controller/CotizacionC.php?accion=index">Importar De BVL</a></li>
         <li class="<?=($url=='/Controller/CierreDelDiaC.php?accion=index')?'active':''?>"><a href="../Controller/CierreDelDiaC.php?accion=index">Cierre Del Dia</a></li>
         <li class="<?=($url=='/Controller/EmpresaC.php?accion=index')?'active':''?>"><a href="../Controller/EmpresaC.php?accion=index">Empresa</a></li>
+        <li class="<?=($url=='/Controller/NemonicoC.php?accion=index')?'active':''?>"><a href="../Controller/NemonicoC.php?accion=index">Nemonico</a></li>
         <li class="<?=($url=='/Controller/GraficoC.php?accion=index')?'active':''?>"><a href="../Controller/GraficoC.php?accion=index">Gráficos</a></li>
         <li class="<?=($url=='/Controller/FavoritoC.php?accion=index')?'active':''?>"><a href="../Controller/FavoritoC.php?accion=index">Favoritos</a></li>
         <li class="<?=($url=='/Controller/ComisionC.php?accion=index')?'active':''?>"><a href="../Controller/ComisionC.php?accion=index">Comisión</a></li>

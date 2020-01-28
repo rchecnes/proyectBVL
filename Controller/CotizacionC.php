@@ -27,24 +27,23 @@ function importarManualAction(){
 	$moneda       = $_POST['moneda'];
 	$acc_cotizado = $_POST['acc_cotizado'];
 
-	$sql = "SELECT em.nemonico FROM empresa em
-            LEFT JOIN sector se ON(em.cod_sector=se.cod_sector)
-            WHERE se.estado='1'
-            AND em.estado='1'";
+	$sql = "SELECT ne.nemonico FROM nemonico ne
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+            WHERE ne.estado='1'";
 
     if ($nemonico_ori !='') {
-    	$sql .= " AND em.nemonico='$nemonico_ori'";
+    	$sql .= " AND ne.nemonico='$nemonico_ori'";
     }
     if ($sector !='') {
-    	$sql .= " AND em.cod_sector='$sector'";
+    	$sql .= " AND em.sec_cod='$sector'";
     }
     if ($moneda !='') {
-    	$sql .= " AND em.moneda='$moneda'";
+    	$sql .= " AND ne.moneda='$moneda'";
     }
     if ($acc_cotizado ==1) {
-    	$sql .= " AND em.nemonico IN(SELECT s_cd.cd_cod_emp FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fecha_inicio' AND s_cd.cd_ng_nop > 0)";
+    	$sql .= " AND ne.nemonico IN(SELECT s_cd.cd_nemo FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fecha_inicio' AND s_cd.cd_ng_nop > 0)";
     }
-
+	
     $rescotiza = mysqli_query($link, $sql);
 
 	$c = 0;
@@ -52,14 +51,14 @@ function importarManualAction(){
     	
     	$nemonico = $r['nemonico'];
 
-		/*$arrContextOptions=array(
-			"ssl"=>array(
-				 "verify_peer"=>false,
-				 "verify_peer_name"=>false,
-			),
-		); 
-		$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";	 
-	  	$html = file_get_contents($url, false, stream_context_create($arrContextOptions));*/
+		//$arrContextOptions=array(
+		//	"ssl"=>array(
+		//		 "verify_peer"=>false,
+		//		 "verify_peer_name"=>false,
+		//	),
+		//); 
+		//$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";	 
+	  	//$html = file_get_contents($url, false, stream_context_create($arrContextOptions));
 
 		$url  = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fecha_inicio&fec_fin=$fecha_fin&nemonico=$nemonico";	 
 		$html = file_get_contents_curl($url);
@@ -88,7 +87,7 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$empresa    = $_GET['empresa'];
+	$nemonico    = $_GET['nemonico'];
 	$fec_inicio = $_GET['fec_inicio'];
 	$fec_fin    = $_GET['fec_fin'];
 	$sector     = $_GET['sector'];
@@ -102,18 +101,19 @@ function listarAction(){
 			WHERE cz.cz_fecha BETWEEN '$fec_inicio' AND '$fec_fin'";*/
 	$sql = "SELECT cz.*,e.*, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant, cd.cd_ng_nop, cd.cd_pr_com,cd.cd_pr_ven
 			FROM cotizacion cz
-			INNER JOIN empresa e ON(cz.cz_codemp=e.nemonico)
-			LEFT JOIN cotizacion_del_dia cd ON (cz.cz_cod=cd.cd_cod AND cz.cz_codemp=cd.cd_cod_emp)
+			LEFT JOIN nemonico ne ON(cz.cz_nemo=ne.nemonico)
+			LEFT JOIN empresa e ON(ne.emp_cod=e.emp_cod)
+			LEFT JOIN cotizacion_del_dia cd ON (cz.cz_cod=cd.cd_cod AND cz.cz_nemo=cd.cd_nemo)
 			WHERE cz.cz_fecha BETWEEN '$fec_inicio' AND '$fec_fin'";
 	
-	if ($empresa !='') {
-		$sql .= " AND cz.cz_codemp='$empresa'";
+	if ($nemonico !='') {
+		$sql .= " AND cz.cz_nemo='$nemonico'";
 	}
 	if ($sector !='' && $sector !='Todos') {
-		$sql .= " AND e.cod_sector='$sector'";
+		$sql .= " AND e.sec_cod='$sector'";
 	}
 	if ($moneda !='') {
-		$sql .= " AND e.moneda LIKE '%$moneda%'";
+		$sql .= " AND ne.moneda LIKE '%$moneda%'";
 	}
 
 	if ($origen=='one') {
@@ -121,7 +121,7 @@ function listarAction(){
 		$sql .= " ORDER BY cz.cz_fecha DESC";
 	}elseif ($origen=='two') {
 
-		$sql .= " ORDER BY cz.cz_codemp ASC";
+		$sql .= " ORDER BY cz.cz_nemo ASC";
 	}
 	
 
@@ -133,49 +133,53 @@ function listarAction(){
 	include('../View/Cotizacion/listar.php');
 }
 
-function buscarEmpresaAction(){
+function buscarNemonicoAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sector = ($_GET['sector']!='')?" AND cod_sector ='".$_GET['sector']."'":"";
-	$moneda = ($_GET['moneda']!='')?" AND moneda LIKE '%".$_GET['moneda']."%'":"";
+	$sector = ($_GET['sector']!='')?" AND em.sec_cod ='".$_GET['sector']."'":"";
+	$moneda = ($_GET['moneda']!='')?" AND ne.moneda LIKE '%".$_GET['moneda']."%'":"";
 	//$term   = $_GET['term'];
 
-	$sql = "SELECT * FROM empresa WHERE cod_emp!='' $sector $moneda";
+	$sql = "SELECT * FROM nemonico ne
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			WHERE ne.ne_cod!='' $sector $moneda";
 	$resp = mysqli_query($link,$sql);
 
 	//$empresa = "<option value=''>[Ninguno]</option>";
-	$empresa = "";
+	$nemonico = "";
 
 	while ($row = mysqli_fetch_array($resp)) {
-		$empresa .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['nombre'].' - '.$row['moneda']."</option>";
+		$nemonico .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['emp_nomb'].' - '.$row['moneda']."</option>";
 
 	}
 
-	if ($empresa=='') {
-		$empresa = "<option value=''>[Sin Resultado]</option>";
+	if ($nemonico == '') {
+		$nemonico = "<option value=''>[Sin Resultado]</option>";
 	}
 
-	echo $empresa;
+	echo $nemonico;
 }
 function buscarEmpresaTodosAction(){
 
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sector = ($_GET['sector']!='')?" AND cod_sector ='".$_GET['sector']."'":"";
-	$moneda = ($_GET['moneda']!='')?" AND moneda LIKE '%".$_GET['moneda']."%'":"";
+	$sector = ($_GET['sector']!='')?" AND em.sec_cod ='".$_GET['sector']."'":"";
+	$moneda = ($_GET['moneda']!='')?" AND ne.moneda LIKE '%".$_GET['moneda']."%'":"";
 	//$term   = $_GET['term'];
 
-	$sql = "SELECT * FROM empresa WHERE cod_emp!='' $sector $moneda";
+	$sql = "SELECT * FROM nemonico ne
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			WHERE ne.ne_cod!='' $sector $moneda";
 	$resp = mysqli_query($link,$sql);
 
 	//$empresa = "<option value=''>[Ninguno]</option>";
 	$empresa = "<option value=''>Todos</option>";
 
 	while ($row = mysqli_fetch_array($resp)) {
-		$empresa .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['nombre'].' - '.$row['moneda']."</option>";
+		$empresa .= "<option value='".$row['nemonico']."'>".$row['nemonico'].' - '.$row['emp_nomb'].' - '.$row['moneda']."</option>";
 
 	}
 
@@ -192,10 +196,10 @@ switch ($_GET['accion']) {
 	case 'listar':
 		listarAction();
 		break;
-	case 'busemp':
-		buscarEmpresaAction();
+	case 'bunemo':
+		buscarNemonicoAction();
 		break;
-	case 'busemptodos':
+	case 'bunemotodos':
 		buscarEmpresaTodosAction();
 		break;
 	case 'importarmanual':

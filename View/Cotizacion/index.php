@@ -48,11 +48,11 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label>Empresa:</label>
+                            <label>Nemonico:</label>
                             <?php   
                                 $params = array(
-                                    'select' => array('id'=>'empresa', 'name'=>'empresa', 'class'=>'form-control'),
-                                    'sql'    => 'SELECT * FROM empresa WHERE estado=1',
+                                    'select' => array('id'=>'nemonico', 'name'=>'nemonico', 'class'=>'form-control'),
+                                    'sql'    => 'SELECT * FROM nemonico WHERE estado=1',
                                     'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
                                     'empty'  => false,
                                     'defect' => 'RELAPAC1',
@@ -126,11 +126,11 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label>Empresa:</label>
+                            <label>Nemonico:</label>
                             <?php   
                                 $params = array(
-                                    'select' => array('id'=>'empresa_two', 'name'=>'empresa_two', 'class'=>'form-control'),
-                                    'sql'    => 'SELECT * FROM empresa WHERE estado=1',
+                                    'select' => array('id'=>'nemonico_two', 'name'=>'nemonico_two', 'class'=>'form-control'),
+                                    'sql'    => 'SELECT * FROM nemonico WHERE estado=1',
                                     'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
                                     'empty'  => 'Todos',
                                     'defect' => '',
@@ -190,7 +190,7 @@
    
     getHistorico = function(){
 
-        var p_Nemonico   = $("#empresa").val();
+        var p_Nemonico   = $("#nemonico").val();
         var fecha_inicio = $("#fecha_inicio").val().split('-');
         var p_Ini        = fecha_inicio[0]+'-'+fecha_inicio[1]+'-'+fecha_inicio[2];
         var fecha_fin    = $("#fecha_fin").val().split('-');
@@ -201,7 +201,7 @@
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
-            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector option:selected").val(),moneda: $("#moneda option:selected").val(), origen:'one'},
+            data:{nemonico:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector option:selected").val(),moneda: $("#moneda option:selected").val(), origen:'one'},
             success:function(data){
 
                 $("#divHistorico").html(data);
@@ -214,7 +214,7 @@
 
     getCotizacion = function(){
 
-        var p_Nemonico    = $("#empresa").val();
+        var p_Nemonico    = $("#nemonico").val();
         var fecha_inicio  = $("#fecha_inicio").val().split('-');
         var anio_ini      = fecha_inicio[0];
         var mes_ini       = fecha_inicio[1];
@@ -244,7 +244,7 @@
 
     getHistoricoTwo = function(){
 
-        var p_Nemonico   = $("#empresa_two").val();
+        var p_Nemonico   = $("#nemonico_two").val();
         var fecha_inicio = $("#fecha_inicio_two").val().split('-');
         var p_Ini        = fecha_inicio[0]+'-'+fecha_inicio[1]+'-'+fecha_inicio[2];
         var fecha_fin    = $("#fecha_inicio_two").val().split('-');
@@ -255,7 +255,7 @@
         $.ajax({
             type:'GET',
             url: '../Controller/CotizacionC.php?accion=listar',
-            data:{empresa:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector_two option:selected").val(),moneda: $("#moneda_two option:selected").val(), origen:'two'},
+            data:{nemonico:p_Nemonico,fec_inicio:p_Ini,fec_fin:P_Fin, sector: $("#sector_two option:selected").val(),moneda: $("#moneda_two option:selected").val(), origen:'two'},
             dataType: 'html',
             success:function(data){
 
@@ -268,9 +268,9 @@
 
     getCotizacionTwo = function(){
 
-        var p_Nemonico    = $("#empresa_two").val();
-        var fecha_inicio  = $("#fecha_inicio_two").val().split('-');
-        var fecha_fin     = $("#fecha_inicio_two").val().split('-');
+        var p_Nemonico    = $("#nemonico_two").val();
+        var fecha_inicio  = $("#fecha_inicio_two").val();
+        var fecha_fin     = $("#fecha_inicio_two").val();
         var sector        = $("#sector_two option:selected").val();
         var moneda        = $("#moneda_two option:selected").val();
         var acc_cotizado  = ($("#empresa_cotiza_dia").is(":checked")==true)?1:0;
@@ -281,7 +281,7 @@
 
             $.ajax({
                 type:'POST',
-                data:{p_Nemonico:p_Nemonico, fecha_inicio:$("#fecha_inicio_two").val(),fecha_fin:$("#fecha_inicio_two").val(),sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
+                data:{p_Nemonico:p_Nemonico, fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,sector:sector,moneda:moneda,acc_cotizado:acc_cotizado},
                 dataType: 'json',
                 url: '../Controller/CotizacionC.php?accion=importarmanual',
                 success:function(data){
@@ -298,38 +298,38 @@
 
     getHistorico();
 
-    buscarEmpresa = function(){
-        $("#empresa").attr('disabled','disabled');
+    buscarNemonico = function(){
+        $("#nemonico").attr('disabled','disabled');
         $.ajax({
             type: 'GET',
-            url: "../Controller/CotizacionC.php?accion=busemp",
+            url: "../Controller/CotizacionC.php?accion=bunemo",
             data: {sector: $("#sector").val(),moneda: $("#moneda").val()},
             success: function( data ) {
-                $("#empresa").html(data);
-                $("#empresa").removeAttr('disabled');
+                $("#nemonico").html(data);
+                $("#nemonico").removeAttr('disabled');
             }
         });
     }
 
-    buscarEmpresaTwo = function(){
-        $("#empresa_two").attr('disabled','disabled');
+    buscarNemonicoTwo = function(){
+        $("#nemonico_two").attr('disabled','disabled');
         $.ajax({
             type: 'GET',
-            url: "../Controller/CotizacionC.php?accion=busemptodos",
+            url: "../Controller/CotizacionC.php?accion=bunemotodos",
             data: {sector: $("#sector_two").val(),moneda: $("#moneda_two").val()},
             success: function( data ) {
-                $("#empresa_two").html(data);
-                $("#empresa_two").removeAttr('disabled');
+                $("#nemonico_two").html(data);
+                $("#nemonico_two").removeAttr('disabled');
             }
         });
     }
 
     $("#sector, #moneda").on("change", function(){
-        buscarEmpresa();
+        buscarNemonico();
     });
 
     $("#sector_two, #moneda_two").on("change", function(){
-        buscarEmpresaTwo();
+        buscarNemonicoTwo();
     })
 
  });

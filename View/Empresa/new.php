@@ -13,22 +13,11 @@
 		<h3><?=$titulo?></h3>
 		<br>
 		<form class="form-horizontal" method="POST" action="../Controller/EmpresaC.php?accion=create" id="form_empresa">
-		<div class="form-group">
-		    <label class="col-sm-2 control-label">Codigo BVL:</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="cod_emp_bvl" name="cod_emp_bvl" value="">
-		    </div>
-		  </div>
+		
 		  <div class="form-group">
 		    <label class="col-sm-2 control-label">Nombre:</label>
 		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">Nemónico:</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="nemonico" name="nemonico" placeholder="nemonico">
+		      <input type="text" class="form-control" id="emp_nomb" name="emp_nomb" placeholder="Nombre">
 		    </div>
 		  </div>
 		  <div class="form-group">
@@ -36,10 +25,10 @@
 		    <div class="col-sm-10">
 		    <?php
 		      $params = array(
-                    'select' => array('id'=>'sector', 'name'=>'sector', 'class'=>'form-control'),
+                    'select' => array('id'=>'sec_cod', 'name'=>'sec_cod', 'class'=>'form-control'),
                     'sql'    => 'SELECT * FROM sector WHERE estado=1',
                     'attrib' => array('value'=>'cod_sector','desc'=>'nombre', 'concat'=>'','descextra'=>''),
-                    'empty'  => 'Todos',
+                    'empty'  => '[SELECCIONAR]',
                     'defect' => '',
                     'edit'   => '',
                     'enable' => 'enable'
@@ -49,24 +38,9 @@
 		    </div>
 		  </div>
 		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">Segmento:</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="segmento" name="segmento" placeholder="segmento">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="inputPassword" class="col-sm-2 control-label">Moneda:</label>
-		    <div class="col-sm-10">
-			    <select id="moneda" name="moneda" class="form-control">
-	                <option value="US$">US$</option>
-	                <option value="S/">S/</option>
-	            </select>
-	        </div>
-		  </div>
-		  <div class="form-group">
 		    <label for="inputPassword" class="col-sm-2 control-label">Habilitado:</label>
 		    <div class="col-sm-10">
-		      <input type="checkbox" class="form-control" id="estado" name="estado">
+		      <input type="checkbox" class="form-control" id="emp_stdo" name="emp_stdo" checked="checked">
 		    </div>
 		  </div>
 		  <p>
@@ -87,37 +61,16 @@
 	        },
 			
 	        fields: {
-				cod_emp_bvl: {
+				emp_nomb: {
 	                validators: {
 	                        notEmpty: {
 	                        message: 'Campo requerido'
 	                    }
 	                }
 	            },
-	            nombre: {
+				sec_cod: {
 	                validators: {
 	                        notEmpty: {
-	                        message: 'Campo requerido'
-	                    }
-	                }
-	            },
-	            nemonico: {
-	                validators: {
-	                    notEmpty: {
-	                        message: 'Campo requerido'
-	                    }
-	                }
-	            },
-	            sector: {
-	                validators: {
-	                    notEmpty: {
-	                        message: 'Campo requerido'
-	                    }
-	                }
-	            },
-	            moneda: {
-	                validators: {
-	                    notEmpty: {
 	                        message: 'Campo requerido'
 	                    }
 	                }

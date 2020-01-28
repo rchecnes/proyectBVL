@@ -9,7 +9,7 @@
 			<th colspan="3" class="align-center bg-yellow">Negociación</th>
 		</tr>
 		<tr>
-			<th class="align-center bg-gray-dark">Empresa</th>
+			<th class="align-center bg-gray-dark" style="width:120px">Empresa</th>
 			<th class="align-center bg-gray-dark">Nemonico</th>
 			<th class="align-center bg-gray-dark">Sector</th>
 			<th class="align-center bg-gray-dark">Segm.</th>
