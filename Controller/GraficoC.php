@@ -11,16 +11,16 @@ function indexAction(){
 	//ORIGEN SIMULADOR
 	$simu_prec_unit = '';
 	$cod_grupo = '';
-	$simu_cod_emp   = '';
+	$simu_ne_cod   = '';
 	if (isset($_GET['simu_prec_unit'])) {
 
-		$sqlemp   = "SELECT * FROM empresa WHERE cod_emp='".$_GET['simu_cod_emp']."'";
+		$sqlemp   = "SELECT * FROM empresa WHERE cod_emp='".$_GET['simu_ne_cod']."'";
 		$resemp   = mysqli_query($link, $sqlemp);
 		$ep       = mysqli_fetch_array($resemp);
 
 		$simu_prec_unit = $_GET['simu_prec_unit'];
 		$cod_grupo = $_GET['simu_cod_grupo'];
-		$simu_cod_emp   = $ep['nemonico'];
+		$simu_ne_cod   = $ep['nemonico'];
 	}
 	//FIN SIMULADOR
 	
@@ -346,13 +346,13 @@ function recomendacionSimuladorAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cod_emp   = $_GET['cod_emp'];
+	$ne_cod   = $_GET['ne_cod'];
 	$cod_user  = $_SESSION['cod_user'];
 	$prec_unit = $_GET['prec_unit'];
 	$tp_fecha  = date('Y-m-d');
 
 	//CODIGO EMPRESA
-	$sqlemp   = "SELECT * FROM empresa WHERE cod_emp='$cod_emp'";
+	$sqlemp   = "SELECT * FROM nemonico WHERE ne_cod='$ne_cod'";
 	$resemp   = mysqli_query($link, $sqlemp);
 	$ep       = mysqli_fetch_array($resemp);
 	$nemonico = $ep['nemonico'];

@@ -34,7 +34,7 @@ function datoscabAction(){
 	$com = getComision($link, 'contado');
 
 	$oper            = $_GET['oper'];
-	$cod_emp         = $_GET['cod_emp'];
+	$ne_cod         = $_GET['ne_cod'];
 	$tipo            = $_GET['tipo'];
 	$tipo_two        = $_GET['tipo_two'];
 	$monto_estimado  = ($_GET['monto_estimado']!='' && (float)$_GET['monto_estimado']>0)?(float)$_GET['monto_estimado']:0;
@@ -51,7 +51,7 @@ function datoscabAction(){
 
 		if ($oper != 'ver_simu') {
 
-			$sql  = "SELECT * FROM empresa WHERE cod_emp='$cod_emp' LIMIT 1";
+			$sql  = "SELECT * FROM nemonico WHERE ne_cod='$ne_cod' LIMIT 1";
 			$resp = mysqli_query($link,$sql);
 			$r    = mysqli_fetch_array($resp);
 

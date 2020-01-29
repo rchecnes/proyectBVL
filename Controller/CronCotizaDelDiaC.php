@@ -36,7 +36,7 @@ function getCotizacionDelDiaActiguo(){
 
             if ($nemonico !='') {
 
-                $cd_cod_emp  = $nemonico;
+                $cd_nemo  = $nemonico;
                 
                 $cd_fecha    = date('Y-m-d');
 
@@ -73,10 +73,10 @@ function getCotizacionDelDiaActiguo(){
                 $cd_ng_mng   = str_replace(",","",str_replace(" ","",$cd_ng_mng));
 
                 //Creamos query insert
-                $sql_ins .= "('$cd_cod', '$cd_cod_emp','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
+                $sql_ins .= "('$cd_cod', '$cd_nemo','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
 
                 //Creamos sql para eliminar
-                $sql_del .= "'".$cd_cod_emp."',";
+                $sql_del .= "'".$cd_nemo."',";
 
             }
    
@@ -89,11 +89,11 @@ function getCotizacionDelDiaActiguo(){
     if($sql_ins!='' && $sql_del!=''){
 
         //Eliminamos
-        $delete = "DELETE FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_cod_emp IN(".$sql_del.")";
+        $delete = "DELETE FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_nemo IN(".$sql_del.")";
         mysqli_query($link, $delete);
 
         //Insertamos
-        $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_cod_emp,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
+        $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_nemo,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
         $resp    = mysqli_query($link, $insert);
 
         unset($sql_del);

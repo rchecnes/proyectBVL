@@ -38,9 +38,9 @@
 						    <label for="inputPassword" class="control-label">Empresa:</label>
 						    <?php
 						    	$params = array(
-				                    'select' => array('id'=>'cod_emp', 'name'=>'cod_emp', 'class'=>'form-control'),
-				                    'sql'    => "SELECT * FROM empresa WHERE estado=1",
-				                    'attrib' => array('value'=>'cod_emp','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
+				                    'select' => array('id'=>'ne_cod', 'name'=>'ne_cod', 'class'=>'form-control'),
+				                    'sql'    => "SELECT ne.ne_cod, ne.nemonico, em.emp_nomb FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1",
+				                    'attrib' => array('value'=>'ne_cod','desc'=>'nemonico,emp_nomb', 'concat'=>' - ','descextra'=>''),
 				                    'empty'  => 'Todos',
 				                    'defect' => '',
 				                    'edit'   => '',
@@ -142,14 +142,26 @@
 						INNER JOIN empresa e ON (ef.cod_emp=e.cod_emp)
 						INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
 						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'";*/
-				$sql = "SELECT e.cod_emp,e.nombre AS nom_empresa, s.nombre AS nom_sector,e.nemonico,e.moneda,ef.cod_user, ef.cod_grupo,
-						DATE_FORMAT(e.cz_fe_fin,'%d/%m/%Y') AS fe_ult_cotiza,
-						e.cz_ci_fin AS cz_ult_cierre,e.cz_compra,e.cz_venta,e.cz_recomen
+				$sql = "SELECT 
+						ne.ne_cod,
+						em.emp_nomb AS nom_empresa, 
+						se.nombre AS nom_sector,
+						ne.nemonico,
+						ne.moneda,
+						ef.cod_user, 
+						ef.cod_grupo, 
+						DATE_FORMAT(ne.cz_fe_fin,'%d/%m/%Y') AS fe_ult_cotiza, 
+						ne.cz_ci_fin AS cz_ult_cierre,
+						ne.cz_compra,
+						ne.cz_venta,
+						ne.cz_recomen 
 						FROM empresa_favorito ef
-						INNER JOIN empresa e ON (ef.cod_emp=e.cod_emp)
-						INNER JOIN sector s ON(e.cod_sector=s.cod_sector)
-						WHERE ef.cod_user='$cod_user' AND ef.cod_grupo='".$rg['cod_grupo']."'
-						ORDER BY e.nemonico ASC";
+						INNER JOIN nemonico ne ON (ef.ne_cod=ne.ne_cod)
+						LEFT JOIN empresa em ON (ne.emp_cod=em.emp_cod) 
+						LEFT JOIN sector se ON(em.sec_cod=se.cod_sector) 
+						WHERE ef.cod_user='$cod_user' 
+						AND ef.cod_grupo='".$rg['cod_grupo']."' 
+						ORDER BY ne.nemonico ASC";
 				$favoritos= mysqli_query($link, $sql);
 
 			    while ($em = mysqli_fetch_array($favoritos)):
@@ -166,7 +178,7 @@
 			        <td align="center"><?=$em['cz_recomen']?></td>
 			        			        
 			        <td width="200" align="center">
-			        	<a href="../Controller/FavoritoC.php?accion=delete&cod_emp=<?=$em['cod_emp']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" title="Eliminar">
+			        	<a href="../Controller/FavoritoC.php?accion=delete&ne_cod=<?=$em['ne_cod']?>&cod_user=<?=$em['cod_user']?>&cod_grupo=<?=$em['cod_grupo']?>" title="Eliminar">
 			              <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 			            </a>
 			        </td>

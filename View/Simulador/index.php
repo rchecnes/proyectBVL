@@ -31,16 +31,17 @@
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="form-group">
-						<label for="inputPassword" class="control-label">Empresa:</label>
+						<label for="inputPassword" class="control-label">Nemonico:</label>
 					    <?php
 					    	$andwhere = ($cod_grupo !='')?" AND ug.cod_grupo='$cod_grupo'":"";
 					    	$params = array(
-			                    'select' => array('id'=>'cod_emp', 'name'=>'cod_emp', 'class'=>'form-control'),
-			                    'sql'    => "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef 
-			                    			 INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
+			                    'select' => array('id'=>'ne_cod', 'name'=>'ne_cod', 'class'=>'form-control'),
+			                    'sql'    => "SELECT DISTINCT(ne.ne_cod), ne.nemonico,em.emp_nomb FROM empresa_favorito ef 
+			                    			 INNER JOIN nemonico ne ON(ef.ne_cod=ne.ne_cod)
+											 LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
 			                    			 INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
-			                    			 WHERE e.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
-			                    'attrib' => array('value'=>'cod_emp','desc'=>'nemonico,nombre', 'concat'=>' - ','descextra'=>''),
+			                    			 WHERE ne.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
+			                    'attrib' => array('value'=>'ne_cod','desc'=>'nemonico,emp_nomb', 'concat'=>' - ','descextra'=>''),
 			                    'empty'  => false,
 			                    'defect' => $cod_emp,
 			                    'edit'   => '',
@@ -244,7 +245,7 @@
 
             var oper = '<?=$oper?>';
             if (oper == 'ver_simu') {
-            	$("#cod_emp").attr('disabled','disabled');
+            	$("#ne_cod").attr('disabled','disabled');
 				$("#cod_grupo").attr('disabled','disabled');
 				$("#add_portafolio").hide();
 				if ('<?=$origen?>' =='por_cab') {
@@ -303,7 +304,7 @@
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=datoscab',
-				    data:{oper:oper,cod_emp:$("#cod_emp").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
+				    data:{oper:oper,ne_cod:$("#ne_cod").val(),tipo:tipo,tipo_two:tipo_two,monto_estimado:monto_estimado,precio_unitario:precio_unitario,gan_renta_obj:gan_renta_obj,gan_pre_obj:gan_pre_obj},
 				    dataType: "json",
 				    success:function(data){
 						//CABECERA
@@ -405,17 +406,17 @@
 
 			$("#cod_grupo").change(function(){
 
-				$("#cod_emp").attr('disabled','disabled');
+				$("#ne_cod").attr('disabled','disabled');
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/SimuladorC.php?accion=empresaporgrupo',
 				    data:{cod_grupo:$(this).val()},
 				    success:function(data){
 
-				        $("#cod_emp").html(data);
-				        $("#cod_emp").removeAttr('disabled');
+				        $("#ne_cod").html(data);
+				        $("#ne_cod").removeAttr('disabled');
 
-				        if ($("#cod_emp").val()!='') {
+				        if ($("#ne_cod").val()!='') {
 				        	buscar('uno','');
 				        }
 				    }
@@ -425,7 +426,7 @@
 			//Recomendacion
 			getRecomendacion = function(){
 
-				var cod_emp = $("#cod_emp").val();
+				var ne_cod = $("#ne_cod").val();
 				var prec_unit = $("#precio_unitario").val();
 
 				$("#loading").show();
@@ -434,7 +435,7 @@
 				$.ajax({
 				    type:'GET',
 				    url: '../Controller/GraficoC.php?accion=recSimulador',
-				    data:{cod_emp:cod_emp, prec_unit:prec_unit},
+				    data:{ne_cod:ne_cod, prec_unit:prec_unit},
 				    success:function(data){
 				        $("#recomendacion").html('REC: '+data);
 				        $("#loading").hide();
@@ -449,7 +450,7 @@
 			//	buscar('uno','');
 			//});
 
-			$("#cod_emp").on('change',function(){
+			$("#ne_cod").on('change',function(){
 				buscar('uno','');
 			});
 
@@ -457,8 +458,8 @@
 
 				var simu_prec_unit = $("#precio_unitario").val();
 				var cod_grupo      = $("#cod_grupo").val();
-				var cod_emp        = $("#cod_emp").val();
-				window.location.href = "../Controller/GraficoC.php?accion=index&simu_prec_unit="+simu_prec_unit+"&simu_cod_grupo="+cod_grupo+"&simu_cod_emp="+cod_emp;
+				var ne_cod        = $("#ne_cod").val();
+				window.location.href = "../Controller/GraficoC.php?accion=index&simu_prec_unit="+simu_prec_unit+"&simu_cod_grupo="+cod_grupo+"&simu_ne_cod="+ne_cod;
 			});
 				
 			verPortafolio = function(){
@@ -475,7 +476,7 @@
 
 			$("#add_portafolio").on("click",function(){
 
-				var cod_emp  = $("#cod_emp").val();
+				var ne_cod  = $("#ne_cod").val();
 				var cod_grupo= $("#cod_grupo").val();
 				var mont_est = $("#monto_estimado").val();
 				var cantidad = $("#cantidad_acciones").val(); 
@@ -491,7 +492,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
-				    data:{cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
+				    data:{ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');
@@ -505,7 +506,7 @@
 			$("#update_portafolio").on("click",function(){
 
 				var por_cod  = $("#por_cod").val();
-				var cod_emp  = $("#cod_emp").val();
+				var ne_cod  = $("#ne_cod").val();
 				var cod_grupo= $("#cod_grupo").val();
 				var mont_est = $("#monto_estimado").val();
 				var cantidad = $("#cantidad_acciones").val(); 
@@ -521,7 +522,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=update_portafolio',
-				    data:{por_cod:por_cod,cod_emp:cod_emp,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
+				    data:{por_cod:por_cod,ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');
