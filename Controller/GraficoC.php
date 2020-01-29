@@ -14,7 +14,7 @@ function indexAction(){
 	$simu_ne_cod   = '';
 	if (isset($_GET['simu_prec_unit'])) {
 
-		$sqlemp   = "SELECT * FROM empresa WHERE cod_emp='".$_GET['simu_ne_cod']."'";
+		$sqlemp   = "SELECT * FROM nemonico WHERE ne_cod='".$_GET['simu_ne_cod']."'";
 		$resemp   = mysqli_query($link, $sqlemp);
 		$ep       = mysqli_fetch_array($resemp);
 
