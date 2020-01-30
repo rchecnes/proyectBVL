@@ -11,7 +11,7 @@ function indexAction(){
 	//ORIGEN SIMULADOR
 	$simu_prec_unit = '';
 	$cod_grupo = '';
-	$simu_ne_cod   = '';
+	$simu_nemonico   = '';
 	if (isset($_GET['simu_prec_unit'])) {
 
 		$sqlemp   = "SELECT * FROM nemonico WHERE ne_cod='".$_GET['simu_ne_cod']."'";
@@ -20,7 +20,7 @@ function indexAction(){
 
 		$simu_prec_unit = $_GET['simu_prec_unit'];
 		$cod_grupo = $_GET['simu_cod_grupo'];
-		$simu_ne_cod   = $ep['nemonico'];
+		$simu_nemonico   = $ep['nemonico'];
 	}
 	//FIN SIMULADOR
 	
@@ -271,7 +271,7 @@ function crearcuadrorecAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$nemonico  = $_GET['empresa'];
+	$nemonico  = $_GET['nemonico'];
 	$cod_user  = $_SESSION['cod_user'];
 	$prec_unit = $_GET['prec_unit'];
 	$tp_fecha = date('Y-m-d');

@@ -182,12 +182,12 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label>Empresa:</label>
+								<label>Nemonico:</label>
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cef_nemonico', 'name'=>'cef_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
+										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_cod,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',
 										'edit'   => '',
@@ -256,11 +256,11 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label>Empresa:</label>
+								<label>Nemonico:</label>
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cer_nemonico', 'name'=>'cer_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',
@@ -334,7 +334,7 @@
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cefa_nemonico', 'name'=>'cefa_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',
@@ -382,7 +382,7 @@
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cara_nemonico', 'name'=>'cara_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado=1 AND imp_sit_fin!=''",
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
 										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',

@@ -45,10 +45,10 @@ function listarAction(){
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT * FROM empresa WHERE nemonico='$cef_nemonico'";
+	$sqlem = "SELECT em.emp_nomb FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.nemonico='$cef_nemonico'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
-	$nombre_empresa = $rowem['nombre'];
+	$nombre_empresa = $rowem['emp_nomb'];
 
 	$cab_fe_ini = '';
 	if($cef_trim == 4){$cab_fe_ini = '31/12/'.($cef_anio);}

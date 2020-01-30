@@ -10,7 +10,7 @@
             <h3 class="title">Depósito Plazo</h3>
             <div class="tabbable">
                 <ul class="nav nav-tabs" id="tabs">
-                    <li class=""><a data-toggle="tab" href="#importar_empresa_plazo">Importar Empresa</a></li>
+                    <li class=""><a data-toggle="tab" href="#importar_empresa_plazo">Importar Entidad Financiera</a></li>
                     <li class="active"><a data-toggle="tab" href="#importar_tasas_costos">Historico - Tasas y Costos</a></li>
                 </ul>
                 <div class="tab-content">

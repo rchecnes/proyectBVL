@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Empresas:</label>
+                                <label>Entidad Financiera:</label>
                                 <select id="dp_empresa" name="dp_empresa" class="form-control">
                                     <option value="3">3 Primeras</option> 
                                     <option value="4">4 Primeras</option>                            

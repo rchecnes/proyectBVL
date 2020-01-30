@@ -90,7 +90,7 @@ function createAction(){
 
 
 	//Obtenemos el codigo empresa
-	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
+	$sqlemp = "SELECT nemonico FROM nemonico WHERE nemonico='$ub_nemonico'";
 	$resemp = mysqli_query($link, $sqlemp);
 	$rowemp = mysqli_fetch_array($resemp);
 	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
@@ -172,15 +172,16 @@ function listarAction(){
 				DATE_FORMAT(ub_fech_reg,'%d/%m/%Y')AS ub_fech_reg,
 				DATE_FORMAT(ub_fech_ent,'%d/%m/%Y')AS ub_fech_ent
 				 FROM ultimos_beneficios ub
-			INNER JOIN empresa em ON(ub.ub_nemonico=em.nemonico)
-			LEFT JOIN empresa_favorito fa ON(em.cod_emp=fa.cod_emp)
+			INNER JOIN nemonico ne ON(ub.ub_nemonico=ne.nemonico)
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			LEFT JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
 			WHERE ub.ub_cod>0";
 
-	if ($nemonico != '') { $sql .= " AND em.nemonico='$nemonico'";}
+	if ($nemonico != '') { $sql .= " AND ne.nemonico='$nemonico'";}
 	if ($ub_der_tip != '') { $sql .= " AND ub.ub_der_tip='$ub_der_tip'";}
 	if ($ub_der_mon != '') { $sql .= " AND ub.ub_der_mon='$ub_der_mon'";}
 	if ($ub_fech_ent_de != '' && $ub_fech_ent_ha!='') { $sql .= " AND ub.ub_fech_ent BETWEEN '$ub_fech_ent_de' AND '$ub_fech_ent_ha'";}
-	if ($cod_ector != '') { $sql .= " AND em.cod_sector='$cod_ector'";}
+	if ($cod_ector != '') { $sql .= " AND em.sec_cod='$cod_ector'";}
 	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
 	$sql .= " ORDER BY ub.ub_fech_ent DESC";

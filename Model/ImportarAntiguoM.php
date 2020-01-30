@@ -56,6 +56,7 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
         unset($delete);
 
         $insert = "INSERT INTO cotizacion (cz_cod,cz_nemo,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
+        echo $insert;
         $resp    = mysqli_query($link,$insert);
         //echo $insert;
         unset($insert);
@@ -83,7 +84,7 @@ function file_get_contents_curl($url) {
 	return ($data!='')?$data:"";
  }
  
-function getPrepareDataAntiguo($empresa, $html){
+function getPrepareDataAntiguo($nemonico, $html){
 
     $cotiza = array();
 
@@ -120,7 +121,7 @@ function getPrepareDataAntiguo($empresa, $html){
                     }
 
     	            $cotiza[] = array(
-    	                    'nem'=> $empresa,
+    	                    'nem'=> $nemonico,
     	                    'f'  => ($fecha_cotiza!='')?$fecha_cotiza:"0000-00-00",
     	                    'a'  => $apertura,
     	                    'c'  => (double)str_replace(" ","",$e->find('td',2)->plaintext),

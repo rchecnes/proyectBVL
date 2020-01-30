@@ -71,7 +71,7 @@ function createAction(){
 	$inf_contador = $_POST['inf_contador'];
 
 	//Obtenemos el codigo empresa
-	$sqlemp = "SELECT nemonico FROM empresa WHERE nemonico='$ub_nemonico'";
+	$sqlemp = "SELECT nemonico FROM nemonico WHERE nemonico='$ub_nemonico'";
 	$resemp = mysqli_query($link, $sqlemp);
 	$rowemp = mysqli_fetch_array($resemp);
 	$ub_cod_emp_bvl = $rowemp['ub_cod_emp_bvl'];
@@ -160,15 +160,16 @@ function listarAction(){
 	$cod_sector = $_GET['cod_sector'];
 	$cod_grupo = $_GET['cod_grupo'];
 
-	$sql = "SELECT c.*,d.*,e.nombre FROM det_indice_financiero d
-			INNER JOIN cab_indice_financiero c ON(d.inf_codigo=c.inf_codigo)  
-			INNER JOIN empresa e ON(e.nemonico COLLATE utf8_general_ci=d.inf_nemonico COLLATE utf8_general_ci)
-			LEFT JOIN empresa_favorito fa ON(e.cod_emp=fa.cod_emp)
+	$sql = "SELECT c.*,d.*,em.emp_nomb FROM det_indice_financiero d 
+			INNER JOIN cab_indice_financiero c ON(d.inf_codigo=c.inf_codigo) 
+			INNER JOIN nemonico ne ON(ne.nemonico COLLATE utf8_general_ci=d.inf_nemonico COLLATE utf8_general_ci)
+			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			LEFT JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
 			WHERE c.inf_stat ='10'";
 
 	if ($inf_nemonico != '') { $sql .= " AND d.inf_nemonico='$inf_nemonico'";}
 	if ($inf_codigo != '') { $sql .= " AND d.inf_codigo='$inf_codigo'";}
-	if ($cod_sector != '') { $sql .= " AND e.cod_sector='$cod_sector'";}
+	if ($cod_sector != '') { $sql .= " AND em.sec_cod='$cod_sector'";}
 	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
 	$sql .= " GROUP BY c.inf_codigo,d.inf_nemonico ORDER BY d.inf_nemonico ASC, c.inf_codigo ASC";
@@ -219,7 +220,7 @@ function importarIndiceFinanciero($ruta, $condicion){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa WHERE imp_ind_fin!='' AND cod_emp_bvl!='' $condicion";
+	$sql = "SELECT * FROM nemonico WHERE imp_ind_fin!='' AND cod_emp_bvl!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	while($row = mysqli_fetch_array($res)){

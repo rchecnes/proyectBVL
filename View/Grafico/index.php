@@ -59,7 +59,7 @@
                                     AND nf.cod_user='$cod_user' $andwhere",
                         'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb', 'concat'=>' - ','descextra'=>''),
                         'empty'  => false,
-                        'defect' => ($simu_cod_emp!='')?$simu_cod_emp:'ENGEPEC1',
+                        'defect' => ($simu_nemonico!='')?$simu_nemonico:'ENGEPEC1',
                         'edit'   => '',
                         'enable' => 'enable'
                     );

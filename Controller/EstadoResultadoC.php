@@ -37,10 +37,10 @@ function listarAction(){
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT * FROM empresa WHERE nemonico='$der_nemonico'";
+	$sqlem = "SELECT em.emp_nomb FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.nemonico='$der_nemonico'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
-	$nombre_empresa = $rowem['nombre'];
+	$nombre_empresa = $rowem['emp_nomb'];
 
 	$tot_info_1 = $tot_info_2= $tot_info_3 = $tot_info_4='';
 	if($der_trim == 4 || $der_trim == 3 || $der_trim == 2 || $der_trim == 1){

@@ -29,7 +29,7 @@
         $inf_codigo  = $inf['inf_codigo'];
         $inf_nemonico  = $inf['inf_nemonico'];
         $inf_nombre  = $inf['inf_nombre'];
-        $emp_nombre  = $inf['nombre'];
+        $emp_nombre  = $inf['emp_nomb'];
         
     
         

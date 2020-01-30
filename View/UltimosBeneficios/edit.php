@@ -20,8 +20,8 @@
 							<?php   
 								$params = array(
 									'select' => array('id'=>'ub_nemonico', 'name'=>'ub_nemonico', 'class'=>'form-control'),
-									'sql'    => "SELECT nemonico,nombre,moneda FROM empresa WHERE estado='1' AND cod_emp_bvl!=''",
-									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+									'sql'    => "SELECT ne.nemonico,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado='1' AND ne.imp_ind_fin!='' AND ne.cod_emp_bvl!=''",
+									'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
 									'empty'  => false,
 									'defect' => '',
 									'edit'   => $ub_nemonico,

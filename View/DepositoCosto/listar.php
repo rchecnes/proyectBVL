@@ -2,7 +2,7 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
 <table class="table table-bordered">
     <tr>
-        <th style="width: 80px">Empresa</th>
+        <th style="width: 80px">Entidad Financiera</th>
         <th>Ultima Actualizacion</th>
         <th>Saldo Promedio Mensual</th>
         <th>Plazo</th>
