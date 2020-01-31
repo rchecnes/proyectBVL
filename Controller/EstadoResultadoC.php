@@ -14,11 +14,11 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$der_nemonico = $_GET['cer_nemonico'];
-	$der_anio = $_GET['cer_anio'];
-	$der_peri = $_GET['cer_peri'];
-	$der_tipo = $_GET['cer_tipo'];
-	$der_trim = $_GET['cer_trim'];
+	$der_nemonico = $_GET['cef_nemonico'];
+	$der_anio = $_GET['cef_anio'];
+	$der_peri = $_GET['cef_peri'];
+	$der_tipo = $_GET['cef_tipo'];
+	$der_trim = $_GET['cef_trim'];
 	if($der_peri == 'A'){$der_trim = 'A';}
 
 	$sql = "SELECT * FROM cab_estado_resultado c
@@ -93,7 +93,7 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
+	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	$tri_auto = 1;
@@ -104,10 +104,10 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 4;}
 
 	if($modo == 'manual'){
-		$der_anio = $_GET['cer_anio'];
-		$der_peri = $_GET['cer_peri'];
-		$der_tipo = $_GET['cer_tipo'];
-		$der_trim = $_GET['cer_trim'];
+		$der_anio = $_GET['cef_anio'];
+		$der_peri = $_GET['cef_peri'];
+		$der_tipo = $_GET['cef_tipo'];
+		$der_trim = $_GET['cef_trim'];
 	}else{
 		$der_anio = date('Y');
 		$der_peri = 'T';
@@ -227,12 +227,12 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 
 function importarManualAction(){
 
-	$cer_nemonico = $_GET['cer_nemonico'];
+	$cef_nemonico = $_GET['cef_nemonico'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($cer_nemonico !=''){
-		$condicion .= " AND nemonico='$cer_nemonico'";
+	if($cef_nemonico !=''){
+		$condicion .= " AND nemonico='$cef_nemonico'";
 	}
 
 	importarEstadoResultado($ruta, $condicion, 'manual');

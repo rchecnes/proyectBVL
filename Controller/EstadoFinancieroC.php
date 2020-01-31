@@ -133,7 +133,7 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
+	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	$tri_auto = 1;
