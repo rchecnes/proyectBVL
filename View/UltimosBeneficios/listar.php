@@ -1,8 +1,8 @@
 <p>Cantidad Registros:<b><?=$nro_reg?></b></p>
 <table class="table table-bordered">
     <tr>
-        <th>Nemonico</th>
         <th>Empresa</th>
+        <th>Nemonico</th>
         <th>Derechos</th>
         <th>Fecha de Acuerdo</th>
         <th>Fecha de Corte</th>
@@ -13,7 +13,7 @@
     <?php
     while ($ub = mysqli_fetch_array($res)) {
 
-        $nombre  = $ub['nombre'];
+        $nombre  = $ub['emp_nomb'];
         $ub_nemonico  = $ub['ub_nemonico'];
         $ub_der_mon  = $ub['ub_der_mon'];
         $ub_der_imp  = $ub['ub_der_imp'];
@@ -28,8 +28,8 @@
         $derecho = $ub['ub_der_comp'];
     ?>
     <tr>
-        <td><?=$ub_nemonico?></td>
         <td><?=$nombre?></td>
+        <td><?=$ub_nemonico?></td>
         <td><?=$derecho?></td>
         <td><?=$ub_fech_acu?></td>
         <td><?=$ub_fech_cor?></td>
