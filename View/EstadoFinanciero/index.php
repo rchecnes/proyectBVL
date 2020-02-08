@@ -258,8 +258,8 @@
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cefa_nemonico', 'name'=>'cefa_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
+										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',
 										'edit'   => '',
@@ -306,8 +306,8 @@
 								<?php   
 									$params = array(
 										'select' => array('id'=>'cara_nemonico', 'name'=>'cara_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT ne.nemonico,em.emp_cod,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,nombre,moneda', 'concat'=>' - ','descextra'=>''),
+										'sql'    => "SELECT ne.nemonico,em.emp_cod,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
+										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
 										'defect' => 'GRAMONC1',
 										'edit'   => '',

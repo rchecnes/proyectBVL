@@ -156,6 +156,7 @@ function deleteAction(){
 
 function listarAction(){
 
+	session_start();
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
@@ -166,6 +167,7 @@ function listarAction(){
 	$ub_fech_ent_ha = $_GET['ub_fech_ent_ha'];
 	$cod_ector = $_GET['cod_ector'];
 	$cod_grupo = $_GET['cod_grupo'];
+	$cod_user = $_SESSION['cod_user'];
 
 	$sql = "SELECT *, DATE_FORMAT(ub_fech_acu,'%d/%m/%Y')AS ub_fech_acu, 
 				DATE_FORMAT(ub_fech_cor,'%d/%m/%Y')AS ub_fech_cor,
@@ -174,7 +176,7 @@ function listarAction(){
 				 FROM ultimos_beneficios ub
 			INNER JOIN nemonico ne ON(ub.ub_nemonico=ne.nemonico)
 			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
-			LEFT JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
+			INNER JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
 			WHERE ub.ub_cod>0";
 
 	if ($nemonico != '') { $sql .= " AND ne.nemonico='$nemonico'";}
@@ -185,6 +187,7 @@ function listarAction(){
 	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
 	$sql .= " ORDER BY ub.ub_fech_ent DESC";
+	//echo $sql;
 	$res = mysqli_query($link, $sql);
 
 	$nro_reg = mysqli_num_rows($res);
@@ -221,7 +224,7 @@ function importarBeneficio($ruta, $condicion){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa WHERE cod_emp_bvl!='' $condicion";
+	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	while($row = mysqli_fetch_array($res)){

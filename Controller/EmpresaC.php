@@ -99,6 +99,85 @@ function deleteAction(){
 	header("location:../Controller/EmpresaC.php?accion=index");
 }
 
+function crearEmpresaAction(){
+
+	include('../Config/Conexion.php');
+	$link = getConexion();
+
+	$sql = "SELECT * FROM nemonico";
+	$res = mysqli_query($link, $sql);
+
+	$contador = 0;
+
+	while($row = mysqli_fetch_array($res)){
+		
+		$nombre = $row['nombre'];
+		$nemonico = $row['nemonico'];
+
+		$sqlem = "SELECT * FROM empresa WHERE emp_nomb='$nombre' LIMIT 1";
+		$resem = mysqli_query($link, $sqlem);
+		$rowem = mysqli_fetch_array($resem);
+		$emp_cod = $rowem['emp_cod'];
+
+		if($emp_cod == ''){
+
+			$max = "SELECT max(emp_cod) AS max FROM empresa";
+			$respmax = mysqli_query($link,$max);
+			$rowmax = mysqli_fetch_array($respmax);
+
+			$new_emp_cod   	= ($rowmax['max']!='')?$rowmax['max']+1:1000;
+			$emp_nomb 	= $row['nombre'];
+			$sec_cod 	= $row['cod_sector'];
+			$emp_cod_bvl = $row['cod_emp_bvl'];
+			$emp_cod_rpj = $row['imp_sit_fin'];
+			$emp_imp_inf = $row['imp_ind_fin'];
+
+			$emp_stdo 	= 1;
+
+			//Insertamos empresa
+			$sql  = "INSERT INTO empresa(emp_cod,emp_nomb,sec_cod,emp_stdo,emp_cod_bvl,emp_cod_rpj,emp_imp_inf) VALUES('$new_emp_cod','$emp_nomb','$sec_cod','$emp_stdo','$emp_cod_bvl','$emp_cod_rpj','$emp_imp_inf')";
+			$resp = mysqli_query($link, $sql);
+			//$emp_cod = mysqli_insert_id($link);
+			$emp_cod = $new_emp_cod;
+
+			if($emp_cod !=''){
+				//Actualizamos nemonico con codigo empresa
+				$sqlupn = "UPDATE nemonico SET emp_cod='$emp_cod' WHERE nemonico='$nemonico'";
+				$resupn = mysqli_query($link, $sqlupn);
+
+				//Actualizamos codigo empresa en estados financieros
+				$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod' WHERE def_nemonico='$nemonico'";
+				$resup1 = mysqli_query($link, $sqlup1);
+
+				$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod' WHERE der_nemonico='$nemonico'";
+				$resup2 = mysqli_query($link, $sqlup2);
+
+				$sqlup2 = "UPDATE det_indice_financiero SET emp_cod='$emp_cod' WHERE inf_nemonico='$nemonico'";
+				$resup2 = mysqli_query($link, $sqlup2);
+			}
+
+			$contador ++;
+
+		}else{
+
+			//Actualizamos nemonico con codigo empresa
+			$sqlupn = "UPDATE nemonico SET emp_cod='$emp_cod' WHERE nemonico='$nemonico'";
+			$resupn = mysqli_query($link, $sqlupn);
+
+			//Actualizamos codigo empresa en estados financieros
+			$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod' WHERE def_nemonico='$nemonico'";
+			$resup1 = mysqli_query($link, $sqlup1);
+
+			$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod' WHERE der_nemonico='$nemonico'";
+			$resup2 = mysqli_query($link, $sqlup2);
+
+			$sqlup2 = "UPDATE det_indice_financiero SET emp_cod='$emp_cod' WHERE inf_nemonico='$nemonico'";
+			$resup2 = mysqli_query($link, $sqlup2);
+		}
+	}
+
+	echo "Empresa creadas: $contador";
+}
 
 switch ($_GET['accion']) {
 	case 'index':
@@ -118,6 +197,8 @@ switch ($_GET['accion']) {
 		break;
 	case 'update':
 		updateAction();
+	case 'crearempresa':
+		crearEmpresaAction();
 		break;
 }
 ?>

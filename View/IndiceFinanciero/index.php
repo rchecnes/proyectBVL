@@ -17,7 +17,7 @@
 		        $.ajax({
 		            type:'GET',
 		            url: '../Controller/IndiceFinancieroC.php?accion=importarmanual',
-		            data:{nemonico:$("#empresa").val()},
+		            data:{inf_nemonico:$("#inf_nemonico").val()},
 		            success:function(data){
 		                $("#loading").hide();
 						buscarImportado();

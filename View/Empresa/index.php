@@ -18,6 +18,9 @@
 				<th>Codigo</th>
 		        <th>Nombre</th>		        
 		        <th>Sector</th>
+				<th>Cod. Bolsa (Imp. Ind. Fin.)</th>
+				<th>Cod. (Imp. Ind. Fin.)</th>
+				<th>Cod. RPJ (Imp. Est.)</th>
 		        <th>Estado</th>
 		        <th>Acciones</th>
 		    </tr>
@@ -28,6 +31,9 @@
 				<td><?=$em['emp_cod']?></td>
 		        <td><?=$em['emp_nomb']?></td>		        
 		        <td><?=$em['nom_sector']?></td>
+				<td><?=$em['emp_cod_bvl']?></td>
+				<td><?=$em['emp_imp_inf']?></td>
+				<td><?=$em['emp_cod_rpj']?></td>
 		        <td><?=($em['emp_stdo']=='1')?'Habilitado':'Deshabilitado'?></td>
 		        <td width="50" align="center">
 		        	<a href="../Controller/EmpresaC.php?accion=edit&emp_cod=<?=$em['emp_cod']?>" class="" role="button"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>&nbsp;

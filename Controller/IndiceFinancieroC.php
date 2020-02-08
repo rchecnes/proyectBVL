@@ -317,12 +317,12 @@ function importarIndiceFinanciero($ruta, $condicion){
 
 function importarManualAction(){
 
-	$nemonico = $_GET['nemonico'];
+	$inf_nemonico = $_GET['inf_nemonico'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($nemonico !=''){
-		$condicion .= " AND nemonico='$nemonico'";
+	if($inf_nemonico !=''){
+		$condicion .= " AND nemonico='$inf_nemonico'";
 	}
 
 	importarIndiceFinanciero($ruta, $condicion);
