@@ -224,12 +224,13 @@ function importarBeneficio($ruta, $condicion){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' $condicion";
+	$sql = "SELECT ne.nemonico, em.emp_cod_bvl FROM nemonico ne
+			INNER JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE em.emp_cod_bvl!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	while($row = mysqli_fetch_array($res)){
 		
-		$new_codigo = $row['cod_emp_bvl'];
+		$new_codigo = $row['emp_cod_bvl'];
 		$new_nemonico = $row['nemonico'];
 
 		$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
@@ -304,7 +305,7 @@ function importarManualAction(){
 
 	$condicion = "";
 	if($nemonico !=''){
-		$condicion .= " AND nemonico='$nemonico'";
+		$condicion .= " AND ne.nemonico='$nemonico'";
 	}
 
 	importarBeneficio($ruta, $condicion);

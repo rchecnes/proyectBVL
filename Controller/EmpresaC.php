@@ -118,6 +118,7 @@ function crearEmpresaAction(){
 		$resem = mysqli_query($link, $sqlem);
 		$rowem = mysqli_fetch_array($resem);
 		$emp_cod = $rowem['emp_cod'];
+		$emp_cod_rpj = $rowem['emp_cod_rpj'];
 
 		if($emp_cod == ''){
 
@@ -137,7 +138,6 @@ function crearEmpresaAction(){
 			//Insertamos empresa
 			$sql  = "INSERT INTO empresa(emp_cod,emp_nomb,sec_cod,emp_stdo,emp_cod_bvl,emp_cod_rpj,emp_imp_inf) VALUES('$new_emp_cod','$emp_nomb','$sec_cod','$emp_stdo','$emp_cod_bvl','$emp_cod_rpj','$emp_imp_inf')";
 			$resp = mysqli_query($link, $sql);
-			//$emp_cod = mysqli_insert_id($link);
 			$emp_cod = $new_emp_cod;
 
 			if($emp_cod !=''){
@@ -146,14 +146,17 @@ function crearEmpresaAction(){
 				$resupn = mysqli_query($link, $sqlupn);
 
 				//Actualizamos codigo empresa en estados financieros
-				$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod' WHERE def_nemonico='$nemonico'";
+				$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod', emp_cod_rpj='$emp_cod_rpj' WHERE def_nemonico='$nemonico'";
 				$resup1 = mysqli_query($link, $sqlup1);
 
-				$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod' WHERE der_nemonico='$nemonico'";
+				$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod', emp_cod_rpj='$emp_cod_rpj' WHERE der_nemonico='$nemonico'";
 				$resup2 = mysqli_query($link, $sqlup2);
 
 				$sqlup2 = "UPDATE det_indice_financiero SET emp_cod='$emp_cod' WHERE inf_nemonico='$nemonico'";
 				$resup2 = mysqli_query($link, $sqlup2);
+
+				$sqlup3 = "UPDATE ultimos_beneficios SET emp_cod='$emp_cod' WHERE ub_nemonico='$nemonico'";
+				$resup3 = mysqli_query($link, $sqlup3);
 			}
 
 			$contador ++;
@@ -165,14 +168,17 @@ function crearEmpresaAction(){
 			$resupn = mysqli_query($link, $sqlupn);
 
 			//Actualizamos codigo empresa en estados financieros
-			$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod' WHERE def_nemonico='$nemonico'";
+			$sqlup1 = "UPDATE det_estado_financiero SET emp_cod='$emp_cod', emp_cod_rpj='$emp_cod_rpj' WHERE def_nemonico='$nemonico'";
 			$resup1 = mysqli_query($link, $sqlup1);
 
-			$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod' WHERE der_nemonico='$nemonico'";
+			$sqlup2 = "UPDATE det_estado_resultado SET emp_cod='$emp_cod', emp_cod_rpj='$emp_cod_rpj' WHERE der_nemonico='$nemonico'";
 			$resup2 = mysqli_query($link, $sqlup2);
 
 			$sqlup2 = "UPDATE det_indice_financiero SET emp_cod='$emp_cod' WHERE inf_nemonico='$nemonico'";
 			$resup2 = mysqli_query($link, $sqlup2);
+
+			$sqlup3 = "UPDATE ultimos_beneficios SET emp_cod='$emp_cod' WHERE ub_nemonico='$nemonico'";
+			$resup3 = mysqli_query($link, $sqlup3);
 		}
 	}
 
