@@ -22,7 +22,7 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cef_nemonico = $_GET['cef_nemonico'];
+	$cef_emp_cod = $_GET['cef_emp_cod'];
 	$cef_anio = $_GET['cef_anio'];
 	$cef_peri = $_GET['cef_peri'];
 	$cef_tipo = $_GET['cef_tipo'];
@@ -33,19 +33,19 @@ function listarAction(){
 			INNER JOIN det_estado_financiero d ON(c.cef_cod=d.cef_cod AND c.cef_cod_bvl=d.cef_cod_bvl)
 			WHERE c.cef_stat='10'";
 
-	if ($cef_nemonico != '') { $sql .= " AND d.def_nemonico='$cef_nemonico'";}
+	if ($cef_emp_cod != '') { $sql .= " AND d.emp_cod='$cef_emp_cod'";}
 	if ($cef_anio != '') { $sql .= " AND d.def_anio='$cef_anio'";}
 	if ($cef_peri != '') { $sql .= " AND d.def_peri='$cef_peri'";}
 	if ($cef_tipo != '') { $sql .= " AND d.def_tipo='$cef_tipo'";}
 	if ($cef_trim != '') { $sql .= " AND d.def_trim='$cef_trim'";}
 
-	$sql .= " ORDER BY c.cef_cod, def_nemonico ASC";
+	$sql .= " ORDER BY c.cef_cod ASC";
 	$res = mysqli_query($link, $sql);
 
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT em.emp_nomb FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.nemonico='$cef_nemonico'";
+	$sqlem = "SELECT em.emp_nomb FROM empresa em WHERE em.emp_cod='$cef_emp_cod'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
 	$nombre_empresa = $rowem['emp_nomb'];
@@ -133,7 +133,7 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
+	$sql = "SELECT * FROM empresa WHERE emp_cod_bvl!='' AND emp_cod_rpj!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	$tri_auto = 1;
@@ -162,15 +162,14 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	
 	while($row = mysqli_fetch_array($res)){
 		
-		$new_codigo = $row['cod_emp_bvl'];
-		$new_nemonico = $row['nemonico'];
-		$imp_sit_fin = $row['imp_sit_fin'];
+		$emp_cod_bvl = $row['emp_cod_bvl'];
+		$emp_cod = $row['emp_cod'];
+		$emp_cod_rpj = $row['emp_cod_rpj'];
 		$razon_social = "";
 		$cef_fech_crea = date('Y-m-d');
 		$cef_hora_crea = date('H:i:s');
 
-		//$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
-		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$cef_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$cef_form&Tipo1=$cef_peri&Tipo2=$cef_tipo&Dsc_Correlativo=0000&Secuencia=0";
+		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$cef_anio&Trimestre=$cef_trim&Rpj=$emp_cod_rpj&RazoSoci=$razon_social&TipoEEFF=$cef_form&Tipo1=$cef_peri&Tipo2=$cef_tipo&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
 
 		if (!empty($html)) {
@@ -236,14 +235,14 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 						}
 
 						//Insertamos detalle
-						$sqlvd = "SELECT cef_cod, cef_cod_bvl FROM det_estado_financiero WHERE cef_cod='$cef_cod' AND cef_cod_bvl='$cef_cod_bvl' AND def_nemonico='$new_nemonico' AND def_peri='$cef_peri' AND def_trim='$cef_trim' AND def_anio='$cef_anio' AND def_tipo='$cef_tipo' AND def_form='$cef_form' LIMIT 1";
+						$sqlvd = "SELECT cef_cod, cef_cod_bvl FROM det_estado_financiero WHERE cef_cod='$cef_cod' AND cef_cod_bvl='$cef_cod_bvl' AND emp_cod='$emp_cod' AND def_peri='$cef_peri' AND def_trim='$cef_trim' AND def_anio='$cef_anio' AND def_tipo='$cef_tipo' AND def_form='$cef_form' LIMIT 1";
 						$resvd = mysqli_query($link, $sqlvd);
 						$rowvd = mysqli_fetch_array($resvd);
 						$cef_cod_det = $rowvd['cef_cod'];
 
 						if($cef_cod_det == ''){
-							$sqlinc = "INSERT INTO det_estado_financiero(cef_cod,cef_cod_bvl,def_nemonico,def_cab_det,def_val_de, def_val_ha,def_peri,def_trim,def_anio,def_tipo,def_form,def_fech_crea,def_hora_crea)VALUES
-							('$cef_cod','$cef_cod_bvl','$new_nemonico','$cef_cab_det','$def_val_de','$def_val_ha','$cef_peri','$cef_trim','$cef_anio','$cef_tipo','$cef_form','$cef_fech_crea','$cef_hora_crea')";
+							$sqlinc = "INSERT INTO det_estado_financiero(cef_cod,cef_cod_bvl,emp_cod,def_cab_det,def_val_de, def_val_ha,def_peri,def_trim,def_anio,def_tipo,def_form,def_fech_crea,def_hora_crea,emp_cod_rpj)VALUES
+							('$cef_cod','$cef_cod_bvl','$emp_cod','$cef_cab_det','$def_val_de','$def_val_ha','$cef_peri','$cef_trim','$cef_anio','$cef_tipo','$cef_form','$cef_fech_crea','$cef_hora_crea','$emp_cod_rpj')";
 							$resinc = mysqli_query($link, $sqlinc) or die(mysqli_error($link));
 						}
 
@@ -259,12 +258,12 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 
 function importarManualAction(){
 
-	$cef_nemonico = $_GET['cef_nemonico'];
+	$cef_emp_cod = $_GET['cef_emp_cod'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($cef_nemonico !=''){
-		$condicion .= " AND nemonico='$cef_nemonico'";
+	if($cef_emp_cod !=''){
+		$condicion .= " AND emp_cod='$cef_emp_cod'";
 	}
 
 	importarEstadoFinanciero($ruta, $condicion, 'manual');

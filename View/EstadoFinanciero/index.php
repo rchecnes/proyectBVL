@@ -23,7 +23,7 @@
 
 			importarInformacionEstadoFinanciero = function(){
 
-				var cef_nemonico = $("#cef_nemonico").val();
+				var cef_emp_cod = $("#cef_emp_cod").val();
 				var cef_tipo = $("#cef_tipo").val();
 				var cef_anio = $("#cef_anio").val();
 				var cef_trim = $("#cef_trim").val();
@@ -41,7 +41,7 @@
 					$.ajax({
 						type:'GET',
 						url: '../Controller/'+estados[es_fi]+'.php?accion=importarmanual',
-						data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
+						data:{cef_emp_cod:cef_emp_cod,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
 						success:function(data){
 							//$("#loading").hide();
 							//$('#importar_estado').removeAttr('disabled');						
@@ -64,7 +64,7 @@
 				$("#loading").show();
 				$('#importar_estado').attr('disabled','disabled');
 
-				var cef_nemonico = $("#cef_nemonico").val();
+				var cef_emp_cod = $("#cef_emp_cod").val();
 				var cef_tipo = $("#cef_tipo").val();
 				var cef_anio = $("#cef_anio").val();
 				var cef_trim = $("#cef_trim").val();
@@ -78,7 +78,7 @@
 				$.ajax({
 					type:'GET',
 					url: '../Controller/'+ruta+'.php?accion=listar',
-					data:{cef_nemonico:cef_nemonico,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
+					data:{cef_emp_cod:cef_emp_cod,cef_tipo:cef_tipo,cef_anio:cef_anio,cef_trim:cef_trim,cef_peri:cef_peri},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -180,14 +180,14 @@
 						</div>
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label>Nemonico:</label>
-								<?php   
+								<label>Empresa:</label>
+								<?php
 									$params = array(
-										'select' => array('id'=>'cef_nemonico', 'name'=>'cef_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT ne.nemonico,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
+										'select' => array('id'=>'cef_emp_cod', 'name'=>'cef_emp_cod', 'class'=>'form-control'),
+										'sql'    => "SELECT em.emp_cod,em.emp_nomb FROM empresa em WHERE em.emp_stdo=1 AND em.emp_cod_rpj!=''",
+										'attrib' => array('value'=>'emp_cod','desc'=>'emp_cod,emp_nomb', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
-										'defect' => 'GRAMONC1',
+										'defect' => '1007',//Alicorp
 										'edit'   => '',
 										'enable' => 'enable'
 									);
@@ -254,14 +254,14 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label>Nemonico:</label>
+								<label>Empresa:</label>
 								<?php   
 									$params = array(
-										'select' => array('id'=>'cefa_nemonico', 'name'=>'cefa_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT ne.nemonico,em.emp_cod,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
+										'select' => array('id'=>'cefa_emp_cod', 'name'=>'cefa_emp_cod', 'class'=>'form-control'),
+										'sql'    => "SELECT em.emp_cod,em.emp_nomb FROM empresa em WHERE em.emp_stdo=1 AND em.emp_cod_rpj!=''",
+										'attrib' => array('value'=>'emp_cod','desc'=>'emp_cod,emp_nomb', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
-										'defect' => 'GRAMONC1',
+										'defect' => '1007',//Alicorp
 										'edit'   => '',
 										'enable' => 'enable'
 									);
@@ -302,14 +302,14 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label>Nemonico:</label>
-								<?php   
+								<label>Empresa:</label>
+								<?php
 									$params = array(
-										'select' => array('id'=>'cara_nemonico', 'name'=>'cara_nemonico', 'class'=>'form-control'),
-										'sql'    => "SELECT ne.nemonico,em.emp_cod,em.emp_nomb,ne.moneda FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.estado=1 AND ne.imp_sit_fin!=''",
-										'attrib' => array('value'=>'nemonico','desc'=>'nemonico,emp_nomb,moneda', 'concat'=>' - ','descextra'=>''),
+										'select' => array('id'=>'cera_emp_cod', 'name'=>'cera_emp_cod', 'class'=>'form-control'),
+										'sql'    => "SELECT em.emp_cod,em.emp_nomb FROM empresa em WHERE em.emp_stdo=1 AND em.emp_cod_rpj!=''",
+										'attrib' => array('value'=>'emp_cod','desc'=>'emp_cod,emp_nomb', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
-										'defect' => 'GRAMONC1',
+										'defect' => '1007',//Alicorp
 										'edit'   => '',
 										'enable' => 'enable'
 									);

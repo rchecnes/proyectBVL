@@ -14,7 +14,7 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$der_nemonico = $_GET['cef_nemonico'];
+	$der_emp_cod = $_GET['cef_emp_cod'];
 	$der_anio = $_GET['cef_anio'];
 	$der_peri = $_GET['cef_peri'];
 	$der_tipo = $_GET['cef_tipo'];
@@ -25,7 +25,7 @@ function listarAction(){
 			INNER JOIN det_estado_resultado d ON(c.cer_cod=d.der_cod AND c.cer_cod_bvl=d.der_cod_bvl)
 			WHERE c.cer_stat='10'";
 
-	if ($der_nemonico != '') { $sql .= " AND d.der_nemonico='$der_nemonico'";}
+	if ($der_emp_cod != '') { $sql .= " AND d.emp_cod='$der_emp_cod'";}
 	if ($der_anio != '') { $sql .= " AND d.der_anio='$der_anio'";}
 	if ($der_peri != '') { $sql .= " AND d.der_peri='$der_peri'";}
 	if ($der_tipo != '') { $sql .= " AND d.der_tipo='$der_tipo'";}
@@ -37,7 +37,7 @@ function listarAction(){
 	$nro_reg = mysqli_num_rows($res);
 
 	//Nombre de la empresa sola
-	$sqlem = "SELECT em.emp_nomb FROM nemonico ne LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE ne.nemonico='$der_nemonico'";
+	$sqlem = "SELECT em.emp_nomb FROM empresa em WHERE em.emp_cod='$der_emp_cod'";
 	$resem = mysqli_query($link, $sqlem);
 	$rowem = mysqli_fetch_array($resem);
 	$nombre_empresa = $rowem['emp_nomb'];
@@ -93,7 +93,7 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM nemonico WHERE cod_emp_bvl!='' AND imp_sit_fin!='' $condicion";
+	$sql = "SELECT * FROM empresa WHERE emp_cod_bvl!='' AND emp_cod_rpj!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
 	$tri_auto = 1;
@@ -122,15 +122,15 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	
 	while($row = mysqli_fetch_array($res)){
 		
-		$new_codigo = $row['cod_emp_bvl'];
-		$new_nemonico = $row['nemonico'];
-		$imp_sit_fin = $row['imp_sit_fin'];
+		$emp_cod_bvl = $row['emp_cod_bvl'];
+		$emp_cod = $row['emp_cod'];
+		$emp_cod_rpj = $row['emp_cod_rpj'];
 		$razon_social = "";
 		$cer_fech_crea = date('Y-m-d');
 		$cer_hora_crea = date('H:i:s');
 
 		//$url  = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=2019&Trimestre=3&Rpj=023106&RazoSoci=GRANA%20Y%20MONTERO%20SAA&TipoEEFF=GYP&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0";
-		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$der_anio&Trimestre=$der_trim&Rpj=$imp_sit_fin&RazoSoci=$razon_social&TipoEEFF=$der_form&Tipo1=$der_peri&Tipo2=$der_tipo&Dsc_Correlativo=0000&Secuencia=0";
+		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$der_anio&Trimestre=$der_trim&Rpj=$emp_cod_rpj&RazoSoci=$razon_social&TipoEEFF=$der_form&Tipo1=$der_peri&Tipo2=$der_tipo&Dsc_Correlativo=0000&Secuencia=0";
 		$html = file_get_contents_curl($url);
 
 		if (!empty($html)) {
@@ -204,14 +204,14 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 						}
 
 						//Insertamos detalle
-						$sqlvd = "SELECT der_cod, der_cod_bvl FROM det_estado_resultado WHERE der_cod='$cer_cod' AND der_cod_bvl='$cer_cod_bvl' AND der_nemonico='$new_nemonico' AND der_peri='$der_peri' AND der_trim='$der_trim' AND der_anio='$der_anio' AND der_tipo='$der_tipo' AND der_form='$der_form' LIMIT 1";
+						$sqlvd = "SELECT der_cod, der_cod_bvl FROM det_estado_resultado WHERE der_cod='$cer_cod' AND der_cod_bvl='$cer_cod_bvl' AND emp_cod='$emp_cod' AND der_peri='$der_peri' AND der_trim='$der_trim' AND der_anio='$der_anio' AND der_tipo='$der_tipo' AND der_form='$der_form' LIMIT 1";
 						$resvd = mysqli_query($link, $sqlvd);
 						$rowvd = mysqli_fetch_array($resvd);
 						$der_cod_det = $rowvd['der_cod'];
 
 						if($der_cod_det == ''){
-							$sqlinc = "INSERT INTO det_estado_resultado(der_cod,der_cod_bvl,der_nemonico,der_cab_det,der_val_tr1,der_val_tr2,der_val_tr3,der_val_tr4,der_peri,der_trim,der_anio,der_tipo,der_form,der_fech_crea,der_hora_crea,der_val1_vac,der_val2_vac,der_val3_vac,der_val4_vac)VALUES
-							('$cer_cod','$cer_cod_bvl','$new_nemonico','$cer_cab_det','$der_val_tr1','$der_val_tr2','$der_val_tr3','$der_val_tr4','$der_peri','$der_trim','$der_anio','$der_tipo','$der_form','$cer_fech_crea','$cer_hora_crea','$der_val1_vac','$der_val2_vac','$der_val3_vac','$der_val4_vac')";
+							$sqlinc = "INSERT INTO det_estado_resultado(der_cod,der_cod_bvl,emp_cod,der_cab_det,der_val_tr1,der_val_tr2,der_val_tr3,der_val_tr4,der_peri,der_trim,der_anio,der_tipo,der_form,der_fech_crea,der_hora_crea,der_val1_vac,der_val2_vac,der_val3_vac,der_val4_vac,emp_cod_bvl)VALUES
+							('$cer_cod','$cer_cod_bvl','$emp_cod','$cer_cab_det','$der_val_tr1','$der_val_tr2','$der_val_tr3','$der_val_tr4','$der_peri','$der_trim','$der_anio','$der_tipo','$der_form','$cer_fech_crea','$cer_hora_crea','$der_val1_vac','$der_val2_vac','$der_val3_vac','$der_val4_vac','$emp_cod_bvl')";
 							$resinc = mysqli_query($link, $sqlinc) or die(mysqli_error($link));
 						}
 
@@ -227,12 +227,12 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 
 function importarManualAction(){
 
-	$cef_nemonico = $_GET['cef_nemonico'];
+	$cef_emp_cod = $_GET['cef_emp_cod'];
 	$ruta = "..";
 
 	$condicion = "";
-	if($cef_nemonico !=''){
-		$condicion .= " AND nemonico='$cef_nemonico'";
+	if($cef_emp_cod !=''){
+		$condicion .= " AND emp_cod='$cef_emp_cod'";
 	}
 
 	importarEstadoResultado($ruta, $condicion, 'manual');
