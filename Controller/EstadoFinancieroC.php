@@ -277,7 +277,7 @@ function importarAutomaticolAction(){
 	importarEstadoFinanciero($ruta, $condicion, 'automatico');
 }
 
-function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tipo){
+function getImpoEstadoResAnual($link, $emp_cod, $cod_bvl, $anio, $periodo, $tipo){
 
 	$new_cod_bvl = '';
 	$exp_cod_bvl = explode('@',$cod_bvl);
@@ -286,12 +286,12 @@ function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tip
 	}
 	$new_cod_bvl = trim($new_cod_bvl,',');
 
-	$sql1 = "SELECT der_val_tr1 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
+	$sql1 = "SELECT der_val_tr1 FROM det_estado_resultado WHERE emp_cod='$emp_cod' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
 	$res1 = mysqli_query($link, $sql1);
 	$row1 = mysqli_fetch_array($res1);
 
 	$new_anio = $anio + 1;
-	$sql2 = "SELECT der_val_tr2 FROM det_estado_resultado WHERE der_nemonico='$nemonico' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$new_anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
+	$sql2 = "SELECT der_val_tr2 FROM det_estado_resultado WHERE emp_cod='$emp_cod' AND der_cod_bvl IN($new_cod_bvl) AND der_anio='$new_anio' AND der_peri='$periodo' AND der_tipo='$tipo'";
 	$res2 = mysqli_query($link, $sql2);
 	$row2 = mysqli_fetch_array($res2);
 
@@ -300,7 +300,7 @@ function getImpoEstadoResAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tip
 	return ($impo_ret != '' && $impo_ret != 0)?$impo_ret:0;
 }
 
-function getImpoEstadoFinAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tipo){
+function getImpoEstadoFinAnual($link, $emp_cod, $cod_bvl, $anio, $periodo, $tipo){
 
 	$new_cod_bvl = '';
 	$exp_cod_bvl = explode('@',$cod_bvl);
@@ -309,12 +309,12 @@ function getImpoEstadoFinAnual($link, $nemonico, $cod_bvl, $anio, $periodo, $tip
 	}
 	$new_cod_bvl = trim($new_cod_bvl,',');
 
-	$sql1 = "SELECT def_val_de FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$sql1 = "SELECT def_val_de FROM det_estado_financiero WHERE emp_cod='$emp_cod' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
 	$res1 = mysqli_query($link, $sql1);
 	$row1 = mysqli_fetch_array($res1);
 
 	$new_anio = $anio + 1;
-	$sql2 = "SELECT def_val_ha FROM det_estado_financiero WHERE def_nemonico='$nemonico' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$new_anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
+	$sql2 = "SELECT def_val_ha FROM det_estado_financiero WHERE emp_cod='$emp_cod' AND cef_cod_bvl IN($new_cod_bvl) AND def_anio='$new_anio' AND def_peri='$periodo' AND def_tipo='$tipo'";
 	$res2 = mysqli_query($link, $sql2);
 	$row2 = mysqli_fetch_array($res2);
 
@@ -328,7 +328,7 @@ function analisisAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$cefa_nemonico = $_GET['cefa_nemonico'];
+	$cefa_emp_cod = $_GET['cefa_emp_cod'];
 	$cefa_anio = $_GET['cefa_anio'];
 	$cefa_tipo = $_GET['cefa_tipo'];
 	$cant_coslpan = 0;//(date('Y')-1)-$cefa_anio;
@@ -344,7 +344,7 @@ function analisisAction(){
 	foreach($anio_arr as $anio){
 
 		//Ventas
-		$impo_ventas = getImpoEstadoResAnual($link, $cefa_nemonico, '2D01ST@2F01ST@2E0201@2A01ST', $anio, 'A',$cefa_tipo);
+		$impo_ventas = getImpoEstadoResAnual($link, $cefa_emp_cod, '2D01ST@2F01ST@2E0201@2A01ST', $anio, 'A',$cefa_tipo);
 		if($impo_ventas > 0){
 
 			$cant_coslpan ++;
@@ -356,32 +356,32 @@ function analisisAction(){
 			$ventas_grfco[] = (double)number_format($impo_ventas,0,'','');
 
 			//Utilidad Bruta
-			$impo_util_bru = getImpoEstadoResAnual($link, $cefa_nemonico, '2D02ST@2F2401@2E0901', $anio, 'A',$cefa_tipo);
+			$impo_util_bru = getImpoEstadoResAnual($link, $cefa_emp_cod, '2D02ST@2F2401@2E0901', $anio, 'A',$cefa_tipo);
 			$util_bru_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_bru);
 			$util_bru_grfco[] = (double)number_format($impo_util_bru,0,'','');
 
 			//Utilidad Operativa
-			$impo_util_ope = getImpoEstadoResAnual($link, $cefa_nemonico, '2D03ST@2F2801@2E1501@2A03ST', $anio, 'A',$cefa_tipo);
+			$impo_util_ope = getImpoEstadoResAnual($link, $cefa_emp_cod, '2D03ST@2F2801@2E1501@2A03ST', $anio, 'A',$cefa_tipo);
 			$util_ope_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_ope);
 			$util_ope_grfco[] = (double)number_format($impo_util_ope,0,'','');
 
 			//Utilidad Neta
-			$impo_util_net = getImpoEstadoResAnual($link, $cefa_nemonico, '2D07ST@2F1901@2E1509@2A07ST', $anio, 'A',$cefa_tipo);
+			$impo_util_net = getImpoEstadoResAnual($link, $cefa_emp_cod, '2D07ST@2F1901@2E1509@2A07ST', $anio, 'A',$cefa_tipo);
 			$util_net_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_util_net);
 			$util_net_grfco[] = (double)number_format($impo_util_net,0,'','');
 
 			//Total Pasivo
-			$impo_pasi = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D040T@1F3101@1E0501@1A040T', $anio, 'A',$cefa_tipo);
+			$impo_pasi = getImpoEstadoFinAnual($link, $cefa_emp_cod, '1D040T@1F3101@1E0501@1A040T', $anio, 'A',$cefa_tipo);
 			$tot_pas_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pasi);
 			$tot_pas_grfco[] = (double)number_format($impo_pasi,0,'','');
 
 			//Total Patrimonio
-			$impo_pat = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D07ST@1F3306@1E0901@1A07ST', $anio, 'A',$cefa_tipo);
+			$impo_pat = getImpoEstadoFinAnual($link, $cefa_emp_cod, '1D07ST@1F3306@1E0901@1A07ST', $anio, 'A',$cefa_tipo);
 			$tot_pat_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_pat);
 			$tot_pat_grfco[] = (double)number_format($impo_pat,0,'','');
 
 			//Total Activo
-			$impo_act = getImpoEstadoFinAnual($link, $cefa_nemonico, '1D020T@1F2001@1E02ST@1A020T', $anio, 'A',$cefa_tipo);
+			$impo_act = getImpoEstadoFinAnual($link, $cefa_emp_cod, '1D020T@1F2001@1E02ST@1A020T', $anio, 'A',$cefa_tipo);
 			$tot_act_arr[$anio] = array('anio'=>$anio,'impo'=>$impo_act);
 			$tot_act_grfco[] = (double)number_format($impo_act,0,'','');
 

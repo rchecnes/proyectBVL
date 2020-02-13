@@ -104,14 +104,14 @@
 
 				$("#loading_cefa").show();
 
-				var cefa_nemonico = $("#cefa_nemonico").val();
+				var cefa_emp_cod = $("#cefa_emp_cod").val();
 				var cefa_anio = $("#cefa_anio").bootstrapSlider('getValue');
 				var cefa_tipo = $("#cefa_tipo").val();
 
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoFinancieroC.php?accion=analisis',
-					data:{cefa_nemonico:cefa_nemonico, cefa_anio:cefa_anio, cefa_tipo:cefa_tipo},
+					data:{cefa_emp_cod:cefa_emp_cod, cefa_anio:cefa_anio, cefa_tipo:cefa_tipo},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -124,14 +124,14 @@
 				
 				$("#loading_cera").show();
 
-				var cara_nemonico = $("#cara_nemonico").val();
+				var cara_emp_cod = $("#cara_emp_cod").val();
 				var cara_tri = $("input:radio[name='cara_tri']:checked").val();
 				var cara_tipo = $("#cara_tipo").val();
 				//input:radio[name=edad]:checked
 				$.ajax({
 					type:'GET',
 					url: '../Controller/EstadoResultadoC.php?accion=analisis',
-					data:{cara_nemonico:cara_nemonico, cara_tri:cara_tri, cara_tipo:cara_tipo},
+					data:{cara_emp_cod:cara_emp_cod, cara_tri:cara_tri, cara_tipo:cara_tipo},
 					success:function(data){
 
 						$("#div_detalle").html(data);
@@ -305,7 +305,7 @@
 								<label>Empresa:</label>
 								<?php
 									$params = array(
-										'select' => array('id'=>'cera_emp_cod', 'name'=>'cera_emp_cod', 'class'=>'form-control'),
+										'select' => array('id'=>'cara_emp_cod', 'name'=>'cara_emp_cod', 'class'=>'form-control'),
 										'sql'    => "SELECT em.emp_cod,em.emp_nomb FROM empresa em WHERE em.emp_stdo=1 AND em.emp_cod_rpj!=''",
 										'attrib' => array('value'=>'emp_cod','desc'=>'emp_cod,emp_nomb', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
