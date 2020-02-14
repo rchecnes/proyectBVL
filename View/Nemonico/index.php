@@ -98,13 +98,13 @@
 
 		        $.ajax({
 		            type:'GET',
-		            url: '../Controller/EmpresaC.php?accion=importarmanual&tipo='+tipo,
+		            url: '../Controller/NemonicoC.php?accion=importarmanual&tipo='+tipo,
 					dataType: 'json',
 		            success:function(data){
 
 						$("#loading").hide();
 
-						window.location.assign("../Controller/EmpresaC.php?accion=index");	
+						window.location.assign("../Controller/NemonicoC.php?accion=index");	
 		            }
 		        });
 		    }

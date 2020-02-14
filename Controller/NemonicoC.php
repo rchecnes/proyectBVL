@@ -221,7 +221,7 @@ function savImportedAction($data){
 	$link = getConexion();
 	$dataBVL = $data;
 
-	$max = "SELECT max(cod_emp) AS max FROM empresa";
+	$max = "SELECT max(ne_cod) AS max FROM nemonico";
 	$respmax = mysqli_query($link,$max);
 	$rowmax = mysqli_fetch_array($respmax);
 	$codigo = $rowmax['max'];
@@ -240,7 +240,7 @@ function savImportedAction($data){
 
 		if($nemonico!=''){
 
-			$sqlval = "SELECT COUNT(cod_emp)AS cantidad FROM empresa WHERE UPPER(nemonico)='$nemonico'";
+			$sqlval = "SELECT COUNT(ne_cod)AS cantidad FROM nemonico WHERE UPPER(nemonico)='$nemonico'";
 			$resval = mysqli_query($link, $sqlval);
 			$rowval = mysqli_fetch_array($resval);
 			if($rowval['cantidad']<=0){
@@ -253,9 +253,17 @@ function savImportedAction($data){
 				$moneda    = $f['mon'];
 				$estado    = 1;
 
-				//$del .= "'".$nemonimo."',";
-				
 				$sql .= "('$codigo','$nombre','$nemonico','$sector','$segmento','$moneda','$estado', '$fe_impo'),";
+				
+				//Creamos nuevas empresas
+				$maxemp = "SELECT max(emp_cod) AS maxemp FROM empresa";
+				$respmax = mysqli_query($link,$maxemp);
+				$rowmax = mysqli_fetch_array($respmax);
+				$new_emp_cod   	= ($rowmax['maxemp']!='')?$rowmax['maxemp']+1:1000;
+
+				//Insertamos empresa
+				$sqlem  = "INSERT INTO empresa(emp_cod,emp_nomb,sec_cod,emp_stdo) VALUES('$new_emp_cod','$nombre','$sector','1')";
+				$resem = mysqli_query($link, $sqlem);
 			}
 		}
 		
@@ -268,7 +276,7 @@ function savImportedAction($data){
 		//echo $delete."<br>";
 		//$respdel = mysqli_query($link,$delete);
 
-		$insert = "INSERT INTO empresa (cod_emp,nombre,nemonico,cod_sector,segmento,moneda,estado,fe_impo) VALUES ".trim($sql,',').";";
+		$insert = "INSERT INTO nemonico (ne_cod,nombre,nemonico,cod_sector,segmento,moneda,estado,fe_impo) VALUES ".trim($sql,',').";";
 		$resp    = mysqli_query($link,$insert);
 	}
 	
@@ -292,13 +300,17 @@ function updateImportedAction($data){
 			
 			$cod_emp_bvl = $f['cod'];
 
-			$sqlval = "SELECT cod_emp_bvl FROM empresa WHERE UPPER(nemonico)='$nemonico'";
+			$sqlval = "SELECT cod_emp_bvl FROM nemonico WHERE UPPER(nemonico)='$nemonico'";
 			$resval = mysqli_query($link, $sqlval);
 			$rowval = mysqli_fetch_array($resval);
 
 			if($rowval['cod_emp_bvl']==''){
 
-				$update = "UPDATE empresa SET cod_emp_bvl='$cod_emp_bvl' WHERE UPPER(nemonico)='$nemonico'";
+				$update = "UPDATE nemonico SET cod_emp_bvl='$cod_emp_bvl' WHERE UPPER(nemonico)='$nemonico'";
+				$resp   = mysqli_query($link,$update);
+
+				$emp_cod = $rowval['emp_cod'];
+				$update = "UPDATE empresa SET emp_cod_bvl='$cod_emp_bvl' WHERE emp_cod='$emp_cod'";
 				$resp   = mysqli_query($link,$update);
 
 			}
@@ -313,7 +325,7 @@ function updateImportedAction($data){
 function importarManualAction(){
 
 	include('../Util/simple_html_dom_php5.6.php');
-	$url = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
+	$url = "https://www.bvl.com.pe/includes/cotizaciones_todas.dat";
 
 	$html = file_get_contents_curl($url);
 	
