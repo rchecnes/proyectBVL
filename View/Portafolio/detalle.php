@@ -2,7 +2,7 @@
 
 $contador = 0;
 while ($w = mysqli_fetch_array($res)) {
-	$cod_emp      = $w['cod_emp'];
+	$ne_cod      = $w['ne_cod'];
 	$cod_user     = $w['cod_user'];
 	$por_fech     = $w['por_fech'];
 	$por_cod      = $w['por_cod'];
@@ -21,7 +21,7 @@ while ($w = mysqli_fetch_array($res)) {
 	$acciones .= "";
 	?>
 
-	<tr class='port_detalle_<?=$cod_emp?>'>
+	<tr class='port_detalle_<?=$ne_cod?>'>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		<td><?=$w['por_fech'].' '.$w['por_hora']?></td>
@@ -33,9 +33,9 @@ while ($w = mysqli_fetch_array($res)) {
 		<td align="right"><?=$por_prec_obj?></td>
 		<td align="right"><?=$por_gan_net?></td>
 		<td>
-			<a href='../Controller/PortafolioC.php?accion=delete&por_cod=<?=$por_cod?>&cod_emp=<?=$cod_emp?>&cod_user=<?=$cod_user?>&por_fech=<?=$por_fech?>&todo=no' title='Eliminar'><i class='fa fa-trash-o fa-2x color-red' aria-hidden='true'></i>
+			<a href='../Controller/PortafolioC.php?accion=delete&por_cod=<?=$por_cod?>&ne_cod=<?=$ne_cod?>&cod_user=<?=$cod_user?>&por_fech=<?=$por_fech?>&todo=no' title='Eliminar'><i class='fa fa-trash-o fa-2x color-red' aria-hidden='true' onclick="return confirm('¿Esta seguro de eliminar el registro?')"></i>
 			</a>&nbsp;&nbsp;
-			<a href='../Controller/SimuladorC.php?accion=index&por_cod=<?=$por_cod?>&oper=ver_simu&cod_emp=<?=$cod_emp?>&cod_grupo=<?=$cod_grupo?>&mont_est=<?=$w['por_mont_est']?>&prec=<?=$w['por_prec']?>&cant=<?=$w['por_cant']?>&rent_obj=<?=$w['por_rent_obj']?>&prec_act=<?=$w['por_prec_obj']?>' title='Ver en simulador'>
+			<a href='../Controller/SimuladorC.php?accion=index&por_cod=<?=$por_cod?>&oper=ver_simu&ne_cod=<?=$ne_cod?>&por_fech=<?=$por_fech?>&cod_grupo=<?=$cod_grupo?>&mont_est=<?=$w['por_mont_est']?>&prec=<?=$w['por_prec']?>&cant=<?=$w['por_cant']?>&rent_obj=<?=$w['por_rent_obj']?>&prec_act=<?=$w['por_prec_obj']?>' title='Ver en simulador'>
 			    <i class='fa fa-share fa-2x color-black' aria-hidden='true'></i> 
 			</a>
 		</td>

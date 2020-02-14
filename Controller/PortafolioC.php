@@ -75,7 +75,7 @@ function addPortafolioAction(){
 	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
 	$prec      = (double)str_replace(',', '', $_POST['precio']);
 	$mont_neg  = (double)str_replace(',', '', $_POST['mont_neg']);
-	$fecha     = date('Y-m-d');
+	$fecha     = (isset($_POST['por_fech']))?$_POST['por_fech']:date('Y-m-d');
 	$hora      = date('H:i:s');
 	$cod_user  = $_SESSION['cod_user'];
 	$cod_grupo = $_POST['cod_grupo'];
@@ -100,7 +100,7 @@ function updatePortafolioAction(){
 	$cant      = (int)str_replace(',', '', $_POST['cantidad']);
 	$prec      = (double)str_replace(',', '', $_POST['precio']);
 	$mont_neg  = (double)str_replace(',', '', $_POST['mont_neg']);
-	$fecha     = date('Y-m-d');
+	$fecha     = (isset($_POST['por_fech']))?$_POST['por_fech']:date('Y-m-d');
 	$hora      = date('H:i:s');
 	$cod_user  = $_SESSION['cod_user'];
 	$cod_grupo = $_POST['cod_grupo'];
@@ -109,7 +109,7 @@ function updatePortafolioAction(){
 	$por_prec_obj = (double)str_replace(',', '', $_POST['prec_act']);
 	$gan_neta = (double)str_replace(',', '', $_POST['gan_neta']);
 
-	$update = "UPDATE nemonico_portafolio SET por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_obj='$por_prec_obj',por_gan_net='$gan_neta', por_mont_neg='$mont_neg'  WHERE por_cod='$por_cod'";
+	$update = "UPDATE nemonico_portafolio SET por_fech='$fecha', por_hora='$hora',por_cant='$cant',por_prec='$prec',por_mont_est='$mont_est',por_rent_obj='$rent_obj',por_prec_obj='$por_prec_obj',por_gan_net='$gan_neta', por_mont_neg='$mont_neg'  WHERE por_cod='$por_cod'";
 	//echo $update;
 	$resp = mysqli_query($link,$update);
 
@@ -131,7 +131,7 @@ function deleteAction(){
 
 	$AND_WHERE = ($todo!='si')?" por_cod='$por_cod' AND":"";
 
-	$sql  = "DELETE FROM nemonico_portafolio WHERE $AND_WHERE ne_cod='$ne_cod' AND cod_user='$cod_user' AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$por_fech'";
+	$sql  = "DELETE FROM nemonico_portafolio WHERE $AND_WHERE ne_cod='$ne_cod' AND cod_user='$cod_user'";// AND DATE_FORMAT(por_fech,'%Y-%m-%d')='$por_fech'
 	$resp = mysqli_query($link,$sql);
 
 	header("location:../Controller/PortafolioC.php?accion=index");

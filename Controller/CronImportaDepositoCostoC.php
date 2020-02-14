@@ -128,15 +128,15 @@ function savDepositoPlazo($link, $data, $dp_emp_id){
 
         $date = date('Y-m-d');
 
-        $delete = "DELETE FROM historico_deposito_plazo WHERE dh_emp_id='$dp_emp_id' AND dh_fecha='$date'";
+        $delete = "DELETE FROM historico_entidad_financiera WHERE dh_emp_id='$dp_emp_id' AND dh_fecha='$date'";
         $respdel = mysqli_query($link, $delete);
 
-        $insert = "INSERT INTO historico_deposito_plazo (dh_emp_id, dh_pono, dh_fecha, dh_sal_prom_d, dh_sal_prom_h, dh_plazo_d, dh_plazo_h, dh_tea, dh_last_update, dh_time, dh_fsd, dh_cost_mant, dh_min_aper, dh_stat) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO historico_entidad_financiera (dh_emp_id, dh_pono, dh_fecha, dh_sal_prom_d, dh_sal_prom_h, dh_plazo_d, dh_plazo_h, dh_tea, dh_last_update, dh_time, dh_fsd, dh_cost_mant, dh_min_aper, dh_stat) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link, $insert);
 
         if($resp){
 
-            $sqlup = "UPDATE empresa_deposito_plazo SET dp_fecha_imcs='$date' WHERE dp_emp_id='$dp_emp_id'";
+            $sqlup = "UPDATE entidad_financiera SET dp_fecha_imcs='$date' WHERE dp_emp_id='$dp_emp_id'";
             $resup = mysqli_query($link, $sqlup);
         }
     }
@@ -151,7 +151,7 @@ function getDepositoPlazo(){
     //global $ruta;
 	$link      = getConexion();
 
-	$sqlemp    = "SELECT * FROM empresa_deposito_plazo WHERE dp_stat='1'";
+	$sqlemp    = "SELECT * FROM entidad_financiera WHERE dp_stat='1'";
 	$respemp   = mysqli_query($link, $sqlemp);
 
     $c = 0;

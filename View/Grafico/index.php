@@ -89,7 +89,7 @@
 
     <div class="tabbable">
         <ul class="nav nav-tabs" id="tabs">
-          <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Montos Por Precio</a></li>
+          <li class="active"><a data-toggle="tab" href="#monto_por_precio">1. Cantidad Por Precio</a></li>
           <li><a data-toggle="tab" href="#analisis_de_precio">2. Análisis De Precio</a></li>
           <li><a data-toggle="tab" href="#cotizacion">3. Cotizaciones</a></li>
         </ul>

@@ -15,9 +15,10 @@ function indexAction(){
 	$cant      = isset($_GET['cant'])?$_GET['cant']:'';
 	$rent_obj  = isset($_GET['rent_obj'])?(float)$_GET['rent_obj']:'500.00';
 	$prec_act  = isset($_GET['prec_act'])?(float)$_GET['prec_act']:'';
-	$cod_emp   = isset($_GET['cod_emp'])?$_GET['cod_emp']:'';
+	$ne_cod   = isset($_GET['ne_cod'])?$_GET['ne_cod']:'';
 	$origen    = isset($_GET['origen'])?$_GET['origen']:'';
 	$cod_grupo = (isset($_GET['cod_grupo']) && $_GET['cod_grupo']!=0)?$_GET['cod_grupo']:'';
+	$por_fech = isset($_GET['por_fech'])?$_GET['por_fech']:date('Y-m-d');
 
 	$cod_user = $_SESSION['cod_user'];
 
@@ -186,23 +187,29 @@ function getEmpresaPorGrupoAction(){
 
 	$cod_grupo = $_GET['cod_grupo'];
 
-	$sql = "SELECT DISTINCT(e.cod_emp), e.nemonico,e.nombre FROM empresa_favorito ef
-			INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
-			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo)
-			WHERE e.estado=1
-			AND ef.est_fab
+	$sql = "SELECT 
+			DISTINCT(n.ne_cod), n.nemonico,e.emp_nomb 
+			FROM empresa_favorito ef 
+			INNER JOIN nemonico n ON(ef.ne_cod=n.ne_cod) 
+			INNER JOIN empresa e ON(n.emp_cod=e.emp_cod) 
+			INNER JOIN user_grupo ug ON(ef.cod_grupo=ug.cod_grupo) 
+			WHERE n.estado=1 
+			AND ef.est_fab 
 			AND ef.cod_user='$cod_user'";
+
 	if ($cod_grupo !='') {
 		$sql .= " AND ef.cod_grupo='$cod_grupo'";
 	}
-	
+	//echo $sql;
 	$resp = mysqli_query($link,$sql);
 
 	$html = '';
 	while ($r=mysqli_fetch_array($resp)) {
-		$html .= '<option value="'.$r['cod_emp'].'">'.$r['nemonico'].' - '.$r['nombre'].'</option>';
+		$html .= '<option value="'.$r['ne_cod'].'">'.$r['nemonico'].' - '.$r['emp_nomb'].'</option>';
 	}
-
+	if($html == ''){
+		$html .= '<option value="#" disabled="disabled" selected>[Ninguno]</option>';
+	}
 	echo $html;
 }
 

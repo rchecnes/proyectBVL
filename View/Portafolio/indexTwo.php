@@ -85,10 +85,10 @@
 			        	<span title="Ver Detalle" class="ver-detalle icon-button" data="<?=$p['ne_cod']?>">
 				            <i class="fa fa-plus-square-o fa-2x" aria-hidden="true"></i>
 				        </span>
-			        	<a href="../Controller/PortafolioC.php?accion=delete&por_cod=''&ne_cod=<?=$p['ne_cod']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>&todo=si" title="Eliminar Todo El historial">
+			        	<a href="../Controller/PortafolioC.php?accion=delete&por_cod=&ne_cod=<?=$p['ne_cod']?>&cod_user=<?=$p['cod_user']?>&por_fech=<?=$p['por_fech']?>&todo=si" title="Eliminar Todo El historial" onclick="return confirm('¿Esta seguro de eliminar todo el historial?')">
 				            <i class="fa fa-trash-o fa-2x color-red" aria-hidden="true"></i> 
 				        </a>&nbsp;&nbsp;
-				        <a href="../Controller/SimuladorC.php?accion=index&por_cod=''&oper=ver_simu&origen=por_cab&ne_cod=<?=$p['ne_cod']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$por_mont_est?>&prec=<?=$por_pre?>&cant=<?=$por_cant?>&rent_obj=<?=$por_gan_net_obj?>&prec_act=<?=$gan_pre_obj?>" title="Ver en simulador">
+				        <a href="../Controller/SimuladorC.php?accion=index&por_cod=&oper=ver_simu&origen=por_cab&ne_cod=<?=$p['ne_cod']?>&por_fech=<?=$p['por_fech']?>&cod_grupo=<?=$p['cod_grupo']?>&mont_est=<?=$por_mont_est?>&prec=<?=$por_pre?>&cant=<?=$por_cant?>&rent_obj=<?=$por_gan_net_obj?>&prec_act=<?=$gan_pre_obj?>" title="Ver en simulador">
 				            <i class="fa fa-share fa-2x color-blue" aria-hidden="true"></i> 
 				        </a>
 			        </td>

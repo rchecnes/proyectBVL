@@ -7,7 +7,7 @@ function indexAction(){
 	$link = getConexion();
 
 	//Buscamos la ultima fecha de actualizacion
-	$sqlfa = "SELECT dh_last_update FROM historico_deposito_plazo WHERE dh_stat=1 GROUP BY dh_last_update ORDER BY dh_last_update DESC";
+	$sqlfa = "SELECT dh_last_update FROM historico_entidad_financiera WHERE dh_stat=1 GROUP BY dh_last_update ORDER BY dh_last_update DESC";
 	$resfa = mysqli_query($link, $sqlfa);
 
 	include('../View/DepositoEmpresa/index.php');
@@ -17,7 +17,7 @@ function listarAction(){
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
-	$sql = "SELECT * FROM empresa_deposito_plazo WHERE dp_stat='1' ORDER BY dp_nomb_emp ASC";
+	$sql = "SELECT * FROM entidad_financiera WHERE dp_stat='1' ORDER BY dp_nomb_emp ASC";
 	$dp_empresa = mysqli_query($link, $sql);
 	$nro_reg = 0;
 	if ($dp_empresa){
@@ -45,7 +45,7 @@ function importarEmpresaAction(){
 
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
-			$sqlin = "INSERT INTO empresa_deposito_plazo(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
+			$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
 			mysqli_query($link, $sqlin);
 		}
 	}

@@ -20,8 +20,8 @@ function listarAction(){
 	$dp_ubicacion = $_GET['dp_ubicacion'];
 	$dp_last_update = $_GET['dp_last_update'];
 
-	$sql = "SELECT * FROM historico_deposito_plazo dh
-			INNER JOIN empresa_deposito_plazo de ON(de.dp_emp_id=dh.dh_emp_id)
+	$sql = "SELECT * FROM historico_entidad_financiera dh
+			INNER JOIN entidad_financiera de ON(de.dp_emp_id=dh.dh_emp_id)
 			WHERE dh.dh_stat='1' AND de.dp_stat='1'";
 	if($dp_plazo_d!=''){
 		//$sql .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";

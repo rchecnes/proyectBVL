@@ -20,7 +20,7 @@
                 <th class="align-center">Rango Inicio</th>
                 <th class="align-center">Rango Final</th>
                 <th class="align-center">Días</th>
-                <th class="align-center">Monto</th>
+                <th class="align-center">Cant. Negda.</th>
             </tr>
 
             <?php if($precio>$max):?>
@@ -110,7 +110,7 @@
         type: 'bar'
     },
     title: {
-        text: 'MONTO NEGOCIADO POR RANGO DE PRECIO'
+        text: 'CANTIDAD NEGOCIADA POR RANGO DE PRECIO'
     },
     subtitle: {
         text: ''
@@ -167,7 +167,7 @@
         enabled: false
     },
     series: [{
-        name: 'MONTO NEGOCIADO (%)',
+        name: 'CANTIDAD NEGOCIADA (%)',
         valueSuffix: ' %',
         groupPadding: 0,
         data: <?=$series?>

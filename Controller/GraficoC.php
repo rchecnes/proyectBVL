@@ -129,7 +129,7 @@ function grafico1Action(){
 			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
+			$sqlm = "SELECT SUM(cz_cantnegda)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 
 		}else{
 
@@ -137,7 +137,7 @@ function grafico1Action(){
 			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
+			$sqlm = "SELECT SUM(cz_cantnegda)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 AND cz_nemo='$nemonico'";
 			
 		}
 		//echo $sqlc;
@@ -462,7 +462,7 @@ function grafico2Action(){
 			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
+			$sqlm = "SELECT SUM(cz_cantnegda)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre <= '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 
 		}else{
 
@@ -470,7 +470,7 @@ function grafico2Action(){
 			$sqlc = "SELECT COUNT(DISTINCT(cz_fecha))AS cant FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 	
 			//Get Monto
-			$sqlm = "SELECT SUM(cz_monto_neg_ori)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
+			$sqlm = "SELECT SUM(cz_cantnegda)AS suma FROM cotizacion WHERE cz_cierre >= '$rango_fin' AND cz_cierre < '$rango_ini' AND cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_cierre > 0 $nemonico";
 			
 		}
 

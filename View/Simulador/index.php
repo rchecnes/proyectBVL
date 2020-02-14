@@ -11,7 +11,7 @@
 		<h3 class="title">Simulador</h3>
 		<div style="border-bottom: 1px solid #aba8a8;">
 			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
 						<label for="inputPassword" class="control-label">Grupo:</label>
 					    <?php
@@ -29,7 +29,7 @@
 					    
 				  	</div>
 				</div>
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<div class="form-group">
 						<label for="inputPassword" class="control-label">Nemonico:</label>
 					    <?php
@@ -43,12 +43,18 @@
 			                    			 WHERE ne.estado=1 AND ef.est_fab AND ef.cod_user='$cod_user' $andwhere",
 			                    'attrib' => array('value'=>'ne_cod','desc'=>'nemonico,emp_nomb', 'concat'=>' - ','descextra'=>''),
 			                    'empty'  => false,
-			                    'defect' => $cod_emp,
+			                    'defect' => $ne_cod,
 			                    'edit'   => '',
 			                    'enable' => 'enable'
 			                );
 					      	Combobox($link, $params);
 					     ?>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<div class="form-group">
+						<label for="fecha_simulacion" class="control-label">Fecha Simulación:</label>
+					    <input type="date" id="por_fech" name="por_fech" class="form-control" value="<?=$por_fech?>">
 					</div>
 				</div>
 				<!--<div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
@@ -255,6 +261,7 @@
 					$("#precio_unitario").attr('disabled','disabled');
 					$("#gan_rent_obj").attr('disabled','disabled');
 					$("#gan_pre_obj").attr('disabled','disabled');
+					$("#por_fech").attr('disabled','disabled');
 				}else{
 					$("#update_portafolio").show();
 				}
@@ -485,6 +492,7 @@
 				var prec_act = $("#gan_pre_obj").val();
 				var gan_neta = $("#res_gan_neta").val();
 				var mont_neg = $("#monto_negociado").val();
+				var por_fech = $("#por_fech").val();
 
 				$("#buscar").attr('disabled','disabled');
 				$("#add_portafolio").attr('disabled','disabled');
@@ -492,7 +500,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=add_portafolio',
-				    data:{ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
+				    data:{ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg,por_fech:por_fech},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');
@@ -515,6 +523,7 @@
 				var prec_act = $("#gan_pre_obj").val();
 				var gan_neta = $("#res_gan_neta").val();
 				var mont_neg = $("#monto_negociado").val();
+				var por_fech = $("#por_fech").val();
 
 				$("#buscar").attr('disabled','disabled');
 				$("#add_portafolio").attr('disabled','disabled');
@@ -522,7 +531,7 @@
 				$.ajax({
 				    type:'POST',
 				    url: '../Controller/PortafolioC.php?accion=update_portafolio',
-				    data:{por_cod:por_cod,ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg},
+				    data:{por_cod:por_cod,ne_cod:ne_cod,cantidad:cantidad,precio:precio,mont_est:mont_est,rent_obj:rent_obj,prec_act:prec_act,gan_neta:gan_neta,cod_grupo:cod_grupo,mont_neg:mont_neg,por_fech:por_fech},
 				    success:function(data){
 
 				    	$("#buscar").removeAttr('disabled');
