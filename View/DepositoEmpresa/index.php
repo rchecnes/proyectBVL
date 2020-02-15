@@ -204,7 +204,7 @@
 
                     $.ajax({
                         type:'GET',
-                        url: '../Controller/DepositoEmpresaC.php?accion=importarEmpresa',
+                        url: '../Controller/DepositoEmpresaC.php?accion=importarmanual',
                         data:{dp_moneda:$("#dp_moneda").val(),dp_valor:$("#dp_valor").val(),dp_plazo:$("#dp_plazo").val(),dp_ubicacion:$("#dp_ubicacion").val(),dp_correo:$("#dp_correo").val()},
                         success:function(data){
 

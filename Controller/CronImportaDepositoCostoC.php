@@ -18,7 +18,7 @@ function fileGetContentDepositoCurl($url) {
     $data = str_get_html($data);
     curl_close( $ch );
     return ($data!='')?$data:"";
- }
+}
 
 function prepararData($data_html){
 
@@ -162,10 +162,11 @@ function getDepositoPlazo(){
 
         //$url = "https://comparabien.com.pe/producto/depositos-plazo/fondesurco-plazo-fijo-mn?prod_id=$dp_emp_id&type=DEPOSITOS";
         $url = "https://comparabien.com.pe//node/$dp_nodo?prod_id=$dp_emp_id&amp;type=DEPOSITOS";
+        
         $data_html = fileGetContentDepositoCurl($url);
-
+        
         $data_sav = prepararData($data_html);
-		
+
         if (count($data_sav)>0) {
 
             $res = savDepositoPlazo($link, $data_sav, $dp_emp_id);

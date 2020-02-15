@@ -228,7 +228,7 @@ function importarBeneficio($ruta, $condicion){
 	$ub_fe_reg = date('Y-m-d');
 	$ub_hr_reg = date('H:i:s');
 
-	$sql = "SELECT ne.nemonico, em.emp_cod_bvl FROM nemonico ne
+	$sql = "SELECT ne.nemonico, em.emp_cod_bvl, ne.emp_cod FROM nemonico ne
 			INNER JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE em.emp_cod_bvl!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
@@ -236,6 +236,7 @@ function importarBeneficio($ruta, $condicion){
 		
 		$new_codigo = $row['emp_cod_bvl'];
 		$new_nemonico = $row['nemonico'];
+		$emp_cod = $row['emp_cod'];
 
 		$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
 		$html = file_get_contents_curl($url);
@@ -285,8 +286,8 @@ function importarBeneficio($ruta, $condicion){
 
 						if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
 							//Insertar a BD
-							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl,ub_fe_reg,ub_hr_reg)
-							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo','$ub_fe_reg','$ub_hr_reg')";
+							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl,emp_cod,ub_fe_reg,ub_hr_reg)
+							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo','$emp_cod','$ub_fe_reg','$ub_hr_reg')";
 							$resin = mysqli_query($link, $sqlin);
 							unset($sqlin);
 							unset($resin);

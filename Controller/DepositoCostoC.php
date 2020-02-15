@@ -22,7 +22,8 @@ function listarAction(){
 
 	$sql = "SELECT * FROM historico_entidad_financiera dh
 			INNER JOIN entidad_financiera de ON(de.dp_emp_id=dh.dh_emp_id)
-			WHERE dh.dh_stat='1' AND de.dp_stat='1'";
+			WHERE dh.dh_stat='1' AND de.dp_stat='1'
+			AND dh.dh_fecha = (SELECT MAX(h_s.dh_fecha) FROM historico_entidad_financiera h_s WHERE h_s.dh_emp_id=dh.dh_emp_id AND h_s.dh_last_update=dh.dh_last_update)";
 	if($dp_plazo_d!=''){
 		//$sql .= " AND $dp_plazo>=dh.dh_plazo_d AND $dp_plazo<=dh.dh_plazo_h";
 		$sql .= " AND dh.dh_plazo_d>=$dp_plazo_d";
