@@ -175,8 +175,8 @@ function listarAction(){
 				DATE_FORMAT(ub_fech_ent,'%d/%m/%Y')AS ub_fech_ent
 				 FROM ultimos_beneficios ub
 			INNER JOIN nemonico ne ON(ub.ub_nemonico=ne.nemonico)
-			LEFT JOIN empresa em ON(ne.emp_cod=em.emp_cod)
-			INNER JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
+			INNER JOIN empresa em ON(ne.emp_cod=em.emp_cod)
+			LEFT JOIN empresa_favorito fa ON(ne.ne_cod=fa.ne_cod)
 			WHERE ub.ub_cod>0";
 
 	if ($nemonico != '') { $sql .= " AND ne.nemonico='$nemonico'";}
@@ -186,6 +186,7 @@ function listarAction(){
 	if ($cod_ector != '') { $sql .= " AND em.sec_cod='$cod_ector'";}
 	if ($cod_grupo != '') { $sql .= " AND fa.cod_grupo='$cod_grupo'";}
 
+	$sql .= " GROUP BY ub.ub_nemonico,ub_der_mon, ub.ub_der_imp, ub.ub_der_por, ub.ub_der_tip";
 	$sql .= " ORDER BY ub.ub_fech_ent DESC";
 	//echo $sql;
 	$res = mysqli_query($link, $sql);
@@ -223,6 +224,9 @@ function importarBeneficio($ruta, $condicion){
 	include($ruta.'/Util/simple_html_dom_php5.6.php');
 	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
+
+	$ub_fe_reg = date('Y-m-d');
+	$ub_hr_reg = date('H:i:s');
 
 	$sql = "SELECT ne.nemonico, em.emp_cod_bvl FROM nemonico ne
 			INNER JOIN empresa em ON(ne.emp_cod=em.emp_cod) WHERE em.emp_cod_bvl!='' $condicion";
@@ -281,8 +285,8 @@ function importarBeneficio($ruta, $condicion){
 
 						if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
 							//Insertar a BD
-							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl)
-							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo')";
+							$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl,ub_fe_reg,ub_hr_reg)
+							VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo','$ub_fe_reg','$ub_hr_reg')";
 							$resin = mysqli_query($link, $sqlin);
 							unset($sqlin);
 							unset($resin);
