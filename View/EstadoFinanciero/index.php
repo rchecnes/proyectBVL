@@ -172,7 +172,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Estado Financiero:</label>
-								<select id="cef_est_fin" name="cef_est_fin" class="form-control">
+								<select id="cef_est_fin" name="cef_est_fin" class="form-control chosen">
 									<option value="BAL_GEN">Balance General</option>
 									<option value="EST_RES">Estado De Resultados</option>
 								</select>
@@ -183,7 +183,7 @@
 								<label>Empresa:</label>
 								<?php
 									$params = array(
-										'select' => array('id'=>'cef_emp_cod', 'name'=>'cef_emp_cod', 'class'=>'form-control'),
+										'select' => array('id'=>'cef_emp_cod', 'name'=>'cef_emp_cod', 'class'=>'form-control chosen'),
 										'sql'    => "SELECT em.emp_cod,em.emp_nomb FROM empresa em WHERE em.emp_stdo=1 AND em.emp_cod_rpj!=''",
 										'attrib' => array('value'=>'emp_cod','desc'=>'emp_cod,emp_nomb', 'concat'=>' - ','descextra'=>''),
 										'empty'  => false,
@@ -199,7 +199,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Tipo:</label>
-								<select id="cef_tipo" name="cef_tipo" class="form-control">
+								<select id="cef_tipo" name="cef_tipo" class="form-control chosen">
 									<option value="I">Individual</option>
 									<option value="C" selected="selected">Consolidada</option>
 								</select>
@@ -208,7 +208,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Año:</label>
-								<select id="cef_anio" name="cef_anio" class="form-control">
+								<select id="cef_anio" name="cef_anio" class="form-control chosen">
 								<?php
 								for($a=2000;$a<=2050;$a++){
 									$selected = ($a == (date('Y')-1))?'selected="selected"':'';
@@ -221,7 +221,7 @@
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label>Periodo:</label>
-								<select id="cef_peri" name="cef_peri" class="form-control">
+								<select id="cef_peri" name="cef_peri" class="form-control chosen">
 									<option value="T">Trimestral No Auditada</option>
 									<option value="A" selected="selected">Auditada Anual</option>
 								</select>
@@ -230,7 +230,7 @@
 						<div class="col-lg-3" id="grupo_cef_trim">
 							<div class="form-group">
 								<label>Trimestre:</label>
-								<select id="cef_trim" name="cef_trim" class="form-control">
+								<select id="cef_trim" name="cef_trim" class="form-control chosen">
 									<option value="1">Primer Trimestre</option>
 									<option value="2">Segundo Trimestre</option>
 									<option value="3" selected="selected">Tercer Trimestre</option>

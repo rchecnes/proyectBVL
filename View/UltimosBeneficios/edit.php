@@ -16,7 +16,7 @@
 				<form class="form-horizontal" method="POST" action="../Controller/UltimosBeneficiosC.php?accion=<?=$accion?>">
 					<div class="row">
 						<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-							<label>Empresa:</label>
+							<label>Nemonico:</label>
 							<?php   
 								$params = array(
 									'select' => array('id'=>'ub_nemonico', 'name'=>'ub_nemonico', 'class'=>'form-control'),

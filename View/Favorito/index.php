@@ -121,7 +121,7 @@
 			    </tr>
 			    <tr>
 			    	<th rowspan="2" class="td-header align-midle align-center">Nemónico</th>
-			    	<th rowspan="2" class="td-header align-midle align-center">Nombre</th>
+			    	<th rowspan="2" class="td-header align-midle align-center">Empresa</th>
 			    	<th rowspan="2" class="td-header align-midle align-center">Moneda</th>
 			    	<th colspan="5" class="td-header align-center">Última Cotización</th>
 			    	<th rowspan="2" class="td-header align-midle align-center">Acciones</th>

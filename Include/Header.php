@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="../Assets/css/bootstrap-datepicker3.min.css">
 <link rel="stylesheet" type="text/css" href="../Assets/font-awesome-4.7.0/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="../Assets/bootstrap-slider/css/bootstrap-slider.min.css" />
+<link rel="stylesheet" href="../Assets/chosen/chosen.css">
 <link rel="stylesheet" type="text/css" href="../Assets/css/style.css">
 <!--Fin CSS-->
 
@@ -25,4 +26,21 @@
 <script type="text/javascript" src="../Assets/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="../Assets/bootstrap-slider/js/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="../Assets/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="../Assets/chosen/chosen.jquery.js"></script>
 <!--FIN JS-->
+<script>
+$(document).ready(function(){
+    var config = {
+        '.chosen'                  : {},
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : { allow_single_deselect: true },
+        '.chosen-select-no-single' : { disable_search_threshold: 10 },
+        '.chosen-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chosen-select-rtl'       : { rtl: true },
+        '.chosen-select-width'     : { width: '95%' }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+});
+</script>
