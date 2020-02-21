@@ -13,6 +13,8 @@
         <th>Num. Oper.</th>
         <th>Compra</th>
         <th>Venta</th>
+        <th>Acc. Cir.</th>
+        <th>Val. Nom.</th>
     </tr>
     <?php
     while ($cz = mysqli_fetch_array($cotizacion)) {
@@ -44,6 +46,8 @@
         <td align="right"><?=$cz_num_oper?></td>
         <td align="right"><?=$cz_num_compra?></td>
         <td align="right"><?=$cz_num_venta?></td>
+        <td align="right"><?=$cz['ub_acc_cir']?></td>
+        <td align="right"><?=$cz['ub_val_mon'].' '.number_format($cz['ub_val_nom'],2,'.',',')?></td>
     </tr>
     <?php
     }

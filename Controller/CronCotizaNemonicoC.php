@@ -79,6 +79,7 @@ function getCotizacionGrupoAntiguo(){
     while ($e = mysqli_fetch_array($respemp)) {
         
         $nemonico = $e['nemonico'];
+        $new_codigo = $e['cod_emp_bvl'];
 
         $url = "http://www.bvl.com.pe/jsp/cotizacion.jsp?fec_inicio=$fec_inicio&fec_fin=$fec_fin&nemonico=$nemonico";
         //$html = file_get_html($url);
@@ -98,6 +99,33 @@ function getCotizacionGrupoAntiguo(){
         unset($url);
         unset($html);
         unset($new_data);
+
+        //Actualizamos datos de ultimos beneficios
+        if($new_codigo != ''){
+            $url2  = "https://loadbalancerprod.bvl.com.pe/static/company/$new_codigo/value";
+            $html2 = file_get_contents_curl($url2);
+            $data2 = ($html2 != '')?json_decode($html2, true):array();
+            if(count($data2)>0){
+                foreach($data2 as $grupo_ne){
+                    
+                    if(strtoupper($grupo_ne['nemonico']) == strtoupper($new_nemonico)){
+                        if(isset($grupo_ne['listStock'])){
+                            $data_reg = $grupo_ne['listStock'];
+                            foreach($data_reg as $row){
+                                $ub_date = $row['date'];
+                                $ub_acc_cir = (isset($row['quantity']))?$row['quantity']:0;
+                                $ub_val_mon = (isset($row['coin']))?$row['coin']:0;
+                                $ub_val_nom = (isset($row['nominalValue']))?$row['nominalValue']:0;
+                                $ub_val_cap = (isset($row['capital']))?$row['capital']:0;
+
+                                $sqlup = "UPDATE cotizacion SET ub_acc_cir='$ub_acc_cir', ,ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cz_nemo='$nemonico' AND cz_fecha='$ub_date'";
+                                mysqli_query($link, $sqlup);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     mysqli_free_result($respemp);

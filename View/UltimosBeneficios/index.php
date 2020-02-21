@@ -22,7 +22,7 @@
 		        $.ajax({
 		            type:'GET',
 		            url: '../Controller/UltimosBeneficiosC.php?accion=importarmanual',
-		            data:{nemonico:$("#nemonico").val()},
+		            data:{'nemonico':$("#nemonico").val(), 'ub_tip_pag':$("#ub_tip_pag").val()},
 		            success:function(data){
 		                $("#loading").hide();
 						buscarImportado();
@@ -144,6 +144,15 @@
 								);
 								Combobox($link, $params);
 								?>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+								<div class="form-group"><br>
+									<label>Importar De:</label>
+									<select id="ub_tip_pag" name="ub_tip_pag" class="form-control">
+										<option value="PA_ACT">Pagina Actual</option>
+										<option value="PA_BET" selected>Pagina Beta</option>
+									</select>
+								</div>
 							</div>
 						</div>
 						<div class="row">
