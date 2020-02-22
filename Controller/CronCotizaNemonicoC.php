@@ -69,7 +69,7 @@ function getCotizacionGrupoAntiguo(){
     $fec_fin    = date('Ymd');
 
     $date      = date('Y-m-d');
-    $sqlemp    = "SELECT ne.nemonico FROM nemonico ne
+    $sqlemp    = "SELECT ne.nemonico, ne.cod_emp_bvl FROM nemonico ne
                   WHERE ne.estado='1'
                   AND ne.nemonico IN(SELECT s_cd.cd_nemo FROM cotizacion_del_dia s_cd WHERE s_cd.cd_cod='$fec_inicio' AND s_cd.cd_ng_nop > 0)";
                 
@@ -106,9 +106,10 @@ function getCotizacionGrupoAntiguo(){
             $html2 = file_get_contents_curl($url2);
             $data2 = ($html2 != '')?json_decode($html2, true):array();
             if(count($data2)>0){
+
                 foreach($data2 as $grupo_ne){
                     
-                    if(strtoupper($grupo_ne['nemonico']) == strtoupper($new_nemonico)){
+                    if(strtoupper($grupo_ne['nemonico']) == strtoupper($nemonico)){
                         if(isset($grupo_ne['listStock'])){
                             $data_reg = $grupo_ne['listStock'];
                             foreach($data_reg as $row){
@@ -118,7 +119,8 @@ function getCotizacionGrupoAntiguo(){
                                 $ub_val_nom = (isset($row['nominalValue']))?$row['nominalValue']:0;
                                 $ub_val_cap = (isset($row['capital']))?$row['capital']:0;
 
-                                $sqlup = "UPDATE cotizacion SET ub_acc_cir='$ub_acc_cir', ,ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cz_nemo='$nemonico' AND cz_fecha='$ub_date'";
+                                $sqlup = "UPDATE cotizacion SET ub_acc_cir='$ub_acc_cir', ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cz_nemo='$nemonico' AND cz_fecha='$ub_date'";
+                                //echo $sqlup."<br>";
                                 mysqli_query($link, $sqlup);
                             }
                         }
