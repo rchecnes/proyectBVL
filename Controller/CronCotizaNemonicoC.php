@@ -109,19 +109,21 @@ function getCotizacionGrupoAntiguo(){
 
                 foreach($data2 as $grupo_ne){
                     
-                    if(strtoupper($grupo_ne['nemonico']) == strtoupper($nemonico)){
-                        if(isset($grupo_ne['listStock'])){
-                            $data_reg = $grupo_ne['listStock'];
-                            foreach($data_reg as $row){
-                                $ub_date = $row['date'];
-                                $ub_acc_cir = (isset($row['quantity']))?$row['quantity']:0;
-                                $ub_val_mon = (isset($row['coin']))?$row['coin']:0;
-                                $ub_val_nom = (isset($row['nominalValue']))?$row['nominalValue']:0;
-                                $ub_val_cap = (isset($row['capital']))?$row['capital']:0;
+                    if(isset($grupo_ne['nemonico'])){
+                        if(strtoupper($grupo_ne['nemonico']) == strtoupper($nemonico)){
+                            if(isset($grupo_ne['listStock'])){
+                                $data_reg = $grupo_ne['listStock'];
+                                foreach($data_reg as $row){
+                                    $ub_date = $row['date'];
+                                    $ub_acc_cir = (isset($row['quantity']))?$row['quantity']:0;
+                                    $ub_val_mon = (isset($row['coin']))?$row['coin']:0;
+                                    $ub_val_nom = (isset($row['nominalValue']))?$row['nominalValue']:0;
+                                    $ub_val_cap = (isset($row['capital']))?$row['capital']:0;
 
-                                $sqlup = "UPDATE cotizacion SET ub_acc_cir='$ub_acc_cir', ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cz_nemo='$nemonico' AND cz_fecha='$ub_date'";
-                                //echo $sqlup."<br>";
-                                mysqli_query($link, $sqlup);
+                                    $sqlup = "UPDATE cotizacion SET ub_acc_cir='$ub_acc_cir', ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cz_nemo='$nemonico' AND cz_fecha='$ub_date'";
+                                    //echo $sqlup."<br>";
+                                    mysqli_query($link, $sqlup);
+                                }
                             }
                         }
                     }
