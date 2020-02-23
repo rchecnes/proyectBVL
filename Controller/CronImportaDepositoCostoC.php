@@ -1,6 +1,6 @@
 <?php
-$ruta = 'public_html/analisisdevalor.com';
-//$ruta = '..';
+//$ruta = 'public_html/analisisdevalor.com';
+$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 
@@ -162,8 +162,8 @@ function getDepositoPlazo(){
 
         //$url = "https://comparabien.com.pe/producto/depositos-plazo/fondesurco-plazo-fijo-mn?prod_id=$dp_emp_id&type=DEPOSITOS";
         $url = "https://comparabien.com.pe//node/$dp_nodo?prod_id=$dp_emp_id&amp;type=DEPOSITOS";
-        
-        $data_html = fileGetContentDepositoCurl($url);
+        echo $url."<br>";
+        /*$data_html = fileGetContentDepositoCurl($url);
         
         $data_sav = prepararData($data_html);
 
@@ -177,7 +177,7 @@ function getDepositoPlazo(){
         }
 
         unset($data_html);
-        unset($data_sav);
+        unset($data_sav);*/
 	}
 
     echo "Se importo deposito plazo para ".$c." empresas";

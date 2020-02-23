@@ -93,8 +93,18 @@ function importarEmpresaAction(){
 
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
-			$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
-			mysqli_query($link, $sqlin);
+			$dp_nodo = $fila[1];
+			$sqlval = "SELECT dp_nodo FROM entidad_financiera WHERE dp_nodo='$dp_nodo'";
+			//echo $sqlval."<br>";
+			$resval = mysqli_query($link, $sqlval);
+			$rowval = mysqli_fetch_array($resval);
+
+			if($rowval['dp_nodo']){
+
+				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
+				//echo $sqlin;
+				mysqli_query($link, $sqlin);
+			}
 		}
 	}
 }
@@ -106,7 +116,7 @@ switch ($_GET['accion']) {
 	case 'listar':
 		listarAction();
 		break;
-	case 'importarEmpresa':
+	case 'importarmanual':
 		importarEmpresaAction();
 		break;
 	default:

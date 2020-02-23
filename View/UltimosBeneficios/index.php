@@ -149,8 +149,8 @@
 								<div class="form-group"><br>
 									<label>Importar De:</label>
 									<select id="ub_tip_pag" name="ub_tip_pag" class="form-control">
-										<option value="PA_ACT">Pagina Actual</option>
-										<option value="PA_BET" selected>Pagina Beta</option>
+										<option value="PA_ACT" selected>Pagina Actual</option>
+										<option value="PA_BET">Pagina Beta</option>
 									</select>
 								</div>
 							</div>

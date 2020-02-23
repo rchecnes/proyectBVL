@@ -325,7 +325,7 @@ function importarBeneficio($ruta, $condicion, $ub_tip_pag){
 								$ub_fech_ent = trim($row['dateDelivery']);
 
 								if($row['benefitType'] == 'DE'){
-									$ub_der_tip = 'Efe';
+									$ub_der_tip = 'Efe.';
 									$ub_der_por = '';
 									$ub_der_mon = trim($row['coin']);
 									$derecho = $ub_der_mon.' '.$ub_der_imp;

@@ -24,11 +24,11 @@
     $cz_maxima    = ($cz['cz_maxima']>1)?number_format($cz['cz_maxima'],2):number_format($cz['cz_maxima'],3);
     $cz_minima    = ($cz['cz_minima']>1)?number_format($cz['cz_minima'],2):number_format($cz['cz_minima'],3);
     $cz_promedio  = ($cz['cz_promedio']>1)?number_format($cz['cz_promedio'],2):number_format($cz['cz_promedio'],3);
-    $cz_cantnegda = number_format($cz['cz_cantnegda'],2);
+    $cz_cantnegda = number_format($cz['cz_cantnegda'],0);
     $cz_montnegd  = number_format($cz['cz_monto_neg_ori'],2);
     $cz_cierreant = ($cz['cz_cierreant']>1)?number_format($cz['cz_cierreant'],2):number_format($cz['cz_cierreant'],3);
 
-    $cz_num_oper =  number_format($cz['cd_ng_nop'],2);
+    $cz_num_oper =  number_format($cz['cd_ng_nop'],0);
     $cz_num_compra = ($cz['cd_pr_com']>1)?number_format($cz['cd_pr_com'],2):number_format($cz['cd_pr_com'],3);
     $cz_num_venta  = ($cz['cd_pr_ven']>1)?number_format($cz['cd_pr_ven'],2):number_format($cz['cd_pr_ven'],3);
 
