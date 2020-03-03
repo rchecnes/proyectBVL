@@ -31,6 +31,7 @@ function mostrarAction(){
 	
 	//CONDICION
 	$sqlwhere = " WHERE dh.dh_stat='1'";
+	$sqlwhere .= " AND dh.dh_fecha=(SELECT MAX(s_c.dh_fecha) FROM historico_entidad_financiera s_c WHERE s_c.dh_emp_id=dh.dh_emp_id)";
 	$sqlwhere .= " AND de.dp_stat='1'";
 	$sqlwhere .= " AND dh.dh_fsd='S'";
 	if($dp_plazo_d!=''){
