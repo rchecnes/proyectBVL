@@ -1,8 +1,7 @@
 <?php
-require_once('TiempoC.php');
-
 function indexAction(){
 
+	require_once('TiempoC.php');
 	include('../Config/Conexion.php');
 	$link = getConexion();
 
@@ -27,7 +26,7 @@ function listarAction(){
 	include('../View/DepositoEmpresa/listar.php');
 }
 
-function importaEmpresaDepositoPlazo($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo){
+function getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo){
 
 	$jquery_rand = rand(1,1000000000);
     $url ="https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=2&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=off&email=$dp_correo&source=Compara&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
@@ -75,19 +74,26 @@ function importaEmpresaDepositoPlazo($dp_moneda, $dp_valor, $dp_plaza, $dp_ubica
     return $return;
 }
 
-function importarEmpresaAction(){
+function importarEmpresaAction($ruta, $tipo){
 
-	include('../Config/Conexion.php');
+	include($ruta.'/Config/Conexion.php');
 	$link = getConexion();
-	//include('../Model/DepositoEmpresaM.php');
 
-	$dp_moneda    = $_GET['dp_moneda'];
-	$dp_valor     = $_GET['dp_valor'];
-	$dp_plaza     = $_GET['dp_plaza'];
-	$dp_ubicacion = $_GET['dp_ubicacion'];
-	$dp_correo    = $_GET['dp_correo'];
-
-	$data = importaEmpresaDepositoPlazo($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo);
+	if($tipo == 'manual'){
+		$dp_moneda    = $_GET['dp_moneda'];
+		$dp_valor     = $_GET['dp_valor'];
+		$dp_plaza     = $_GET['dp_plaza'];
+		$dp_ubicacion = $_GET['dp_ubicacion'];
+		$dp_correo    = $_GET['dp_correo'];
+	}else{
+		$dp_moneda    = 'MN';
+		$dp_valor     = 100;
+		$dp_plaza     = 360;
+		$dp_ubicacion = 'LI';
+		$dp_correo    = 'ananimo426@gmail.com';
+	}
+	
+	$data = getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo);
 
 	if($data['status']=='success'){
 
@@ -109,7 +115,29 @@ function importarEmpresaAction(){
 	}
 }
 
-switch ($_GET['accion']) {
+function importarManualAction(){
+
+	$ruta = "..";
+	$condicion = "";
+	
+	importarEmpresaAction($ruta, 'manual');
+}
+
+function importarAutomaticoAction(){
+
+	$ruta = "public_html/analisisdevalor.com";
+	$condicion = "";
+	
+	importarEmpresaAction($ruta, 'automatico');
+}
+
+//Este parametro se obtiene desde la vista y crons
+$accion = (isset($_GET['accion']))?$_GET['accion']:'';
+if($accion == ''){
+	$accion = (isset($argv[1]))?$argv[1]:'';
+}
+
+switch ($accion) {
 	case 'index':
 		indexAction();
 		break;
@@ -117,7 +145,10 @@ switch ($_GET['accion']) {
 		listarAction();
 		break;
 	case 'importarmanual':
-		importarEmpresaAction();
+		importarManualAction();
+		break;
+	case 'importarautomatico':
+		importarAutomaticoAction();
 		break;
 	default:
 		# code...
