@@ -46,8 +46,8 @@
         <td align="right"><?=$cz_num_oper?></td>
         <td align="right"><?=$cz_num_compra?></td>
         <td align="right"><?=$cz_num_venta?></td>
-        <td align="right"><?=$cz['ub_acc_cir']?></td>
-        <td align="right"><?=$cz['ub_val_mon'].' '.number_format($cz['ub_val_nom'],2,'.',',')?></td>
+        <td align="right"><?=number_format($cz['ub_acc_cir'],0,'.',',')?></td>
+        <td align="right"><?=number_format($cz['ub_val_nom'],2,'.',',')?></td>
     </tr>
     <?php
     }

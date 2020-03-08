@@ -86,7 +86,8 @@ function importarEmpresaAction($ruta, $tipo){
 		$dp_ubicacion = $_GET['dp_ubicacion'];
 		$dp_correo    = $_GET['dp_correo'];
 	}else{
-		$dp_moneda    = 'MN';
+		$rand = rand(1,2);
+		$dp_moneda    = ($rand==1)?'MN':'ME';
 		$dp_valor     = 100;
 		$dp_plaza     = 360;
 		$dp_ubicacion = 'LI';
@@ -94,25 +95,34 @@ function importarEmpresaAction($ruta, $tipo){
 	}
 	
 	$data = getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo);
+	//var_dump($data);
+
+	$contador = 0;
 
 	if($data['status']=='success'){
 
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
+			$dp_emp_id = $fila[0];
 			$dp_nodo = $fila[1];
-			$sqlval = "SELECT dp_nodo FROM entidad_financiera WHERE dp_nodo='$dp_nodo'";
-			//echo $sqlval."<br>";
+			$sqlval = "SELECT dp_nodo FROM entidad_financiera WHERE dp_emp_id='$dp_emp_id' AND dp_nodo='$dp_nodo'";
 			$resval = mysqli_query($link, $sqlval);
 			$rowval = mysqli_fetch_array($resval);
 
-			if($rowval['dp_nodo']){
+			if($rowval['dp_nodo'] == ''){
 
 				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
-				//echo $sqlin;
-				mysqli_query($link, $sqlin);
+				$resreg = mysqli_query($link, $sqlin);
+
+				if($resreg){
+					$contador ++;
+				}
+
 			}
 		}
 	}
+
+	echo "Se importo ".$contador." entidades financieras";
 }
 
 function importarManualAction(){
@@ -126,6 +136,7 @@ function importarManualAction(){
 function importarAutomaticoAction(){
 
 	$ruta = "public_html/analisisdevalor.com";
+	//$ruta = "..";
 	$condicion = "";
 	
 	importarEmpresaAction($ruta, 'automatico');

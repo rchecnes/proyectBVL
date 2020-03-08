@@ -99,7 +99,7 @@ function listarAction(){
 			FROM cotizacion cz
 			INNER JOIN empresa e ON(cz.cz_codemp=e.nemonico)
 			WHERE cz.cz_fecha BETWEEN '$fec_inicio' AND '$fec_fin'";*/
-	$sql = "SELECT cz.*,e.*, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant, cd.cd_ng_nop, cd.cd_pr_com,cd.cd_pr_ven
+	$sql = "SELECT cz.*,e.*, DATE_FORMAT(cz_fecha,'%d/%m/%Y')AS fecha_forma, DATE_FORMAT(cz_fechant,'%d/%m/%Y')AS fecha_formant, cd.cd_ng_nop, cd.cd_pr_com,cd.cd_pr_ven,cd.ub_acc_cir,cd.ub_val_nom
 			FROM cotizacion cz
 			LEFT JOIN nemonico ne ON(cz.cz_nemo=ne.nemonico)
 			LEFT JOIN empresa e ON(ne.emp_cod=e.emp_cod)

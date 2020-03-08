@@ -13,7 +13,6 @@ require_once($ruta.'/Config/Conexion.php');
 require_once($ruta."/Model/CotizaGrupoM.php");
 require_once($ruta."/Model/ImportarAntiguoM.php");
 
-
 function getCotizacionGrupo(){
 
     //global $ruta;
@@ -120,7 +119,7 @@ function getCotizacionGrupoAntiguo(){
                                     $ub_val_nom = (isset($row['nominalValue']))?$row['nominalValue']:0;
                                     $ub_val_cap = (isset($row['capital']))?$row['capital']:0;
 
-                                    $sqlup = "UPDATE cotizacion_del_dia SET ub_acc_cir='$ub_acc_cir', ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cd_nemo='$nemonico' AND cd_cod='$ub_date'";
+                                    $sqlup = "UPDATE cotizacion_del_dia SET ub_acc_cir='$ub_acc_cir', ub_val_mon='$ub_val_mon', ub_val_nom='$ub_val_nom', ub_val_cap='$ub_val_cap' WHERE cd_nemo='$nemonico' AND cd_cod='$fec_inicio'";
                                     mysqli_query($link, $sqlup);
                                 }
                             }

@@ -37,7 +37,7 @@ function listarAction(){
 	$sql .= " ORDER BY ne.nombre ASC";
 
 	$res = mysqli_query($link, $sql);
-
+	//echo $sql;
 	$nro_reg = mysqli_num_rows($res);
 
 	include('../View/CierreDelDia/listar.php');

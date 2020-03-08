@@ -7,6 +7,7 @@
 			<th colspan="5" class="align-center bg-yellow">Cotizaciones</th>
 			<th colspan="2" class="align-center bg-yellow">Propuestas</th>
 			<th colspan="3" class="align-center bg-yellow">Negociación</th>
+			<th colspan="2" class="align-center bg-yellow">En Circulación</th>
 		</tr>
 		<tr>
 			<th class="align-center bg-gray-dark" style="width:120px">Empresa</th>
@@ -23,6 +24,8 @@
 			<th class="align-center bg-gray-dark">Nro. Acc.</th>
 			<th class="align-center bg-gray-dark">Nro. Oper.</th>
 			<th class="align-center bg-gray-dark">Monto. Neg.</th>
+			<th class="align-center bg-gray-dark">Acc. Cir.</th>
+			<th class="align-center bg-gray-dark">Val. Nom.</th>
 		</tr>
 	</thead>
 	
@@ -44,6 +47,8 @@
 			<td align="right"><?=($cd['cd_ng_nac']>0)?number_format($cd['cd_ng_nac'],3):''?></td>
 			<td align="right"><?=($cd['cd_ng_nop']>0)?number_format($cd['cd_ng_nop'],0):''?></td>
 			<td align="right"><?=($cd['cd_ng_mng']>0)?number_format($cd['cd_ng_mng'],2,'.',','):''?></td>
+			<td align="right"><?=number_format($cd['ub_acc_cir'],0,'.',',')?></td>
+			<td align="right"><?=number_format($cd['ub_val_nom'],2,'.',',')?></td>
 		</tr>
 		<?php endwhile; ?>
 	</tbody>
