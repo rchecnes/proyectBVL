@@ -107,7 +107,7 @@ function importarEmpresaAction($ruta, $tipo){
 	$count_rows = count($data['data']['aaData']);
 	if($data['status']=='success' && $count_rows>0){
 
-		$fecha_imp = date('Y-m-d');
+		$fecha_imp = date('Y-m-d H:i:s');
 		
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
@@ -119,7 +119,7 @@ function importarEmpresaAction($ruta, $tipo){
 
 			if($rowval['dp_nodo'] == ''){
 
-				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd,dp_stat,dp_fecha_imcs)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."','1','$fecha_imp')";
+				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd,dp_stat,dp_fcrea)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."','1','$fecha_imp')";
 				$resreg = mysqli_query($link, $sqlin);
 
 				if($resreg){

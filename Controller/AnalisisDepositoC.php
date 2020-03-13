@@ -27,11 +27,11 @@ function mostrarAction(){
 	$dp_plazo_h = $_GET['dp_plazo_h'];
 	$dp_empresa = $_GET['dp_empresa'];
 
-	$dh_fecha = "2019-03-30";
+	//$dh_fecha = "2019-03-30";
 	
 	//CONDICION
 	$sqlwhere = " WHERE dh.dh_stat='1'";
-	$sqlwhere .= " AND dh.dh_fecha=(SELECT MAX(s_c.dh_fecha) FROM historico_entidad_financiera s_c WHERE s_c.dh_emp_id=dh.dh_emp_id)";
+	$sqlwhere .= " AND dh.dh_fecha=(SELECT MAX(s_c.dh_fecha) FROM historico_entidad_financiera s_c WHERE s_c.dh_emp_id=dh.dh_emp_id AND s_c.dh_last_update=dh.dh_last_update)";
 	$sqlwhere .= " AND de.dp_stat='1'";
 	$sqlwhere .= " AND dh.dh_fsd='S'";
 	if($dp_plazo_d!=''){
@@ -70,7 +70,14 @@ function mostrarAction(){
 	$sqlhx .= " ORDER BY dh.dh_emp_id ASC, dh.dh_tea ASC";
 	//echo $sqlhx;
 	$reshx = mysqli_query($link, $sqlhx);
-	$cant_hx = mysqli_num_rows($reshx);
+
+	//Contamos
+	$sqlct = "SELECT COUNT(dh.dh_emp_id)AS total FROM historico_entidad_financiera dh 
+	INNER JOIN entidad_financiera de ON(de.dp_emp_id=dh.dh_emp_id AND dh.dh_fecha=de.dp_fecha_imcs)";//de.dp_fecha_imcs
+	$sqlct .= $sqlwhere." AND dh.dh_emp_id IN($dh_emp_id)";
+	$resct = mysqli_query($link, $sqlct);
+	$rowct = mysqli_fetch_array($resct);
+	$cant_hx = $rowct['total'];//mysqli_num_rows($reshx);
 	//echo "Cantidad Des:".$cant_hx."<br><br>";
 
 	$emp_tasa = array();

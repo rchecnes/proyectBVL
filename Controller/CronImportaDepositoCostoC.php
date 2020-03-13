@@ -1,6 +1,6 @@
 <?php
-//$ruta = 'public_html/analisisdevalor.com';
-$ruta = '..';
+$ruta = 'public_html/analisisdevalor.com';
+//$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
 
@@ -99,7 +99,7 @@ function prepararData($data_html){
     return $deposito;
 }
 
-function savDepositoPlazo($link, $data, $dp_emp_id){
+function savDepositoPlazo($link, $data, $dp_emp_id, $dh_nodo){
 
     $sql = "";
     $upd = "";
@@ -119,7 +119,7 @@ function savDepositoPlazo($link, $data, $dp_emp_id){
         $dh_cost_mant   = $d['dh_cost_mant'];
         $dh_min_aper    = $d['dh_min_aper'];
 
-        $sql .= "('$dp_emp_id','$dh_pono','$dh_fecha','$dh_sal_prom_d','$dh_sal_prom_h','$dh_plazo_d','$dh_plazo_h','$dh_tea','$dh_last_update','$dh_time','$dh_fsd','$dh_cost_mant','$dh_min_aper','1'),";
+        $sql .= "('$dp_emp_id','$dh_nodo','$dh_pono','$dh_fecha','$dh_sal_prom_d','$dh_sal_prom_h','$dh_plazo_d','$dh_plazo_h','$dh_tea','$dh_last_update','$dh_time','$dh_fsd','$dh_cost_mant','$dh_min_aper','1'),";
     }
 
     $resp = false;
@@ -128,15 +128,15 @@ function savDepositoPlazo($link, $data, $dp_emp_id){
 
         $date = date('Y-m-d');
 
-        $delete = "DELETE FROM historico_entidad_financiera WHERE dh_emp_id='$dp_emp_id' AND dh_fecha='$date'";
+        $delete = "DELETE FROM historico_entidad_financiera WHERE dh_emp_id='$dp_emp_id' AND dh_nodo='$dh_nodo' AND dh_fecha='$date'";
         $respdel = mysqli_query($link, $delete);
 
-        $insert = "INSERT INTO historico_entidad_financiera (dh_emp_id, dh_pono, dh_fecha, dh_sal_prom_d, dh_sal_prom_h, dh_plazo_d, dh_plazo_h, dh_tea, dh_last_update, dh_time, dh_fsd, dh_cost_mant, dh_min_aper, dh_stat) VALUES ".trim($sql,',').";";
+        $insert = "INSERT INTO historico_entidad_financiera (dh_emp_id, dh_nodo, dh_pono, dh_fecha, dh_sal_prom_d, dh_sal_prom_h, dh_plazo_d, dh_plazo_h, dh_tea, dh_last_update, dh_time, dh_fsd, dh_cost_mant, dh_min_aper, dh_stat) VALUES ".trim($sql,',').";";
         $resp    = mysqli_query($link, $insert);
 
         if($resp){
-
-            $sqlup = "UPDATE entidad_financiera SET dp_fecha_imcs='$date' WHERE dp_emp_id='$dp_emp_id'";
+            $date_imp = date('Y-m-d H:i:s');
+            $sqlup = "UPDATE entidad_financiera SET dp_fecha_imcs='$date_imp' WHERE dp_emp_id='$dp_emp_id' AND dp_nodo='$dh_nodo'";
             $resup = mysqli_query($link, $sqlup);
         }
     }
@@ -170,7 +170,7 @@ function getDepositoPlazo(){
 
         if (count($data_sav)>0) {
 
-            $res = savDepositoPlazo($link, $data_sav, $dp_emp_id);
+            $res = savDepositoPlazo($link, $data_sav, $dp_emp_id, $dp_nodo);
 
             if($res){
                 $c ++;
