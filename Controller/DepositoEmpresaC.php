@@ -26,11 +26,9 @@ function listarAction(){
 	include('../View/DepositoEmpresa/listar.php');
 }
 
-function getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo){
+function getDataJson($url){
 
-	$jquery_rand = rand(1,1000000000);
-    $url ="https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=2&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=off&email=$dp_correo&source=Compara&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
-    $post_data = "";
+	$post_data = "";
 
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $url);
@@ -39,16 +37,19 @@ function getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo
     curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
     curl_setopt( $ch, CURLOPT_TIMEOUT, 30 );
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+	//curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         "Content-type: application/json",
-        "origin: https://comparabien.com.pe",
+		"origin: https://comparabien.com.pe",
         "Referer: https://comparabien.com.pe/depositos-plazo/result",
-        "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
+        "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
         "cache-control: no-cache"
     ));
     
-    $response = curl_exec( $ch );
+	$response = curl_exec( $ch );
+	//var_dump($response);
     $err = curl_error($ch);
 
     if ($err) {
@@ -82,7 +83,7 @@ function importarEmpresaAction($ruta, $tipo){
 	if($tipo == 'manual'){
 		$dp_moneda    = $_GET['dp_moneda'];
 		$dp_valor     = $_GET['dp_valor'];
-		$dp_plaza     = $_GET['dp_plaza'];
+		$dp_plaza     = $_GET['dp_plazo'];
 		$dp_ubicacion = $_GET['dp_ubicacion'];
 		$dp_correo    = $_GET['dp_correo'];
 	}else{
@@ -91,16 +92,23 @@ function importarEmpresaAction($ruta, $tipo){
 		$dp_valor     = 100;
 		$dp_plaza     = 360;
 		$dp_ubicacion = 'LI';
-		$dp_correo    = 'ananimo426@gmail.com';
+		$dp_correo    = 'demo@gmail.com';
 	}
-	
-	$data = getDataJson($dp_moneda, $dp_valor, $dp_plaza, $dp_ubicacion, $dp_correo);
-	//var_dump($data);
 
+	$jquery_rand = rand(1,1000000000);
+	$num_rand = rand(1,100);
+	$hash = "";
+	$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=$num_rand&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=all&email=$dp_correo&source=Compara&hash=$hash&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
+	//$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=&sEcho=4&sWhere=&ipaddr=&userid=&username=&geo=LI&balance=2000&days=240&currency=MN&exclude=all&email=demo%40gmail.com&source=Compara&hash=&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
+	$data = getDataJson($url);
+	
 	$contador = 0;
 
-	if($data['status']=='success'){
+	$count_rows = count($data['data']['aaData']);
+	if($data['status']=='success' && $count_rows>0){
 
+		$fecha_imp = date('Y-m-d');
+		
 		foreach ($data['data']['aaData'] as $key => $fila) {
 
 			$dp_emp_id = $fila[0];
@@ -111,7 +119,7 @@ function importarEmpresaAction($ruta, $tipo){
 
 			if($rowval['dp_nodo'] == ''){
 
-				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."')";
+				$sqlin = "INSERT INTO entidad_financiera(dp_emp_id,dp_nodo,dp_nomb_emp,dp_nomb_prod,dp_logo,dp_ubig,dp_moneda,dp_fsd,dp_stat,dp_fecha_imcs)VALUES('".$fila[0]."','".$fila[1]."','".$fila[4]."','".$fila[13]."','".$fila[2]."','$dp_ubicacion','$dp_moneda','".$fila[16]."','1','$fecha_imp')";
 				$resreg = mysqli_query($link, $sqlin);
 
 				if($resreg){
@@ -120,9 +128,10 @@ function importarEmpresaAction($ruta, $tipo){
 
 			}
 		}
+		
 	}
 
-	echo "Se importo ".$contador." entidades financieras";
+	echo "Se leo ".$count_rows." registros y se importo ".$contador." entidades financieras";
 }
 
 function importarManualAction(){

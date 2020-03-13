@@ -74,7 +74,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Correo:</label>
-                                        <input type="text" id="dp_correo" id="dp_correo" class="form-control" min="0" value="ananimo<?=rand(100,1000)?>@gmail.com">
+                                        <input type="text" id="dp_correo" id="dp_correo" class="form-control" min="0" value="demo@gmail.com">
                                     </div>
                                 </div>
                             </div>
