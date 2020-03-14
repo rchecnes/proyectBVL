@@ -15,10 +15,11 @@ function listarAction(){
 
 	$dp_moneda = $_GET['dp_moneda'];
 	$dp_valor = $_GET['dp_valor'];
-	$dp_plazo_d = $_GET['dp_plazo_d'];
+	$dp_plazo_d = ($_GET['dp_plazo_d']!='')?$_GET['dp_plazo_d']:0;
 	$dp_plazo_h = $_GET['dp_plazo_h'];
 	$dp_ubicacion = $_GET['dp_ubicacion'];
 	$dp_last_update = $_GET['dp_last_update'];
+	$dh_tea = $_GET['dh_tea'];
 
 	$sql = "SELECT * FROM historico_entidad_financiera dh
 			INNER JOIN entidad_financiera de ON(de.dp_emp_id=dh.dh_emp_id)
@@ -42,6 +43,9 @@ function listarAction(){
 	}
 	if($dp_last_update!=''){
 		$sql .= " AND dh.dh_last_update='$dp_last_update'";
+	}
+	if($dh_tea == 1){
+		$sql .= " AND dh.dh_fsd='S'";
 	}
 
 	

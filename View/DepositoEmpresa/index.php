@@ -161,6 +161,13 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class=""><input type="checkbox" class="" id="dh_tea_2" id="dh_tea_2">
+                                        ¿TEA - FSD?
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -219,10 +226,12 @@
             
                     $.blockUI();
 
+                    var dh_tea_2 = ($("#dh_tea_2").is(':checked'))?1:0;
+
                     $.ajax({
                         type:'GET',
                         url: '../Controller/DepositoCostoC.php?accion=listar',
-                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo_d:$("#dp_plazo_d_2").val(),dp_plazo_h:$("#dp_plazo_h_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val(),dp_last_update:$("#dp_last_update").val()},
+                        data:{dp_moneda:$("#dp_moneda_2").val(),dp_valor:$("#dp_valor_2").val(),dp_plazo_d:$("#dp_plazo_d_2").val(),dp_plazo_h:$("#dp_plazo_h_2").val(),dp_ubicacion:$("#dp_ubicacion_2").val(),dp_last_update:$("#dp_last_update").val(),dh_tea:dh_tea_2},
                         success:function(data){
 
                             $("#divHistorico").html(data);
