@@ -138,10 +138,10 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 
 	$tri_auto = 1;
 	$mes_auto = (int)date('m');
-	if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$tri_auto = 1;}
-	if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$tri_auto = 2;}
-	if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$tri_auto = 3;}
-	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 4;}
+	if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$tri_auto = 4; $cef_anio = date('Y')-1;}
+	if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$tri_auto = 1; $cef_anio = date('Y');}
+	if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$tri_auto = 2; $cef_anio = date('Y');}
+	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 3; $cef_anio = date('Y');}
 
 	if($modo == 'manual'){
 		$cef_anio = $_GET['cef_anio'];
@@ -149,10 +149,10 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 		$cef_tipo = $_GET['cef_tipo'];
 		$cef_trim = $_GET['cef_trim'];
 	}else{
-		$cef_anio = date('Y');
+		//$cef_anio = '2019';//date('Y');
 		$cef_peri = 'T';
 		$cef_tipo = 'C';
-		$cef_trim = $mes_auto;
+		$cef_trim = $tri_auto;
 	}
 
 	if($cef_peri == 'A'){$cef_trim = 'A';}

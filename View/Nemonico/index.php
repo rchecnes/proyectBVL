@@ -20,7 +20,7 @@
 			<?php
 			$date_ha = date("Y-m-d",strtotime(date('Y-m-d')."- 1 days"));
 			$date_de = date("Y-m-d",strtotime($date_ha."- 1 year"));
-			$date_de = date("Y-m-d",strtotime($date_de."- 1 days"));
+			$date_de = date("Y-m-d",strtotime($date_de."+ 1 days"));
 			?>
 			<tr>
 				<th colspan="4">&nbsp;</th>
