@@ -109,10 +109,15 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 		$der_tipo = $_GET['cef_tipo'];
 		$der_trim = $_GET['cef_trim'];
 	}else{
-		$der_anio = date('Y');
+
 		$der_peri = 'T';
 		$der_tipo = 'C';
-		$der_trim = $mes_auto;
+
+		$mes_auto = (int)date('m');
+		if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$der_trim = 4; $der_anio = date('Y')-1;}
+		if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$der_trim = 1; $der_anio = date('Y');}
+		if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$der_trim = 2; $der_anio = date('Y');}
+		if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$der_trim = 3; $der_anio = date('Y');}
 	}
 
 	if($der_peri == 'A'){$der_trim = 'A';}

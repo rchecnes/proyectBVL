@@ -136,23 +136,22 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	$sql = "SELECT * FROM empresa WHERE emp_cod_bvl!='' AND emp_cod_rpj!='' $condicion";
 	$res = mysqli_query($link, $sql);
 
-	$tri_auto = 1;
-	$mes_auto = (int)date('m');
-	if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$tri_auto = 4; $cef_anio = date('Y')-1;}
-	if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$tri_auto = 1; $cef_anio = date('Y');}
-	if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$tri_auto = 2; $cef_anio = date('Y');}
-	if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$tri_auto = 3; $cef_anio = date('Y');}
-
 	if($modo == 'manual'){
 		$cef_anio = $_GET['cef_anio'];
 		$cef_peri = $_GET['cef_peri'];
 		$cef_tipo = $_GET['cef_tipo'];
 		$cef_trim = $_GET['cef_trim'];
 	}else{
-		//$cef_anio = '2019';//date('Y');
+		
 		$cef_peri = 'T';
 		$cef_tipo = 'C';
-		$cef_trim = $tri_auto;
+
+		$mes_auto = (int)date('m');
+		if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$cef_trim = 4; $cef_anio = date('Y')-1;}
+		if($mes_auto==4 || $mes_auto==5 || $mes_auto==6){$cef_trim = 1; $cef_anio = date('Y');}
+		if($mes_auto==7 || $mes_auto==8 || $mes_auto==9){$cef_trim = 2; $cef_anio = date('Y');}
+		if($mes_auto==10 || $mes_auto==11 || $mes_auto==12){$cef_trim = 3; $cef_anio = date('Y');}
+
 	}
 
 	if($cef_peri == 'A'){$cef_trim = 'A';}
@@ -273,7 +272,7 @@ function importarAutomaticolAction(){
 
 	$ruta = "public_html/analisisdevalor.com";
 	$condicion = "";
-	
+
 	importarEstadoFinanciero($ruta, $condicion, 'automatico');
 }
 
