@@ -92,7 +92,7 @@ function importarEmpresaAction($ruta, $tipo){
 		$dp_valor     = 100;
 		$dp_plaza     = 360;
 		$dp_ubicacion = 'LI';
-		$dp_correo    = 'demo@gmail.com';
+		$dp_correo    = 'prueba@gmail.com';
 	}
 
 	$jquery_rand = rand(1,1000000000);
@@ -101,7 +101,7 @@ function importarEmpresaAction($ruta, $tipo){
 	$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=$num_rand&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=all&email=$dp_correo&source=Compara&hash=$hash&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
 	//$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=&sEcho=4&sWhere=&ipaddr=&userid=&username=&geo=LI&balance=2000&days=240&currency=MN&exclude=all&email=demo%40gmail.com&source=Compara&hash=&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
 	$data = getDataJson($url);
-	
+	//var_dump($data);
 	$contador = 0;
 
 	$count_rows = count($data['data']['aaData']);
