@@ -111,7 +111,9 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 	}else{
 
 		$der_peri = 'T';
-		$der_tipo = 'C';
+		
+		$dia = (int)date('d');
+		$der_tipo = ($dia%2==0)?'C':'I';
 
 		$mes_auto = (int)date('m');
 		if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$der_trim = 4; $der_anio = date('Y')-1;}
@@ -136,7 +138,7 @@ function importarEstadoResultado($ruta, $condicion, $modo){
 
 		//$url  = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=2019&Trimestre=3&Rpj=023106&RazoSoci=GRANA%20Y%20MONTERO%20SAA&TipoEEFF=GYP&Tipo1=T&Tipo2=I&Dsc_Correlativo=0000&Secuencia=0";
 		$url = "https://www.bvl.com.pe/jsp/ShowEEFF_new.jsp?Ano=$der_anio&Trimestre=$der_trim&Rpj=$emp_cod_rpj&RazoSoci=$razon_social&TipoEEFF=$der_form&Tipo1=$der_peri&Tipo2=$der_tipo&Dsc_Correlativo=0000&Secuencia=0";
-		
+		//echo $url."<br>";
 		$html = file_get_contents_curl($url);
 
 		if (!empty($html)) {
@@ -247,6 +249,7 @@ function importarManualAction(){
 function importarAutomaticolAction(){
 
 	$ruta = "public_html/analisisdevalor.com";
+	//$ruta = "..";
 	$condicion = "";
 	
 	importarEstadoResultado($ruta, $condicion, 'automatico');

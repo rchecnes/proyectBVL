@@ -144,7 +144,9 @@ function importarEstadoFinanciero($ruta, $condicion, $modo){
 	}else{
 		
 		$cef_peri = 'T';
-		$cef_tipo = 'C';
+		
+		$dia = (int)date('d');
+		$cef_tipo = ($dia%2==0)?'C':'I';
 
 		$mes_auto = (int)date('m');
 		if($mes_auto==1 || $mes_auto==2 || $mes_auto==3){$cef_trim = 4; $cef_anio = date('Y')-1;}
