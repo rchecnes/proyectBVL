@@ -89,8 +89,24 @@ function importarEmpresaAction($ruta, $tipo){
 	}else{
 		$rand = rand(1,2);
 		$dp_moneda    = ($rand==1)?'MN':'ME';
-		$dp_valor     = 100;
-		$dp_plaza     = 360;
+
+		$array_temp = array(
+			array('valor'=>2000,'plazo'=>30),
+			array('valor'=>500000,'plazo'=>1080),
+			array('valor'=>800000,'plazo'=>1800),
+			array('valor'=>100000,'plazo'=>360)
+		);
+		$opcion_valor = 0;
+		$time = date('H:i');
+		if($time>='18:00' && $time<'18:30'){ $opcion_valor = 0;}
+		if($time>='18:30' && $time<'19:00'){ $opcion_valor = 1;}
+		if($time>='19:00' && $time<'19:30'){ $opcion_valor = 2;}
+		if($time>='19:30' && $time<'20:00'){ $opcion_valor = 3;}
+		$data_temp = $array_temp[$opcion_valor];
+
+		$dp_valor = $data_temp['valor'];
+		$dp_plaza = $data_temp['plazo'];
+
 		$dp_ubicacion = 'LI';
 		$dp_correo    = 'prueba@gmail.com';
 	}
@@ -100,6 +116,7 @@ function importarEmpresaAction($ruta, $tipo){
 	$hash = "";
 	$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=jQuery$jquery_rand&sEcho=$num_rand&sWhere=&ipaddr=&userid=&username=&geo=$dp_ubicacion&balance=$dp_valor&days=$dp_plaza&currency=$dp_moneda&exclude=all&email=$dp_correo&source=Compara&hash=$hash&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
 	//$url = "https://comparabien.com/services/pe/ws-depositos-plazo.php?callback=&sEcho=4&sWhere=&ipaddr=&userid=&username=&geo=LI&balance=2000&days=240&currency=MN&exclude=all&email=demo%40gmail.com&source=Compara&hash=&iSortingCols=1&iSortCol_0=6&sSortDir_0=desc&bSortable_6=true";
+	
 	$data = getDataJson($url);
 	//var_dump($data);
 	$contador = 0;
