@@ -21,6 +21,7 @@ function getCotizacionDelDiaActiguo(){
     $url   = "http://www.bvl.com.pe/includes/cotizaciones_todas.dat";
     //$html = file_get_html($url);
     $html = file_get_contents_curl($url);
+    //var_dump($html);
 
     $cotiza = array();
 
@@ -62,18 +63,29 @@ function getCotizacionDelDiaActiguo(){
                 $cd_ng_mng  = (isset($e->find('td',15)->plaintext)==true && $e->find('td',15)->plaintext!='')?$e->find('td',15)->plaintext:'';
 
 
-                $cd_cz_ant   = str_replace(",","",str_replace(" ","",$cd_cz_ant));
-                $cd_cz_aper  = str_replace(",","",str_replace(" ","",$cd_cz_aper));
-                $cd_cz_ult   = str_replace(",","",str_replace(" ","",$cd_cz_ult));
-                $cd_cz_var   = str_replace(",","",str_replace(" ","",$cd_cz_var));
-                $cd_pr_com   = str_replace(",","",str_replace(" ","",$cd_pr_com));
-                $cd_pr_ven   = str_replace(",","",str_replace(" ","",$cd_pr_ven));
-                $cd_ng_nac   = str_replace(",","",str_replace(" ","",$cd_ng_nac));
-                $cd_ng_nop   = str_replace(",","",str_replace(" ","",$cd_ng_nop));
-                $cd_ng_mng   = str_replace(",","",str_replace(" ","",$cd_ng_mng));
+                $cd_cz_ant   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_cz_ant)));
+                $cd_cz_aper  = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_cz_aper)));
+                $cd_cz_ult   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_cz_ult)));
+                $cd_cz_var   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_cz_var)));
+                $cd_pr_com   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_pr_com)));
+                $cd_pr_ven   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_pr_ven)));
+                $cd_ng_nac   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_ng_nac)));
+                $cd_ng_nop   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_ng_nop)));
+                $cd_ng_mng   = str_replace(",","",str_replace(" ","",str_replace("&nbsp;","",$cd_ng_mng)));
+
+                $cd_cz_fant = ($cd_cz_fant == '')?'NULL':"'".$cd_cz_fant."'";
+                $cd_cz_ant = ($cd_cz_ant == '')?'NULL':"'".$cd_cz_ant."'";
+                $cd_cz_ult = ($cd_cz_ult == '')?'NULL':"'".$cd_cz_ult."'";
+                $cd_cz_var = ($cd_cz_var == '')?'NULL':"'".$cd_cz_var."'";
+                $cd_cz_aper = ($cd_cz_aper == '')?'NULL':"'".$cd_cz_aper."'";
+                $cd_pr_com = ($cd_pr_com == '')?'NULL':"'".$cd_pr_com."'";
+                $cd_pr_ven = ($cd_pr_ven == '')?'NULL':"'".$cd_pr_ven."'";
+                $cd_ng_nac = ($cd_ng_nac == '')?'NULL':"'".$cd_ng_nac."'";
+                $cd_ng_nop = ($cd_ng_nop == '')?'NULL':"'".$cd_ng_nop."'";
+                $cd_ng_mng = ($cd_ng_mng == '')?'NULL':"'".$cd_ng_mng."'";
 
                 //Creamos query insert
-                $sql_ins .= "('$cd_cod', '$cd_nemo','$cd_fecha','$cd_cz_ant','$cd_cz_fant','$cd_cz_aper','$cd_cz_ult','$cd_cz_var','$cd_pr_com','$cd_pr_ven','$cd_ng_nac','$cd_ng_nop','$cd_ng_mng'),";
+                $sql_ins .= "('$cd_cod', '$cd_nemo','$cd_fecha',$cd_cz_ant,$cd_cz_fant,$cd_cz_aper,$cd_cz_ult,$cd_cz_var,$cd_pr_com,$cd_pr_ven,$cd_ng_nac,$cd_ng_nop,$cd_ng_mng),";
 
                 //Creamos sql para eliminar
                 $sql_del .= "'".$cd_nemo."',";
@@ -94,7 +106,8 @@ function getCotizacionDelDiaActiguo(){
 
         //Insertamos
         $insert = "INSERT INTO cotizacion_del_dia (cd_cod,cd_nemo,cd_fecha,cd_cz_ant,cd_cz_fant,cd_cz_aper,cd_cz_ult,cd_cz_var,cd_pr_com,cd_pr_ven,cd_ng_nac,cd_ng_nop,cd_ng_mng)VALUES ".$sql_ins.";";
-        $resp    = mysqli_query($link, $insert);
+        //echo $insert;
+        $resp    = mysqli_query($link, $insert)or die(mysqli_error($link));
 
         unset($sql_del);
         unset($delete);
