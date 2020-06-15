@@ -248,7 +248,7 @@ function importarManualAction(){
 
 function importarAutomaticolAction(){
 
-	$ruta = "public_html/analisisdevalor.com";
+	$ruta = "/var/www/html/analisisdevalor";
 	//$ruta = "..";
 	$condicion = "";
 	

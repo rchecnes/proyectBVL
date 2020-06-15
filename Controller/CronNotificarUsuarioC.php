@@ -1,5 +1,5 @@
 <?php
-$ruta = 'public_html/analisisdevalor.com';
+$ruta = '/var/www/html/analisisdevalor';
 //$ruta = '..';
 require_once($ruta."/Libraries/PHPMailer/class.phpmailer.php");
 require_once($ruta.'/Config/Conexion.php');

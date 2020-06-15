@@ -6,7 +6,7 @@
 //CONFIGURAR CRON CON ESTA LINEA
 # /opt/php56/bin/php /home3/rchecnes/public_html/domains/bvl.worldapu.com/Controller/CotizaGrupoC.php
 
-$ruta = 'public_html/analisisdevalor.com';
+$ruta = '/var/www/html/analisisdevalor';
 //$ruta = '..';
 include($ruta.'/Util/simple_html_dom_php5.6.php');
 require_once($ruta.'/Config/Conexion.php');
