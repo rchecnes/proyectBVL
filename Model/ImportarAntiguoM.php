@@ -40,7 +40,7 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
 
                 $upd_x_emp = "UPDATE nemonico ne SET ne.cz_fe_fin='$fecha',ne.cz_ci_fin='$cierre',ne.cz_cn_fin='$cant_negociado',ne.cz_mn_fin='$monto_negociado' WHERE ne.nemonico='$cz_nemo'";
 
-                $respup    = mysqli_query($link, $upd_x_emp);
+                $respup    = mysqli_query($link, $upd_x_emp)or die(mysqli_error($link));
             }
 
         }
@@ -51,13 +51,13 @@ function savCatizaAntiguo($link, $cotiza, $nemonico){
     if ($del_x_cod !='' && $sql !='') {
 
         $delete = "DELETE FROM cotizacion WHERE cz_cod IN(".trim($del_x_cod,',').") AND cz_nemo IN('$nemonico')";
-        $respdel = mysqli_query($link,$delete);
+        $respdel = mysqli_query($link,$delete)or die(mysqli_error($link));
         //echo $delete."<br>";
         unset($delete);
 
         $insert = "INSERT INTO cotizacion (cz_cod,cz_nemo,cz_fecha,cz_apertura,cz_cierre,cz_maxima,cz_minima,cz_promedio,cz_cantnegda,cz_monto_neg_ori,cz_fechant,cz_cierreant) VALUES ".trim($sql,',').";";
-        echo $insert;
-        $resp    = mysqli_query($link,$insert);
+        //echo $insert;
+        $resp    = mysqli_query($link,$insert)or die(mysqli_error($link));
         //echo $insert;
         unset($insert);
     }

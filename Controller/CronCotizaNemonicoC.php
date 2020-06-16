@@ -85,8 +85,7 @@ function getCotizacionGrupoAntiguo(){
         $html = file_get_contents_curl($url);
 
         $new_data = getPrepareDataAntiguo($nemonico, $html);
-
-        //$new_data = ordenarArray($new_data,'f','ASC');
+        $new_data = ordenarArray($new_data,'f','ASC');
 
         if (count($new_data)>0) {
 
