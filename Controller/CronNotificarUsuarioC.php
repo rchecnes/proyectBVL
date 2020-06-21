@@ -60,7 +60,7 @@ function getDatosCotiza($link, $fecha, $nemonico){
 	$cd_cod   = str_replace('-', '', $fecha);
 	$nemonico = strtoupper($nemonico);
 
-	$sql = "SELECT cd_pr_com, cd_pr_ven FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_cod_emp='$nemonico'";
+	$sql = "SELECT cd_pr_com, cd_pr_ven FROM cotizacion_del_dia WHERE cd_cod='$cd_cod' AND cd_nemo='$nemonico'";
 	$res = mysqli_query($link, $sql);
 	$w   = mysqli_fetch_array($res);
 
@@ -81,11 +81,11 @@ function updateEmpresa($link, $nemonico, $compra, $venta, $recomendacion){
 function getContenidoCorreo($link, $cod_user){
 
 	$sqlfa = "SELECT * FROM empresa_favorito ef
-			  INNER JOIN empresa e ON(ef.cod_emp=e.cod_emp)
-			  INNER JOIN user_grupo  ug ON(ef.cod_grupo=ug.cod_grupo)
-			  WHERE ef.cod_user='$cod_user'
-			  AND ef.est_fab='1'
-			  AND ug.cod_user='$cod_user'";
+			INNER JOIN nemonico n ON(ef.ne_cod=n.ne_cod)
+			INNER JOIN user_grupo  ug ON(ef.cod_grupo=ug.cod_grupo)
+			WHERE ef.cod_user='$cod_user'
+			AND ef.est_fab='1'
+			AND ug.cod_user='$cod_user'";
 	$resfa = mysqli_query($link, $sqlfa);
 
 	//Armamos el arreglo para ordenar
@@ -152,9 +152,9 @@ function NotificarCotizacion(){
 	$link  = getConexion();
 
 	$sqluser = "SELECT * FROM user";
-	$resuser = mysqli_query($link, $sqluser);
+	$resuser = mysqli_query($link, $sqluser)or die(mysqli_error($link));
 	
-	$remitente['correo'] = "rchecnes@acuario.com.pe";
+	$remitente['correo'] = "analisisdevalor@gmail.com";
 	$remitente['nombre'] = "Robot";
 
 	while ($wu = mysqli_fetch_array($resuser)) {
@@ -162,20 +162,19 @@ function NotificarCotizacion(){
 		$receptor['correo'] = $wu['email_user'];
 		$receptor['nombre'] = $wu['nomb_user'];
 
-		$copia['correo'] = "rchecnes@gmail.com";
-		$copia['nombre'] = "Richard Checnes";
+		$copia['correo'] = "analisisdevalor@gmail.com";
+		$copia['nombre'] = "Analisis De Valor";
 
 		$asunto = utf8_decode("Notificación BVL - Cotización");
 
 		$contenido  = getContenidoCorreo($link, $wu['cod_user']);
-		//echo $contenido."<br><br>";
+		//echo $contenido;exit();
 
 		if($contenido !=''){
 			$rptacorreo = enviarCorreoUsuario($remitente, $receptor, $copia, $asunto, $contenido);
 		  	echo "Envio a ".$wu['email_user'].":".$rptacorreo."<br>";
 		  	//echo $contenido."<br>";
 		}
-		
 	}
 }
 

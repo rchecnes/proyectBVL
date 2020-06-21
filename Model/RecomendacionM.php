@@ -12,7 +12,7 @@ function getRecomendacioPorMes($link, $fecha_final, $nemonico, $prec_unit, $mes)
     //Fin  restar fecha
 
 
-	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
+	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_nemo='$nemonico'";
 	$resp = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($resp);
 	

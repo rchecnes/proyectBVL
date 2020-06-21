@@ -132,7 +132,7 @@ function getCotizacionGrupoAntiguo(){
     mysqli_free_result($respemp);
     
     
-    echo ":".$c." Empresas actualizadas de $fec_inicio al  $fec_fin";   
+    echo $c." Empresas Actualizadas del $fec_inicio al  $fec_fin";   
 }
 
 //http://www.bvl.com.pe/includes/cotizaciones_busca.dat

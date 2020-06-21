@@ -213,10 +213,14 @@ function file_get_contents_curl($url){
 }
 
 function getFechaBD($date){
+	$date = trim($date);
+	if(strlen($date)==10){
+		list($dia, $mes, $ano) = explode('/',$date);
 
-	list($dia, $mes, $ano) = explode('/',$date);
-
-	return $ano.'-'.$mes.'-'.$dia;
+		return $ano.'-'.$mes.'-'.$dia;
+	}else{
+		return '0000-00-00';
+	}
 }
 
 function importarBeneficio($ruta, $condicion, $ub_tip_pag){
@@ -240,65 +244,68 @@ function importarBeneficio($ruta, $condicion, $ub_tip_pag){
 
 		if($ub_tip_pag == 'PA_ACT'){
 			$url  = "https://www.bvl.com.pe/jsp/Inf_EstadisticaGrafica.jsp?Cod_Empresa=$new_codigo&Nemonico=$new_nemonico&Listado=|$new_nemonico";
+			
 			$html = file_get_contents_curl($url);
 
 			//echo $new_nemonico."<br>";
 			if (!empty($html)) {
 
-				$div_0 = $html->find("div[class='divBloque']",0);
-				$table_1 = ($div_0->find('table',1)!=null)?$div_0->find('table',1):$div_0->find('table',0);
-				//$tr_0 = $table_1->find('tr',0);
-				//echo $div_0."<br>";
-				if(isset($table_1->find('tr',0)->plaintext)){
+				if(is_object($html->find("div[class='divBloque']",0))){
+					$div_0 = $html->find("div[class='divBloque']",0);
+					$table_1 = ($div_0->find('table',1)!=null)?$div_0->find('table',1):$div_0->find('table',0);
+					//$tr_0 = $table_1->find('tr',0);
+					//echo $div_0."<br>";
+					if(isset($table_1->find('tr',0)->plaintext)){
 
-					foreach($table_1->find("tr") as $tr){
-						
-						if (isset($tr->find('td',0)->plaintext)) {
+						foreach($table_1->find("tr") as $tr){
+							
+							if (isset($tr->find('td',0)->plaintext)) {
 
-							$ub_der_mon = '';
-							$ub_der_imp = 0;
-							$ub_der_por = '';
-							$ub_der_tip = '';
+								$ub_der_mon = '';
+								$ub_der_imp = 0;
+								$ub_der_por = '';
+								$ub_der_tip = '';
 
-							$derecho = $tr->find("td",0)->plaintext;
-							if(strpos($derecho, 'S/.') !== false ){$ub_der_mon = 'S/.';}
-							if(strpos($derecho, 'US$') !== false){$ub_der_mon = 'US$';}
+								$derecho = $tr->find("td",0)->plaintext;
+								if(strpos($derecho, 'S/.') !== false ){$ub_der_mon = 'S/.';}
+								if(strpos($derecho, 'US$') !== false){$ub_der_mon = 'US$';}
 
-							if(strpos($derecho, 'Efe.') !== false ){$ub_der_tip = 'Efe.';}
-							if(strpos($derecho, 'Accs.') !== false){$ub_der_tip = 'Accs.';}
+								if(strpos($derecho, 'Efe.') !== false ){$ub_der_tip = 'Efe.';}
+								if(strpos($derecho, 'Accs.') !== false){$ub_der_tip = 'Accs.';}
 
-							if(strpos($derecho, '%') !== false ){$ub_der_por = '%';}
+								if(strpos($derecho, '%') !== false ){$ub_der_por = '%';}
 
-							$ub_der_imp = str_replace($ub_der_mon,'',$derecho);
-							$ub_der_imp = str_replace($ub_der_tip,'',$ub_der_imp);
-							$ub_der_imp = str_replace($ub_der_por,'',$ub_der_imp);
-							$ub_der_imp = trim($ub_der_imp);
+								$ub_der_imp = str_replace($ub_der_mon,'',$derecho);
+								$ub_der_imp = str_replace($ub_der_tip,'',$ub_der_imp);
+								$ub_der_imp = str_replace($ub_der_por,'',$ub_der_imp);
+								$ub_der_imp = trim($ub_der_imp);
 
-							$ub_fech_acu = getFechaBD($tr->find("td",1)->plaintext);
-							$ub_fech_cor = getFechaBD($tr->find("td",2)->plaintext);
-							$ub_fech_reg = getFechaBD($tr->find("td",3)->plaintext);
-							$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
+								$ub_fech_acu = getFechaBD($tr->find("td",1)->plaintext);
+								$ub_fech_cor = getFechaBD($tr->find("td",2)->plaintext);
+								$ub_fech_reg = getFechaBD($tr->find("td",3)->plaintext);
+								$ub_fech_ent = getFechaBD($tr->find("td",4)->plaintext);
 
-							//Consultamos si ya se registro
-							$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent' AND ub_der_mon='$ub_der_mon' AND ub_der_tip='$ub_der_tip'";
-							$resval = mysqli_query($link, $sqlval);
-							$rowval = mysqli_fetch_array($resval);
-							//echo $sqlval."<br>";
+								//Consultamos si ya se registro
+								$sqlval = "SELECT ub_nemonico FROM ultimos_beneficios WHERE ub_nemonico='$new_nemonico' AND ub_fech_acu='$ub_fech_acu' AND ub_fech_cor='$ub_fech_cor' AND ub_fech_reg='$ub_fech_reg' AND ub_fech_ent='$ub_fech_ent' AND ub_der_mon='$ub_der_mon' AND ub_der_tip='$ub_der_tip'";
+								$resval = mysqli_query($link, $sqlval);
+								$rowval = mysqli_fetch_array($resval);
+								//echo $sqlval."<br>";
 
-							if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
-								//Insertar a BD
-								$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl,emp_cod,ub_fe_reg,ub_hr_reg,ub_tip_pag)
-								VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo','$emp_cod','$ub_fe_reg','$ub_hr_reg','$ub_tip_pag')";
-								$resin = mysqli_query($link, $sqlin);
-								unset($sqlin);
-								unset($resin);
+								if($rowval['ub_nemonico']=='' || $rowval['ub_nemonico']==null){
+									//Insertar a BD
+									$sqlin = "INSERT INTO ultimos_beneficios(ub_nemonico,ub_der_comp,ub_der_mon,ub_der_imp,ub_der_por,ub_der_tip,ub_fech_acu,ub_fech_cor,ub_fech_reg,ub_fech_ent,ub_cod_emp_bvl,emp_cod,ub_fe_reg,ub_hr_reg,ub_tip_pag)
+									VALUES('$new_nemonico','$derecho','$ub_der_mon','$ub_der_imp','$ub_der_por','$ub_der_tip','$ub_fech_acu','$ub_fech_cor','$ub_fech_reg','$ub_fech_ent','$new_codigo','$emp_cod','$ub_fe_reg','$ub_hr_reg','$ub_tip_pag')";
+									$resin = mysqli_query($link, $sqlin);
+									unset($sqlin);
+									unset($resin);
+								}
+								unset($sqlval);
 							}
-							unset($sqlval);
 						}
 					}
+					unset($div_0);
+					unset($table_1);
 				}
-				unset($div_0);
-				unset($table_1);
 			}
 			unset($html);
 

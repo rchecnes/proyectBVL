@@ -33,63 +33,65 @@ function prepararData($data_html){
 
         foreach($data_html->find("div[@id='block-detalleproductodedepositosaplazo']") as $div){
 
-            $dh_last_update = $div->find("div[@class='update-date']",0)->plaintext;
-            $dh_last_update = preg_replace("[ultima|actualización| |,|:]", "", strtolower($dh_last_update));
+            if(is_object($div->find("div[@class='update-date']",0))){
+                $dh_last_update = $div->find("div[@class='update-date']",0)->plaintext;
+                $dh_last_update = preg_replace("[ultima|actualización| |,|:]", "", strtolower($dh_last_update));
 
-            //FSD:Inversion seguro
-            foreach ($div->find("div[@class='prod-detail-med']") as $divext) {
-                foreach ($divext->find("div[@class='prod-detail-col right']") as $divcol) {
+                //FSD:Inversion seguro
+                foreach ($div->find("div[@class='prod-detail-med']") as $divext) {
+                    foreach ($divext->find("div[@class='prod-detail-col right']") as $divcol) {
 
-                   $dh_min_aper = $divcol->find('div',3)->plaintext;
-                   $dh_min_aper = preg_replace("[s/| |,|$]", "", strtolower($dh_min_aper));
+                    $dh_min_aper = $divcol->find('div',3)->plaintext;
+                    $dh_min_aper = preg_replace("[s/| |,|$]", "", strtolower($dh_min_aper));
 
-                   $dh_fsd = $divcol->find('div',5)->plaintext;
-                   $dh_fsd = preg_replace("[s/| |,]", "", strtolower($dh_fsd));
+                    $dh_fsd = $divcol->find('div',5)->plaintext;
+                    $dh_fsd = preg_replace("[s/| |,]", "", strtolower($dh_fsd));
+                    }
                 }
-            }
 
-            //Costo de manenimiento
-            foreach ($div->find("div[@class='prod-detail-extra']") as $divcm) {
-                $dh_cost_mant = $divcm->find("div[@class='extra-desc']",0)->plaintext;
-                $dh_cost_mant = preg_replace("[s/| |,|$]", "", strtolower($dh_cost_mant));
-            }
-            
-            foreach($div->find("table[@class='table']") as $table){
+                //Costo de manenimiento
+                foreach ($div->find("div[@class='prod-detail-extra']") as $divcm) {
+                    $dh_cost_mant = $divcm->find("div[@class='extra-desc']",0)->plaintext;
+                    $dh_cost_mant = preg_replace("[s/| |,|$]", "", strtolower($dh_cost_mant));
+                }
+                
+                foreach($div->find("table[@class='table']") as $table){
 
-                $contador = 1;
-                foreach($table->find("tr") as $e){
-                    //var_dump($e);
-                    if (isset($e->find('td',0)->plaintext) && isset($e->find('td',1)->plaintext) && isset($e->find('td',2)->plaintext)) {
+                    $contador = 1;
+                    foreach($table->find("tr") as $e){
+                        //var_dump($e);
+                        if (isset($e->find('td',0)->plaintext) && isset($e->find('td',1)->plaintext) && isset($e->find('td',2)->plaintext)) {
 
-                        //Saldo Promedio Mensual
-                        $prom = preg_replace("[s/|s/.| |,]", "", strtolower($e->find('td',0)->plaintext));
-                        $prom = preg_replace("[más|mas]", "9999999999", $prom);
-                        list($dh_sal_prom_d, $dh_sal_prom_h) = explode("a",$prom);
+                            //Saldo Promedio Mensual
+                            $prom = preg_replace("[s/|s/.| |,]", "", strtolower($e->find('td',0)->plaintext));
+                            $prom = preg_replace("[más|mas]", "9999999999", $prom);
+                            list($dh_sal_prom_d, $dh_sal_prom_h) = explode("a",$prom);
 
-                        //Plazo
-                        $plazo = preg_replace("[días| |,]", "", strtolower($e->find('td',1)->plaintext));
-                        $plazo = preg_replace("[más|mas]", "9999999999", $plazo);
-                        list($dh_plazo_d, $dh_plazo_h) = explode("a",$plazo);
+                            //Plazo
+                            $plazo = preg_replace("[días| |,]", "", strtolower($e->find('td',1)->plaintext));
+                            $plazo = preg_replace("[más|mas]", "9999999999", $plazo);
+                            list($dh_plazo_d, $dh_plazo_h) = explode("a",$plazo);
 
-                        //TEA
-                        $dh_tea = preg_replace("[%| |,]", "", strtolower($e->find('td',2)->plaintext));
+                            //TEA
+                            $dh_tea = preg_replace("[%| |,]", "", strtolower($e->find('td',2)->plaintext));
 
-                        $deposito[] = array(
-                            'dh_pono'      => $contador,
-                            'dh_fecha'      => $fecha,
-                            'dh_sal_prom_d' => (float)$dh_sal_prom_d,
-                            'dh_sal_prom_h' => (float)$dh_sal_prom_h,
-                            'dh_plazo_d'    => (float)$dh_plazo_d,
-                            'dh_plazo_h'    => (float)$dh_plazo_h,
-                            'dh_tea'        => (float)$dh_tea,
-                            'dh_last_update'=> $dh_last_update,
-                            'dh_fsd'        => ($dh_fsd=='si')?'S':'',
-                            'dh_cost_mant'  => (double)$dh_cost_mant,
-                            'dh_min_aper'   => (double)$dh_min_aper,
-                            'dh_time'       => date('H:i:s')
-                        );
+                            $deposito[] = array(
+                                'dh_pono'      => $contador,
+                                'dh_fecha'      => $fecha,
+                                'dh_sal_prom_d' => (float)$dh_sal_prom_d,
+                                'dh_sal_prom_h' => (float)$dh_sal_prom_h,
+                                'dh_plazo_d'    => (float)$dh_plazo_d,
+                                'dh_plazo_h'    => (float)$dh_plazo_h,
+                                'dh_tea'        => (float)$dh_tea,
+                                'dh_last_update'=> $dh_last_update,
+                                'dh_fsd'        => ($dh_fsd=='si')?'S':'',
+                                'dh_cost_mant'  => (double)$dh_cost_mant,
+                                'dh_min_aper'   => (double)$dh_min_aper,
+                                'dh_time'       => date('H:i:s')
+                            );
 
-                        $contador ++;
+                            $contador ++;
+                        }
                     }
                 }
             }
