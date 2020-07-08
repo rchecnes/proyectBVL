@@ -21,7 +21,7 @@
 <!--JS-->
 <script src="../Assets/js/jquery-2.1.4.min.js"></script>
 <script src="../Assets/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js'></script>
 <script type="text/javascript" src="../Assets/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="../Assets/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="../Assets/bootstrap-slider/js/bootstrap-slider.min.js"></script>
