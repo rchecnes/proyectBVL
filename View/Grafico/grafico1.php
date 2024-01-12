@@ -48,7 +48,7 @@
                         elseif($c['rango_fin']<1): echo number_format($c['rango_fin'],4,'.',',');endif;?>  
                     </td>
                     <td class="align-center"><?=$c['dias']?></td>
-                    <td class="align-center"><?=number_format($c['monto'],0,'.',',')?></td>
+                    <td class="align-center"><?=($c['monto'] !='' && $c['monto']>=0)?number_format($c['monto'],0,'.',','):0?></td>
                     <td class="align-center"><?=$c['rec_nom']?></td>
                     
                 </tr>

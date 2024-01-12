@@ -63,7 +63,7 @@
                         ?>  
                     </td>
                     <td class="align-center" <?= $style?>><?=$c['dias']?></td>
-                    <td class="align-center" <?= $style?>><?=number_format($c['monto'],0,'.',',')?></td>
+                    <td class="align-center" <?= $style?>><?=($c['monto'] !='' && $c['monto']>=0)?number_format($c['monto'],0,'.',','):0?></td>
                 </tr>
             <?php
                 $suma_dias += $c['dias'];

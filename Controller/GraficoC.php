@@ -81,11 +81,11 @@ function grafico1Action(){
 	$empresa      = " AND cz_nemo='".$_GET['nemonico']."'";
 	$mes          = (isset($_GET['mes']))?$_GET['mes']:'';
 
-	$max     = (float)$_GET['max'];
-	$min     = (float)$_GET['min'];
-	$long    = (float)$_GET['long'];
-	$med     = (float)$_GET['med'];
-	$prec_unit  = (float)$_GET['prec_unit'];
+	$max     = (isset($_GET['max']))?(float)$_GET['max']:0;
+	$min     = (isset($_GET['min']))?(float)$_GET['min']:0;
+	$long    = (isset($_GET['long']))?(float)$_GET['long']:0;
+	$med     = (isset($_GET['med']))?(float)$_GET['med']:0;
+	$prec_unit  = (isset($_GET['prec_unit']))?(float)$_GET['prec_unit']:0;
 	/*
 	//Obtener Max
 	$sql = "SELECT MAX(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS max,MIN(IF(cz_cierre!=0,cz_cierre,cz_cierreant)) AS min FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' AND cz_codemp='$nemonico'";
@@ -569,7 +569,8 @@ function grafico3Action(){
 	//Cotizacion
 	$sqlcot  = "SELECT
 				IF(cz_cierre!=0,cz_cierre,cz_cierreant)AS cierre,
-				DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha,
+				-- DATE_FORMAT(IF(cz_fecha ='',cz_fechant,cz_fecha),'%d/%m/%Y')AS fecha,
+				DATE_FORMAT(COALESCE(NULLIF(cz_fecha, NOW()), cz_fechant), '%d/%m/%Y') AS fecha,
 				cz_fecha
 				FROM cotizacion WHERE cz_fecha BETWEEN '$fecha_inicio' AND '$fecha_final' $nemonico ORDER BY cz_fecha ASC";
 	$respcot = mysqli_query($link, $sqlcot);
