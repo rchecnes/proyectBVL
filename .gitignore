@@ -1,4 +1,6 @@
-Config/conexion.php
 sftp-config.json
 /vendor
 /.vscode
+*.zip
+Config/.env
+docker-compose/db_mysql

@@ -1,8 +1,10 @@
 {
-    "name": "dependencias/proyectBVL",
+    "name": "laravel/projectbvl",
+    "type": "project",
     "description": "BVL",
     "require": {
-        "kint-php/kint": "^1.0",
-        "twig/twig":"~1.0"
+        "kint-php/kint": "^3.3",
+        "twig/twig":"~1.0",
+        "vlucas/phpdotenv": "^5.5"
     }
 }

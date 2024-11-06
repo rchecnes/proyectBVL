@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anva-ant-app
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - app-ant-network
+  
+  nginx:
+        image: nginx:1.19.4
+        container_name: anva-ant-nginx
+        ports:
+            - ${SERVER_PORT:-8080}:80
+        volumes:
+            - ./:/var/www/html
+            - ./docker-compose/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - app-ant-network
+
+  db:
+    image: mysql:8
+    container_name: anva-ant-db
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE:-analisisdevalor_ant}
+      - MYSQL_USER=${DB_USERNAME:-user_mysql}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker-compose/db_mysql:/var/lib/mysql
+    networks:
+      - app-ant-network
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: anva-phpmyadmin
+    restart: always
+    ports:
+        - ${PHPMYADMIN_PORT_DB:-8083}:80
+    environment:
+        - PMA_ARBITRARY=1
+        - UPLOAD_LIMIT=100000000
+    networks:
+        - app-ant-network
+
+networks:
+  app-ant-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
